@@ -1,3 +1,7 @@
+package math;
+
+// Differentiates between position and direction.
+// Vectors should be used for directions, not positions.
 public class Vector {
     public float x,y,z;
 

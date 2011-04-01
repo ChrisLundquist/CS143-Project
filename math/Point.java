@@ -1,3 +1,7 @@
+package math;
+
+// Differentiates between a position vector and a direction vector
+// Points should be used for positions, not directions.
 public class Point {
     public float x,y,z;
 

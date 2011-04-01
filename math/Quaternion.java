@@ -1,3 +1,4 @@
+package math;
 public class Quaternion {
     Quaternion(){
         w_ = 1.0f;
