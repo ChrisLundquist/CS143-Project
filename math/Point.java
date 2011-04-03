@@ -16,4 +16,10 @@ public class Point {
         this.y = y;
         this.z = z;
     }
+
+    public void add(Vector velocity) {
+        x += velocity.x;
+        y += velocity.y;
+        z += velocity.z;
+    }
 }
