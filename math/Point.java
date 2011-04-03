@@ -5,7 +5,7 @@ package math;
 public class Point {
     public float x,y,z;
 
-    Point(){
+    public Point(){
         x = 0;
         y = 0;
         z = 0;
@@ -21,5 +21,13 @@ public class Point {
         x += velocity.x;
         y += velocity.y;
         z += velocity.z;
+    }
+
+    public void incrementBy(Vector velocity) {
+        this.x += velocity.x;
+        this.y += velocity.y;
+        this.z += velocity.z;
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -5,7 +5,7 @@ package math;
 public class Vector {
     public float x,y,z;
 
-    Vector(){
+    public Vector(){
         x = 0;
         y = 0;
         z = 0;

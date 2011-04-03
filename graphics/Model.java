@@ -7,4 +7,9 @@ public class Model {
         return null;
     }
 
+    public static void loadModels() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
