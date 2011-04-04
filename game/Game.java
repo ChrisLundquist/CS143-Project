@@ -13,10 +13,6 @@ public class Game {
      * @param args
      */
     public static void main(String[] args) {
-        // Load our sounds and enable them.
-        sound.SoundEffect.init(false);
-        graphics.particles.ParticleSystem.init(true);
-        graphics.OnscreenMessage.init();
         gui = new GUI();
         menu = new MainMenu();
     }
@@ -44,6 +40,9 @@ public class Game {
     public static void init() {
         // TODO Auto-generated method stub
         graphics.Model.loadModels();
+        sound.SoundEffect.init(false);
+        graphics.particles.ParticleSystem.init(true);
+        graphics.OnscreenMessage.init();
         
     }
 
@@ -63,7 +62,9 @@ public class Game {
     }
 
     public static void showGame() {
-        // TODO Auto-generated method stub
+        menu.dispose();
+        menu = null;
+        gui.setVisible(true);
         
     }
 
