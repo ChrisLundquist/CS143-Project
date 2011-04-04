@@ -13,12 +13,12 @@
 - tim.mikeladze@gmail.com
 - https://github.com/TimMikeladze
 
-###Chris Lundquist
+####Chris Lundquist
 
 - RampantDurandal@gmail.com
 - https://github.com/ChrisLundquist
 
-###Dustin Lundquist
+####Dustin Lundquist
 
 - dustin@null-ptr.net
 - https://github.com/dlundquist
