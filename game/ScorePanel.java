@@ -22,7 +22,6 @@ public class ScorePanel extends JPanel {
     private JLabel multiplyer;
     private JLabel score;
     private JLabel accurate;
-    private JLabel asteroidNumber;
     private int scoreAmount;
     private int hitAmount;
     private int shotsMissed;
