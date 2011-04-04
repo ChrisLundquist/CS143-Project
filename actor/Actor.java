@@ -43,16 +43,11 @@ public abstract class Actor implements Serializable {
         return model;
     }
     
-
-
         
         /**
          * Common random number generator object
          */
         static protected Random gen = new Random();
-
-
-
          
          /**
           * CL - We need to synchronize removing actors so we don't have threads
@@ -92,12 +87,6 @@ public abstract class Actor implements Serializable {
             return velocity;
         }
         
-        
-        /**
-         * 
-         * @return the actors current rotational position in degrees
-         */
-        
         /**
          * 
          * @return the actors size (for texture scaling and collision detection)
@@ -111,16 +100,13 @@ public abstract class Actor implements Serializable {
             size = newSize;
             return this;
         }
-        
-        
+               
         public float getMass() {
             // This does not account for different actors having different densities
             // but the mass should scale with the cube of the linear scale (the volume)
             // But the area is more fun!
             return size * size;
         }
-        
-        
         
         protected int generateId() {
             return (lastId =+ gen.nextInt(1000) + 1); // Pseudo random increments
@@ -287,5 +273,11 @@ public abstract class Actor implements Serializable {
     // CL - updates the state of the actor for the next frame
     public void update(){
         position.add(velocity);
+    }
+    
+    public void render() {
+        // TODO load OpenGL Identity
+        // TODO Push our transformation matrix onto the openGL stack
+        // TODO Push our points and textures for our model to OpenGL
     }
 }
