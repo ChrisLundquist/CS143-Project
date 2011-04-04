@@ -1,4 +1,4 @@
-####Project
+###Project
 
 - https://github.com/ChrisLundquist/CS143-Project
 - git@github.com:ChrisLundquist/CS143-Project.git
@@ -13,3 +13,12 @@
 - tim.mikeladze@gmail.com
 - https://github.com/TimMikeladze
 
+###Chris Lundquist
+
+- RampantDurandal@gmail.com
+- https://github.com/ChrisLundquist
+
+###Dustin Lundquist
+
+- dustin@null-ptr.net
+- https://github.com/dlundquist
