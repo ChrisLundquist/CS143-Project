@@ -6,6 +6,8 @@ public class Game {
     private static GUI gui;
     private static MainMenu menu;
     private static boolean paused;
+    private static boolean started; 
+    // TODO CL - get rid of this. It is used by the main menu to change the verbage from "start" to "resume"
 
 
     /**
@@ -23,8 +25,7 @@ public class Game {
     }
 
     public static boolean isPaused() {
-        // TODO Auto-generated method stub
-        return false;
+        return paused;
     }
 
     public static void quitToMenu() {
@@ -33,17 +34,14 @@ public class Game {
     }
 
     public static void togglePause() {
-        // TODO Auto-generated method stub
-        
+        paused = !paused;
     }
 
     public static void init() {
-        // TODO Auto-generated method stub
-        graphics.Model.loadModels();
-        sound.SoundEffect.init(false);
-        graphics.particles.ParticleSystem.init(true);
-        graphics.OnscreenMessage.init();
-        
+        graphics.Model.loadModels();                  // Load our models
+        sound.SoundEffect.init(false);                // Default to sound off
+        graphics.particles.ParticleSystem.init(true); // default to particles on
+        graphics.OnscreenMessage.init();              // Initialize Screen messages
     }
 
     public static void update() {
@@ -57,19 +55,13 @@ public class Game {
     }
 
     public static boolean isStarted() {
-        // TODO Auto-generated method stub
-        return false;
+        return started;
     }
 
     public static void showGame() {
         menu.dispose();
         menu = null;
         gui.setVisible(true);
-        
-    }
-
-    public static void showHighScores() {
-        // TODO Auto-generated method stub
         
     }
 
