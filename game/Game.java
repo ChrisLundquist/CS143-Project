@@ -3,9 +3,22 @@ package game;
 import actor.Player;
 
 public class Game {
+    private static GUI gui;
+    private static MainMenu menu;
+    private static boolean paused;
 
+
+    /**
+     * Our main function
+     * @param args
+     */
     public static void main(String[] args) {
-         // TODO make a window and grab the OpenGL context
+        // Load our sounds and enable them.
+        sound.SoundEffect.init(false);
+        graphics.particles.ParticleSystem.init(true);
+        graphics.OnscreenMessage.init();
+        gui = new GUI();
+        menu = new MainMenu();
     }
 
     public static Player getPlayer() {
