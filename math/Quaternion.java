@@ -28,35 +28,6 @@ public class Quaternion {
         return(r);
     }
 
-    float[] toMatrix(){
-        float[] matrix = new float[16];
-        // First row
-        matrix[0] = 1.0f - 2.0f * ( y_ * y_ + z_ * z_ );
-        matrix[1] = 2.0f * (x_ * y_ + z_ * w_);
-        matrix[2] = 2.0f * (x_ * z_ - y_ * w_);
-        matrix[3] = 0.0f;
-
-        // Second row
-        matrix[4] = 2.0f * ( x_ * y_ - z_ * w_ );
-        matrix[5] = 1.0f - 2.0f * ( x_ * x_ + z_ * z_ );
-        matrix[6] = 2.0f * (z_ * y_ + x_ * w_ );
-        matrix[7] = 0.0f;
-
-        // Third row
-        matrix[8]  = 2.0f * ( x_ * z_ + y_ * w_ );
-        matrix[9]  = 2.0f * ( y_ * z_ - x_ * w_ );
-        matrix[10] = 1.0f - 2.0f * ( x_ * x_ + y_ * y_ );
-        matrix[11] = 0.0f;
-
-        // Fourth row
-        matrix[12] = 0.0f;
-        matrix[13] = 0.0f;
-        matrix[14] = 0.0f;
-        matrix[15] = 1.0f;
-
-        return matrix;
-    }
-
     /*
      * Returns a rotation matrix 
      * glLoadMatrix expects the matrix in column major form:

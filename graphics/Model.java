@@ -3,8 +3,6 @@ package graphics;
 import java.io.File;
 import java.util.Vector;
 
-import math.Point;
-
 public class Model {
     private static Vector<Model> models = new Vector<Model>();
 
@@ -85,7 +83,7 @@ public class Model {
     }
 
     public static void load3ds(File input) {
-        Vector<Point> points = new Vector<Point>();
+        Vector<math.Vector> points = new Vector<math.Vector>();
         Vector<Polygon> polygons = new Vector<Polygon>();
     }
 
