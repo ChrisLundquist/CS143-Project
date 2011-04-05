@@ -2,30 +2,30 @@ package math;
 
 // Differentiates between position and direction.
 // Vectors should be used for directions, not positions.
-public class Vector {
+public class Vector3 {
     public float x,y,z;
 
-    public Vector(){
+    public Vector3(){
         x = 0;
         y = 0;
         z = 0;
     }
 
-    Vector(float x, float y, float z){
+    Vector3(float x, float y, float z){
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Vector times(float scalar){
-        return new Vector( x * scalar, y * scalar, z * scalar);
+    public Vector3 times(float scalar){
+        return new Vector3( x * scalar, y * scalar, z * scalar);
     }
 
-    public Vector plus(Vector other) {
-        return new Vector(x + other.x, y + other.y, z + other.z);
+    public Vector3 plus(Vector3 other) {
+        return new Vector3(x + other.x, y + other.y, z + other.z);
     }
     
-    public Vector plusEquals(Vector other){
+    public Vector3 plusEquals(Vector3 other){
         x += other.x;
         y += other.y;
         z += other.z;

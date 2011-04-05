@@ -27,8 +27,8 @@ public abstract class Actor implements Serializable {
 
     protected float headingDegrees;
     protected float pictureDegrees;
-    protected Vector velocity;
-    protected Vector position;
+    protected Vector3 velocity;
+    protected Vector3 position;
     protected Quaternion heading;
     protected Quaternion pitch;
 
@@ -75,7 +75,7 @@ public abstract class Actor implements Serializable {
      * 
      * @return the actors current position
      */
-    public Vector getPosition() {
+    public Vector3 getPosition() {
         return position;
     }
 
@@ -83,7 +83,7 @@ public abstract class Actor implements Serializable {
      * 
      * @return the actors current velocity
      */
-    public Vector getVelocity(){
+    public Vector3 getVelocity(){
         return velocity;
     }
 
