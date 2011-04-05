@@ -1,3 +1,4 @@
+package input;
 /**
  * @author Tim Mikeladze
  * Gives access to XboxControllerInput.exe output
