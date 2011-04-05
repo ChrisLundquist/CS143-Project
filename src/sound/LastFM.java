@@ -4,13 +4,15 @@
  */
 package sound;
 
+import java.lang.reflect.Field;
 import java.util.Scanner;
+import java.io.*;
 
 public class LastFM {
     //gets OS
     private String os = System.getProperty("os.name").toLowerCase();
     private Runtime rt = Runtime.getRuntime();
-    
+    Process p;
     private boolean isPlaying = false;
     
     /**
@@ -55,7 +57,47 @@ public class LastFM {
      * Not finished yet
      */
     public void stopPlayback() {
+        //gets and kills the process on Unix systems
+        try {
+            killUnixProcess(p);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         isPlaying = false;
+       
+    }
+    /**
+     * Gets and returns the pid of the process on Unix systems
+     * @param process
+     * @return
+     * @throws Exception
+     */
+    public int getUnixPID(Process process) throws Exception
+    {
+        System.out.println(process.getClass().getName());
+        if (process.getClass().getName().equals("java.lang.UNIXProcess"))
+        {
+            Class cl = process.getClass();
+            Field field = cl.getDeclaredField("pid");
+            field.setAccessible(true);
+            Object pidObject = field.get(process);
+            return (Integer) pidObject;
+        } else
+        {
+            throw new IllegalArgumentException("Needs to be a UNIXProcess");
+        }
+    }
+    /**
+     * Kills the unix process
+     * @param process
+     * @return
+     * @throws Exception
+     */
+    public int killUnixProcess(Process process) throws Exception
+    {
+        int pid = getUnixPID(process);
+        return Runtime.getRuntime().exec("kill " + pid).waitFor();
     }
     /**
      * Opens a url in the default browser
@@ -68,11 +110,11 @@ public class LastFM {
 
                 // this doesn't support showing urls in the form of
                 // "page.html#nameLink"
-                rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+                p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
 
             } else if (os.indexOf("mac") >= 0) {
 
-                rt.exec("open " + url);
+                p = Runtime.getRuntime().exec("open " + url);
 
             } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
 
@@ -90,7 +132,7 @@ public class LastFM {
                     cmd.append((i == 0 ? "" : " || ") + browsers[i] + " \""
                             + url + "\" ");
 
-                rt.exec(new String[] { "sh", "-c", cmd.toString() });
+                p = Runtime.getRuntime().exec(new String[] { "sh", "-c", cmd.toString() });
 
             } else {
                 return;
