@@ -1,3 +1,5 @@
+package sound;
+
 
 // TODO What if someone wanted to play with sound off?
 public class SoundEffect {

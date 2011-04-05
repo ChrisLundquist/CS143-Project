@@ -1,3 +1,4 @@
+package sound;
 import java.io.File;
 
 public class EntryPoint {

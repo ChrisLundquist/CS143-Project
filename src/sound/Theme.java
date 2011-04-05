@@ -1,3 +1,5 @@
+package sound;
+
 
 public class Theme {
     public static Piece[] pieces;
