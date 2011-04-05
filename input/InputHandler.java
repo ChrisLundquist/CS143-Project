@@ -112,7 +112,7 @@ public class InputHandler implements KeyListener {
         Player player = Game.getPlayer();
 
         // On state transition to player death, clear key state
-        if (playerAlive && player.isAlive() == false) {
+        if(player != null && playerAlive && player.isAlive() == false) {
             clearKeyState();
             playerAlive = false;
         }
