@@ -130,10 +130,8 @@ public class ScenePanel extends GLCanvas {
         // Render background
         // FIXME gl.glClear(GL.GL_COLOR_BUFFER_BIT) should reset the color but doesn't seem to
         gl.glLoadIdentity();
-        //gl.glBindTexture(GL.GL_TEXTURE_2D, Sprite.background().getTextureId());
-        //gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        //gl.glTranslatef(0, 0, -2);
-        //gl.glScalef(4, 4, 1);
+        drawSkybox(gl);
+
         // The Polygon for our background image to map a texture to
         //drawNormalSquare(gl);
 
@@ -276,6 +274,16 @@ public class ScenePanel extends GLCanvas {
         */
     }
 
+    
+    private void drawSkybox(GL2 gl){
+        // TODO OPTIMIZE we don't want to load the texture each frame, this was
+        // just a basic proof test.
+        gl.glBindTexture(GL.GL_TEXTURE_2D, new graphics.Texture(gl,new java.io.File("/Users/Durandal/code/java/tcc/project/data/background.jpg")).getGlTexture());
+        gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        gl.glTranslatef(0, 0, -2);
+        gl.glScalef(4, 4, 1);
+        drawNormalSquare(gl);
+    }
     /**
      * Draw a normalized square at the origin
      * @param gl - the OpenGL context

@@ -15,7 +15,6 @@ public class MainMenu extends JFrame {
     //These are the fields
     private JPanel titlePanel;
     private JPanel buttonsPanel;
-    private JButton highScores;
     private JButton startGame;
     private JButton settings;
     private JButton howToPlay;
@@ -50,20 +49,17 @@ public class MainMenu extends JFrame {
         startGame = new JButton(Game.isStarted() ? "Resume Game" : "Start Game");
         howToPlay = new JButton("How to play");
         settings = new JButton("Settings");
-        highScores = new JButton("High scores");
         quitButton = new JButton("Quit");
 
         startGame.addActionListener(new StartGameListener());
         howToPlay.addActionListener(new HowToPlayListener());
         settings.addActionListener(new SettingsListener());
-        highScores.addActionListener(new HighScoresListener());
         quitButton.addActionListener(new QuitButtonListener());
 
         titlePanel.add(title);
         buttonsPanel.add(startGame);
         buttonsPanel.add(howToPlay);
         buttonsPanel.add(settings);
-        buttonsPanel.add(highScores);
         buttonsPanel.add(quitButton);
 
         GUI.colorize(buttonsPanel);
@@ -105,12 +101,6 @@ public class MainMenu extends JFrame {
     private class SettingsListener implements ActionListener {
         public void actionPerformed(ActionEvent f) {
             new Settings();
-        }
-    }
-
-    private class HighScoresListener implements ActionListener {
-        public void actionPerformed(ActionEvent f) {
-            Game.showHighScores();
         }
     }
 

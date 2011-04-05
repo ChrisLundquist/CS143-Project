@@ -21,9 +21,7 @@ public class ScorePanel extends JPanel {
     private int frameCounter;
     private JLabel multiplyer;
     private JLabel score;
-    private JLabel lives;
     private JLabel accurate;
-    private JLabel asteroidNumber;
     private int scoreAmount;
     private int hitAmount;
     private int shotsMissed;
@@ -36,7 +34,6 @@ public class ScorePanel extends JPanel {
         accurate = new JLabel("Accuracy 0%");
         score = new JLabel("Score: " + scoreAmount);
         add(score);
-        add(lives);
         add(accurate);
         add(multiplyer);
 
