@@ -199,7 +199,7 @@ public class ScenePanel extends GLCanvas {
     }
 
     private void renderShields(GL2 gl){
-        actor.Player player = Game.getPlayer();
+        //actor.Player player = Game.getPlayer();
 
         gl.glLoadIdentity();
         // Texture of the player's shield
