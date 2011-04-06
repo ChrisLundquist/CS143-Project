@@ -4,6 +4,8 @@ import graphics.Model;
 import java.io.Serializable;
 import java.util.Random;
 
+import javax.media.opengl.GL2;
+
 public abstract class Actor implements Serializable {
     private static final long serialVersionUID = 744085604446096658L;
     static protected final float MASS_SCALING = 2.0f;
@@ -26,7 +28,7 @@ public abstract class Actor implements Serializable {
     protected int age; // Actor age in frames
 
     protected float headingDegrees;
-    protected float pictureDegrees;
+    protected float pictchDegrees;
     protected Vector3 velocity;
     protected Vector3 position;
     protected Quaternion heading;
@@ -275,9 +277,14 @@ public abstract class Actor implements Serializable {
         position.plusEquals(velocity);
     }
 
-    public void render() {
-        // TODO load OpenGL Identity
+    public void render(GL2 gl) {
+        // CL NOTE: We are loading the identity instead of pushing and popping the
+        //          current matrix. This replaces the current matrix forever.
+        gl.glLoadIdentity();
         // TODO Push our transformation matrix onto the openGL stack
-        // TODO Push our points and textures for our model to OpenGL
+        
+        // CL - Render our model.
+        getModel().render(gl);
     }
+    
 }

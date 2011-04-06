@@ -274,15 +274,18 @@ public class ScenePanel extends GLCanvas {
         */
     }
 
-    
+    private static float rot = 0.0f;
     private void drawSkybox(GL2 gl){
         // TODO OPTIMIZE we don't want to load the texture each frame, this was
         // just a basic proof test.
-        gl.glBindTexture(GL.GL_TEXTURE_2D, new graphics.Texture(gl,new java.io.File("/Users/Durandal/code/java/tcc/project/data/background.jpg")).getGlTexture());
+        //gl.glBindTexture(GL.GL_TEXTURE_2D, new graphics.Texture(gl,new java.io.File("/Users/Durandal/code/java/tcc/project/data/background.jpg")).getGlTexture());
         gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        gl.glTranslatef(0, 0, -2);
+        gl.glTranslatef(0, 0, -6);
+        gl.glRotatef(1.0f, 1.0f, 0.0f, 40.0f);
         gl.glScalef(4, 4, 1);
-        drawNormalSquare(gl);
+
+        rot += 10.0f;
+        graphics.Model.renderCube(gl);
     }
     /**
      * Draw a normalized square at the origin
