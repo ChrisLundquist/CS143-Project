@@ -1,22 +1,18 @@
 package game;
-
+ 
 import actor.Player;
 
-public class Game {
-    private static GUI gui;
-    private static MainMenu menu;
-    private static boolean paused;
-    private static boolean started; 
-    // TODO CL - get rid of this. It is used by the main menu to change the verbage from "start" to "resume"
+ 
+/**
+ * ported to JOGL 2.0 by Julien Gouesse (http://tuer.sourceforge.net)
+ */
+public class Game { 
 
-
-    /**
-     * Our main function
-     * @param args
-     */
+    private static graphics.Renderer renderer;
+    
     public static void main(String[] args) {
-        gui = new GUI();
-        menu = new MainMenu();
+        renderer = new graphics.Renderer();
+        renderer.start();
     }
 
     public static Player getPlayer() {
@@ -25,7 +21,8 @@ public class Game {
     }
 
     public static boolean isPaused() {
-        return paused;
+        // TODO Auto-generated method stub
+        return false;
     }
 
     public static void quitToMenu() {
@@ -34,35 +31,12 @@ public class Game {
     }
 
     public static void togglePause() {
-        paused = !paused;
-    }
-
-    public static void init() {
-        graphics.Model.loadModels();                  // Load our models
-        sound.SoundEffect.init(false);                // Default to sound off
-        graphics.particles.ParticleSystem.init(true); // default to particles on
-        graphics.OnscreenMessage.init();              // Initialize Screen messages
-    }
-
-    public static void update() {
         // TODO Auto-generated method stub
         
     }
 
-    public static void dispose() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public static boolean isStarted() {
-        return started;
-    }
-
-    public static void showGame() {
-        menu.dispose();
-        menu = null;
-        gui.setVisible(true);
-        
+    public static void exit() {
+        renderer.exit();
     }
 
 }
