@@ -17,6 +17,9 @@ import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.Animator;
 
+/* @author Chris Lundquist
+ *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
+ */
 public class Renderer implements GLEventListener {
      GLU glu;
      GLCanvas canvas;
@@ -26,7 +29,7 @@ public class Renderer implements GLEventListener {
      public Renderer(){
           glu = new GLU();
           canvas = new GLCanvas();
-          frame = new Frame("Jogl Quad drawing");
+          frame = new Frame("cs143 project");
           animator = new Animator(canvas);
      }
      private static float rotateT;
