@@ -2,10 +2,6 @@ package game;
  
 import actor.Player;
 
- 
-/**
- * ported to JOGL 2.0 by Julien Gouesse (http://tuer.sourceforge.net)
- */
 public class Game { 
 
     private static graphics.Renderer renderer;
