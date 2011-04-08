@@ -28,6 +28,9 @@ public class WavefrontObjLoader {
                 StringTokenizer tokenizer = new StringTokenizer(line);
 
                 switch(tokenType(tokenizer.nextToken())) {
+                    case COMMENT:
+                        /* NOOP */
+                        break;
                     case GEOMETRIC_VERTEX:
                         geo_verticies.add(readVertex(tokenizer));
                         break;
@@ -39,7 +42,7 @@ public class WavefrontObjLoader {
                         break;
                     case FACE:
                         polygons.add(readPolygon(tokenizer));
-                        
+                        break;
                     default:
                         System.out.println("Unhandled Line: " + line);
                 }
@@ -66,8 +69,18 @@ public class WavefrontObjLoader {
     private static Polygon readPolygon(StringTokenizer tokenizer) {
         
         while (tokenizer.hasMoreTokens()) {
-            String vertex_token = tokenizer.nextToken();
+            String vertex_tokens[] = tokenizer.nextToken().split("/");
             
+            switch(vertex_tokens.length) {
+                case 1:
+                    /* Single number - lookup geo vertex only */
+                case 2:
+                    /* Two numbers - geo vertex, and texture coordinate */
+                case 3:
+                    /* geo vertex, texture cooridinate and normal */
+                default:
+                    throw new IllegalArgumentException("Malformed vertex token: ");
+            }
             
             
         }
@@ -113,6 +126,10 @@ public class WavefrontObjLoader {
         
         void add(float v) {
             switch(dim) {
+                case 0:
+                    x = v;
+                    dim ++;
+                    return;
                 case 1:
                     y = v;
                     dim ++;
