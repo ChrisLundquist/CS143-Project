@@ -13,19 +13,26 @@ import java.nio.ByteOrder;
 
 public class Texture {
     private static Vector<Texture> textures = new Vector<Texture>();
+    private static int lastID = 0;
 
-    private int glTexture;
+    private transient int glTexture;
+    private int id;
 
     public int getGlTexture() {
         return glTexture;
     }
 
     public static Texture findById(int id) {
-        return textures.get(id);
+        for(Texture texture : textures){
+            if(texture.id == id)
+                return texture;
+        }
+        return null;
     }
     
     
     public Texture(GL gl, File textureFile) {
+        id = ++lastID;
         BufferedImage image;
         try {
             image = ImageIO.read(textureFile);

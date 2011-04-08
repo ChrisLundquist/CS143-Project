@@ -67,9 +67,9 @@ public class Renderer implements GLEventListener {
         gl.glRotatef(rotateT, 0.0f, 0.0f, 1.0f);
 
         // Draw A Quad
-        Model foo = WavefrontObjLoader.load("assets/cube.obj");
-        //foo.init(gl);
-        foo.render_slow(gl);
+        Model foo = WavefrontObjLoader.load("assets/cube_textured.obj");
+        foo.init(gl);
+        foo.render(gl);
         
         // increasing rotation for the next iteration
         rotateT += 0.2f;

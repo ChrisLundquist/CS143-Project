@@ -21,7 +21,7 @@ public class WavefrontObjLoader {
     public static Model load(String filepath){
         return load(new File(filepath));
     }
-    
+
     public static Model load(File file) {
 
         Vector<Polygon> polygons = new Vector<Polygon>();
@@ -31,27 +31,42 @@ public class WavefrontObjLoader {
         try {
             in = new BufferedReader(new FileReader(file));
 
+            // While we have lines in our file
             while((line = in.readLine()) != null) {
                 StringTokenizer tokenizer = new StringTokenizer(line);
 
-                switch(tokenType(tokenizer.nextToken())) {
-                    case COMMENT:
-                        /* NOOP */
-                        break;
-                    case GEOMETRIC_VERTEX:
-                        geo_verticies.add(readVertex(tokenizer));
-                        break;
-                    case VERTEX_NORMAL:
-                        vertex_normals.add(readVertex(tokenizer));
-                        break;  
-                    case TEXTURE_COORDINATE:
-                        texture_verticies.add(readVertex(tokenizer));
-                        break;
-                    case FACE:
-                        polygons.add(readPolygon(tokenizer));
-                        break;
-                    default:
-                        System.out.println("Unhandled Line: " + line);
+                // And while we have tokens in the line
+                while(tokenizer.hasMoreTokens()) {
+                    String token = tokenizer.nextToken();
+                    switch(tokenType(token)) {
+                        case COMMENT:
+                            /* NOOP */
+                            break;
+                        case GROUP:
+                            break;
+                        case GEOMETRIC_VERTEX:
+                            geo_verticies.add(readVertex(tokenizer));
+                            break;
+                        case VERTEX_NORMAL:
+                            vertex_normals.add(readVertex(tokenizer));
+                            break;  
+                        case TEXTURE_COORDINATE:
+                            texture_verticies.add(readVertex(tokenizer));
+                            break;
+                        case USEMAP:
+                            break;
+                        case MAPLIB:
+                            break;
+                        case MATLLIB:
+                            break;
+                        case USEMTL:
+                            break;
+                        case FACE:
+                            polygons.add(readPolygon(tokenizer));
+                            break;
+                        default:
+                            System.out.println("Unhandled Token: " + token + "\n" +"Line: " + line);
+                    }
                 }
             }
 
@@ -120,6 +135,16 @@ public class WavefrontObjLoader {
             return TokenType.VERTEX_NORMAL;
         if (token.equals("f"))
             return TokenType.FACE;
+        if (token.equals("usemap"))
+            return TokenType.USEMAP;
+        if (token.equals("usemtl"))
+            return TokenType.USEMTL;
+        if (token.equals("maplib"))
+            return TokenType.MAPLIB;
+        if (token.equals("matllib"))
+            return TokenType.MATLLIB;
+        if (token.equals("g"))
+            return TokenType.GROUP;
 
         return TokenType.UNKNOWN;
     }
@@ -131,6 +156,11 @@ public class WavefrontObjLoader {
         VERTEX_NORMAL,
         TEXTURE_COORDINATE,
         FACE,
+        USEMAP,
+        USEMTL,
+        MAPLIB,
+        MATLLIB,
+        GROUP,
     }
 
     private static class ObjVertex {
