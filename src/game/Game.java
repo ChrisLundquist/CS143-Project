@@ -1,24 +1,32 @@
 package game;
  
+import input.InputHandler;
 import actor.Player;
 
 public class Game { 
 
     private static graphics.Renderer renderer;
+    private static input.InputHandler input;
+    private static boolean paused;
+    private static Player player;
     
     public static void main(String[] args) {
+        player = new Player();
         renderer = new graphics.Renderer();
+        input = new InputHandler();
         renderer.start();
+    }
+    
+    public static InputHandler getInputHandler(){
+        return input;
     }
 
     public static Player getPlayer() {
-        // TODO Auto-generated method stub
-        return null;
+        return player;
     }
 
     public static boolean isPaused() {
-        // TODO Auto-generated method stub
-        return false;
+        return paused;
     }
 
     public static void quitToMenu() {
@@ -27,11 +35,13 @@ public class Game {
     }
 
     public static void togglePause() {
-        // TODO Auto-generated method stub
-        
+        paused = !paused;
     }
 
     public static void exit() {
+        System.err.println("Exiting");
+        // FIXME This generates an exception when some threaded callback tries
+        //       to redraw the window
         renderer.exit();
     }
 

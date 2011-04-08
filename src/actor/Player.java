@@ -1,7 +1,14 @@
 package actor;
 
 public class Player extends Actor {
+    private static final long serialVersionUID = 260627862699350716L;
+    protected boolean alive;
+    protected graphics.Camera camera;
 
+    
+    public Player(){
+        alive = true;
+    }
     @Override
     public void handleCollision(Actor other) {
         // TODO Auto-generated method stub
@@ -9,11 +16,14 @@ public class Player extends Actor {
     }
 
     public boolean isAlive() {
-        // TODO Auto-generated method stub
-        return false;
+        return alive;
     }
 
     public void respawn() {
+        // Don't respawn the player if they are alive
+        if(alive == true)
+            return;
+        
         // TODO Auto-generated method stub
         
     }
