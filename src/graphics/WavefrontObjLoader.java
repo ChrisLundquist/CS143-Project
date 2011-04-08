@@ -8,15 +8,22 @@ import java.util.Vector;
  * Singleton class to load Wavefront .obj files
  */
 public class WavefrontObjLoader {
+    /* These where originally local variables in loadModel(), but readPolygon needs to access them */
+    private static Vector<ObjVertex> geo_verticies = new Vector<ObjVertex>();
+    private static Vector<ObjVertex> texture_verticies = new Vector<ObjVertex>();
+    private static Vector<ObjVertex> vertex_normals = new Vector<ObjVertex>();
+
     public static void main(String[] args) {
         File file = new File("assets/cube.obj");
-        loadModel(file);
+        load(file);
+    }
+
+    public static Model load(String filepath){
+        return load(new File(filepath));
     }
     
-    public static Model loadModel(File file) {
-        Vector<ObjVertex> geo_verticies = new Vector<ObjVertex>();
-        Vector<ObjVertex> texture_verticies = new Vector<ObjVertex>();
-        Vector<ObjVertex> vertex_normals = new Vector<ObjVertex>();
+    public static Model load(File file) {
+
         Vector<Polygon> polygons = new Vector<Polygon>();
         BufferedReader in;
         String line;
@@ -48,7 +55,7 @@ public class WavefrontObjLoader {
                 }
             }
 
-            return null;
+            return new Model(polygons);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -58,34 +65,48 @@ public class WavefrontObjLoader {
     private static ObjVertex readVertex(StringTokenizer tokenizer) {
         ObjVertex vertex = new ObjVertex();
         float value;
-        
+
         while (tokenizer.hasMoreTokens()) {
             value = Float.parseFloat(tokenizer.nextToken());
             vertex.add(value);
         }
         return vertex;
     }
-    
+
     private static Polygon readPolygon(StringTokenizer tokenizer) {
-        
+        Vector<Vertex> verticies = new Vector<Vertex>();
         while (tokenizer.hasMoreTokens()) {
-            String vertex_tokens[] = tokenizer.nextToken().split("/");
-            
+            String token = tokenizer.nextToken();
+            String vertex_tokens[] = token.split("/");
+            ObjVertex geo, tex, norm;
+
             switch(vertex_tokens.length) {
                 case 1:
                     /* Single number - lookup geo vertex only */
+                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0]) - 1); /* Obj files starts w/ vertex 1 */
+                    verticies.add(new Vertex(geo.x, geo.y, geo.z));
+                    break;
                 case 2:
                     /* Two numbers - geo vertex, and texture coordinate */
+                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0])-1);
+                    tex = texture_verticies.get(Integer.parseInt(vertex_tokens[1])-1);
+                    verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
+                    break;
                 case 3:
                     /* geo vertex, texture cooridinate and normal */
+                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0])-1);
+                    tex = texture_verticies.get(Integer.parseInt(vertex_tokens[1])-1);
+                    norm = vertex_normals.get(Integer.parseInt(vertex_tokens[3])-1);
+                    verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
+                    break;
                 default:
-                    throw new IllegalArgumentException("Malformed vertex token: ");
+                    throw new IllegalArgumentException("Malformed vertex token: " + token );
             }
-            
-            
+
+
         }
-        
-        return null;
+
+        return new Polygon(0 /* textureId */, verticies);
     }
 
     private static TokenType tokenType(String token) {
@@ -115,7 +136,7 @@ public class WavefrontObjLoader {
     private static class ObjVertex {
         int dim;
         float x, y, z, w;
-        
+
         public ObjVertex() {
             dim = 0;
             this.x = 0.0f;
@@ -123,7 +144,7 @@ public class WavefrontObjLoader {
             this.z = 0.0f;
             this.w = 0.0f;
         }
-        
+
         void add(float v) {
             switch(dim) {
                 case 0:

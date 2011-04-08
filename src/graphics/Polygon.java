@@ -25,11 +25,12 @@ public class Polygon {
         if (verticies.size() < 2)
             return;
 
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, getTexture().getGlTexture());
+        //gl.glBindTexture(GL2.GL_TEXTURE_2D, getTexture().getGlTexture());
         gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         if (verticies.size() == 3) {           
             for (Vertex v: verticies){
-                gl.glTexCoord2f(v.u, v.v); gl.glVertex3f(v.x, v.y, v.z);
+                //gl.glTexCoord2f(v.u, v.v); 
+                gl.glVertex3f(v.x, v.y, v.z);
             }
         } else {
             Vertex a = verticies.get(0);
@@ -38,9 +39,12 @@ public class Polygon {
                 Vertex b = verticies.get(i - 1);
                 Vertex c = verticies.get(i);
                 
-                gl.glTexCoord2f(a.u, a.v); gl.glVertex3f(a.x, a.y, a.z);
-                gl.glTexCoord2f(b.u, b.v); gl.glVertex3f(b.x, b.y, b.z);
-                gl.glTexCoord2f(c.u, c.v); gl.glVertex3f(c.x, c.y, c.z);
+                //gl.glTexCoord2f(a.u, a.v); 
+                gl.glVertex3f(a.x, a.y, a.z);
+                //gl.glTexCoord2f(b.u, b.v); 
+                gl.glVertex3f(b.x, b.y, b.z);
+                //gl.glTexCoord2f(c.u, c.v); 
+                gl.glVertex3f(c.x, c.y, c.z);
             }
             
         }

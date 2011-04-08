@@ -67,14 +67,10 @@ public class Renderer implements GLEventListener {
         gl.glRotatef(rotateT, 0.0f, 0.0f, 1.0f);
 
         // Draw A Quad
-        gl.glBegin(GL2.GL_QUADS);               
-        gl.glColor3f(0.0f, 1.0f, 1.0f);   // set the color of the quad
-        gl.glVertex3f(-1.0f, 1.0f, 0.0f);      // Top Left
-        gl.glVertex3f( 1.0f, 1.0f, 0.0f);       // Top Right
-        gl.glVertex3f( 1.0f,-1.0f, 0.0f);      // Bottom Right
-        gl.glVertex3f(-1.0f,-1.0f, 0.0f);     // Bottom Left
-        // Done Drawing The Quad
-        gl.glEnd();
+        Model foo = WavefrontObjLoader.load("assets/cube.obj");
+        //foo.init(gl);
+        foo.render_slow(gl);
+        
         // increasing rotation for the next iteration
         rotateT += 0.2f;
 

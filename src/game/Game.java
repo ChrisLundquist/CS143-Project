@@ -15,6 +15,7 @@ public class Game {
         renderer = new graphics.Renderer();
         input = new InputHandler();
         renderer.start();
+      
     }
     
     public static InputHandler getInputHandler(){
