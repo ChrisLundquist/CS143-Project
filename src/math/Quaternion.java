@@ -1,14 +1,14 @@
 package math;
 
 public class Quaternion {
-    Quaternion() {
+    public Quaternion() {
         w_ = 1.0f;
         x_ = 0.0f;
         y_ = 0.0f;
         z_ = 0.0f;
     }
 
-    Quaternion(float x, float y, float z, float radians) {
+    public Quaternion(float x, float y, float z, float radians) {
         // BOO java doubles
         float angle = (float)Math.sin(radians / 2.0f);
         w_ = (float)Math.cos(angle / 2.0f);
@@ -16,6 +16,13 @@ public class Quaternion {
         x_ = x * angle;
         y_ = y * angle;
         z_ = z * angle;
+    }
+
+    public Quaternion(Quaternion original) {
+        w_ = original.w_;
+        x_ = original.x_;
+        y_ = original.y_;
+        z_ = original.z_;
     }
 
     public Quaternion times(Quaternion q) {

@@ -9,11 +9,14 @@ public class Game {
     private static input.InputHandler input;
     private static boolean paused;
     private static Player player;
+    //private static MainMenu menu;
     
     public static void main(String[] args) {
         player = new Player();
         renderer = new graphics.Renderer();
         input = new InputHandler();
+        //menu = new MainMenu();
+        
         renderer.start();
       
     }

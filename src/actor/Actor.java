@@ -22,35 +22,30 @@ public abstract class Actor implements Serializable {
     public static int lastId;
 
 
-    protected float size; // the radius of the object
-    protected int id; // unique ID for each Actor 
-    protected int parentId;
-    protected int age; // Actor age in frames
-
-    protected float headingDegrees;
-    protected float pictchDegrees;
-    protected Vector3 velocity;
-    protected Vector3 position;
-    protected Quaternion heading;
-    protected Quaternion pitch;
-
-    protected int modelId;
-    protected transient Model model; // CL - Used to store the model reference after we look it up once
-
-    public Model getModel() {
-        // CL - If our reference is null, go look it up
-        if(model == null)
-            model = Model.findById(modelId);
-
-        return model;
-    }
-
-
     /**
      * Common random number generator object
      */
     static protected Random gen = new Random();
+    protected float size; // the radius of the object
+    protected int id; // unique ID for each Actor 
+    protected int modelId;
+    protected transient Model model; // CL - Used to store the model reference after we look it up once
+    protected int parentId;
+    protected int age; // Actor age in frames
 
+    protected float headingDegrees;
+    protected Quaternion pitch;
+    protected float pictchDegrees;
+    protected Vector3 velocity;
+    protected Vector3 position;
+    protected Quaternion heading;
+    
+    public Actor(){
+        pitch = new Quaternion();
+        heading = new Quaternion();
+        position = new Vector3();
+        velocity = new Vector3();
+    }
     /**
      * CL - We need to synchronize removing actors so we don't have threads
      *      stepping on eachother's toes.
@@ -72,43 +67,6 @@ public abstract class Actor implements Serializable {
      * @param other the object this actor collided with
      */
     abstract public void handleCollision(Actor other);
-
-    /**
-     * 
-     * @return the actors current position
-     */
-    public Vector3 getPosition() {
-        return position;
-    }
-
-    /**
-     * 
-     * @return the actors current velocity
-     */
-    public Vector3 getVelocity(){
-        return velocity;
-    }
-
-    /**
-     * 
-     * @return the actors size (for texture scaling and collision detection)
-     */
-    public float getSize(){
-        return size;
-    }
-
-    // Lets you reference chain
-    public Actor setSize(float newSize){
-        size = newSize;
-        return this;
-    }
-
-    public float getMass() {
-        // This does not account for different actors having different densities
-        // but the mass should scale with the cube of the linear scale (the volume)
-        // But the area is more fun!
-        return size * size;
-    }
 
     protected int generateId() {
         return (lastId =+ gen.nextInt(1000) + 1); // Pseudo random increments
@@ -285,6 +243,91 @@ public abstract class Actor implements Serializable {
         
         // CL - Render our model.
         getModel().render(gl);
+    }
+
+    /**
+     * 
+     * @return the actors current position
+     */
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    /**
+     * 
+     * @return the actors current velocity
+     */
+    public Vector3 getVelocity(){
+        return velocity;
+    }
+
+    /**
+     * 
+     * @return the actors size (for texture scaling and collision detection)
+     */
+    public float getSize(){
+        return size;
+    }
+
+    // Lets you reference chain
+    public Actor setSize(float newSize){
+        size = newSize;
+        return this;
+    }
+
+    public float getMass() {
+        // This does not account for different actors having different densities
+        // but the mass should scale with the cube of the linear scale (the volume)
+        // But the area is more fun!
+        return size * size;
+    }
+
+    public float getHeadingDegrees() {
+        return headingDegrees;
+    }
+
+    public void setHeadingDegrees(float headingDegrees) {
+        this.headingDegrees = headingDegrees;
+    }
+
+    public float getPictchDegrees() {
+        return pictchDegrees;
+    }
+
+    public void setPictchDegrees(float pictchDegrees) {
+        this.pictchDegrees = pictchDegrees;
+    }
+
+    public Quaternion getHeading() {
+        return heading;
+    }
+
+    public void setHeading(Quaternion heading) {
+        this.heading = heading;
+    }
+
+    public Quaternion getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(Quaternion pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setVelocity(Vector3 velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
+    }
+
+    public Model getModel() {
+        // CL - If our reference is null, go look it up
+        if(model == null)
+            model = Model.findById(modelId);
+    
+        return model;
     }
     
 }

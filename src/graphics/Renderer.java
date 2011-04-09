@@ -50,24 +50,18 @@ public class Renderer implements GLEventListener {
         // Update the actors
         actor.Actor.updateActors();
 
-        // Render each actor
-        for(Actor a : actor.Actor.actors ){
-            a.render(gl);
-        }
-
         //TODO render something we care about
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glTranslatef(0.0f, 0.0f, -5.0f);
 
-        // rotate on the three axis
-        gl.glRotatef(rotateT, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(rotateT, 0.0f, 1.0f, 0.0f);
-        gl.glRotatef(rotateT, 0.0f, 0.0f, 1.0f);
-
+        game.Game.getPlayer().getCamera().pushTransformation(gl);
+        // Render each actor
+        for(Actor a : actor.Actor.actors ){
+            a.render(gl);
+        }
         // Draw A Quad
-        Model foo = WavefrontObjLoader.load("assets/cube_textured.obj");
+        Model foo = WavefrontObjLoader.load("assets/cube.obj");
         foo.init(gl);
         foo.render(gl);
         
