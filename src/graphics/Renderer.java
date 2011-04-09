@@ -52,6 +52,7 @@ public class Renderer implements GLEventListener {
         //TODO render something we care about
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
 
         // Push the transformation for our player's Camera
         game.Game.getPlayer().getCamera().pushTransformation(gl);
