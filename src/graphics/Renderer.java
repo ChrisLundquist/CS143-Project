@@ -34,7 +34,6 @@ public class Renderer implements GLEventListener {
         frame = new Frame("cs143 project");
         animator = new Animator(canvas);
     }
-    private static float rotateT;
 
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -53,21 +52,15 @@ public class Renderer implements GLEventListener {
         //TODO render something we care about
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
 
+        // Push the transformation for our player's Camera
         game.Game.getPlayer().getCamera().pushTransformation(gl);
+        
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
-        // Draw A Quad
-        Model foo = WavefrontObjLoader.load("assets/cube.obj");
-        foo.init(gl);
-        foo.render(gl);
         
-        // increasing rotation for the next iteration
-        rotateT += 0.2f;
-
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {

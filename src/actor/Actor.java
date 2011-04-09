@@ -41,11 +41,15 @@ public abstract class Actor implements Serializable {
     protected Quaternion heading;
     
     public Actor(){
+        id = generateId();
         pitch = new Quaternion();
         heading = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
+        modelId = Model.getModelIdFor(this);
     }
+    
+
     /**
      * CL - We need to synchronize removing actors so we don't have threads
      *      stepping on eachother's toes.
@@ -236,11 +240,6 @@ public abstract class Actor implements Serializable {
     }
 
     public void render(GL2 gl) {
-        // CL NOTE: We are loading the identity instead of pushing and popping the
-        //          current matrix. This replaces the current matrix forever.
-        gl.glLoadIdentity();
-        // TODO Push our transformation matrix onto the openGL stack
-        
         // CL - Render our model.
         getModel().render(gl);
     }

@@ -2,10 +2,11 @@ package graphics;
 
 import java.util.Vector;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 public class Model {
+    private static final int NO_LIST = -1;
+    protected int id;
     int displayList;
     Vector<Polygon> polygons;
 
@@ -13,17 +14,16 @@ public class Model {
 
     public Model(Vector<Polygon> polygons){
         this.polygons = polygons;
+        displayList = NO_LIST;
     }
-
 
     public static Model findById(int modelId) {
         return models.get(modelId);
     }
 
     public static void loadModels() {
-        // TODO Auto-generated method stub
+        models.add( WavefrontObjLoader.load("assets/cube.obj"));
     }
-
 
     /* 
      * Build a display list for this model
@@ -34,15 +34,15 @@ public class Model {
         renderPolygons(gl);
         gl.glEndList();  
     }
-    
+
     private void renderPolygons(GL2 gl){
-        gl.glBegin(GL.GL_TRIANGLES);
+        gl.glBegin(GL2.GL_TRIANGLES);
         for (Polygon p: polygons) {
             p.render(gl);
         }
         gl.glEnd();
     }
-    
+
     public void render_slow(GL2 gl){
         renderPolygons(gl);
     }
@@ -52,38 +52,18 @@ public class Model {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
+        if(displayList == NO_LIST)
+            init(gl);
         gl.glCallList(displayList);
     }
 
-    // Test method to test rendering geometry
-    public static void renderCube(GL2 gl) {
-        gl.glBegin(GL2.GL_QUADS);                          // Start Drawing Quads
-        // Bottom Face
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);  // Top Right Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);  // Top Left Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-        // Front Face
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f,  1.0f);  // Top Right Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f,  1.0f);  // Top Left Of The Texture and Quad
-        // Back Face
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);  // Top Right Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);  // Top Left Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-        // Right face
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);  // Top Right Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f,  1.0f);  // Top Left Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom Left Of The Texture and Quad
-        // Left Face
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom Right Of The Texture and Quad
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f,  1.0f);  // Top Right Of The Texture and Quad
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);  // Top Left Of The Texture and Quad
-        gl.glEnd();                                // Done Drawing Quads
-
+    public static int getModelIdFor(actor.Actor actor) {
+        // FIXME replace the magic numbers!
+        if(actor instanceof actor.Asteroid){
+            return 0;
+        } else if(actor instanceof actor.Player) {
+            return 1;
+        }
+        return 0;
     }
 }

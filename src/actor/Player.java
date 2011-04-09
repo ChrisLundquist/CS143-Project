@@ -40,13 +40,13 @@ public class Player extends Actor {
 
     public void forwardThrust() {
         // TODO Auto-generated method stub
-        position.z += 0.1f;
+        position.z += 0.01f;
         
     }
 
     public void reverseThrust() {
         // TODO Auto-generated method stub
-        position.z -= 0.1f;
+        position.z -= 0.01f;
         
     }
 
