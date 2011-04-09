@@ -101,15 +101,14 @@ public class GuiTester extends JFrame {
     public void play(){
         Theme playedTheme = new Theme();
         for(File f: this.currentFiles){
-            if(f.getName().endsWith(".mp3")){
-                playedTheme.addPiece(new Piece(f));
+            if(f.getName().endsWith(".wav")){
+                playedTheme.addPiece(new Piece(f.getPath()));
                 cw.print("Added "+f.getName()+" to the theme");
             }
             else{
-                cw.print("Could not add"+f.getName()+".  Not an mp3 file");
+                cw.print("Could not add"+f.getName()+".  Not a wav file");
             }
         }
-        this.themeThread = new Thread(playedTheme);
         this.themeThread.start();
     }
     

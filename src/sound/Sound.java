@@ -1,70 +1,122 @@
 package sound;
 
-/*************************************************************************  
- *  Plays an MP3 file using the JLayer MP3 library.
- *
- *  Reference:  http://www.javazoom.net/javalayer/sources.html
- *  			http://www.cs.princeton.edu/introcs/faq/mp3/MP3.java.html
- *************************************************************************/
-
-
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Date;
 
-/* Defined in the JLayer Jar */
-import javazoom.jl.player.advanced.*;
+import javax.sound.sampled.*;
 
-public class Sound {
-    static public final String SOUND_DIR = ".";
+public class Sound{ 
 
-    private File soundFile;
+	private String filename;
+	private File soundFile;
 
-    // Constructor takes the filePath
-    public Sound(String filename) {
-        this(new File(SOUND_DIR, filename));
-    }
+	private SourceDataLine auline = null;
+	private AudioInputStream audioInputStream = null;
 
-    public Sound(File file) {
-        soundFile = file;
-        open();
-    }
+	private boolean isPlaying = false;
+	private boolean isStarted = false;
 
-    public AdvancedPlayer open() {
-        try {
-            FileInputStream fis     = new FileInputStream(soundFile);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            return new AdvancedPlayer(bis);
-        } catch (Exception e) {
-            System.err.println("Problem opening file " + soundFile);
-            System.err.println(e);
-        }
-        return null;
-    }
 
-    /* FIXME: There must be a cleaner way to do the playing of sounds in threads. */
-    public void play() {
-        // Run in new thread to play in background
-        // by creating an anonymous class like a Functor in C++
-        // or a block in Ruby
-        try {
-            AdvancedPlayer player = open();
-            player.play();
-            player.close();
-        } catch (Exception e) {
-            System.out.println(e); 
-        }
-    }
+	private final int EXTERNAL_BUFFER_SIZE = 524288; // 128Kb 
 
-    /**
-     * Main method for testing this module.
-     * @param args
-     */
-    public static void main(String[] args) {
-        Sound test = new Sound("roar.mp3");
-        System.out.println("loaded");
-        test.play();
-        System.out.println("Success");
-    }
-}
+	public Sound(String wavfile) { 
+		filename = wavfile;
 
+		setup();
+	} 
+
+	/**
+	 * Prepares the audio file for execution.  
+	 * This should be run at the beginning of the game otherwise you can see lag.
+	 */
+	private void setup(){
+	    //Try to construct the file object to read
+		this.soundFile = new File(filename);
+		if (!this.soundFile.exists()) { 
+			System.err.println("Wave file not found: " + filename);
+			return;
+		} 
+		
+		//Gets the input stream
+		try { 
+			audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
+		} catch (UnsupportedAudioFileException e1) { 
+			e1.printStackTrace();
+			return;
+		} catch (IOException e1) { 
+			e1.printStackTrace();
+			return;
+		} 
+
+		AudioFormat format = audioInputStream.getFormat();
+		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+
+		try { 
+			auline = (SourceDataLine) AudioSystem.getLine(info);
+			auline.open(format);
+		} catch (LineUnavailableException e) { 
+			e.printStackTrace();
+			return;
+		} catch (Exception e) { 
+			e.printStackTrace();
+			return;
+		} 
+
+		//start parsing, but don't actually push the data to output
+		auline.start();
+	}
+
+	/**
+	 * Actually plays the song.  
+	 */
+	private void begin(){
+		this.isPlaying = true;
+		this.isStarted = true;
+		
+		try {
+			audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		int nBytesRead = 0;
+		byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
+
+		try { 
+			while (nBytesRead != -1) {
+				if(this.isPlaying){
+					nBytesRead = audioInputStream.read(abData, 0, abData.length);
+					if (nBytesRead >= 0){
+						auline.write(abData, 0, nBytesRead);
+					}
+				}
+				
+			} 
+		} catch (IOException e) { 
+			e.printStackTrace();
+			return;
+		} finally { 
+			this.isStarted = false; 
+		}
+	}
+	
+	public SourceDataLine getAulin(){
+		return this.auline;
+	}
+
+	/**
+	 * Gets rid of the data from the input line.  Don't call flush if you will ever play the songs again.
+	 */
+	public void flush() {
+		this.auline.drain();
+		this.auline.close();
+		
+	}
+
+	public void play() {
+		this.begin();
+	}
+} 
