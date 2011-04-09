@@ -9,6 +9,8 @@ import javax.media.opengl.GL2;
 public abstract class Actor implements Serializable {
     private static final long serialVersionUID = 744085604446096658L;
     static protected final float MASS_SCALING = 2.0f;
+    private static final float HEADING_RATE = 1.0f;
+    private static final float PITCH_RATE = 1.0f;
 
     /**
      *  All the actors currently in play
@@ -35,7 +37,7 @@ public abstract class Actor implements Serializable {
 
     protected float headingDegrees;
     protected Quaternion pitch;
-    protected float pictchDegrees;
+    protected float pitchDegrees;
     protected Vector3 velocity;
     protected Vector3 position;
     protected Quaternion heading;
@@ -289,12 +291,12 @@ public abstract class Actor implements Serializable {
         this.headingDegrees = headingDegrees;
     }
 
-    public float getPictchDegrees() {
-        return pictchDegrees;
+    public float getPitchDegrees() {
+        return pitchDegrees;
     }
 
-    public void setPictchDegrees(float pictchDegrees) {
-        this.pictchDegrees = pictchDegrees;
+    public void setPitchDegrees(float pictchDegrees) {
+        this.pitchDegrees = pictchDegrees;
     }
 
     public Quaternion getHeading() {
@@ -320,6 +322,24 @@ public abstract class Actor implements Serializable {
     public void setPosition(Vector3 position) {
         this.position = position;
     }
+    
+    public Vector3 getDirection(){
+        float[] matrix = new float[16];
+        Quaternion q = new Quaternion();
+        Vector3 direction = new Vector3();
+        // Create a matrix from the pitch Quaternion and get the j vector 
+        // for our direction.
+        matrix = getPitch().toGlMatrix();
+        direction.y = matrix[9];
+
+        // Combine the heading and pitch rotations and make a matrix to get
+        // the i and j vectors for our direction.
+        q = getHeading().times(getPitch());
+        matrix = q.toGlMatrix();
+        direction.x = matrix[8];
+        direction.z = matrix[10];
+        return direction;
+    }
 
     public Model getModel() {
         // CL - If our reference is null, go look it up
@@ -328,5 +348,111 @@ public abstract class Actor implements Serializable {
     
         return model;
     }
+    public void changePitch(float degrees)
+    {
+        if(Math.abs(degrees) < Math.abs(PITCH_RATE))
+        {
+            // Our pitch is less than the max pitch rate that we 
+            // defined so lets increment it.
+            pitchDegrees += degrees;
+        }
+        else
+        {
+            // Our pitch is greater than the max pitch rate that
+            // we defined so we can only increment our pitch by the 
+            // maximum allowed value.
+            if(degrees < 0)
+            {
+                // We are pitching down so decrement
+                pitchDegrees -= PITCH_RATE;
+            }
+            else
+            {
+                // We are pitching up so increment
+                pitchDegrees += PITCH_RATE;
+            }
+        }
+
+        // We don't want our pitch to run away from us. Although it
+        // really doesn't matter I prefer to have my pitch degrees
+        // within the range of -360.0f to 360.0f
+        if(pitchDegrees > 360.0f)
+        {
+            pitchDegrees -= 360.0f;
+        }
+        else if(pitchDegrees < -360.0f)
+        {
+            pitchDegrees += 360.0f;
+        }
+    }
     
+    public void changeHeading(float degrees)
+    {
+        if(Math.abs(degrees) < Math.abs(HEADING_RATE))
+        {
+            // Our Heading is less than the max heading rate that we 
+            // defined so lets increment it but first we must check
+            // to see if we are inverted so that our heading will not
+            // become inverted.
+            if(pitchDegrees > 90 && pitchDegrees < 270 || (pitchDegrees < -90 && pitchDegrees > -270))
+            {
+                headingDegrees -= degrees;
+            }
+            else
+            {
+                headingDegrees += degrees;
+            }
+        }
+        else
+        {
+            // Our heading is greater than the max heading rate that
+            // we defined so we can only increment our heading by the 
+            // maximum allowed value.
+            if(degrees < 0)
+            {
+                // Check to see if we are upside down.
+                if((pitchDegrees > 90 && pitchDegrees < 270) || (pitchDegrees < -90 && pitchDegrees > -270))
+                {
+                    // Ok we would normally decrement here but since we are upside
+                    // down then we need to increment our heading
+                    headingDegrees += HEADING_RATE;
+                }
+                else
+                {
+                    // We are not upside down so decrement as usual
+                    headingDegrees -= HEADING_RATE;
+                }
+            }
+            else
+            {
+                // Check to see if we are upside down.
+                if(pitchDegrees > 90 && pitchDegrees < 270 || (pitchDegrees < -90 && pitchDegrees > -270))
+                {
+                    // Ok we would normally increment here but since we are upside
+                    // down then we need to decrement our heading.
+                    headingDegrees -= HEADING_RATE;
+                }
+                else
+                {
+                    // We are not upside down so increment as usual.
+                    headingDegrees += HEADING_RATE;
+                }
+            }
+        }
+        
+        // We don't want our heading to run away from us either. Although it
+        // really doesn't matter I prefer to have my heading degrees
+        // within the range of -360.0f to 360.0f
+        if(headingDegrees > 360.0f)
+        {
+            headingDegrees -= 360.0f;
+        }
+        else if(headingDegrees < -360.0f)
+        {
+            headingDegrees += 360.0f;
+        }
+    }
 }
+
+    
+

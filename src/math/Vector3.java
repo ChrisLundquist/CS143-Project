@@ -36,4 +36,12 @@ public class Vector3 {
     public float magnitude() {
         return (float)Math.sqrt(x*x + y*y + z*z);
     }
+
+    public Vector3 minusEquals(Vector3 other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        
+        return this;
+    }
 }
