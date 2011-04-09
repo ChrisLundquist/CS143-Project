@@ -29,6 +29,8 @@ public class InputHandler implements KeyListener {
         KeyEvent.VK_P,
         KeyEvent.VK_W,
         KeyEvent.VK_S,
+        KeyEvent.VK_A,
+        KeyEvent.VK_Z,
         KeyEvent.VK_F11,
         KeyEvent.VK_BACK_SLASH,
     };
@@ -65,6 +67,8 @@ public class InputHandler implements KeyListener {
         true, //KeyEvent.VK_P,
         true, //KeyEvent.VK_W,
         true, //KeyEvent.VK_S,
+        true, // A
+        true, // Z
         true, //KeyEvent.VK_F11,
         true, //KeyEvent.VK_BLACK_SLASH,
     };
@@ -144,16 +148,22 @@ public class InputHandler implements KeyListener {
                     player.shoot();
                 break;
                 case(KeyEvent.VK_UP):
-                    player.forwardThrust();
+                    player.turnUp();
                 break;
                 case(KeyEvent.VK_DOWN):
-                    player.reverseThrust();
+                    player.turnDown();
                 break;
                 case(KeyEvent.VK_LEFT):
                     player.turnLeft();
                 break;
                 case(KeyEvent.VK_RIGHT):
                     player.turnRight();
+                break;
+                case(KeyEvent.VK_A):
+                    player.forwardThrust();
+                break;
+                case(KeyEvent.VK_Z):
+                    player.reverseThrust();
                 break;
                 case(KeyEvent.VK_Q):
                 case(KeyEvent.VK_ESCAPE):

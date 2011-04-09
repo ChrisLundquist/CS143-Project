@@ -2,6 +2,7 @@ package actor;
 
 public class Player extends Actor {
     private static final String DEFAULT_NAME = new String("Pilot");
+    private static final float TURN_SPEED = 1.0f;
     private static final long serialVersionUID = 260627862699350716L;
     protected boolean alive;
     protected graphics.Camera camera;
@@ -50,14 +51,22 @@ public class Player extends Actor {
         
     }
 
+    public void turnUp(){
+        getCamera().changePitch(-TURN_SPEED);
+
+    }
+    
+    public void turnDown(){
+        getCamera().changePitch(TURN_SPEED);
+    }
+    
+    
     public void turnLeft() {
-        // TODO Auto-generated method stub
-        
+        getCamera().changeHeading(TURN_SPEED);
     }
 
     public void turnRight() {
-        // TODO Auto-generated method stub
-        
+        getCamera().changeHeading(-TURN_SPEED);
     }
     public graphics.Camera getCamera() {
         return camera;

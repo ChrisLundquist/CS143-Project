@@ -1,5 +1,6 @@
 package math;
 
+/* Based on the Nehe Tutorial by  Vic Hollis */
 public class Quaternion {
     public Quaternion() {
         w_ = 1.0f;
@@ -8,7 +9,8 @@ public class Quaternion {
         z_ = 0.0f;
     }
 
-    public Quaternion(float x, float y, float z, float radians) {
+    public Quaternion(float x, float y, float z, float degrees) {
+        float radians = degrees / 180.0f * (float)Math.PI;
         // BOO java doubles
         float angle = (float)Math.sin(radians / 2.0f);
         w_ = (float)Math.cos(angle / 2.0f);

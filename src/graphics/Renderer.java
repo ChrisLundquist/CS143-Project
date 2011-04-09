@@ -55,7 +55,7 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
 
         // Push the transformation for our player's Camera
-        game.Game.getPlayer().getCamera().pushTransformation(gl);
+        game.Game.getPlayer().getCamera().setPerspective(gl);
         
         // Render each actor
         for(Actor a : actor.Actor.actors ){

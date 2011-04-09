@@ -32,4 +32,8 @@ public class Vector3 {
         
         return this;
     }
+
+    public float magnitude() {
+        return (float)Math.sqrt(x*x + y*y + z*z);
+    }
 }
