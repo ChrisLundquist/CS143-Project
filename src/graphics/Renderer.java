@@ -27,12 +27,15 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     FPSAnimator animator;
+    graphics.Camera camera;
+
 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
+        camera = new Camera();
         
     }
 
@@ -56,7 +59,7 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
 
         // Push the transformation for our player's Camera
-        game.Game.getPlayer().getCamera().setPerspective(gl);
+        camera.setPerspective(gl);
         
         // Render each actor
         for(Actor a : actor.Actor.actors ){

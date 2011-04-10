@@ -4,16 +4,14 @@ import javax.media.opengl.GL2;
 
 import math.*;
 public class Camera {
-    //TODO make this network safe
-    actor.Player player;
     
-    public Camera(actor.Player player){
-        this.player = player;
+    public Camera(){
     }
 
     /* Based on the Nehe Tutorial by  Vic Hollis */
     public void setPerspective(GL2 gl) {
         float[] matrix;
+        actor.Player player = game.Game.getPlayer();
         Quaternion q = new Quaternion();
 
         // Make the Quaternions that will represent our rotations

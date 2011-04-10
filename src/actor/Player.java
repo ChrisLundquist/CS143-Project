@@ -8,14 +8,12 @@ public class Player extends Actor {
     private static final long serialVersionUID = 260627862699350716L;
     protected boolean alive;
     protected String name;
-    private Camera camera; // TODO make cameras network safe
 
 
     public Player(){
         super();
         alive = true;
         name = DEFAULT_NAME;
-        camera = new graphics.Camera(this);
     }
     @Override
     public void handleCollision(Actor other) {
@@ -65,10 +63,6 @@ public class Player extends Actor {
 
     public void turnRight() {
         changeHeading(-TURN_SPEED);
-    }
-
-    public Camera getCamera() {
-        return camera;
     }
 
 }
