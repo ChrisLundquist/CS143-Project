@@ -384,6 +384,7 @@ public abstract class Actor implements Serializable {
         {
             pitchDegrees += 360.0f;
         }
+        pitch = new Quaternion(1.0f,0.0f,0.0f,pitchDegrees);
     }
     
     public void changeHeading(float degrees)
@@ -451,6 +452,7 @@ public abstract class Actor implements Serializable {
         {
             headingDegrees += 360.0f;
         }
+        heading = new Quaternion(0.0f,1.0f,0.0f,headingDegrees);
     }
 }
 

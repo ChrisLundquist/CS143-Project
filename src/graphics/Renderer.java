@@ -74,6 +74,7 @@ public class Renderer implements GLEventListener {
     public void init(GLAutoDrawable gLDrawable) {
         GL2 gl = getGL2(gLDrawable);
         gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
+        gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
