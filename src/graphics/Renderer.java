@@ -17,7 +17,7 @@ import javax.media.opengl.glu.GLU;
 
 import actor.Actor;
 
-import com.jogamp.opengl.util.Animator;
+import com.jogamp.opengl.util.FPSAnimator;
 
 /* @author Chris Lundquist
  *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
@@ -26,13 +26,14 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
-    Animator animator;
+    FPSAnimator animator;
 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
-        animator = new Animator(canvas);
+        animator = new FPSAnimator(canvas,60);
+        
     }
 
     // Display is our main game loop since the animator calls it
