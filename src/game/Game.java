@@ -15,7 +15,6 @@ public class Game {
         player = new Player();
         renderer = new graphics.Renderer();
         input = new InputHandler();
-        // TODO figure out how to get a gLautodrawable
         graphics.Model.loadModels();
         //menu = new MainMenu();
         

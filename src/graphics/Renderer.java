@@ -48,7 +48,7 @@ public class Renderer implements GLEventListener {
         if(game.Game.isPaused())
             return;
 
-        GL2 gl = getGL2(glDrawable);
+        GL2 gl = getGL2();
 
         // Update the actors
         actor.Actor.updateActors();
@@ -72,7 +72,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
-        GL2 gl = getGL2(gLDrawable);
+        GL2 gl = getGL2();
         gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -84,7 +84,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
-        GL2 gl = getGL2(gLDrawable);
+        GL2 gl = getGL2();
         if (height <= 0) {
             height = 1;
         }
@@ -122,11 +122,12 @@ public class Renderer implements GLEventListener {
     }
     
     // CL - Private method that handles the exception code that would otherwise
-    // be copy pasted.
-    private GL2 getGL2(GLAutoDrawable gLDrawable){
+    // be copy pasted. It seems that if other people use this method getGL() 
+    // usually returns null and crashes the program
+    private GL2 getGL2(){
         GL2 gl = null;
         try {
-            gl = gLDrawable.getGL().getGL2();
+            gl = canvas.getGL().getGL2();
         } catch(Exception e) {
             System.err.println("Error getting OpenGL Context:\n" + e.toString());
             System.err.println("--------");
