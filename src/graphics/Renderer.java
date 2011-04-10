@@ -17,7 +17,7 @@ import javax.media.opengl.glu.GLU;
 
 import actor.Actor;
 
-import com.jogamp.opengl.util.Animator;
+import com.jogamp.opengl.util.FPSAnimator;
 
 /* @author Chris Lundquist
  *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
@@ -27,15 +27,15 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     Animator animator;
-    
-    double fps;
-    double lastFPS;
+
+    FPSAnimator animator;
 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
-        animator = new Animator(canvas);
+        animator = new FPSAnimator(canvas,60);
+        
     }
 
     // Display is our main game loop since the animator calls it
@@ -60,10 +60,6 @@ public class Renderer implements GLEventListener {
         // Push the transformation for our player's Camera
         game.Game.getPlayer().getCamera().setPerspective(gl);
         
-        
-        fps++;
-        int secs = (int) (animator.getDuration()/1000);
-        System.out.println(fps/secs);
         
         // Render each actor
         for(Actor a : actor.Actor.actors ){
