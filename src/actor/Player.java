@@ -4,7 +4,7 @@ import graphics.Camera;
 
 public class Player extends Actor {
     private static final String DEFAULT_NAME = new String("Pilot");
-    private static final float TURN_SPEED = 1.0f;
+    private static final float TURN_SPEED = 0.1f;
     private static final long serialVersionUID = 260627862699350716L;
     protected boolean alive;
     protected String name;

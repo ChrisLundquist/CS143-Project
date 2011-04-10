@@ -27,6 +27,9 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     Animator animator;
+    
+    double fps;
+    double lastFPS;
 
     public Renderer(){
         glu = new GLU();
@@ -56,6 +59,11 @@ public class Renderer implements GLEventListener {
 
         // Push the transformation for our player's Camera
         game.Game.getPlayer().getCamera().setPerspective(gl);
+        
+        
+        fps++;
+        int secs = (int) (animator.getDuration()/1000);
+        System.out.println(fps/secs);
         
         // Render each actor
         for(Actor a : actor.Actor.actors ){

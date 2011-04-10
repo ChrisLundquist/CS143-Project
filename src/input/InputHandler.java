@@ -145,7 +145,7 @@ public class InputHandler implements KeyListener {
 
             switch(KEYS_IN_USE[i]){
                 case(KeyEvent.VK_SPACE):
-                    player.shoot();
+                    //player.shoot();
                 break;
                 case(KeyEvent.VK_UP):
                     player.turnUp();

@@ -22,7 +22,7 @@ public class Model {
     }
 
     public static void loadModels() {
-        models.add( WavefrontObjLoader.load("assets/cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/models/cube.obj"));
     }
 
     /* 
