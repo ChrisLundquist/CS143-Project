@@ -1,24 +1,26 @@
 package actor;
 
+import graphics.Camera;
+
 public class Player extends Actor {
     private static final String DEFAULT_NAME = new String("Pilot");
     private static final float TURN_SPEED = 1.0f;
     private static final long serialVersionUID = 260627862699350716L;
     protected boolean alive;
-    protected graphics.Camera camera;
     protected String name;
+    private Camera camera; // TODO make cameras network safe
 
-    
+
     public Player(){
         super();
         alive = true;
-        camera = new graphics.Camera(this);
         name = DEFAULT_NAME;
+        camera = new graphics.Camera(this);
     }
     @Override
     public void handleCollision(Actor other) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public boolean isAlive() {
@@ -29,46 +31,43 @@ public class Player extends Actor {
         // Don't respawn the player if they are alive
         if(alive == true)
             return;
-        
+
         // TODO Auto-generated method stub
-        
+
     }
 
     public void shoot() {
         // TODO Auto-generated method stub
-        
+
     }
 
     public void forwardThrust() {
-        // TODO Auto-generated method stub
-        position.z += 0.1f;
-        
+        position.plusEquals(getDirection().times(0.1f));
     }
 
     public void reverseThrust() {
-        // TODO Auto-generated method stub
-        position.z -= 0.1f;
-        
+        position.minusEquals(getDirection().times(0.1f));
     }
 
     public void turnUp(){
-        getCamera().changePitch(-TURN_SPEED);
+        changePitch(TURN_SPEED);
 
     }
-    
+
     public void turnDown(){
-        getCamera().changePitch(TURN_SPEED);
+        changePitch(-TURN_SPEED);
     }
-    
-    
+
+
     public void turnLeft() {
-        getCamera().changeHeading(TURN_SPEED);
+        changeHeading(TURN_SPEED);
     }
 
     public void turnRight() {
-        getCamera().changeHeading(-TURN_SPEED);
+        changeHeading(-TURN_SPEED);
     }
-    public graphics.Camera getCamera() {
+
+    public Camera getCamera() {
         return camera;
     }
 

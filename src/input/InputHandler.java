@@ -67,8 +67,8 @@ public class InputHandler implements KeyListener {
         true, //KeyEvent.VK_P,
         true, //KeyEvent.VK_W,
         true, //KeyEvent.VK_S,
-        true, // A
-        true, // Z
+        false, // A
+        false, // Z
         true, //KeyEvent.VK_F11,
         true, //KeyEvent.VK_BLACK_SLASH,
     };
