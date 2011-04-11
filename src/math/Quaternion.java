@@ -9,8 +9,12 @@ public class Quaternion {
         z_ = 0.0f; // k
     }
 
-    /*
-     * What does degrees represent? is it yaw?
+    /**
+     * Create a quaternion that rotates around a vector specified
+     * @param x x component of the vector about which to rotate
+     * @param y y component of the vector about which to rotate
+     * @param z z component of the vector about which to rotate
+     * @param degress the angle to rotate through
      */
     public Quaternion(float x, float y, float z, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
