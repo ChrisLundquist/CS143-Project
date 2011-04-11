@@ -9,12 +9,8 @@ public class Game {
     private static input.InputHandler input;
     private static boolean paused;
     private static Player player;
-    
-    /**
-     * This constructor is called from the MainMenu, commented out for now to make testing easier  - Tim
-     * @param args
-     */
-    /*public Game() {
+   
+    public static void init(){
         player = new Player();
         renderer = new graphics.Renderer();
         input = new InputHandler();
@@ -22,21 +18,10 @@ public class Game {
         
         
         actor.Actor.actors.add(new actor.Asteroid());
-        
-        renderer.start();
-    }*/
+    }
     
-    public static void main(String[] args) {
-        player = new Player();
-        renderer = new graphics.Renderer();
-        input = new InputHandler();
-        graphics.Model.loadModels();
-        
-        
-        actor.Actor.actors.add(new actor.Asteroid());
-        
+    public static void start(){
         renderer.start();
-      
     }
     
     public static InputHandler getInputHandler(){

@@ -125,9 +125,10 @@ public class MainMenu extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == playButton) {
-            Game game = new Game();
+            Game.init();
             this.setVisible(false);
             menuVisible = false;
+            Game.start();
         }
         if(e.getSource() == settingsButton) {
             JOptionPane.showMessageDialog(this, "Doesn't do anything yet");
