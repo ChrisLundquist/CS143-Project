@@ -39,9 +39,11 @@ public abstract class Actor implements Serializable {
     protected Quaternion pitch;
     protected float pitchDegrees;
     protected Vector3 velocity;
+    protected float velocityPitchDegrees;
+    protected float velocityHeadingDegrees;
     protected Vector3 position;
     protected Quaternion heading;
-    
+
     public Actor(){
         id = generateId();
         pitch = new Quaternion();
@@ -49,8 +51,10 @@ public abstract class Actor implements Serializable {
         position = new Vector3();
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
+        velocityPitchDegrees = 1.0f;
+        velocityHeadingDegrees = 1.0f;
     }
-    
+
 
     /**
      * CL - We need to synchronize removing actors so we don't have threads
@@ -239,9 +243,17 @@ public abstract class Actor implements Serializable {
     // CL - updates the state of the actor for the next frame
     public void update(){
         position.plusEquals(velocity);
+        pitchDegrees += velocityPitchDegrees;
+        headingDegrees += velocityHeadingDegrees;
     }
 
     public void render(GL2 gl) {
+        // Translate the actor to it's position
+        gl.glTranslatef(position.x, position.y, position.z);
+        // Rotate the actor
+        gl.glMultMatrixf(getPitch().times(getHeading()).toGlMatrix(), 0);
+        // Scale the Actor
+
         // CL - Render our model.
         getModel().render(gl);
     }
@@ -300,6 +312,7 @@ public abstract class Actor implements Serializable {
     }
 
     public Quaternion getHeading() {
+        heading = new Quaternion(0.0f,1.0f,0.0f,headingDegrees);
         return heading;
     }
 
@@ -308,6 +321,7 @@ public abstract class Actor implements Serializable {
     }
 
     public Quaternion getPitch() {
+        pitch = new Quaternion(1.0f,0.0f,0.0f,pitchDegrees);
         return pitch;
     }
 
@@ -322,7 +336,7 @@ public abstract class Actor implements Serializable {
     public void setPosition(Vector3 position) {
         this.position = position;
     }
-    
+
     public Vector3 getDirection(){
         float[] matrix = new float[16];
         Quaternion q = new Quaternion();
@@ -345,7 +359,7 @@ public abstract class Actor implements Serializable {
         // CL - If our reference is null, go look it up
         if(model == null)
             model = Model.findById(modelId);
-    
+
         return model;
     }
     public void changePitch(float degrees)
@@ -386,7 +400,7 @@ public abstract class Actor implements Serializable {
         }
         pitch = new Quaternion(1.0f,0.0f,0.0f,pitchDegrees);
     }
-    
+
     public void changeHeading(float degrees)
     {
         if(Math.abs(degrees) < Math.abs(HEADING_RATE))
@@ -440,7 +454,7 @@ public abstract class Actor implements Serializable {
                 }
             }
         }
-        
+
         // We don't want our heading to run away from us either. Although it
         // really doesn't matter I prefer to have my heading degrees
         // within the range of -360.0f to 360.0f
@@ -456,5 +470,5 @@ public abstract class Actor implements Serializable {
     }
 }
 
-    
+
 

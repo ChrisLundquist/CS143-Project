@@ -16,8 +16,9 @@ public class Game {
         input = new InputHandler();
         graphics.Model.loadModels();
         
-        
-        actor.Actor.actors.add(new actor.Asteroid());
+        actor.Asteroid a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        actor.Actor.actors.add(a);
     }
     
     public static void start(){
