@@ -3,12 +3,15 @@ package math;
 /* Based on the Nehe Tutorial by  Vic Hollis */
 public class Quaternion {
     public Quaternion() {
-        w_ = 1.0f;
-        x_ = 0.0f;
-        y_ = 0.0f;
-        z_ = 0.0f;
+        w_ = 1.0f; // real
+        x_ = 0.0f; // i
+        y_ = 0.0f; // j
+        z_ = 0.0f; // k
     }
 
+    /*
+     * What does degrees represent? is it yaw?
+     */
     public Quaternion(float x, float y, float z, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
         // BOO java doubles
@@ -20,6 +23,9 @@ public class Quaternion {
         z_ = z * angle;
     }
 
+    /*
+     * Copy constructor
+     */
     public Quaternion(Quaternion original) {
         w_ = original.w_;
         x_ = original.x_;
@@ -28,14 +34,14 @@ public class Quaternion {
     }
 
     public Quaternion times(Quaternion q) {
-        Quaternion r = new Quaternion();
+        Quaternion r =  new Quaternion();
 
-        r.w_ = w_*q.w_ - x_*q.x_ - y_*q.y_ - z_*q.z_;
-        r.x_ = w_*q.x_ + x_*q.w_ + y_*q.z_ - z_*q.y_;
-        r.y_ = w_*q.y_ + y_*q.w_ + z_*q.x_ - x_*q.z_;
-        r.z_ = w_*q.z_ + z_*q.w_ + x_*q.y_ - y_*q.x_;
+        r.w_ = w_ * q.w_ - x_ * q.x_ - y_ * q.y_ - z_ * q.z_;
+        r.x_ = w_ * q.x_ + x_ * q.w_ + y_ * q.z_ - z_ * q.y_;
+        r.y_ = w_ * q.y_ - x_ * q.z_ + y_ * q.w_ + z_ * q.x_;
+        r.z_ = w_ * q.z_ + x_ * q.y_ - y_ * q.x_ + z_ * q.w_;
 
-        return(r);
+        return r;
     }
 
     /*
@@ -72,5 +78,12 @@ public class Quaternion {
         return matrix;
     }
 
-    private float w_,x_,y_,z_;
+    public static void main(String[] args) {
+        Quaternion q = new Quaternion();
+    }
+
+    private float w_; // real
+    private float x_; // i
+    private float y_; // j
+    private float z_; // k
 }
