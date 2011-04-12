@@ -1,4 +1,5 @@
 package graphics.particles;
+
 public abstract class Particle extends actor.Actor {
     private static final long serialVersionUID = -1288874741029406494L;
     public float colorR;

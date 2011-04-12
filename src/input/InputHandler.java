@@ -29,6 +29,8 @@ public class InputHandler implements KeyListener {
         KeyEvent.VK_P,
         KeyEvent.VK_W,
         KeyEvent.VK_S,
+        KeyEvent.VK_A,
+        KeyEvent.VK_Z,
         KeyEvent.VK_F11,
         KeyEvent.VK_BACK_SLASH,
     };
@@ -65,6 +67,8 @@ public class InputHandler implements KeyListener {
         true, //KeyEvent.VK_P,
         true, //KeyEvent.VK_W,
         true, //KeyEvent.VK_S,
+        false, // A
+        false, // Z
         true, //KeyEvent.VK_F11,
         true, //KeyEvent.VK_BLACK_SLASH,
     };
@@ -72,13 +76,10 @@ public class InputHandler implements KeyListener {
 
     private boolean[] keyState;
     private int[] keyDebounce;
-    private boolean playerAlive;
-
 
     public InputHandler() {
         keyState = new boolean[KEYS_IN_USE.length];
         keyDebounce = new int[KEYS_IN_USE.length];
-        playerAlive = true;
     }
 
     @Override
@@ -108,13 +109,11 @@ public class InputHandler implements KeyListener {
     }
 
     public void update() {
-        boolean ignoreUpDown = false; //used to ignore up and down keys for brakeShip()
         Player player = Game.getPlayer();
 
         // On state transition to player death, clear key state
-        if(player != null && playerAlive && player.isAlive() == false) {
+        if(player != null && player.isAlive() == false) {
             clearKeyState();
-            playerAlive = false;
         }
 
         // Update our debounce timers
@@ -132,9 +131,8 @@ public class InputHandler implements KeyListener {
                 continue;
 
             // Respawn player on first key stroke after death
-            if (playerAlive == false) {
+            if (player.isAlive() == false) {
                 player.respawn();
-                playerAlive = true;
             }
 
             // Skip keys who's debounce timer is running
@@ -146,41 +144,42 @@ public class InputHandler implements KeyListener {
             }
 
             switch(KEYS_IN_USE[i]){
-            case(KeyEvent.VK_SPACE):
-                player.shoot();
-            break;
-            case(KeyEvent.VK_UP):
-                if (ignoreUpDown)
-                    break;
-            player.forwardThrust();
-            break;
-            case(KeyEvent.VK_DOWN):
-                if (ignoreUpDown)
-                    break;
-            player.reverseThrust();
-            break;
-            case(KeyEvent.VK_LEFT):
-                player.turnLeft();
-            break;
-            case(KeyEvent.VK_RIGHT):
-                player.turnRight();
-            break;
-            case(KeyEvent.VK_Q):
-            case(KeyEvent.VK_ESCAPE):
-                Game.quitToMenu();
-            clearKeyState(); /* Clear key state so we don't find this command in our buffer when we return to the game */
-            break;
-            case(KeyEvent.VK_P): // Fall through
-            case(KeyEvent.VK_PAUSE):
-                Game.togglePause();
-            break;
-            case(KeyEvent.VK_BACK_SLASH):
-                // Same as VK_F11
-            case(KeyEvent.VK_F11): // This is just for DEBUGGING
-                // TODO remove from public version
-                //Bandit.spawn();
-            default:
-                //do nothing
+                case(KeyEvent.VK_SPACE):
+                    player.shoot();
+                break;
+                case(KeyEvent.VK_UP):
+                    player.turnUp();
+                break;
+                case(KeyEvent.VK_DOWN):
+                    player.turnDown();
+                break;
+                case(KeyEvent.VK_LEFT):
+                    player.turnLeft();
+                break;
+                case(KeyEvent.VK_RIGHT):
+                    player.turnRight();
+                break;
+                case(KeyEvent.VK_A):
+                    player.forwardThrust();
+                break;
+                case(KeyEvent.VK_Z):
+                    player.reverseThrust();
+                break;
+                case(KeyEvent.VK_Q):
+                case(KeyEvent.VK_ESCAPE):
+                    Game.exit();
+                clearKeyState(); /* Clear key state so we don't find this command in our buffer when we return to the game */
+                break;
+                case(KeyEvent.VK_P): // Fall through
+                case(KeyEvent.VK_PAUSE):
+                    Game.togglePause();
+                break;
+                case(KeyEvent.VK_BACK_SLASH):
+                    // Same as VK_F11
+                case(KeyEvent.VK_F11): // This is just for DEBUGGING
+                    //Bandit.spawn();
+                default:
+                    //do nothing
             }
         }
     }
