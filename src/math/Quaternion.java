@@ -181,9 +181,9 @@ public class Quaternion implements Serializable {
     
     public Vector3 rollAxis() {
         return new Vector3 (
-                2.0f * (x_ * z_ - y_ * w_),
-                2.0f * (z_ * y_ + x_ * w_ ),
-                1.0f - 2.0f * ( x_ * x_ + y_ * y_ )
+                -2.0f * (x_ * z_ - y_ * w_),
+                -2.0f * (z_ * y_ + x_ * w_ ),
+                -1.0f + 2.0f * ( x_ * x_ + y_ * y_ )
         );
     }
     
