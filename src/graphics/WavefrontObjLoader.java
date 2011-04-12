@@ -76,7 +76,7 @@ public class WavefrontObjLoader {
                     break;
                 case MAPLIB:
                     break;
-                case MATLLIB:
+                case MATLIB:
                     // Do we need to handle relative paths here?
                     while (tokenizer.hasMoreTokens())
                         WavefrontMtlLoader.load(tokenizer.nextToken());
@@ -110,8 +110,8 @@ public class WavefrontObjLoader {
             return TokenType.USEMTL;
         if (token.equals("maplib"))
             return TokenType.MAPLIB;
-        if (token.equals("matllib"))
-            return TokenType.MATLLIB;
+        if (token.equals("mtllib"))
+            return TokenType.MATLIB;
         if (token.equals("g"))
             return TokenType.GROUP;
 
@@ -178,7 +178,7 @@ public class WavefrontObjLoader {
         USEMAP,
         USEMTL,
         MAPLIB,
-        MATLLIB,
+        MATLIB,
         GROUP,
     }
 
