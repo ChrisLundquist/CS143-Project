@@ -158,10 +158,11 @@ public abstract class Actor implements Serializable {
     abstract public void handleCollision(Actor other);
 
     public void render(GL2 gl) {
-        // Translate the actor to it's position
-        gl.glTranslatef(position.x, position.y, position.z);
         // Rotate the actor
         gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
+        
+        // Translate the actor to it's position
+        gl.glTranslatef(position.x, position.y, position.z);
         // Scale the Actor
 
         // CL - Render our model.
@@ -186,8 +187,14 @@ public abstract class Actor implements Serializable {
         position.plusEquals(velocity);
         rotation.normalize();
         // TODO dampen angularVelocity
+        dampenAngularVelocity();
         // This should also take into effect our maximum angular velocity -- this may be an overridden in subclasses to provide different handling
         rotation = rotation.times(angularVelocity);
+    }
+
+    private void dampenAngularVelocity() {
+        angularVelocity = angularVelocity.dampen(0.01f);
+        
     }
 }
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Quaternion implements Serializable {
     private static final long serialVersionUID = 5284423308557214091L;
-    
+
     public Quaternion() {
         w_ = 1.0f; // real
         x_ = 0.0f; // i
@@ -18,7 +18,7 @@ public class Quaternion implements Serializable {
         y_ = y;
         z_ = z;
     }
-    
+
     /**
      * Create a quaternion that rotates around a vector specified
      * @param axis the vector about which to rotate
@@ -26,10 +26,10 @@ public class Quaternion implements Serializable {
      */
     public Quaternion(Vector3 axis, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
-        
+
         float angle = (float)Math.sin(radians / 2.0f);
         w_ = (float)Math.cos(radians / 2.0f);
-        
+
         x_ = axis.x * angle;
         y_ = axis.y * angle;
         z_ = axis.z * angle;
@@ -53,7 +53,7 @@ public class Quaternion implements Serializable {
         return String.format("%g + %gi + %gj + %gk", w_, x_, y_, z_);
     }
 
-    
+
     public String toMatrixString() {
         float[] m = toGlMatrix();
         return String.format(
@@ -78,8 +78,31 @@ public class Quaternion implements Serializable {
         return r;
     }
 
+
+    public float magnitude(){
+        return (float) Math.sqrt( w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_);
+    }
+    // Makes the magnitude one
     public Quaternion normalize() {
-        //TODO write a function to make this quaternion a unit quaternion with a norm of one
+        float magnitude = magnitude();
+        w_ /= magnitude;
+        x_ /= magnitude;
+        y_ /= magnitude;
+        z_ /= magnitude;
+
+        return this;
+    }
+
+    public Quaternion dampen(float strength){
+        Quaternion q = new Quaternion(); // Identity Quaternion
+        w_ = (1.0f - strength) * w_ + strength * q.w_;
+        x_ = (1.0f - strength) * x_ + strength * q.x_;
+        y_ = (1.0f - strength) * y_ + strength * q.y_;
+        z_ = (1.0f - strength) * z_ + strength * q.z_;
+
+        // CL - We have to normalize after our weighted average above
+        normalize();
+
         return this;
     }
 
@@ -116,15 +139,15 @@ public class Quaternion implements Serializable {
 
         return matrix;
     }
-    
+
     public Vector3 rollAxis() {
         return Vector3.UNIT_Z.times(this);
     }
-    
+
     public Vector3 pitchAxis() {
         return Vector3.UNIT_X.times(this);
     }
-    
+
     public Vector3 yawAxis() {
         return Vector3.UNIT_Y.times(this);
     }
@@ -147,8 +170,8 @@ public class Quaternion implements Serializable {
                 "| 01.000 00.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 01.000 00.000 |\n" +
                 "| 00.000 -1.000 00.000 00.000 |\n" +
-                "| 00.000 00.000 00.000 01.000 |"));
-        
+        "| 00.000 00.000 00.000 01.000 |"));
+
         // Test for gimble lock
         Quaternion rotation = new Quaternion();
         rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
@@ -157,7 +180,7 @@ public class Quaternion implements Serializable {
         rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, -90));
         // There should be a better way to compare within epsilon
         assert(rotation.toString().equals(new Quaternion().toString()));
-        
+
         // Test that rotating through 360 degrees on all axies brings us back to normal
         rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
         rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
@@ -173,8 +196,21 @@ public class Quaternion implements Serializable {
         rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
         // Here we get a negative real component by the transformation matrix is the same
         assert(rotation.toMatrixString().equals(new Quaternion().toMatrixString()));
-        
- 
+
+
+        rotation = new Quaternion();
+        assert rotation.magnitude() == 1.0f;
+        assert rotation.normalize().equals(new Quaternion());
+
+        for( int it = 0; it < (4 * 4096); it++){
+            // Rotate a lot to denormalize our vector
+            rotation = rotation.times(new Quaternion(Vector3.UNIT_X, it));
+            rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, it));
+            rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, it));
+            rotation = rotation.times(new Quaternion(Vector3.UNIT_X, it));
+        }
+        rotation.normalize();
+
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
         //System.out.println(r.pitchAxis());
     }

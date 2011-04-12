@@ -53,7 +53,6 @@ public class Renderer implements GLEventListener {
         // Update the actors
         actor.Actor.updateActors();
 
-        //TODO render something we care about
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
