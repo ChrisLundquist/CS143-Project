@@ -6,8 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
- 
+import javax.swing.JFileChooser;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -15,13 +14,19 @@ import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
-import javax.swing.JFileChooser;
+import java.io.File;
+import math.Quaternion;
+import math.Vector3;
  
 import com.jogamp.opengl.util.Animator;
  
 public class ModelViewer implements GLEventListener, KeyListener {
-    float rotateT = 0.0f;
-    Model model;
+    private static final float TURN_RATE = 0.5f;
+    private static final float SPEED = 0.5f;
+    
+    private Quaternion rotation = new Quaternion();
+    private Vector3 position = new Vector3(0.0f, 0.0f, -20.0f);
+    private Model model;
  
     static GLU glu = new GLU();
  
@@ -40,16 +45,13 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glTranslatef(0.0f, 0.0f, -20.0f);
  
-        gl.glRotatef(rotateT, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(rotateT, 0.0f, 1.0f, 0.0f);
-        gl.glRotatef(rotateT, 0.0f, 0.0f, 1.0f);
-        gl.glRotatef(rotateT, 0.0f, 1.0f, 0.0f);
+        gl.glTranslatef(position.x, position.y, position.z);
+        
+        gl.glMultMatrixf(rotation.toGlMatrix(), 0);
 
+        
         model.render(gl);
- 
-        rotateT += 0.2f;
     }
  
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -86,6 +88,24 @@ public class ModelViewer implements GLEventListener, KeyListener {
                 break;
             case KeyEvent.VK_L:
                 loadModel();
+                break;
+            case KeyEvent.VK_UP:
+                rotation.timesEquals(new Quaternion(rotation.pitchAxis(), TURN_RATE));
+                break;
+            case KeyEvent.VK_DOWN:
+                rotation.timesEquals(new Quaternion(rotation.pitchAxis(), -TURN_RATE));
+                break;
+            case KeyEvent.VK_LEFT:
+                rotation.timesEquals(new Quaternion(rotation.yawAxis(), TURN_RATE));
+                break;
+            case KeyEvent.VK_RIGHT:
+                rotation.timesEquals(new Quaternion(rotation.yawAxis(), -TURN_RATE));
+                break;
+            case KeyEvent.VK_A:
+                position.minusEquals(rotation.rollAxis().times(SPEED));
+                break;
+            case KeyEvent.VK_Z:
+                position.plusEquals(rotation.rollAxis().times(SPEED));
                 break;
         }
     }
