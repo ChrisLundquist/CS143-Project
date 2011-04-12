@@ -18,6 +18,10 @@ public class Theme implements Runnable {
             pieces.add(piece);
     }
     
+    public Piece getPiece(int index){
+        return this.pieces.get(0);
+    }
+    
     public void play(){
         for(Piece p: pieces){
             p.play();
