@@ -29,12 +29,8 @@ public abstract class Actor implements Serializable {
 
     public static void updateActors() {
         // Update each actor
-        for(int i = 0; i < actors.size(); i++) {
-            // We get the actor only once in case we the actor is removed
-            // during the update phase. E.G. Bullets FramesToLive reaches 0
-            Actor a = actors.get(i);
-
-            // Track down actors without ids.
+        for(Actor a: actors) {
+             // Track down actors without ids.
             if (a.id == 0)
                 System.err.println("DEBUG: " + a + " actor without ID set");
 

@@ -39,7 +39,6 @@ public class DedicatedServer {
     }
 
     private void shutdown() {
-        /* Clean up */
         timer.cancel();
         
         try {
@@ -60,20 +59,16 @@ public class DedicatedServer {
 
     // Main server update code
     private void update() {
-        for(Actor a: Actor.actors)
-            a.update();
+        Actor.updateActors();
     }
-    
     
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-
     public boolean isRunning() {
         return running;
     }
-
 
     public Collection<Object> getPlayers() {
         return new Vector<Object>();

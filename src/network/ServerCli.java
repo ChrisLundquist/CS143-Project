@@ -58,7 +58,7 @@ public class ServerCli extends Thread {
             case STATUS:
                 displayStatus(tokenizer);
                 break;
-            case LIST;
+            case LIST:
                 displayList(tokenizer);
                 break;
             default:
