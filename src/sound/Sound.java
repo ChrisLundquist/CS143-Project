@@ -39,6 +39,7 @@ public class Sound{
 		} 
 		
 		//Gets the input stream
+		
 		try { 
 			audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
 		} catch (UnsupportedAudioFileException e1) { 
@@ -47,7 +48,7 @@ public class Sound{
 		} catch (IOException e1) { 
 			e1.printStackTrace();
 			return;
-		} 
+		}
 
 		AudioFormat format = audioInputStream.getFormat();
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -74,13 +75,15 @@ public class Sound{
 		this.isPlaying = true;
 		this.isStarted = true;
 		
-		try {
-			audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
-		} catch (UnsupportedAudioFileException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		try { 
+            audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
+        } catch (UnsupportedAudioFileException e1) { 
+            e1.printStackTrace();
+            return;
+        } catch (IOException e1) { 
+            e1.printStackTrace();
+            return;
+        }
 		
 		int nBytesRead = 0;
 		byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];

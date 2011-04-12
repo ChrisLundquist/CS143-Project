@@ -8,28 +8,26 @@ import javax.swing.JOptionPane;
 
 import javax.sound.sampled.*;
 
-import sound.Mixer.ThemeEnum;
-
 public class EntryPoint2 {
 	
 	public final static String A_ASSETS = "assets/audio/";
 	
 	public static void main(String[] args) {
-	    Map<ThemeEnum,Theme> map = new HashMap<ThemeEnum,Theme>();
-    	    ThemeEnum victoryEnum = ThemeEnum.VICTORY;
+	    Map<Integer,Theme> map = new HashMap<Integer,Theme>();
+    	    int victory = 1;
     	    Piece p1 = new Piece(A_ASSETS+"200-0.5.wav","200");
-            Piece p2 = new Piece(A_ASSETS+"200-0.5.wav","200");
+            Piece p2 = new Piece(A_ASSETS+"100-0.5.wav","100");
     
             ArrayList<Piece> pieces = new ArrayList<Piece>();
             pieces.add(p1);
             pieces.add(p2);
 	    Theme victoryTheme = new Theme(pieces);
-	    map.put(victoryEnum, victoryTheme);
+	    map.put(victory, victoryTheme);
 	    
-	    Mixer mix = new Mixer(map);
-	    mix.change(ThemeEnum.VICTORY);
+	    Mixer mix = new Mixer(map,true);
+	    mix.change(victory);
 	    mix.run();
-	    print("test");
+	    print("End");
 	    
 	    
 	}

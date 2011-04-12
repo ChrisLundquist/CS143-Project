@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,7 +27,7 @@ public class GuiTester extends JFrame {
     private String[] nameList = new String[0];
     private File[] currentFiles;
 
-    private Theme playedTheme = new Theme();
+    private Theme playedTheme = new Theme(new ArrayList<Piece>());
     
     private final JButton addSongBtn = new JButton("Select Files");
     private JList songList = new JList(nameList);
