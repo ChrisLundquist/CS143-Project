@@ -20,13 +20,13 @@ public abstract class Actor implements Serializable {
      */
     protected static Random gen = new Random();
     private static int lastId = 0;
-    
+
     public static void removeActorId(int idToRemove) {
         for (Actor a: actors)
             if (a.id == idToRemove)
                 actors.remove(a);
     }
-    
+
     public static void updateActors() {
         // Update each actor
         for(int i = 0; i < actors.size(); i++) {
@@ -41,17 +41,17 @@ public abstract class Actor implements Serializable {
             a.update();
         }
     }
-    
-    
+
+
     protected int id; // unique ID for each Actor 
     protected int modelId;
     protected transient Model model; // CL - Used to store the model reference after we look it up once
     protected Vector3 position, velocity;
     protected float scale;
-    
+
     // Rotation
     protected Quaternion rotation, angularVelocity;
-    
+
     protected int age; // Actor age in frames
     protected int parentId;
 
@@ -79,7 +79,7 @@ public abstract class Actor implements Serializable {
         angularVelocity = angularVelocity.times(new Quaternion(rotation.rollAxis(), degrees));
     }
 
-    
+
     /**
      * CL - We need to synchronize removing actors so we don't have threads
      *      stepping on eachother's toes.
@@ -158,11 +158,12 @@ public abstract class Actor implements Serializable {
     abstract public void handleCollision(Actor other);
 
     public void render(GL2 gl) {
+        // Translate the actor to it's position
+        gl.glLoadIdentity();
+        gl.glTranslatef(position.x, position.y, position.z);
+
         // Rotate the actor
         gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
-        
-        // Translate the actor to it's position
-        gl.glTranslatef(position.x, position.y, position.z);
         // Scale the Actor
 
         // CL - Render our model.
@@ -186,7 +187,6 @@ public abstract class Actor implements Serializable {
     public void update(){
         position.plusEquals(velocity);
         rotation.normalize();
-        // TODO dampen angularVelocity
         dampenAngularVelocity();
         // This should also take into effect our maximum angular velocity -- this may be an overridden in subclasses to provide different handling
         rotation = rotation.times(angularVelocity);
@@ -194,7 +194,7 @@ public abstract class Actor implements Serializable {
 
     private void dampenAngularVelocity() {
         angularVelocity = angularVelocity.dampen(0.01f);
-        
+
     }
 }
 

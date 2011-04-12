@@ -9,15 +9,14 @@ public class Camera {
     public void setPerspective(GL2 gl) {
         float[] matrix;
         actor.Player player = game.Game.getPlayer();
+        gl.glLoadIdentity();
 
         // Combine the pitch and heading rotations and store the results in q
         matrix = player.getRotation().toGlMatrix();
-
+        // Translate to our new position.
+        gl.glTranslatef(-player.getPosition().x, -player.getPosition().y, -player.getPosition().z);
         // Let OpenGL set our new perspective on the world!
         gl.glMultMatrixf(matrix,0);
-
-        // Translate to our new position.
-        gl.glTranslatef(player.getPosition().x, player.getPosition().y, player.getPosition().z);
     }
 
 }

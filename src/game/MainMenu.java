@@ -14,18 +14,19 @@ import javax.swing.*;
  *
  */
 public class MainMenu extends JPanel implements ActionListener {
+    private static final long serialVersionUID = -3569270152514757138L;
     //background image
     BufferedImage background;
     int y, x;
     //paths to all images used
     ImageIcon play, play_selected, settings, settings_selected, quit, quit_selected;
-    String backgroundPath = "assets/images/background.jpg";
-    String playPath  = "assets/images/play.png";
-    String settingsPath = "assets/images/settings.png";
-    String quitPath = "assets/images/quit.png";
-    String playPath_selected  = "assets/images/play_selected.png";
-    String settingsPath_selected = "assets/images/settings_selected.png";
-    String quitPath_selected = "assets/images/quit_selected.png";
+    private static final String BACKGROUND_PATH = "assets/images/background.jpg";
+    private static final String PLAY_PATH  = "assets/images/play.png";
+    private static final String SETTINGS_PATH = "assets/images/settings.png";
+    private static final String QUIT_PATH = "assets/images/quit.png";
+    private static final String PLAY_PATH_SELECTED  = "assets/images/play_selected.png";
+    private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
+    private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
     //buttons
     JButton playButton, settingsButton, quitButton;
@@ -35,13 +36,13 @@ public class MainMenu extends JPanel implements ActionListener {
     public MainMenu() throws IOException {        
         //loads all images from assets/images/
         try {
-            background = ImageIO.read(new File(backgroundPath));
-            play = new ImageIcon(playPath);
-            settings = new ImageIcon(settingsPath);
-            quit = new ImageIcon(quitPath);
-            play_selected = new ImageIcon(playPath_selected);
-            settings_selected = new ImageIcon(settingsPath_selected);
-            quit_selected = new ImageIcon(quitPath_selected);
+            background = ImageIO.read(new File(BACKGROUND_PATH));
+            play = new ImageIcon(PLAY_PATH);
+            settings = new ImageIcon(SETTINGS_PATH);
+            quit = new ImageIcon(QUIT_PATH);
+            play_selected = new ImageIcon(PLAY_PATH_SELECTED);
+            settings_selected = new ImageIcon(SETTINGS_PATH_SELECTED);
+            quit_selected = new ImageIcon(QUIT_PATH_SELECTED);
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
             e.printStackTrace();
@@ -65,7 +66,6 @@ public class MainMenu extends JPanel implements ActionListener {
      * 
      */
     private void createGUI() {
-
         this.setLayout( new FlowLayout(FlowLayout.RIGHT, 60, 10) );
 
         playButton = new JButton(play);   
@@ -139,6 +139,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     }
     public static void main (String []args) throws IOException {
+        @SuppressWarnings("unused")
         MainMenu menu = new MainMenu();
     }
 }

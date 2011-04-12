@@ -6,7 +6,6 @@ package input;
 
 import java.awt.geom.Point2D;
 import java.io.*;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class XboxInputHandler {
@@ -22,12 +21,9 @@ public class XboxInputHandler {
        double rightTrigger, leftTrigger;
        Process p;
        BufferedReader input;
-       private boolean playerAlive;
        public XboxInputHandler() throws IOException {
                //player is alive
                startInputListener();
-               playerAlive = true;
-
        }
        /**
         * Not sure what to do with this, current prints debug messages

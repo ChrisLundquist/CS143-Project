@@ -5,9 +5,7 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GL2ES1;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
@@ -28,7 +26,6 @@ public class Renderer implements GLEventListener {
     Frame frame;
     FPSAnimator animator;
     graphics.Camera camera;
-
 
     public Renderer(){
         glu = new GLU();
@@ -53,18 +50,16 @@ public class Renderer implements GLEventListener {
         // Update the actors
         actor.Actor.updateActors();
 
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-
-        // Push the transformation for our player's Camera
-        camera.setPerspective(gl);
-        
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
-        
+        // Push the transformation for our player's Camera
+        camera.setPerspective(gl);
+
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -76,9 +71,9 @@ public class Renderer implements GLEventListener {
         gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL.GL_LEQUAL);
-        gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+        gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL2.GL_LEQUAL);
+        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
     }
 
