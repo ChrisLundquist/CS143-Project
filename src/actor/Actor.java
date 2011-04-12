@@ -132,6 +132,7 @@ public abstract class Actor implements Serializable {
     abstract public void handleCollision(Actor other);
 
     public void render(GL2 gl) {
+        gl.glPushMatrix();
         // Translate the actor to it's position
         gl.glTranslatef(position.x, position.y, position.z);
 
@@ -141,6 +142,7 @@ public abstract class Actor implements Serializable {
 
         // CL - Render our model.
         getModel().render(gl);
+        gl.glPopMatrix();
     }
 
     public void setPosition(Vector3 position) {
