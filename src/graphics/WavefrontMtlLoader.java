@@ -5,24 +5,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
     public static void main(String[] args) {
-        for(Material m: load("assets/example.mtl").values()) {
+        load("assets/example.mtl");
+        
+        for (Material m: Material.materials.values())
             System.out.println(m);
-        }
-
+       
         System.out.println("Complete");
     }
 
-    public static HashMap<String, Material> load(String filepath){
+    public static int load(String filepath){
         return load(new File(filepath));
     }
     
-    public static HashMap<String, Material> load(File file) {
+    public static int load(File file) {
         WavefrontMtlLoader mtl = new WavefrontMtlLoader();
         BufferedReader in;
         String line;
@@ -35,20 +35,15 @@ public class WavefrontMtlLoader {
                 mtl.readLine(line);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return 0;
         }
 
-        return mtl.getMaterials();
+        HashMap<String, Material> newMaterials = mtl.getMaterials();
+        Material.materials.putAll(newMaterials);
+        
+        return newMaterials.size();
     }
-
     
-    
-    private HashMap<String, Material> getMaterials() {
-        return materials;
-    }
-
-
-
     private Material current_material;
     private HashMap<String, Material> materials;
 
@@ -127,6 +122,10 @@ public class WavefrontMtlLoader {
                 return result;
         }
         return null;
+    }
+
+    private HashMap<String, Material> getMaterials() {
+        return materials;
     }
 
     private TokenType tokenType(String token) {

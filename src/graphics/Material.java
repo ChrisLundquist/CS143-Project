@@ -1,11 +1,17 @@
 package graphics;
 
+import java.util.HashMap;
+
 public class Material {
-    String name;
+    protected static HashMap<String, Material> materials = new HashMap<String, Material>();
+    
+    private String name;
     private Color ambient;
     private Color specular;
     private Color diffuse;
     private float alpha;
+    private float shininess;
+    // TODO do we store textures here?
 
     public Material(String name) {
         this.name = name;
@@ -16,7 +22,7 @@ public class Material {
     }
     
     public String toString() {
-        return "<Material: " + name + " " + ambient + " " + diffuse + " " + specular + " " + alpha + ">";
+        return "<Material: " + name + " " + ambient + " " + diffuse + " " + specular + " " + alpha + " " + shininess + ">";
     }
     
     public String getName() {
@@ -82,8 +88,7 @@ public class Material {
         this.alpha = alpha;
     }
 
-    public void setShininess(float parseFloat) {
-        // TODO Auto-generated method stub
-        
+    public void setShininess(float shininess) {
+        this.shininess = shininess;
     }
 }

@@ -77,6 +77,9 @@ public class WavefrontObjLoader {
                 case MAPLIB:
                     break;
                 case MATLLIB:
+                    // Do we need to handle relative paths here?
+                    while (tokenizer.hasMoreTokens())
+                        WavefrontMtlLoader.load(tokenizer.nextToken());
                     break;
                 case USEMTL:
                     break;
@@ -131,6 +134,7 @@ public class WavefrontObjLoader {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             String vertex_tokens[] = token.split("/");
+            @SuppressWarnings("unused")
             ObjVertex geo, tex, norm;
 
             switch(vertex_tokens.length) {
@@ -180,6 +184,7 @@ public class WavefrontObjLoader {
 
     private static class ObjVertex {
         int dim;
+        @SuppressWarnings("unused")
         float x, y, z, w;
 
         public ObjVertex() {
