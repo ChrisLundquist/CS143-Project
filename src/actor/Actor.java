@@ -67,26 +67,16 @@ public abstract class Actor implements Serializable {
 
     public void changeYaw(float degrees) {
         angularVelocity = angularVelocity.times(new Quaternion(rotation.yawAxis(), degrees));
-        System.out.println(angularVelocity.toMatrixString());
     }
 
     public void changePitch(float degrees)   {
         angularVelocity = angularVelocity.times(new Quaternion(rotation.pitchAxis(), degrees));
-        System.out.println(angularVelocity.toMatrixString());
     }
 
     public void changeRoll(float degrees)   {
         angularVelocity = angularVelocity.times(new Quaternion(rotation.rollAxis(), degrees));
     }
 
-
-    /**
-     * CL - We need to synchronize removing actors so we don't have threads
-     *      stepping on eachother's toes.
-     *      
-     *      NOTE: thread concurrency is an advanced topic. This is a base
-     *      implementation to handle the problem.
-     */
     protected void delete() {
         // NOTE: This needs to be thread safe.
         Actor.actors.remove(this);
@@ -97,16 +87,8 @@ public abstract class Actor implements Serializable {
     }
 
     public Vector3 getDirection(){
+        // FIXME this often points in a negative direction
         return rotation.rollAxis();
-    }
-
-
-
-    public float getMass() {
-        // This does not account for different actors having different densities
-        // but the mass should scale with the cube of the linear scale (the volume)
-        // But the area is more fun!
-        return scale * scale;
     }
 
     public Model getModel() {
@@ -117,10 +99,7 @@ public abstract class Actor implements Serializable {
         return model;
     }
 
-
-
     /**
-     * 
      * @return the actors current position
      */
     public Vector3 getPosition() {
@@ -132,7 +111,6 @@ public abstract class Actor implements Serializable {
     }
 
     /**
-     * 
      * @return the actors size (for texture scaling and collision detection)
      */
     public float getSize(){
@@ -197,6 +175,4 @@ public abstract class Actor implements Serializable {
 
     }
 }
-
-
 
