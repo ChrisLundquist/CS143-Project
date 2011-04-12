@@ -47,12 +47,8 @@ public class Game {
     public static void togglePause() {
         paused = !paused;
     }
-
+    
     public static void exit() {
-        System.err.println("Exiting");
-        // FIXME This generates an exception when some threaded callback tries
-        //       to redraw the window
-        renderer.exit();
+        System.exit(0);
     }
-
 }

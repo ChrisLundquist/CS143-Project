@@ -1,5 +1,7 @@
 package graphics;
 
+import game.Game;
+
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
@@ -33,7 +35,7 @@ public class Renderer implements GLEventListener {
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
         camera = new Camera();
-        
+
     }
 
     // Display is our main game loop since the animator calls it
@@ -55,13 +57,11 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
         // Push the transformation for our player's Camera
         camera.setPerspective(gl);
-        
+
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
-
-
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -92,15 +92,12 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
     }
 
-    public void exit() {
+    public void dispose(GLAutoDrawable gLDrawable) {
         animator.stop();
         frame.dispose();
-        System.exit(0);
+        canvas.destroy();
     }
-
-    public void dispose(GLAutoDrawable gLDrawable) {
-        // do nothing
-    }
+    
     public void start() {
         canvas.addGLEventListener(this);
         frame.add(canvas);
@@ -109,14 +106,14 @@ public class Renderer implements GLEventListener {
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                exit();
+                Game.exit();
             }
         });
         frame.setVisible(true);
         animator.start();
         canvas.requestFocus();
     }
-    
+
     // CL - Private method that handles the exception code that would otherwise
     // be copy pasted. It seems that if other people use this method getGL() 
     // usually returns null and crashes the program
