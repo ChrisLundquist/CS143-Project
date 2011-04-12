@@ -95,7 +95,10 @@ public class Quaternion implements Serializable {
     public float magnitude(){
         return (float) Math.sqrt( w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_);
     }
-    
+   
+    /*
+     * Returns the square of the magnitude
+     */ 
     public float magnitude2(){
         return  w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_;
     }
@@ -188,6 +191,8 @@ public class Quaternion implements Serializable {
     }
     
     public static void main(String[] args) {
+        System.out.println("Running quaternion tests");
+        
         // Test basic properties of quaternions
         {
             Quaternion n = new Quaternion(-1, 0, 0, 0);
@@ -195,14 +200,14 @@ public class Quaternion implements Serializable {
             Quaternion j = new Quaternion(0, 0, 1, 0);
             Quaternion k = new Quaternion(0, 0, 0, 1);
 
-            assert(n.equals(n));
-            assert(n.times(n).equals(new Quaternion())); // (-1)^2 = 1
+            assert n.equals(n) : "Quaturnion equality";
+            assert n.times(n).equals(new Quaternion()) : "(-1)^2 == 1";
             
             // i^2 = j^2 = k^2 = ijk = -1
-            assert(i.times(i).equals(n));
-            assert(j.times(j).equals(n));
-            assert(k.times(k).equals(n));
-            assert(i.times(j).times(k).equals(n));
+            assert i.times(i).equals(n) : "i^2 == -1";
+            assert j.times(j).equals(n) : "j^2 == -1";
+            assert k.times(k).equals(n) : "k^2 == -1";
+            assert i.times(j).times(k).equals(n) : "ijk == -1";
         }
 
         // This transformation matrix should rotate 90 degrees about the x axis
@@ -277,6 +282,8 @@ public class Quaternion implements Serializable {
 
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
         //System.out.println(r.pitchAxis());
+        
+        System.out.println("Complete (did you -enableassertions ?)");
     }
 
     private float w_; // real
