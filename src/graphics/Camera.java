@@ -10,13 +10,13 @@ public class Camera {
         float[] matrix;
         actor.Player player = game.Game.getPlayer();
         gl.glLoadIdentity();
-
-        // Combine the pitch and heading rotations and store the results in q
-        matrix = player.getRotation().toGlMatrix();
-        // Translate to our new position.
         gl.glTranslatef(-player.getPosition().x, -player.getPosition().y, -player.getPosition().z);
+        // Combine the pitch and heading rotations and store the results in q
+        matrix = player.getRotation().inverse().toGlMatrix();
+        // Translate to our new position.
         // Let OpenGL set our new perspective on the world!
         gl.glMultMatrixf(matrix,0);
+
     }
 
 }

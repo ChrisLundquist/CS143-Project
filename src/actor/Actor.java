@@ -137,7 +137,6 @@ public abstract class Actor implements Serializable {
 
     public void render(GL2 gl) {
         // Translate the actor to it's position
-        gl.glLoadIdentity();
         gl.glTranslatef(position.x, position.y, position.z);
 
         // Rotate the actor

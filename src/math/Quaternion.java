@@ -95,6 +95,10 @@ public class Quaternion implements Serializable {
     public float magnitude(){
         return (float) Math.sqrt( w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_);
     }
+    
+    public float magnitude2(){
+        return  w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_;
+    }
 
     // Makes the magnitude one
     public Quaternion normalize() {
@@ -105,6 +109,11 @@ public class Quaternion implements Serializable {
         z_ /= magnitude;
 
         return this;
+    }
+    
+    public Quaternion inverse(){
+        float magnitude2 = magnitude2();
+        return new Quaternion(w_ / magnitude2, -x_ / magnitude2, -y_ / magnitude2, -z_ / magnitude2 );
     }
 
     public Quaternion dampen(float strength){
@@ -255,6 +264,16 @@ public class Quaternion implements Serializable {
             rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
         }
         rotation.normalize();
+        
+        
+        // Test the inverse works as expected
+        // Sometimes the inverse isn't quite accurate, but every near due to floating point
+        rotation = new Quaternion();
+        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 40));
+        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 40));
+        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
+        assert rotation.times(rotation.inverse()).toMatrixString().equals(new Quaternion().toMatrixString());
+        
 
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
         //System.out.println(r.pitchAxis());

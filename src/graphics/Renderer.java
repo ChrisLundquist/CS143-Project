@@ -53,12 +53,14 @@ public class Renderer implements GLEventListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
+        // Push the transformation for our player's Camera
+        camera.setPerspective(gl);
+        
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
-        // Push the transformation for our player's Camera
-        camera.setPerspective(gl);
+
 
     }
 
