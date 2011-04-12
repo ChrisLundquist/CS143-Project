@@ -2,10 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-<<<<<<< HEAD
-	<classpathentry kind="lib" path="/home/ty/Downloads/JLayer1.0.1 (2)/jl1.0.1.jar"/>
-=======
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JLayer"/>
->>>>>>> 76356ceb53364a175c9b02083de5a3ff049585f5
 	<classpathentry kind="output" path="bin"/>
 </classpath>
