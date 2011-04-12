@@ -2,29 +2,33 @@ package sound;
 
 import java.io.File;
 
+<<<<<<< HEAD
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
-
+/**
+ * The Piece is just a part of a theme.  It contains one .wav file, and the name of that wav file.
+ * The reason for wrapping this around the Sound class is that it will eventually have more differences, and I want
+ * It to be abstracted from the other Sounds like sound affects.
+ * @author ty
+ *
+ */
 public class Piece extends Sound {
-    
-    private AdvancedPlayer player;
-    
-    public Piece(File file) {
-        super(file);
-        System.out.println("opening");
-        player = this.open();
-        System.out.println("opened");
+    private final String name;
+
+    /**
+     * Constructs a Piece with a filename
+     * @param file The location of the file
+     * @param nameName The name of the Piece
+     */
+    public Piece(String fileName,String name){
+        super(fileName);
+        this.name = name;
     }
-    
-    public void play(){
-        System.out.println("playing");
-        try {
-            player.play();
-            System.out.println("closing");
-            player.stop();
-            System.out.println("closed");
-        } catch (Exception e) {
-            System.out.println(e); 
-        }
+   
+    /**
+     * @return The name of the Piece
+     */
+    public String getName(){
+        return this.name;
     }
 }

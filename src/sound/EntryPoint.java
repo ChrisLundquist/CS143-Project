@@ -7,8 +7,8 @@ public class EntryPoint {
     public static final String A_ASSETS = "assets/audio/";
 
     public static void main(String[] args) {
-        Piece p1 = new Piece(new File(A_ASSETS+"roar.mp3"));
-        Piece p2 = new Piece(new File(A_ASSETS+"bond.mp3"));
+        Piece p1 = new Piece(A_ASSETS+"200-0.5.wav");
+        Piece p2 = new Piece(A_ASSETS+"200-0.5.wav");
 
         ArrayList<Piece> pieces = new ArrayList<Piece>();
         pieces.add(p1);
