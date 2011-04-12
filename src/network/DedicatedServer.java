@@ -10,6 +10,7 @@ import java.util.Vector;
 import actor.Actor;
 
 public class DedicatedServer {
+    public static final int SERVER_PORT = 8348;
     private static final long FRAME_RATE = 1000 / 60; // Frame rate in ms
     
     private ServerSocket socket;
@@ -25,9 +26,9 @@ public class DedicatedServer {
     private void startup() {
         setRunning(true);
         try {
-            socket = new ServerSocket(NetworkProtocol.SERVER_PORT);
+            socket = new ServerSocket(SERVER_PORT);
         } catch (IOException e) {
-            System.out.println("Could not listen on port: " + NetworkProtocol.SERVER_PORT);
+            System.out.println("Could not listen on port: " + SERVER_PORT);
             System.exit(-1);
         }
         
@@ -39,7 +40,6 @@ public class DedicatedServer {
     }
 
     private void shutdown() {
-        /* Clean up */
         timer.cancel();
         
         try {
@@ -60,20 +60,16 @@ public class DedicatedServer {
 
     // Main server update code
     private void update() {
-        for(Actor a: Actor.actors)
-            a.update();
+        Actor.updateActors();
     }
-    
     
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-
     public boolean isRunning() {
         return running;
     }
-
 
     public Collection<Object> getPlayers() {
         return new Vector<Object>();
