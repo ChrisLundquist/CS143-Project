@@ -14,6 +14,7 @@ import javax.swing.*;
  *
  */
 public class MainMenu extends JPanel implements ActionListener {
+    private static final long serialVersionUID = -3569270152514757138L;
     //background image
     BufferedImage background;
     int y, x;
@@ -139,6 +140,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     }
     public static void main (String []args) throws IOException {
+        @SuppressWarnings("unused")
         MainMenu menu = new MainMenu();
     }
 }

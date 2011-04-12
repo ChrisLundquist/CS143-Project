@@ -58,9 +58,6 @@ public class Material {
                     break;
                 default:
                     String msg = "Invalid color : ";
-                    if (color == null)
-                        msg += "<NULL>";
-                    else 
                         for (float i: color)
                             msg += i + " ";
                     throw new IllegalArgumentException(msg);
