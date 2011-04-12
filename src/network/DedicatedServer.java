@@ -2,8 +2,12 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
+
+import actor.Actor;
 
 public class DedicatedServer {
     private static final long FRAME_RATE = 1000 / 60; // Frame rate in ms
@@ -18,9 +22,8 @@ public class DedicatedServer {
         server.run();
     }
     
-
     private void startup() {
-        running = true;
+        setRunning(true);
         try {
             socket = new ServerSocket(NetworkProtocol.SERVER_PORT);
         } catch (IOException e) {
@@ -43,7 +46,6 @@ public class DedicatedServer {
             /* Close the socket so the listener thread will stop blocking */
             socket.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -51,22 +53,32 @@ public class DedicatedServer {
     private void run() {
         startup();
         
- 
-        while (running) {
-            // do stuff
-        }
-        
+        new ServerCli(this, System.out, System.in).run();
         
         shutdown();
     }
 
-
     // Main server update code
     private void update() {
-        // TODO Auto-generated method stub
-        
+        for(Actor a: Actor.actors)
+            a.update();
     }
     
+    
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+
+    public boolean isRunning() {
+        return running;
+    }
+
+
+    public Collection<Object> getPlayers() {
+        return new Vector<Object>();
+    }
+
     private class ListenerThread extends Thread {
         private DedicatedServer server;
         
@@ -76,12 +88,12 @@ public class DedicatedServer {
         }
 
         public void run() {
-            while (running) {
+            while (isRunning()) {
                 try {
                     Socket client = socket.accept();
                     new ServerClientThread(client, server).start();
                 } catch (SocketException e) {
-                    if (e.getMessage().equals("Socket closed") && running == false) {
+                    if (e.getMessage().equals("Socket closed") && isRunning() == false) {
                         System.err.println("Server socket closed, shutting down.");
                     } else {
                         e.printStackTrace();                        
