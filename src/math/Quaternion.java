@@ -168,17 +168,17 @@ public class Quaternion implements Serializable {
     
     public Vector3 pitchAxis() {
         return new Vector3(
-                1.0f - 2.0f * ( y_ * y_ + z_ * z_ ),
-                2.0f * ( x_ * y_ - z_ * w_ ),
-                2.0f * ( x_ * z_ + y_ * w_ )
+                -1.0f + 2.0f * ( y_ * y_ + z_ * z_ ),
+                -2.0f * ( x_ * y_ - z_ * w_ ),
+                -2.0f * ( x_ * z_ + y_ * w_ )
         );
     }
 
     public Vector3 yawAxis() {
         return new Vector3(
-                2.0f * (x_ * y_ + z_ * w_),
-                1.0f - 2.0f * ( x_ * x_ + z_ * z_ ),
-                2.0f * ( y_ * z_ - x_ * w_ )
+                -2.0f * (x_ * y_ + z_ * w_),
+                -1.0f + 2.0f * ( x_ * x_ + z_ * z_ ),
+                -2.0f * ( y_ * z_ - x_ * w_ )
         );
     }
     
