@@ -16,6 +16,7 @@ public class Quaternion {
      * @param z z component of the vector about which to rotate
      * @param degress the angle to rotate through
      */
+    /*
     public Quaternion(float x, float y, float z, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
         // BOO java doubles
@@ -25,6 +26,18 @@ public class Quaternion {
         x_ = x * angle;
         y_ = y * angle;
         z_ = z * angle;
+    }
+    */
+    
+    public Quaternion(Vector3 axis, float degrees) {
+        float radians = degrees / 180.0f * (float)Math.PI;
+        
+        float angle = (float)Math.sin(radians / 2.0f);
+        w_ = (float)Math.cos(radians / 2.0f);
+        
+        x_ = axis.x * angle;
+        y_ = axis.y * angle;
+        z_ = axis.z * angle;
     }
 
     /*
@@ -102,6 +115,18 @@ public class Quaternion {
 
         return matrix;
     }
+    
+    public Vector3 rollAxis() {
+        return Vector3.UNIT_Z.times(this);
+    }
+    
+    public Vector3 pitchAxis() {
+        return Vector3.UNIT_X.times(this);
+    }
+    
+    public Vector3 yawAxis() {
+        return Vector3.UNIT_Y.times(this);
+    }
 
     public static void main(String[] args) {
         Quaternion negativeone = new Quaternion(); negativeone.w_ = -1.0f; negativeone.x_ = 0.0f; negativeone.y_ = 0.0f; negativeone.z_ = 0.0f;
@@ -117,11 +142,15 @@ public class Quaternion {
         assert(i.times(j).times(k).equals(negativeone));
 
         // This transformation matrix should rotate 90 degrees about the x axis
-        assert(new Quaternion(1, 0, 0, 90).toMatrixString().equals(
+        assert(new Quaternion(Vector3.UNIT_X, 90).toMatrixString().equals(
                 "| 01.000 00.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 01.000 00.000 |\n" +
                 "| 00.000 -1.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 00.000 01.000 |"));
+        
+        
+        //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
+        //System.out.println(r.pitchAxis());
     }
 
     private float w_; // real

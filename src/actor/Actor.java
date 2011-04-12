@@ -52,7 +52,7 @@ public abstract class Actor implements Serializable {
     protected float scale;
     
     // Rotation
-    protected Quaternion pitch, yaw, roll;
+    protected Quaternion rotation;
     protected float pitchDegrees, yawDegrees, rollDegrees;
     protected float velocityPitchDegrees, velocityYawDegrees, velocityRollDegrees;
     
@@ -62,9 +62,7 @@ public abstract class Actor implements Serializable {
 
     public Actor(){
         id = generateId();
-        pitch = new Quaternion();
-        yaw = new Quaternion();
-        roll = new Quaternion();
+        rotation = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
@@ -73,109 +71,11 @@ public abstract class Actor implements Serializable {
     }
 
     public void changeYaw(float degrees) {
-        if(Math.abs(degrees) < Math.abs(YAW_RATE))
-        {
-            // Our Heading is less than the max heading rate that we 
-            // defined so lets increment it but first we must check
-            // to see if we are inverted so that our heading will not
-            // become inverted.
-            if(pitchDegrees > 90 && pitchDegrees < 270 || (pitchDegrees < -90 && pitchDegrees > -270))
-            {
-                yawDegrees -= degrees;
-            }
-            else
-            {
-                yawDegrees += degrees;
-            }
-        }
-        else
-        {
-            // Our heading is greater than the max heading rate that
-            // we defined so we can only increment our heading by the 
-            // maximum allowed value.
-            if(degrees < 0)
-            {
-                // Check to see if we are upside down.
-                if((pitchDegrees > 90 && pitchDegrees < 270) || (pitchDegrees < -90 && pitchDegrees > -270))
-                {
-                    // Ok we would normally decrement here but since we are upside
-                    // down then we need to increment our heading
-                    yawDegrees += YAW_RATE;
-                }
-                else
-                {
-                    // We are not upside down so decrement as usual
-                    yawDegrees -= YAW_RATE;
-                }
-            }
-            else
-            {
-                // Check to see if we are upside down.
-                if(pitchDegrees > 90 && pitchDegrees < 270 || (pitchDegrees < -90 && pitchDegrees > -270))
-                {
-                    // Ok we would normally increment here but since we are upside
-                    // down then we need to decrement our heading.
-                    yawDegrees -= YAW_RATE;
-                }
-                else
-                {
-                    // We are not upside down so increment as usual.
-                    yawDegrees += YAW_RATE;
-                }
-            }
-        }
-
-        // We don't want our heading to run away from us either. Although it
-        // really doesn't matter I prefer to have my heading degrees
-        // within the range of -360.0f to 360.0f
-        if(yawDegrees > 360.0f)
-        {
-            yawDegrees -= 360.0f;
-        }
-        else if(yawDegrees < -360.0f)
-        {
-            yawDegrees += 360.0f;
-        }
-        yaw = new Quaternion(0.0f,1.0f,0.0f,yawDegrees);
+        rotation = rotation.times(new Quaternion(rotation.yawAxis(), degrees));
     }
 
-    public void changePitch(float degrees)
-    {
-        if(Math.abs(degrees) < Math.abs(PITCH_RATE))
-        {
-            // Our pitch is less than the max pitch rate that we 
-            // defined so lets increment it.
-            pitchDegrees += degrees;
-        }
-        else
-        {
-            // Our pitch is greater than the max pitch rate that
-            // we defined so we can only increment our pitch by the 
-            // maximum allowed value.
-            if(degrees < 0)
-            {
-                // We are pitching down so decrement
-                pitchDegrees -= PITCH_RATE;
-            }
-            else
-            {
-                // We are pitching up so increment
-                pitchDegrees += PITCH_RATE;
-            }
-        }
-
-        // We don't want our pitch to run away from us. Although it
-        // really doesn't matter I prefer to have my pitch degrees
-        // within the range of -360.0f to 360.0f
-        if(pitchDegrees > 360.0f)
-        {
-            pitchDegrees -= 360.0f;
-        }
-        else if(pitchDegrees < -360.0f)
-        {
-            pitchDegrees += 360.0f;
-        }
-        pitch = new Quaternion(1.0f,0.0f,0.0f,pitchDegrees);
+    public void changePitch(float degrees)   {
+        rotation = rotation.times(new Quaternion(rotation.pitchAxis(), degrees));
     }
 
     /**
@@ -195,21 +95,7 @@ public abstract class Actor implements Serializable {
     }
 
     public Vector3 getDirection(){
-        float[] matrix = new float[16];
-        Quaternion q = new Quaternion();
-        Vector3 direction = new Vector3();
-        // Create a matrix from the pitch Quaternion and get the j vector 
-        // for our direction.
-        matrix = getPitch().toGlMatrix();
-        direction.y = matrix[9];
-
-        // Combine the heading and pitch rotations and make a matrix to get
-        // the i and j vectors for our direction.
-        q = getYaw().times(getPitch());
-        matrix = q.toGlMatrix();
-        direction.x = matrix[8];
-        direction.z = matrix[10];
-        return direction;
+        return rotation.rollAxis();
     }
 
     public float getHeadingDegrees() {
@@ -231,20 +117,6 @@ public abstract class Actor implements Serializable {
         return model;
     }
 
-    public Quaternion getYaw() {
-        yaw = new Quaternion(0.0f, 1.0f, 0.0f, yawDegrees);
-        return yaw;
-    }
-
-    public Quaternion getPitch() {
-        pitch = new Quaternion(1.0f, 0.0f, 0.0f, pitchDegrees);
-        return pitch;
-    }
-
-    public Quaternion getRoll() {
-        roll = new Quaternion(0.0f, 0.0f, 1.0f, rollDegrees);
-        return roll;
-    }
 
     public float getPitchDegrees() {
         return pitchDegrees;
@@ -296,7 +168,7 @@ public abstract class Actor implements Serializable {
     }
 
     public Quaternion getRotation() {
-        return yaw.times(pitch).times(roll);
+        return rotation;
     }
 
     public void setHeadingDegrees(float headingDegrees) {

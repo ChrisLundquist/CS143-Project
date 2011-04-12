@@ -3,6 +3,10 @@ package math;
 // Differentiates between position and direction.
 // Vectors should be used for directions, not positions.
 public class Vector3 {
+    public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
+    public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
+    public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
+    
     public float x,y,z;
 
     public Vector3(){
@@ -15,6 +19,10 @@ public class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public String toString() {
+        return String.format("<%g, %g, %g>", x, y, z);
     }
 
     public Vector3 times(float scalar){
@@ -31,6 +39,21 @@ public class Vector3 {
         z += other.z;
         
         return this;
+    }
+    
+    public Vector3 times(Quaternion rotation) {
+        float[] m = rotation.toGlMatrix();
+        
+        return times(m);
+    }
+    
+    public Vector3 times(float[] m) {
+        Vector3 result = new Vector3();
+        
+        result.x = x * m[0] + y * m[4] + z * m[8];
+        result.y = x * m[1] + y * m[5] + z * m[9];
+        result.z = x * m[2] + y * m[6] + z * m[10];
+        return result;
     }
 
     public float magnitude() {
