@@ -53,7 +53,6 @@ public class Quaternion implements Serializable {
         return String.format("%g + %gi + %gj + %gk", w_, x_, y_, z_);
     }
 
-    //TODO write a function to make this quaternion a unit quaternion with a norm of one
     
     public String toMatrixString() {
         float[] m = toGlMatrix();
@@ -77,6 +76,11 @@ public class Quaternion implements Serializable {
         r.z_ = w_ * q.z_ + x_ * q.y_ - y_ * q.x_ + z_ * q.w_;
 
         return r;
+    }
+
+    public Quaternion normalize() {
+        //TODO write a function to make this quaternion a unit quaternion with a norm of one
+        return this;
     }
 
     /*

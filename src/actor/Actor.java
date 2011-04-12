@@ -7,8 +7,6 @@ import java.util.Vector;
 import javax.media.opengl.GL2;
 
 public abstract class Actor implements Serializable {
-    private static final float YAW_RATE = 1.0f;
-    private static final float PITCH_RATE = 1.0f;
     private static final long serialVersionUID = 744085604446096658L;
     /**
      *  All the actors currently in play
@@ -52,9 +50,7 @@ public abstract class Actor implements Serializable {
     protected float scale;
     
     // Rotation
-    protected Quaternion rotation;
-    protected float pitchDegrees, yawDegrees, rollDegrees;
-    protected float velocityPitchDegrees, velocityYawDegrees, velocityRollDegrees;
+    protected Quaternion rotation, angularVelocity;
     
     protected int age; // Actor age in frames
     protected int parentId;
@@ -63,22 +59,27 @@ public abstract class Actor implements Serializable {
     public Actor(){
         id = generateId();
         rotation = new Quaternion();
+        angularVelocity = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
-        velocityPitchDegrees = 1.0f;
-        velocityYawDegrees = 1.0f;
     }
 
     public void changeYaw(float degrees) {
-        rotation = rotation.times(new Quaternion(rotation.yawAxis(), degrees));
-        // TODO normalize our rotation quaternion so it doesn't end up accululating a large scaling factor
+        angularVelocity = angularVelocity.times(new Quaternion(rotation.yawAxis(), degrees));
+        System.out.println(angularVelocity.toMatrixString());
     }
 
     public void changePitch(float degrees)   {
-        rotation = rotation.times(new Quaternion(rotation.pitchAxis(), degrees));
+        angularVelocity = angularVelocity.times(new Quaternion(rotation.pitchAxis(), degrees));
+        System.out.println(angularVelocity.toMatrixString());
     }
 
+    public void changeRoll(float degrees)   {
+        angularVelocity = angularVelocity.times(new Quaternion(rotation.rollAxis(), degrees));
+    }
+
+    
     /**
      * CL - We need to synchronize removing actors so we don't have threads
      *      stepping on eachother's toes.
@@ -99,9 +100,7 @@ public abstract class Actor implements Serializable {
         return rotation.rollAxis();
     }
 
-    public float getHeadingDegrees() {
-        return yawDegrees;
-    }
+
 
     public float getMass() {
         // This does not account for different actors having different densities
@@ -119,9 +118,6 @@ public abstract class Actor implements Serializable {
     }
 
 
-    public float getPitchDegrees() {
-        return pitchDegrees;
-    }
 
     /**
      * 
@@ -129,6 +125,10 @@ public abstract class Actor implements Serializable {
      */
     public Vector3 getPosition() {
         return position;
+    }
+
+    public Quaternion getRotation() {
+        return rotation;
     }
 
     /**
@@ -168,19 +168,6 @@ public abstract class Actor implements Serializable {
         getModel().render(gl);
     }
 
-    public Quaternion getRotation() {
-        return rotation;
-    }
-
-    public void setHeadingDegrees(float headingDegrees) {
-        this.yawDegrees = headingDegrees;
-    }
-
-
-    public void setPitchDegrees(float pictchDegrees) {
-        this.pitchDegrees = pictchDegrees;
-    }
-
     public void setPosition(Vector3 position) {
         this.position = position;
     }
@@ -197,9 +184,10 @@ public abstract class Actor implements Serializable {
     // CL - updates the state of the actor for the next frame
     public void update(){
         position.plusEquals(velocity);
-        pitchDegrees += velocityPitchDegrees;
-        yawDegrees += velocityYawDegrees;
-        rollDegrees += velocityRollDegrees;
+        rotation.normalize();
+        // TODO dampen angularVelocity
+        // This should also take into effect our maximum angular velocity -- this may be an overridden in subclasses to provide different handling
+        rotation = rotation.times(angularVelocity);
     }
 }
 
