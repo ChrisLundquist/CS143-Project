@@ -58,11 +58,11 @@ public class Player extends Actor {
 
 
     public void turnLeft() {
-        changeHeading(TURN_SPEED);
+        changeYaw(TURN_SPEED);
     }
 
     public void turnRight() {
-        changeHeading(-TURN_SPEED);
+        changeYaw(-TURN_SPEED);
     }
 
 }
