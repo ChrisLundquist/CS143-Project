@@ -3,29 +3,33 @@ package network;
 import java.net.*;
 import java.io.*;
 
-public class NetworkConnectionThread extends Thread {
-    private Socket server;
 
-    public NetworkConnectionThread(InetAddress addr, String name) throws IOException {
-        server = new Socket(addr, NetworkProtocol.SERVER_PORT);
-    }
+public abstract class ConnectionThread extends Thread {
+    private Socket socket;    
     
+    public ConnectionThread(Socket socket) {
+        this.socket = socket;
+    }
+
     // This is the main body of the network connection thread
     public void run() {
-        NetworkProtocol msg;
+        Message msg;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
 
         try {
-            out = new ObjectOutputStream(server.getOutputStream());
-            in = new ObjectInputStream(server.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             
-            // TODO join game
+            // Include a hook to send an initial hello message
+            msg = helloMessage();
+            if (msg != null)
+                out.writeObject(msg);
             
             // Main loop to receive updates and respond
-            while ((msg = (NetworkProtocol)in.readObject()) != null) {
-                msg.apply(actor.Actor.actors);
-                out.writeObject(new NetworkProtocol());
+            while ((msg = (Message)in.readObject()) != null) {
+                msg = handleMessage(msg);
+                out.writeObject(msg);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,10 +42,16 @@ public class NetworkConnectionThread extends Thread {
                     in.close();
                 if (out != null)
                     out.close();
-                server.close();
+                socket.close();
             } catch(Exception e) {
                 e.printStackTrace();
             }
         }
     }
+
+    protected Message helloMessage() {
+        return null;
+    }
+
+    protected abstract Message handleMessage(Message msg) throws IOException;
 }

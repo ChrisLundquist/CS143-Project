@@ -10,6 +10,7 @@ import java.util.Vector;
 import actor.Actor;
 
 public class DedicatedServer {
+    public static final int SERVER_PORT = 8348;
     private static final long FRAME_RATE = 1000 / 60; // Frame rate in ms
     
     private ServerSocket socket;
@@ -25,9 +26,9 @@ public class DedicatedServer {
     private void startup() {
         setRunning(true);
         try {
-            socket = new ServerSocket(NetworkProtocol.SERVER_PORT);
+            socket = new ServerSocket(SERVER_PORT);
         } catch (IOException e) {
-            System.out.println("Could not listen on port: " + NetworkProtocol.SERVER_PORT);
+            System.out.println("Could not listen on port: " + SERVER_PORT);
             System.exit(-1);
         }
         
