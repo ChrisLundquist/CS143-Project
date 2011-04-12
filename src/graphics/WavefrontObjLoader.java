@@ -85,6 +85,7 @@ public class WavefrontObjLoader {
                     break;
                 default:
                     System.out.println("Unhandled Token: " + token + "\n" +"Line: " + line);
+                    return;
             }
         }
     }
