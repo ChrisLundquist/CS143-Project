@@ -1,8 +1,11 @@
 package math;
 
+import java.io.Serializable;
+
 // Differentiates between position and direction.
 // Vectors should be used for directions, not positions.
-public class Vector3 {
+public class Vector3 implements Serializable {
+    private static final long serialVersionUID = -1520340574791669154L;
     public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
     public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);

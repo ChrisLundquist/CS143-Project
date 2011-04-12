@@ -72,6 +72,7 @@ public abstract class Actor implements Serializable {
 
     public void changeYaw(float degrees) {
         rotation = rotation.times(new Quaternion(rotation.yawAxis(), degrees));
+        // TODO normalize our rotation quaternion so it doesn't end up accululating a large scaling factor
     }
 
     public void changePitch(float degrees)   {

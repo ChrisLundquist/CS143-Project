@@ -1,7 +1,10 @@
 package math;
 
-/* Based on the Nehe Tutorial by  Vic Hollis */
-public class Quaternion {
+import java.io.Serializable;
+
+public class Quaternion implements Serializable {
+    private static final long serialVersionUID = 5284423308557214091L;
+    
     public Quaternion() {
         w_ = 1.0f; // real
         x_ = 0.0f; // i
@@ -9,26 +12,18 @@ public class Quaternion {
         z_ = 0.0f; // k
     }
 
+    public Quaternion(float w, float x, float y, float z) {
+        w_ = w;
+        x_ = x;
+        y_ = y;
+        z_ = z;
+    }
+    
     /**
      * Create a quaternion that rotates around a vector specified
-     * @param x x component of the vector about which to rotate
-     * @param y y component of the vector about which to rotate
-     * @param z z component of the vector about which to rotate
+     * @param axis the vector about which to rotate
      * @param degress the angle to rotate through
      */
-    /*
-    public Quaternion(float x, float y, float z, float degrees) {
-        float radians = degrees / 180.0f * (float)Math.PI;
-        // BOO java doubles
-        float angle = (float)Math.sin(radians / 2.0f);
-        w_ = (float)Math.cos(radians / 2.0f);
-
-        x_ = x * angle;
-        y_ = y * angle;
-        z_ = z * angle;
-    }
-    */
-    
     public Quaternion(Vector3 axis, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
         
@@ -58,6 +53,8 @@ public class Quaternion {
         return String.format("%g + %gi + %gj + %gk", w_, x_, y_, z_);
     }
 
+    //TODO write a function to make this quaternion a unit quaternion with a norm of one
+    
     public String toMatrixString() {
         float[] m = toGlMatrix();
         return String.format(
@@ -129,10 +126,10 @@ public class Quaternion {
     }
 
     public static void main(String[] args) {
-        Quaternion negativeone = new Quaternion(); negativeone.w_ = -1.0f; negativeone.x_ = 0.0f; negativeone.y_ = 0.0f; negativeone.z_ = 0.0f;
-        Quaternion i = new Quaternion(); i.w_ = 0.0f; i.x_ = 1.0f; i.y_ = 0.0f; i.z_ = 0.0f;
-        Quaternion j = new Quaternion(); j.w_ = 0.0f; j.x_ = 0.0f; j.y_ = 1.0f; j.z_ = 0.0f;
-        Quaternion k = new Quaternion(); k.w_ = 0.0f; k.x_ = 0.0f; k.y_ = 0.0f; k.z_ = 1.0f;
+        Quaternion negativeone = new Quaternion(-1, 0, 0, 0);
+        Quaternion i = new Quaternion(0, 1, 0, 0);
+        Quaternion j = new Quaternion(0, 0, 1, 0);
+        Quaternion k = new Quaternion(0, 0, 0, 1);
 
         // i^2 = j^2 = k^2 = ijk = -1
         assert(negativeone.equals(negativeone));
@@ -148,7 +145,32 @@ public class Quaternion {
                 "| 00.000 -1.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 00.000 01.000 |"));
         
+        // Test for gimble lock
+        Quaternion rotation = new Quaternion();
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, -90));
+        // There should be a better way to compare within epsilon
+        assert(rotation.toString().equals(new Quaternion().toString()));
         
+        // Test that rotating through 360 degrees on all axies brings us back to normal
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_X, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Y, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
+        rotation = rotation.times(new Quaternion(Vector3.UNIT_Z, 90));
+        // Here we get a negative real component by the transformation matrix is the same
+        assert(rotation.toMatrixString().equals(new Quaternion().toMatrixString()));
+        
+ 
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
         //System.out.println(r.pitchAxis());
     }
