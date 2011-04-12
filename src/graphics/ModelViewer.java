@@ -80,11 +80,20 @@ public class ModelViewer implements GLEventListener, KeyListener {
     }
  
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            exit();
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                exit();
+                break;
+            case KeyEvent.VK_L:
+                loadModel();
+                break;
         }
     }
  
+    private void loadModel() {
+        model = WavefrontObjLoader.load(guiPromptForFilename());
+    }
+
     public void keyReleased(KeyEvent e) {
     }
  
