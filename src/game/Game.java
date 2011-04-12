@@ -12,6 +12,8 @@ public class Game {
    
     public static void init(){
         player = new Player();
+        // We should let our player play too
+        actor.Actor.actors.add(player);
         renderer = new graphics.Renderer();
         input = new InputHandler();
         graphics.Model.loadModels();

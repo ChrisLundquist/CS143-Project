@@ -24,7 +24,8 @@ public class Model {
     public static void loadModels() {
         // CL - Do we want to generate display lists for everything at load time
         //      or do that lazily?
-        models.add( WavefrontObjLoader.load("assets/cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/cube_centered.obj"));
+        models.add( WavefrontObjLoader.load("assets/cube_textured.obj"));
     }
 
     /* 

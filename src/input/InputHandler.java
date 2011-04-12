@@ -177,7 +177,6 @@ public class InputHandler implements KeyListener {
                 case(KeyEvent.VK_BACK_SLASH):
                     // Same as VK_F11
                 case(KeyEvent.VK_F11): // This is just for DEBUGGING
-                    // TODO remove from public version
                     //Bandit.spawn();
                 default:
                     //do nothing
