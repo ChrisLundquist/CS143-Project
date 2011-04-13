@@ -89,11 +89,14 @@ public class Renderer implements GLEventListener {
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_LIGHT0);
         gl.glEnable(GL2.GL_LIGHT1);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
+        setLighting(gl);
+        Model.initialize(gl); /* calls Texture.initialize */
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
