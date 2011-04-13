@@ -41,10 +41,11 @@ public class Material {
         }
 
         public float[] toFloat(){
-            float[] array = new float[3];
+            float[] array = new float[4];
             array[0] = r;
             array[1] = g;
             array[2] = b;
+            array[3] = 1.0f; /* alpha */
             return array;
         }
 
@@ -73,7 +74,7 @@ public class Material {
     private Color ambient;
     private Color diffuse;
     private String name;
-    private float shininess;
+    private float[] shininess;
     private Color specular;
     private Texture texture;
     
@@ -85,6 +86,7 @@ public class Material {
         specular = Color.WHITE;
         diffuse = Color.WHITE;
         alpha = 1.0f;
+        shininess = new float[1];
     }
 
     public String getName() {
@@ -98,8 +100,19 @@ public class Material {
     }
 
     public void prepare(GL2 gl) {
-        //gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, {specular.r,specular.g,specular.b,alpha});
-        //gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, mat_shininess);
+        //TODO find a way to clean this up, its pretty ugly
+        float[] color = specular.toFloat();
+        color[3] = alpha;
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, color,0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, shininess,0);
+        color = diffuse.toFloat();
+        color[3] = alpha;
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color,0);
+        color = ambient.toFloat();
+        color[3] = alpha;
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color,0);
+        
+
         Texture texture = getTexture();
         if(texture != null)
             texture.bind(gl);
@@ -114,7 +127,7 @@ public class Material {
     }
 
     public void setShininess(float shininess) {
-        this.shininess = shininess;
+        this.shininess[0] = shininess;
     }
 
     public void setSpecularColor(float[] color) {
