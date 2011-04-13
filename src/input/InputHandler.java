@@ -1,10 +1,8 @@
 package input;
 import game.Game;
-
+import game.Player;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-
-import actor.Player;
 
 public class InputHandler implements KeyListener {
     private static final int DEBOUNCE_TIME = 20;
@@ -145,35 +143,35 @@ public class InputHandler implements KeyListener {
 
             switch(KEYS_IN_USE[i]){
                 case(KeyEvent.VK_SPACE):
-                    player.shoot();
-                break;
+                    player.input(PlayerInput.SHOOT);
+                    break;
                 case(KeyEvent.VK_UP):
-                    player.turnUp();
-                break;
+                    player.input(PlayerInput.PITCH_UP);
+                    break;
                 case(KeyEvent.VK_DOWN):
-                    player.turnDown();
-                break;
+                    player.input(PlayerInput.PITCH_DOWN);
+                    break;
                 case(KeyEvent.VK_LEFT):
-                    player.turnLeft();
-                break;
+                    player.input(PlayerInput.YAW_LEFT);
+                    break;
                 case(KeyEvent.VK_RIGHT):
-                    player.turnRight();
-                break;
+                    player.input(PlayerInput.YAW_RIGHT);
+                    break;
                 case(KeyEvent.VK_A):
-                    player.forwardThrust();
-                break;
+                    player.input(PlayerInput.FORWARD);
+                    break;
                 case(KeyEvent.VK_Z):
-                    player.reverseThrust();
-                break;
+                    player.input(PlayerInput.BACK);
+                    break;
                 case(KeyEvent.VK_Q):
                 case(KeyEvent.VK_ESCAPE):
                     Game.exit();
-                clearKeyState(); /* Clear key state so we don't find this command in our buffer when we return to the game */
-                break;
+                    clearKeyState(); /* Clear key state so we don't find this command in our buffer when we return to the game */
+                    break;
                 case(KeyEvent.VK_P): // Fall through
                 case(KeyEvent.VK_PAUSE):
                     Game.togglePause();
-                break;
+                    break;
                 case(KeyEvent.VK_BACK_SLASH):
                     // Same as VK_F11
                 case(KeyEvent.VK_F11): // This is just for DEBUGGING

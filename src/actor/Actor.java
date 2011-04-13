@@ -23,7 +23,7 @@ public abstract class Actor implements Serializable {
 
     public static void removeActorId(int idToRemove) {
         for (Actor a: actors)
-            if (a.id == idToRemove)
+            if (a.getId() == idToRemove)
                 actors.remove(a);
     }
 
@@ -31,7 +31,7 @@ public abstract class Actor implements Serializable {
         // Update each actor
         for(Actor a: actors) {
              // Track down actors without ids.
-            if (a.id == 0)
+            if (a.getId() == 0)
                 System.err.println("DEBUG: " + a + " actor without ID set");
 
             a.update();
@@ -39,7 +39,7 @@ public abstract class Actor implements Serializable {
     }
 
 
-    protected int id; // unique ID for each Actor 
+    private int id; // unique ID for each Actor 
     protected int modelId;
     protected transient Model model; // CL - Used to store the model reference after we look it up once
     protected Vector3 position, velocity;
@@ -169,6 +169,18 @@ public abstract class Actor implements Serializable {
 
     private void dampenAngularVelocity() {
         angularVelocity = angularVelocity.dampen(0.01f);
+    }
+
+    // FIXME this is a linear time search
+    public static Actor findById(int id) {
+        for (Actor a: actors)
+            if (a.getId() == id)
+                return a;
+        return null;
+    }
+
+    public int getId() {
+        return id;
     }
 }
 

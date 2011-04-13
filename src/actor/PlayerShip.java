@@ -1,33 +1,14 @@
 package actor;
 
-public class Player extends Actor {
-    private static final String DEFAULT_NAME = new String("Pilot");
+public class PlayerShip extends Actor {
     private static final float TURN_SPEED = 0.01f;
     private static final long serialVersionUID = 260627862699350716L;
-    protected boolean alive;
-    protected String name;
 
-
-    public Player(){
+    public PlayerShip(){
         super();
-        alive = true;
-        name = DEFAULT_NAME;
     }
     @Override
     public void handleCollision(Actor other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void respawn() {
-        // Don't respawn the player if they are alive
-        if(alive == true)
-            return;
-
         // TODO Auto-generated method stub
 
     }
@@ -62,5 +43,4 @@ public class Player extends Actor {
     public void turnRight() {
         changeYaw(-TURN_SPEED);
     }
-
 }

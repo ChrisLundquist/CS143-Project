@@ -63,7 +63,7 @@ public class Model {
         // FIXME replace the magic numbers!
         if(actor instanceof actor.Asteroid){
             return 0;
-        } else if(actor instanceof actor.Player) {
+        } else if(actor instanceof actor.PlayerShip) {
             return 1;
         }
         return 0;
