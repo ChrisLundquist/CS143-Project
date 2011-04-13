@@ -91,7 +91,7 @@ public class Renderer implements GLEventListener {
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_LIGHTING);
-        gl.glEnable(GL2.GL_TEXTURE);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_LIGHT0);
         gl.glEnable(GL2.GL_LIGHT1);
         gl.glDepthFunc(GL2.GL_LEQUAL);
