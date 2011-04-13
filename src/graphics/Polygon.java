@@ -7,20 +7,20 @@ import java.util.Vector;
 import javax.media.opengl.GL2;
 
 public class Polygon {
-    private int textureId;
-    private transient Texture texture;
+    private transient Material material;
     Vector<Vertex> verticies;
     Vector<String> groups;
+    private String materialName;
 
-    public Polygon(int textureId, Vertex[] verticies) {
-        this.textureId = textureId;
+    public Polygon(String materialName, Vertex[] verticies) {
+        this.materialName = materialName;
         this.verticies = new Vector<Vertex>(verticies.length);
         this.groups = new Vector<String>();
         this.verticies.copyInto(verticies);
     }
 
-    public Polygon(int textureId, java.util.Collection<Vertex> verticies) {
-        this.textureId = textureId;
+    public Polygon(String materialName, java.util.Collection<Vertex> verticies) {
+        this.materialName = materialName;
         this.verticies = new Vector<Vertex>(verticies);
         this.groups = new Vector<String>();
     }
@@ -28,11 +28,9 @@ public class Polygon {
     public void render(GL2 gl) {
         if (verticies.size() < 2)
             return;
-
-        // CL Only push our texture if we have one
-        if(getTexture() != null)
-            gl.glBindTexture(GL2.GL_TEXTURE_2D, getTexture().getGlTexture());
+        
         gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
+        getMaterial().prepare(gl);
         if (verticies.size() == 3) {           
             for (Vertex v: verticies){
                 gl.glTexCoord2f(v.u, v.v); 
@@ -55,10 +53,10 @@ public class Polygon {
             
         }
     }
-
-    private Texture getTexture() {
-        if(texture == null)
-            texture = Texture.findById(textureId);
-        return texture;
+    
+    private Material getMaterial() {
+        if(material == null)
+            material = Material.findByName(materialName);
+        return material;
     }
 }

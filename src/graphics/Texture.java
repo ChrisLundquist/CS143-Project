@@ -12,15 +12,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Texture {
-    private static Vector<Texture> textures = new Vector<Texture>();
     private static int lastID = 0;
-
-    private transient int glTexture;
-    private int id;
-
-    public int getGlTexture() {
-        return glTexture;
-    }
+    private static final int NO_TEXTURE = -1;
+    private static Vector<Texture> textures = new Vector<Texture>();
 
     public static Texture findById(int id) {
         for(Texture texture : textures){
@@ -29,11 +23,35 @@ public class Texture {
         }
         return null;
     }
-    
-    
-    public Texture(GL gl, File textureFile) {
+    private String filePath;
+    private transient int glTexture;
+    private int id;
+
+    public Texture(GL gl, String textureFile) {
         id = ++lastID;
+        glTexture = NO_TEXTURE;
+        init(gl);
+    }
+    
+    public Texture(String filePath){
+        glTexture = NO_TEXTURE;
+        id = ++lastID;
+        this.filePath = filePath;
+    }
+    
+    public void bind(GL gl){
+        gl.glBindTexture(GL.GL_TEXTURE_2D, glTexture);
+    }
+    
+    public int getGlTexture() {
+        return glTexture;
+    }
+    public int getId(){
+        return id;
+    }
+    private void init(GL gl){
         BufferedImage image;
+        File textureFile = new File(filePath);
         try {
             image = ImageIO.read(textureFile);
         } catch (IOException ie) {
@@ -52,7 +70,6 @@ public class Texture {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     }
 
-    
     /* Switched texture loading method, to method from
      * http://today.java.net/pub/a/today/2003/09/11/jogl2d.html
      * 

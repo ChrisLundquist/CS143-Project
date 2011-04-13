@@ -2,33 +2,9 @@ package graphics;
 
 import java.util.HashMap;
 
+import javax.media.opengl.GL2;
+
 public class Material {
-    protected static HashMap<String, Material> materials = new HashMap<String, Material>();
-    
-    private String name;
-    private Color ambient;
-    private Color specular;
-    private Color diffuse;
-    private float alpha;
-    private float shininess;
-    // TODO do we store textures here?
-
-    public Material(String name) {
-        this.name = name;
-        ambient = Color.WHITE;
-        specular = Color.WHITE;
-        diffuse = Color.WHITE;
-        alpha = 1.0f;
-    }
-    
-    public String toString() {
-        return "<Material: " + name + " " + ambient + " " + diffuse + " " + specular + " " + alpha + " " + shininess + ">";
-    }
-    
-    public String getName() {
-        return name;
-    }
-
     public static class Color {
         public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
         
@@ -40,12 +16,6 @@ public class Material {
             this.b = b;
         }
         
-        public Color(int r, int g, int b) {
-            this.r = r / 255.0f;
-            this.g = g / 255.0f;
-            this.b = b / 255.0f;
-        }
-
         public Color(float[] color) {
             switch(color.length) {
                 case 3:
@@ -63,29 +33,86 @@ public class Material {
                     throw new IllegalArgumentException(msg);
             }
         }
+
+        public Color(int r, int g, int b) {
+            this.r = r / 255.0f;
+            this.g = g / 255.0f;
+            this.b = b / 255.0f;
+        }
         
         public String toString() {
             return String.format("#%02x%02x%02x", (int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
     }
-
-    public void setSpecularColor(float[] color) {
-        specular = new Color(color);
+    protected static final Material DEFAULT_MATERIAL = new Material("NONE");
+    
+    protected static HashMap<String, Material> materials = new HashMap<String, Material>();
+    public static Material findByName(String name) {
+        // TODO Optimize: See if we can load this and get rid of the if statement
+        Material mat = materials.get(name);
+        if(mat == null)
+            return DEFAULT_MATERIAL;
+        else
+            return mat;
+    }
+    private float alpha;
+    private Color ambient;
+    private Color diffuse;
+    private String name;
+    private float shininess;
+    private Color specular;
+    private Texture texture;
+    private int textureId;
+    
+    public Material(String name) {
+        this.name = name;
+        ambient = Color.WHITE;
+        specular = Color.WHITE;
+        diffuse = Color.WHITE;
+        alpha = 1.0f;
     }
 
-    public void setDiffuseColor(float[] color) {
-        diffuse = new Color(color);
+    public String getName() {
+        return name;
+    }
+
+    public Texture getTexture() {
+        if(texture == null)
+            texture = Texture.findById(textureId);
+        return texture;
     }
 
     public void setAmbientColor(float[] color) {
         ambient = new Color(color);
     }
 
-    public void setTransparency(float alpha) {
-        this.alpha = alpha;
+    public void setDiffuseColor(float[] color) {
+        diffuse = new Color(color);
     }
 
     public void setShininess(float shininess) {
         this.shininess = shininess;
+    }
+
+    public void setSpecularColor(float[] color) {
+        specular = new Color(color);
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+        this.textureId = texture.getId();
+    }
+
+    public void setTransparency(float alpha) {
+        this.alpha = alpha;
+    }
+
+    public String toString() {
+        return "<Material: " + name + " " + ambient + " " + diffuse + " " + specular + " " + alpha + " " + shininess + ">";
+    }
+
+    public void prepare(GL2 gl) {
+        // TODO Auto-generated method stub
+        
     }
 }

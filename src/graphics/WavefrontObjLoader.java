@@ -153,7 +153,7 @@ public class WavefrontObjLoader {
                     /* geo vertex, texture coordinate and normal */
                     geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
                     tex = texture_verticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
-                    norm = vertex_normals.get(Integer.parseInt(vertex_tokens[3]) - 1);
+                    norm = vertex_normals.get(Integer.parseInt(vertex_tokens[2]) - 1);
                     verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
                     break;
                 default:
@@ -161,7 +161,7 @@ public class WavefrontObjLoader {
             }
         }
 
-        return new Polygon(0 /* textureId */, verticies);
+        return new Polygon("NONE" /* materialName */, verticies);
     }
 
     private Model generateModel() {

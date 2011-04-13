@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
     public static void main(String[] args) {
-        load("assets/example.mtl");
+        load("assets/materials/example.mtl");
         
         for (Material m: Material.materials.values())
             System.out.println(m);
@@ -86,6 +86,9 @@ public class WavefrontMtlLoader {
                 case SHININESS:
                     current_material.setShininess(Float.parseFloat(tokenizer.nextToken()));
                     break;
+                case TEXTURE_MAP_FILENAME:
+                    current_material.setTexture(new Texture(tokenizer.nextToken()));
+                    break;
                 default:
                     System.out.println("Unhandled Token: " + token + "\n" +"Line: " + line);
                     return;
@@ -148,6 +151,8 @@ public class WavefrontMtlLoader {
         if (token.equals("illum"))
             return TokenType.ILLUMINATION_MODEL;
         if (token.equals("map_Ka"))
+            return TokenType.TEXTURE_MAP_FILENAME;
+        if (token.equals("map_Kd"))
             return TokenType.TEXTURE_MAP_FILENAME;
         return TokenType.UNKNOWN;
     }

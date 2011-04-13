@@ -169,7 +169,6 @@ public abstract class Actor implements Serializable {
 
     private void dampenAngularVelocity() {
         angularVelocity = angularVelocity.dampen(0.01f);
-
     }
 }
 

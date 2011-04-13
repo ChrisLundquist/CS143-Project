@@ -11,7 +11,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
@@ -35,7 +34,6 @@ public class Renderer implements GLEventListener {
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
         camera = new Camera();
-
     }
 
     // Display is our main game loop since the animator calls it
@@ -57,11 +55,29 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
         // Push the transformation for our player's Camera
         camera.setPerspective(gl);
-
+        setLighting(gl);
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
+    }
+
+    private void setLighting(GL2 gl) {
+        float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+        float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        float light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        
+        float[] light0 = {-1.0f,-2.0f,2.0f,0.0f};
+        float[] light1 = {1.0f,2.0f,-2.0f,0.0f};
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, light_ambient, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, light_diffuse, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, light_specular, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, light0, 0);
+
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, light_ambient, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, light_diffuse, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, light_specular, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, light1, 0);
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -69,11 +85,14 @@ public class Renderer implements GLEventListener {
 
     public void init(GLAutoDrawable gLDrawable) {
         GL2 gl = getGL2();
-        gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
+        gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_LIGHT1);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
