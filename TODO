@@ -1,4 +1,12 @@
 
+* Initial player joining network game logic
+* Network syncronizing actors between server and client
+* Level setup logic
+* Other actors
+* Rotation dampening just on PlayerShip
+* Join network game interface
+
+
 == UI ==
 HUD
 
