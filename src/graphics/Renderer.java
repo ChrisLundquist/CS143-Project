@@ -67,6 +67,9 @@ public class Renderer implements GLEventListener {
         
         float[] light0 = {-1.0f,-2.0f,2.0f,0.0f};
         float[] light1 = {1.0f,2.0f,-2.0f,0.0f};
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_LIGHT1);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, light_ambient, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, light_diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, light_specular, 0);
@@ -76,6 +79,7 @@ public class Renderer implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, light_diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, light_specular, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, light1, 0);
+        gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, light_ambient, 0);
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -88,10 +92,7 @@ public class Renderer implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
-        gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glEnable(GL2.GL_LIGHT0);
-        gl.glEnable(GL2.GL_LIGHT1);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
