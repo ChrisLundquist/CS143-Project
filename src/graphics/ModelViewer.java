@@ -24,9 +24,12 @@ public class ModelViewer implements GLEventListener, KeyListener {
     private static final float TURN_RATE = 0.5f;
     private static final float SPEED = 0.5f;
     
-    private Quaternion rotation = new Quaternion();
-    private Vector3 position = new Vector3(0.0f, 0.0f, -20.0f);
+    private Quaternion cameraRotation = new Quaternion();
+    private Vector3 cameraPosition = new Vector3(0.0f, 0.0f, 20.0f);
     private Model model;
+    private Quaternion modelRotation = new Quaternion();
+    private Vector3 modelPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    
  
     static GLU glu = new GLU();
  
@@ -46,10 +49,12 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
  
-        gl.glTranslatef(position.x, position.y, position.z);
         
-        gl.glMultMatrixf(rotation.toGlMatrix(), 0);
+        gl.glMultMatrixf(cameraRotation.inverse().toGlMatrix(), 0);
+        gl.glTranslatef(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
 
+        gl.glMultMatrixf(modelRotation.toGlMatrix(), 0);
+        gl.glTranslatef(modelPosition.x, modelPosition.y, modelPosition.z);
         
         model.render(gl);
     }
@@ -90,22 +95,28 @@ public class ModelViewer implements GLEventListener, KeyListener {
                 loadModel();
                 break;
             case KeyEvent.VK_UP:
-                rotation.timesEquals(new Quaternion(rotation.pitchAxis(), TURN_RATE));
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.pitchAxis(), TURN_RATE));
                 break;
             case KeyEvent.VK_DOWN:
-                rotation.timesEquals(new Quaternion(rotation.pitchAxis(), -TURN_RATE));
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.pitchAxis(), -TURN_RATE));
                 break;
             case KeyEvent.VK_LEFT:
-                rotation.timesEquals(new Quaternion(rotation.yawAxis(), TURN_RATE));
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.yawAxis(), TURN_RATE));
                 break;
             case KeyEvent.VK_RIGHT:
-                rotation.timesEquals(new Quaternion(rotation.yawAxis(), -TURN_RATE));
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.yawAxis(), -TURN_RATE));
+                break;
+            case KeyEvent.VK_PAGE_UP:
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.rollAxis(), TURN_RATE));
+                break;
+            case KeyEvent.VK_PAGE_DOWN:
+                cameraRotation.timesEquals(new Quaternion(cameraRotation.rollAxis(), -TURN_RATE));
                 break;
             case KeyEvent.VK_A:
-                position.minusEquals(rotation.rollAxis().times(SPEED));
+                cameraPosition.plusEquals(cameraRotation.rollAxis().times(SPEED));
                 break;
             case KeyEvent.VK_Z:
-                position.plusEquals(rotation.rollAxis().times(SPEED));
+                cameraPosition.minusEquals(cameraRotation.rollAxis().times(SPEED));
                 break;
         }
     }
