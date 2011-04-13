@@ -114,6 +114,8 @@ public class WavefrontObjLoader {
             return TokenType.MATLIB;
         if (token.equals("g"))
             return TokenType.GROUP;
+        if (token.regionMatches(0, "#", 0, 1))
+            return TokenType.COMMENT;
 
         return TokenType.UNKNOWN;
     }
