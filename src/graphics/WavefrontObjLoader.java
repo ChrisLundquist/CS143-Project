@@ -41,6 +41,7 @@ public class WavefrontObjLoader {
     private Vector<ObjVertex> texture_verticies;
     private Vector<ObjVertex> vertex_normals;
     private Vector<Polygon> polygons;
+    private Material current_material;
 
 
     private WavefrontObjLoader() {
@@ -48,6 +49,7 @@ public class WavefrontObjLoader {
         texture_verticies = new Vector<ObjVertex>();
         vertex_normals = new Vector<ObjVertex>();
         polygons = new Vector<Polygon>();
+        current_material = Material.DEFAULT_MATERIAL;
     }
 
     private void readLine(String line) {
@@ -82,15 +84,20 @@ public class WavefrontObjLoader {
                         WavefrontMtlLoader.load(tokenizer.nextToken());
                     break;
                 case USEMTL:
-                    break;
+                        setMaterial(tokenizer.nextToken());
+                    return;
                 case FACE:
                     polygons.add(readPolygon(tokenizer));
                     break;
                 default:
-                    System.out.println("Unhandled Token: " + token + "\n" +"Line: " + line);
+                    System.out.println("WavefrontObjLoader: Unhandled Token: " + token + "\n" +"Line: " + line);
                     return;
             }
         }
+    }
+
+    private void setMaterial(String nextToken) {
+        current_material = Material.findOrCreateByName(nextToken);
     }
 
     private TokenType tokenType(String token) {
@@ -163,7 +170,7 @@ public class WavefrontObjLoader {
             }
         }
 
-        return new Polygon("NONE" /* materialName */, verticies);
+        return new Polygon(current_material, verticies);
     }
 
     private Model generateModel() {

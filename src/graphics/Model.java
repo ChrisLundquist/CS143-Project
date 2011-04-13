@@ -68,4 +68,12 @@ public class Model {
         }
         return 0;
     }
+
+    public static void initialize(GL2 gl) {
+        Texture.initialize(gl);
+        loadModels();
+        for(Model model : models){
+            model.init(gl);
+        }
+    }
 }

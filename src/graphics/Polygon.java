@@ -24,6 +24,21 @@ public class Polygon {
         this.verticies = new Vector<Vertex>(verticies);
         this.groups = new Vector<String>();
     }
+    
+    public Polygon(Material material, Vertex[] verticies) {
+        this.materialName = material.getName();
+        this.material = material;
+        this.verticies = new Vector<Vertex>(verticies.length);
+        this.groups = new Vector<String>();
+        this.verticies.copyInto(verticies);
+    }
+
+    public Polygon(Material material, java.util.Collection<Vertex> verticies) {
+        this.material = material;
+        this.materialName = material.getName();
+        this.verticies = new Vector<Vertex>(verticies);
+        this.groups = new Vector<String>();
+    }
 
     public void render(GL2 gl) {
         if (verticies.size() < 2)

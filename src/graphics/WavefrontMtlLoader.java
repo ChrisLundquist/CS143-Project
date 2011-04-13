@@ -65,7 +65,7 @@ public class WavefrontMtlLoader {
                     /* NOOP - skip remainder of this line */
                     return;
                 case NEW_MATERIAL:
-                    current_material = new Material(tokenizer.nextToken());
+                    current_material = Material.findOrCreateByName(tokenizer.nextToken());
                     materials.put(current_material.getName(), current_material);
                     break;
                 case AMBIENT_COLOR:
@@ -87,10 +87,10 @@ public class WavefrontMtlLoader {
                     current_material.setShininess(Float.parseFloat(tokenizer.nextToken()));
                     break;
                 case TEXTURE_MAP_FILENAME:
-                    current_material.setTexture(new Texture(tokenizer.nextToken()));
+                    current_material.setTexture( Texture.findOrCreateByName(tokenizer.nextToken()));
                     break;
                 default:
-                    System.out.println("Unhandled Token: " + token + "\n" +"Line: " + line);
+                    System.out.println("WavefrontMtlLoader: Unhandled Token: " + token + "\n" +"Line: " + line);
                     return;
             }
         }

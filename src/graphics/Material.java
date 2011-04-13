@@ -7,7 +7,7 @@ import javax.media.opengl.GL2;
 public class Material {
     public static class Color {
         public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
-        
+
         public float r, g, b;
 
         public Color(float r, float g, float b) {
@@ -15,7 +15,7 @@ public class Material {
             this.g = g;
             this.b = b;
         }
-        
+
         public Color(float[] color) {
             switch(color.length) {
                 case 3:
@@ -28,8 +28,8 @@ public class Material {
                     break;
                 default:
                     String msg = "Invalid color : ";
-                        for (float i: color)
-                            msg += i + " ";
+                    for (float i: color)
+                        msg += i + " ";
                     throw new IllegalArgumentException(msg);
             }
         }
@@ -39,14 +39,22 @@ public class Material {
             this.g = g / 255.0f;
             this.b = b / 255.0f;
         }
-        
+
+        public float[] toFloat(){
+            float[] array = new float[3];
+            array[0] = r;
+            array[1] = g;
+            array[2] = b;
+            return array;
+        }
+
         public String toString() {
             return String.format("#%02x%02x%02x", (int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
     }
     protected static final Material DEFAULT_MATERIAL = new Material("NONE");
-    
     protected static HashMap<String, Material> materials = new HashMap<String, Material>();
+    
     public static Material findByName(String name) {
         // TODO Optimize: See if we can load this and get rid of the if statement
         Material mat = materials.get(name);
@@ -55,6 +63,12 @@ public class Material {
         else
             return mat;
     }
+    public static Material findOrCreateByName(String name) {
+        Material mat = materials.get(name);
+        if(mat == null)
+            mat = new Material(name);
+        return mat;
+    }
     private float alpha;
     private Color ambient;
     private Color diffuse;
@@ -62,9 +76,10 @@ public class Material {
     private float shininess;
     private Color specular;
     private Texture texture;
-    private int textureId;
     
-    public Material(String name) {
+    private String textureName;
+
+    private Material(String name) {
         this.name = name;
         ambient = Color.WHITE;
         specular = Color.WHITE;
@@ -78,8 +93,16 @@ public class Material {
 
     public Texture getTexture() {
         if(texture == null)
-            texture = Texture.findById(textureId);
+            texture = Texture.findByName(textureName);
         return texture;
+    }
+
+    public void prepare(GL2 gl) {
+        //gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, {specular.r,specular.g,specular.b,alpha});
+        //gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, mat_shininess);
+        Texture texture = getTexture();
+        if(texture != null)
+            texture.bind(gl);
     }
 
     public void setAmbientColor(float[] color) {
@@ -100,7 +123,7 @@ public class Material {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
-        this.textureId = texture.getId();
+        this.textureName = texture.getName();
     }
 
     public void setTransparency(float alpha) {
@@ -109,10 +132,5 @@ public class Material {
 
     public String toString() {
         return "<Material: " + name + " " + ambient + " " + diffuse + " " + specular + " " + alpha + " " + shininess + ">";
-    }
-
-    public void prepare(GL2 gl) {
-        // TODO Auto-generated method stub
-        
     }
 }
