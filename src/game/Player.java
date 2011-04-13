@@ -61,9 +61,6 @@ public class Player implements Serializable {
             default:
                 System.err.println("Player: unhandled input: " + action);
         }
-        
-        // TODO figure out a more elegant way to do this
-        camera.updateFromActor(ship);
     }
 
     public boolean isAlive() {

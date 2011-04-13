@@ -43,4 +43,9 @@ public class PlayerShip extends Actor {
     public void turnRight() {
         changeYaw(-TURN_SPEED);
     }
+    
+    public void update(){
+        super.update();
+        game.Game.getPlayer().getCamera().updateFromActor(this);
+    }
 }
