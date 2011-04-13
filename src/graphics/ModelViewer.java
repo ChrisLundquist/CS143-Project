@@ -30,13 +30,9 @@ public class ModelViewer implements GLEventListener, KeyListener {
     private Quaternion modelRotation = new Quaternion();
     private Vector3 modelPosition = new Vector3(0.0f, 0.0f, 0.0f);
     
- 
     static GLU glu = new GLU();
- 
     static GLCanvas canvas = new GLCanvas();
- 
     static Frame frame = new Frame("Model Viewer");
- 
     static Animator animator = new Animator(canvas);
  
     public ModelViewer(File objFile) {
@@ -48,7 +44,6 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
- 
         
         gl.glMultMatrixf(cameraRotation.inverse().toGlMatrix(), 0);
         gl.glTranslatef(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
@@ -57,6 +52,8 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glTranslatef(modelPosition.x, modelPosition.y, modelPosition.z);
         
         model.render(gl);
+        
+        gl.glFlush();
     }
  
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -70,6 +67,29 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+        
+        
+        // Enable lighting
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_LIGHT1);
+        float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+        float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        float light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        
+        float[] light0 = {-1.0f,-2.0f,2.0f,0.0f};
+        float[] light1 = {1.0f,2.0f,-2.0f,0.0f};
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, light_ambient, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, light_diffuse, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, light_specular, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, light0, 0);
+
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, light_ambient, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, light_diffuse, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, light_specular, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, light1, 0);
+        
+        
         ((Component) gLDrawable).addKeyListener(this);        
     }
  
