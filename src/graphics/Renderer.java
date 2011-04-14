@@ -50,14 +50,24 @@ public class Renderer implements GLEventListener {
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
+        
         gl.glLoadIdentity();
         // Push the transformation for our player's Camera
         Game.getPlayer().getCamera().setPerspective(gl);
-        setLighting(gl);
+        renderSkybox(gl);
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
+    }
+
+    private void renderSkybox(GL2 gl) {
+        gl.glPushMatrix();
+        math.Vector3 pos = game.Game.getPlayer().getCamera().position;
+        gl.glTranslatef(-pos.x, -pos.y, -pos.z);
+        gl.glScalef(128.0f,128.0f , 128.0f);
+        Model.findById(2).render(gl);
+        gl.glPopMatrix();
     }
 
     private void setLighting(GL2 gl) {

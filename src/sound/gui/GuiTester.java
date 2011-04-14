@@ -26,7 +26,7 @@ public class GuiTester extends JFrame {
     private String[] nameList = new String[0];
     private File[] currentFiles;
 
-    private Theme playedTheme = new Theme();
+    //private Theme playedTheme = new Theme();
     
     private final JButton addSongBtn = new JButton("Select Files");
     private JList songList = new JList(nameList);
@@ -104,7 +104,7 @@ public class GuiTester extends JFrame {
         cw.print("Making new theme");
         for(File f: this.currentFiles){
             if(f.getName().endsWith(".wav")){
-                playedTheme.addPiece(new Piece(f.getPath()));
+                //playedTheme.addPiece(new Piece(f.getPath()));
                 cw.print("Added "+f.getName()+" to the theme");
             }
             else{

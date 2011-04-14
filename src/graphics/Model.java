@@ -25,6 +25,7 @@ public class Model {
         //      or do that lazily?
         models.add( WavefrontObjLoader.load("assets/cube_cube.obj"));
         models.add( WavefrontObjLoader.load("assets/cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/skybox.obj"));
     }
 
     /* 
