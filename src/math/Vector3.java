@@ -44,6 +44,13 @@ public class Vector3 implements Serializable {
         return this;
     }
     
+    /*
+     * Returns the dot product between this and another vector
+     */
+    public float dotProduct(Vector3 other){
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+    
     public Vector3 times(Quaternion rotation) {
         float[] m = rotation.toGlMatrix();
         
