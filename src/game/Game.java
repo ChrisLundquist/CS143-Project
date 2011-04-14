@@ -8,8 +8,10 @@ public class Game {
     private static input.InputHandler input;
     private static boolean paused;
     private static Player player;
+    private static Map map;
    
     public static void init(){
+        map = Map.load("assets/maps/example_1.map");
         player = new Player();
 
         renderer = new graphics.Renderer();
@@ -48,5 +50,9 @@ public class Game {
     
     public static void exit() {
         System.exit(0);
+    }
+
+    public static Map getMap() {
+        return map;
     }
 }
