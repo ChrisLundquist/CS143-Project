@@ -2,8 +2,9 @@ package actor;
 import math.*;
 import graphics.Model;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
+
 import javax.media.opengl.GL2;
 
 public abstract class Actor implements Serializable {
@@ -14,7 +15,7 @@ public abstract class Actor implements Serializable {
      *  it doesn't clash with our name space. Vectors work like ArrayLists,
      *  but are synchronized.
      */
-    public static Vector<Actor> actors = new Vector<Actor>();
+    public static List<Actor> actors = new java.util.concurrent.CopyOnWriteArrayList<Actor>();
     /**
      * Common random number generator object
      */

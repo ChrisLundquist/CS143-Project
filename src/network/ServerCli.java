@@ -1,9 +1,11 @@
 package network;
 
+import game.Player;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -88,7 +90,7 @@ public class ServerCli extends Thread {
         long freeMemory = Runtime.getRuntime().freeMemory() / (1024 * 1024);
         long usedMemory = totalMemory - freeMemory;
         int processors = Runtime.getRuntime().availableProcessors();
-        Collection<Object> players = server.getPlayers();
+        List<Player> players = server.getPlayers();
         int playerCount = players.size();
 
         out.println(playerCount + "players");
@@ -104,8 +106,7 @@ public class ServerCli extends Thread {
     }
 
     private void kickPlayer(StringTokenizer tokenizer) {
-        // TODO Auto-generated method stub
-
+        // TODO
     }
 
     private ServerCommand tokenType(String token) {

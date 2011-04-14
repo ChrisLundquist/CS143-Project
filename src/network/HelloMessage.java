@@ -1,10 +1,16 @@
 package network;
 
+import game.Map;
+
+/**
+ * This message is sent by the server when the player initially connects
+ * @author Dustin Lundquist <dustin@null-ptr.net>
+ */
 public class HelloMessage extends Message {
     private static final long serialVersionUID = -1554065217547323739L;
 
     private int playerCount;
-    private game.Map map;
+    private Map map;
 
     public HelloMessage(DedicatedServer server) {
         playerCount = server.getPlayers().size();
@@ -15,7 +21,7 @@ public class HelloMessage extends Message {
         return playerCount;
     }
     
-    public game.Map getMap() {
+    public Map getMap() {
         return map;
     }
 }

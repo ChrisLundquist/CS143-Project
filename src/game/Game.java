@@ -55,4 +55,9 @@ public class Game {
     public static Map getMap() {
         return map;
     }
+
+    public static void setMap(Map map2) {
+        // TODO Auto-generated method stub
+        
+    }
 }
