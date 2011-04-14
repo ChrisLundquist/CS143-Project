@@ -11,8 +11,8 @@ public class Player implements Serializable {
 
     private String name;
     private PlayerStatus status;
-    private Camera camera;
-    private PlayerShip ship;
+    private transient Camera camera;
+    private transient PlayerShip ship;
     private int shipId;
     
     public Player() {
