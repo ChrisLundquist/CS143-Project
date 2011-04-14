@@ -43,7 +43,7 @@ public class DedicatedServer {
         timer = new Timer();
         timer.scheduleAtFixedRate(new UpdateTask(), 0, FRAME_RATE);
         
-        currentMap = Map.load("assets/maps/example_1.map");
+        currentMap = Map.load("example_1");
         
         new ListenerThread(this).start();
     }
