@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import java.io.File;
 import javax.swing.JTextField;
+import actor.Asteroid;
 import game.Map;
 import java.awt.FlowLayout;
 
@@ -28,11 +29,8 @@ public class Editor extends JFrame {
     private JTextField mapNameField = null;
     private JFileChooser jfc = null;
     private Map map = null;   //  @jve:decl-index=0:visual-constraint=""
-    private JLabel jLabel = null;
     private JTabbedPane jTabbedPane = null;
-    private JScrollPane jScrollPane = null;
     private JTable spawningPositionTable = null;
-    private JScrollPane jScrollPane1 = null;
     private JTable actorTable = null;
     /**
      * This method initializes jToolBar	
@@ -58,8 +56,6 @@ public class Editor extends JFrame {
             openButton = new JButton("Open");
             openButton.addActionListener(new java.awt.event.ActionListener() {   
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-
-
                     if (getJfc().showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
                         return;
                     loadMap(game.Map.load(getJfc().getSelectedFile()));
@@ -72,6 +68,7 @@ public class Editor extends JFrame {
 
     protected void loadMap(Map map) {
         this.map = map;
+        map.actors.add(new Asteroid());
         mapNameField.setText(map.name);
         spawningPositionTable.setModel(new PositionTable(map.spawningPositions));
         actorTable.setModel(new ActorTable(map.actors));
@@ -87,6 +84,7 @@ public class Editor extends JFrame {
             saveButton = new JButton("Save");
             saveButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    System.err.println("Save called");
                     getMap().write();
                 }
             });
@@ -101,12 +99,11 @@ public class Editor extends JFrame {
      */
     private JPanel getMapSettings() {
         if (mapSettings == null) {
-            jLabel = new JLabel();
-            jLabel.setText("Map Name");
-            jLabel.setName("jLabel");
+            JLabel mapNameLabel = new JLabel();
+            mapNameLabel.setText("Map Name");
             mapSettings = new JPanel();
             mapSettings.setLayout(new FlowLayout());
-            mapSettings.add(jLabel, null);
+            mapSettings.add(mapNameLabel, null);
             mapSettings.add(getMapNameField(), null);
         }
         return mapSettings;
@@ -122,13 +119,6 @@ public class Editor extends JFrame {
             mapNameField = new JTextField();
             mapNameField.setText("Map Name");
             mapNameField.setName("mapNameField");
-            mapNameField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-                public void propertyChange(java.beans.PropertyChangeEvent e) {
-                    if ((e.getPropertyName().equals("text"))) {
-                        getMap().name = mapNameField.getText(); 
-                    }
-                }
-            });
         }
         return mapNameField;
     }
@@ -166,24 +156,15 @@ public class Editor extends JFrame {
     private JTabbedPane getJTabbedPane() {
         if (jTabbedPane == null) {
             jTabbedPane = new JTabbedPane();
-            jTabbedPane.addTab(null, null, getMapSettings(), null);
-            jTabbedPane.addTab(null, null, getJScrollPane(), null);
-            jTabbedPane.addTab(null, null, getJScrollPane1(), null);
+            jTabbedPane.addTab("Map", null, getMapSettings(), null);
+            JScrollPane spawningPositionScrollPane = new JScrollPane();
+            spawningPositionScrollPane.setViewportView(getSpawningPositionTable());
+            jTabbedPane.addTab("Spawn Points", null, spawningPositionScrollPane, null);
+            JScrollPane actorsScrollPane1 = new JScrollPane();
+            actorsScrollPane1.setViewportView(getActorTable());
+            jTabbedPane.addTab("Actors", null, actorsScrollPane1, null);
         }
         return jTabbedPane;
-    }
-
-    /**
-     * This method initializes jScrollPane	
-     * 	
-     * @return javax.swing.JScrollPane	
-     */
-    private JScrollPane getJScrollPane() {
-        if (jScrollPane == null) {
-            jScrollPane = new JScrollPane();
-            jScrollPane.setViewportView(getSpawningPositionTable());
-        }
-        return jScrollPane;
     }
 
     /**
@@ -199,19 +180,6 @@ public class Editor extends JFrame {
     }
 
     /**
-     * This method initializes jScrollPane1	
-     * 	
-     * @return javax.swing.JScrollPane	
-     */
-    private JScrollPane getJScrollPane1() {
-        if (jScrollPane1 == null) {
-            jScrollPane1 = new JScrollPane();
-            jScrollPane1.setViewportView(getActorTable());
-        }
-        return jScrollPane1;
-    }
-
-    /**
      * This method initializes actorTable	
      * 	
      * @return javax.swing.JTable	
@@ -219,6 +187,8 @@ public class Editor extends JFrame {
     private JTable getActorTable() {
         if (actorTable == null) {
             actorTable = new JTable();
+            // actorTable.setDefaultEditor(math.Vector3.class, new Vector3Editor());
+            actorTable.setDefaultEditor(math.Quaternion.class, new QuaternionEditor());
         }
         return actorTable;
     }
@@ -250,7 +220,7 @@ public class Editor extends JFrame {
      * @return void
      */
     private void initialize() {
-        this.setSize(712, 473);
+        this.setSize(600, 400);
         this.setContentPane(getJContentPane());
         this.setTitle("Map Editor");
     }
