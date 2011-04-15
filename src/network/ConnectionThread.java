@@ -29,18 +29,37 @@ public abstract class ConnectionThread extends Thread {
             
             // Include a hook to send an initial hello message
             msg = helloMessage();
-            if (msg != null)
+            if (msg != null) {
                 out.writeObject(msg);
+                out.flush();
+            }
             
-            // Main loop to receive updates and respond
-            while ((msg = (Message)in.readObject()) != null) {
+            // Main loop to receive updates and respond          
+            while (true) {
+                
+                // Having issue with reading partial objects over the wire, so trying mark
+                in.mark(64 * 1024);
+                try {
+                    msg = (Message)in.readObject();
+                } catch (java.io.EOFException e) {
+                    System.out.println("EOF encountered, trying to retry");
+                    e.printStackTrace();
+                    Thread.sleep(5);
+                    in.reset();
+                    continue;
+                }
+                
+                
                 msg = handleMessage(msg);
                 out.writeObject(msg);
+                out.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             System.err.println("Invalid network message");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -52,7 +71,15 @@ public abstract class ConnectionThread extends Thread {
             } catch(Exception e) {
                 e.printStackTrace();
             }
+            shutdownHook();
         }
+    }
+
+    /**
+     * Provides an interface for overriding classes to perform cleanup tasks
+     */
+    protected void shutdownHook() {
+        // Do nothing
     }
 
     /**
