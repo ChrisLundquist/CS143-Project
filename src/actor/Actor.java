@@ -182,5 +182,9 @@ public abstract class Actor implements Serializable {
     public int getId() {
         return id;
     }
+
+    public Quaternion getAngularVelocity() {
+        return angularVelocity;
+    }
 }
 
