@@ -8,10 +8,9 @@ import javax.media.opengl.GL2;
 public class Shader {
     private final static String SHADER_DIR = "assets/shaders/";
     private final String fragmentFilePath;
-    protected transient int fragmentID;
-
-    protected transient int programID;
     private final String vertexFilePath;
+    protected transient int fragmentID;
+    protected transient int programID;
     protected transient int vertexID;
 
     public Shader(String vertexFilePath, String fragmentFilePath){
@@ -39,13 +38,13 @@ public class Shader {
         gl.glShaderSource(programObject, 1, source, sourceArrayLength,0);  
         gl.glCompileShader(programObject);
         gl.glGetShaderiv(programObject, GL2.GL_COMPILE_STATUS, compiledSuccessfully,0);
-        
+
         if(compiledSuccessfully[0] == 0){
             System.err.println("Problems with Shaders:" + filePath);
             printErrorLog(gl,programObject);
         }
     }
-    
+
     private void buildProgram(GL2 gl){
         int[] success = new int[1];
         programID = gl.glCreateProgram();
@@ -57,7 +56,7 @@ public class Shader {
         if(success[0] == 0)
         {
             IntBuffer intValue = IntBuffer.allocate(1);
-            gl.glGetObjectParameterivARB(programID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB, intValue);
+            gl.glGetProgramiv(programID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB, intValue);
 
             int lengthWithNull = intValue.get();
 
@@ -68,7 +67,7 @@ public class Shader {
             java.nio.ByteBuffer infoLog = java.nio.ByteBuffer.allocate(lengthWithNull);
 
             intValue.flip();
-            gl.glGetShaderInfoLog(programID, lengthWithNull, intValue, infoLog);
+            gl.glGetProgramInfoLog(programID, lengthWithNull, intValue, infoLog);
 
             int actualLength = intValue.get();
 
@@ -83,7 +82,7 @@ public class Shader {
     public void enable(GL2 gl){
         gl.glUseProgram(programID);
     }
-    
+
     public void init(GL2 gl) throws IOException{
         vertexID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
         fragmentID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
@@ -91,7 +90,7 @@ public class Shader {
         compileShader(gl,fragmentID,fragmentFilePath);
         buildProgram(gl);
     }
-    
+
     private void printErrorLog(GL2 gl, int programObject) {
         IntBuffer intValue = IntBuffer.allocate(1);
         gl.glGetObjectParameterivARB(programObject, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB, intValue);
