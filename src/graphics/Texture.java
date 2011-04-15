@@ -122,6 +122,23 @@ public class Texture {
         // Rewind the buffer so we can read it starting and beginning
         dest.rewind();
 
+
         gl.glTexImage2D(target, 0, GL2.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, dest);
+        if(gl.glIsTexture(target) == false){
+            System.err.println("FAILED TO GENERATE TEXTURE");
+            if(isPowerOfTwo(img.getWidth()) == false || isPowerOfTwo(img.getHeight()) == false){
+                System.err.println("Texture width or height is not power of two");
+                System.err.println("Texture width: " + img.getWidth());
+                System.err.println("Texture height: " + img.getHeight());
+                return;
+            }
+            System.err.println("Unknown reason texture did not generate");
+        }
+    }
+    
+    // http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
+    // Method 10
+    private boolean isPowerOfTwo (int x){
+      return ((x != 0) && ((x & (~x + 1)) == x));
     }
 }
