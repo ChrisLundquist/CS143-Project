@@ -96,7 +96,7 @@ public class Renderer implements GLEventListener {
         gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
-        gl.glEnable(GL2.GL_CULL_FACE); // TODO, change our skybox to be textured from the inside out
+        //gl.glEnable(GL2.GL_CULL_FACE); // TODO, change our skybox to be textured from the inside out
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
@@ -110,7 +110,7 @@ public class Renderer implements GLEventListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);
+        //shader.enable(gl);
         System.gc(); // This is probably a good a idea
     }
 

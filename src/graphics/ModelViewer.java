@@ -15,6 +15,8 @@ import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 import java.io.File;
+import java.io.IOException;
+
 import math.Quaternion;
 import math.Vector3;
  
@@ -34,6 +36,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
     static GLCanvas canvas = new GLCanvas();
     static Frame frame = new Frame("Model Viewer");
     static Animator animator = new Animator(canvas);
+    static Shader shader = new Shader("minimal.vert","minimal.frag");
  
     public ModelViewer(File objFile) {
         model = WavefrontObjLoader.load(objFile);
@@ -90,7 +93,14 @@ public class ModelViewer implements GLEventListener, KeyListener {
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, light1, 0);
         
         
-        ((Component) gLDrawable).addKeyListener(this);        
+        ((Component) gLDrawable).addKeyListener(this);
+        try {
+            shader.init(gl);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        shader.enable(gl);
     }
  
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
