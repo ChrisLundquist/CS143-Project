@@ -1,27 +1,38 @@
 package game;
+ 
+import input.InputHandler;
 
-import actor.Player;
+public class Game { 
 
-public class Game {
-    private static GUI gui;
-    private static MainMenu menu;
+    private static graphics.Renderer renderer;
+    private static input.InputHandler input;
     private static boolean paused;
-    private static boolean started; 
-    // TODO CL - get rid of this. It is used by the main menu to change the verbage from "start" to "resume"
+    private static Player player;
+    private static Map map;
+   
+    public static void init(){
+        map = Map.load("assets/maps/example_1.map");
+        player = new Player();
 
-
-    /**
-     * Our main function
-     * @param args
-     */
-    public static void main(String[] args) {
-        gui = new GUI();
-        menu = new MainMenu();
+        renderer = new graphics.Renderer();
+        input = new InputHandler();
+        graphics.Model.loadModels();
+        
+        actor.Asteroid a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        actor.Actor.actors.add(a);
+    }
+    
+    public static void start(){
+        renderer.start();
+    }
+    
+    public static InputHandler getInputHandler(){
+        return input;
     }
 
     public static Player getPlayer() {
-        // TODO Auto-generated method stub
-        return null;
+        return player;
     }
 
     public static boolean isPaused() {
@@ -36,33 +47,12 @@ public class Game {
     public static void togglePause() {
         paused = !paused;
     }
-
-    public static void init() {
-        graphics.Model.loadModels();                  // Load our models
-        sound.SoundEffect.init(false);                // Default to sound off
-        graphics.particles.ParticleSystem.init(true); // default to particles on
-        graphics.OnscreenMessage.init();              // Initialize Screen messages
+    
+    public static void exit() {
+        System.exit(0);
     }
 
-    public static void update() {
-        // TODO Auto-generated method stub
-        
+    public static Map getMap() {
+        return map;
     }
-
-    public static void dispose() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public static boolean isStarted() {
-        return started;
-    }
-
-    public static void showGame() {
-        menu.dispose();
-        menu = null;
-        gui.setVisible(true);
-        
-    }
-
 }

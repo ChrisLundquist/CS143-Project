@@ -1,5 +1,5 @@
 package graphics;
-import math.Vector;
+import math.Vector3;
 
 public class OnscreenMessage {
     private static final int MAX_AGE = 90;
@@ -32,23 +32,23 @@ public class OnscreenMessage {
 
 
     private String text;
-    private Vector position;
-    private Vector velocity;
+    private Vector3 position;
+    private Vector3 velocity;
     private int age;
 
     public OnscreenMessage(String msg) {
-        this(msg, new Vector());
+        this(msg, new Vector3());
     }
 
-    public OnscreenMessage(String msg, Vector position) {
-        this(msg, position, new Vector());
+    public OnscreenMessage(String msg, Vector3 position) {
+        this(msg, position, new Vector3());
     }
 
     public OnscreenMessage(String msg, actor.Actor actor) {
         this(msg, actor.getPosition(), actor.getVelocity());
     }
 
-    public OnscreenMessage(String msg, Vector position, Vector velocity) {
+    public OnscreenMessage(String msg, Vector3 position, Vector3 velocity) {
         text = msg;
         this.position = position;
         this.velocity = velocity;
@@ -59,11 +59,11 @@ public class OnscreenMessage {
         return text;
     }
 
-    public Vector getPosition() {
+    public Vector3 getPosition() {
         return position;
     }
 
-    public Vector getVelocity() {
+    public Vector3 getVelocity() {
         return velocity;
     }
 

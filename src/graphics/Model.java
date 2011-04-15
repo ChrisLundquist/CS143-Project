@@ -1,90 +1,80 @@
 package graphics;
 
-import java.io.File;
 import java.util.Vector;
+import javax.media.opengl.GL2;
 
 public class Model {
+    private static final int NO_LIST = -1;
+    protected int id;
+    int displayList;
+    Vector<Polygon> polygons;
+
     private static Vector<Model> models = new Vector<Model>();
 
+    public Model(Vector<Polygon> polygons){
+        this.polygons = polygons;
+        displayList = NO_LIST;
+    }
+
     public static Model findById(int modelId) {
-        // XXX FIXME
-        // This line was:
-        // return textures.get(id);
-        // which was nonsense, I don't think we want to return a straight index
         return models.get(modelId);
     }
 
     public static void loadModels() {
-        // TODO Auto-generated method stub
+        // CL - Do we want to generate display lists for everything at load time
+        //      or do that lazily?
+        models.add( WavefrontObjLoader.load("assets/cube_cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/skybox.obj"));
     }
 
-    public class Vertex {
-        float x;
-        float y;
-        float z;
-        float u;
-        float v;
-
-        public Vertex(float x, float y, float z, float u, float v) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.u = u;
-            this.v = v;
-        }
-
-        public Vertex(float x, float y, float z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.u = 0.0f;
-            this.v = 0.0f; 
-        }
-
-        public String toString() {
-            return "<" + x + ", " + y + ", " + z + ">";
-        }
+    /* 
+     * Build a display list for this model
+     */
+    public void init(GL2 gl) {
+        displayList = gl.glGenLists(1);
+        gl.glNewList(displayList, GL2.GL_COMPILE);
+        renderPolygons(gl);
+        gl.glEndList();  
     }
 
-    public class Polygon {
-        int textureId;
-        Vector<Vertex> verticies;
-
-
-        public Polygon(int textureId, Vertex[] verticies) {
-            this.textureId = textureId;
-            this.verticies = new Vector<Vertex>(verticies.length);
-            this.verticies.copyInto(verticies);
+    private void renderPolygons(GL2 gl){
+        gl.glBegin(GL2.GL_TRIANGLES);
+        for (Polygon p: polygons) {
+            p.render(gl);
         }
-
-        public Polygon(int textureId, java.util.Collection<Vertex> verticies) {
-            this.textureId = textureId;
-            this.verticies = new Vector<Vertex>(verticies);
-        }
-
-        public Polygon[] toTriangleFan() {
-            Polygon[] result;
-            Vertex first;
-
-            if (verticies.size() < 3)
-                return null;
-
-            //FIXME
-            //if (verticies.size() == 3)
-            //  return this;
-
-            result = new Polygon[verticies.size() - 2];
-            for (Polygon iter: result) {
-                 // TODO
-            }
-            return result;
-
-        }
+        gl.glEnd();
     }
 
-    public static void load3ds(File input) {
-        Vector<math.Vector> points = new Vector<math.Vector>();
-        Vector<Polygon> polygons = new Vector<Polygon>();
+    public void render_slow(GL2 gl){
+        renderPolygons(gl);
     }
 
+    public void render(GL2 gl) {
+        // CL - The scaling, rotating, translating is handled per actor
+        //      The display list should have already been "adjusted" if it
+        //      wasn't at the center of mass or correct world orientation
+        //      when it was loaded.
+        if(displayList == NO_LIST)
+            init(gl);
+        gl.glCallList(displayList);
+    }
+
+    public static int getModelIdFor(actor.Actor actor) {
+        // FIXME replace the magic numbers!
+        if(actor instanceof actor.Asteroid){
+            return 0;
+        } else if(actor instanceof actor.PlayerShip) {
+            return 1;
+        }
+        return 0;
+    }
+
+    public static void initialize(GL2 gl) {
+        Texture.initialize(gl);
+        loadModels();
+        for(Model model : models){
+            model.init(gl);
+        }
+    }
 }

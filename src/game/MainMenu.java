@@ -1,112 +1,145 @@
 package game;
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
-
+import javax.imageio.ImageIO;
+import javax.swing.*;
 /**
- * This is the 2nd Window(Main menu) with the Start Game & how to play & high score in it. A class within a class.
- * @author GUI team
+ * Main menu, the OpenGL portion of the game will be started from here
+ * @author tim
+ *
  */
-public class MainMenu extends JFrame {
-    private static final long serialVersionUID = -6930053717837454204L;
+public class MainMenu extends JPanel implements ActionListener {
+    private static final long serialVersionUID = -3569270152514757138L;
+    //background image
+    BufferedImage background;
+    int y, x;
+    //paths to all images used
+    ImageIcon play, play_selected, settings, settings_selected, quit, quit_selected;
+    private static final String BACKGROUND_PATH = "assets/images/background.jpg";
+    private static final String PLAY_PATH  = "assets/images/play.png";
+    private static final String SETTINGS_PATH = "assets/images/settings.png";
+    private static final String QUIT_PATH = "assets/images/quit.png";
+    private static final String PLAY_PATH_SELECTED  = "assets/images/play_selected.png";
+    private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
+    private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
-    //These are the fields
-    private JPanel titlePanel;
-    private JPanel buttonsPanel;
-    private JButton startGame;
-    private JButton settings;
-    private JButton howToPlay;
-    private JButton quitButton;
-    private JLabel title;
-    private JLabel imageLabel;
+    //buttons
+    JButton playButton, settingsButton, quitButton;
 
-    //constructor
-    public MainMenu() {
-        setLayout(new BorderLayout());
+    public boolean menuVisible;
 
-        ImageIcon titleImage = new ImageIcon("data/title.png");
-        imageLabel = new JLabel();
-        imageLabel.setIcon(titleImage);
-
-        buttonsPanel = new JPanel();
-        titlePanel = new JPanel();
-
-
-        title = new JLabel();
-        title.setIcon(titleImage);
-
-        JPanel blackSpace = new JPanel();
-
-        add(titlePanel, BorderLayout.NORTH);
-        add(blackSpace, BorderLayout.WEST);
-        add(buttonsPanel, BorderLayout.CENTER);
-        add(blackSpace, BorderLayout.SOUTH);
-        add(blackSpace, BorderLayout.AFTER_LAST_LINE);
-
-
-        startGame = new JButton(Game.isStarted() ? "Resume Game" : "Start Game");
-        howToPlay = new JButton("How to play");
-        settings = new JButton("Settings");
-        quitButton = new JButton("Quit");
-
-        startGame.addActionListener(new StartGameListener());
-        howToPlay.addActionListener(new HowToPlayListener());
-        settings.addActionListener(new SettingsListener());
-        quitButton.addActionListener(new QuitButtonListener());
-
-        titlePanel.add(title);
-        buttonsPanel.add(startGame);
-        buttonsPanel.add(howToPlay);
-        buttonsPanel.add(settings);
-        buttonsPanel.add(quitButton);
-
-        GUI.colorize(buttonsPanel);
-        GUI.colorize(titlePanel);
-        GUI.colorize(blackSpace);
-
-        pack();
-        setVisible(true);
-    }
-
-    private class StartGameListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            Game.showGame();
+    public MainMenu() throws IOException {        
+        //loads all images from assets/images/
+        try {
+            background = ImageIO.read(new File(BACKGROUND_PATH));
+            play = new ImageIcon(PLAY_PATH);
+            settings = new ImageIcon(SETTINGS_PATH);
+            quit = new ImageIcon(QUIT_PATH);
+            play_selected = new ImageIcon(PLAY_PATH_SELECTED);
+            settings_selected = new ImageIcon(SETTINGS_PATH_SELECTED);
+            quit_selected = new ImageIcon(QUIT_PATH_SELECTED);
+        } catch (IOException e) {
+            System.out.println("Can't find image in assets");
+            e.printStackTrace();
         }
+
+        //creates new frame
+        JFrame f = new JFrame();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.add(this);
+        f.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
+        f.setVisible(true);
+
+        //adds gui elements
+        createGUI();
+        //sets the menu visibility as true
+        menuVisible = true;
     }
 
-    private class HowToPlayListener implements ActionListener {
-        public void actionPerformed(ActionEvent f) {
-            String instructions= "<html>" +
-            "<body>" +
-            "<table>" +
-            "<tr><th colspan=2>How to PLAY</th></tr>" +
-            "<tr><td>pause game</td><td>pause or p</td></tr>" +
-            "<tr><td>menu</td><td>escape or q</td></tr>" +
-            "<tr><td>forward thrusters</td><td>up arrow</td></tr>" +
-            "<tr><td>reverse thrusters</td><td>down arrow</td></tr>" +
-            "<tr><td>turn left</td><td>left arrow</td></tr>" +
-            "<tr><td>turn right</td><td>right arrow</td></tr>" +
-            "<tr><td>emergency stop</td><td>up and down arrows</td></tr>" +
-            "<tr><td>flip 180</td><td>s</td></tr>" +
-            "<tr><td>warp</td><td>w</td></tr>" +
-            "</table>" +
-            "</body>" +
-            "</html>";
-            JOptionPane.showMessageDialog(null, instructions);
+    /**
+     * creates and adds gui components
+     * 
+     */
+    private void createGUI() {
+        this.setLayout( new FlowLayout(FlowLayout.RIGHT, 60, 10) );
+
+        playButton = new JButton(play);   
+        playButton.setOpaque(false);
+        playButton.setBorderPainted(false);
+        playButton.setContentAreaFilled(false);
+        playButton.setBorder(null);
+        playButton.setRolloverIcon(play_selected);
+        playButton.addActionListener(this);
+
+        settingsButton = new JButton(settings);
+        settingsButton.setOpaque(false);
+        settingsButton.setBorderPainted(false);
+        settingsButton.setContentAreaFilled(false);
+        settingsButton.setBorder(null);
+        settingsButton.setRolloverIcon(settings_selected);
+        settingsButton.addActionListener(this);
+
+        quitButton = new JButton(quit);
+        quitButton.setOpaque(false);
+        quitButton.setBorderPainted(false);
+        quitButton.setContentAreaFilled(false);
+        quitButton.setBorder(null);
+        quitButton.setRolloverIcon(quit_selected);
+        quitButton.addActionListener(this);
+
+        add(playButton);
+        add(settingsButton);
+        add(quitButton);
+
+    }
+    /**
+     * Paints the background image to the panel
+     * It is scaled in relation to the screen size
+     */
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        //scales image
+        int w = getWidth();
+        int h = getHeight();
+        int iw = background.getWidth();
+        int ih = background.getHeight();
+        double xScale = (double)w/iw;
+        double yScale = (double)h/ih;
+        double scale = //Math.min(xScale, yScale);    // scale to fit
+            Math.max(xScale, yScale);  // scale to fill
+        int  width = (int)(scale*iw);
+        int  height = (int)(scale*ih);
+        x = (w - width)/2;
+        y = (h - height)/2;
+        //paints image
+        g2.drawImage(background, x, y, width, height, this);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == playButton) {
+            Game.init();
+            this.setVisible(false);
+            menuVisible = false;
+            Game.start();
         }
-    }
-
-    private class SettingsListener implements ActionListener {
-        public void actionPerformed(ActionEvent f) {
-            new Settings();
+        if(e.getSource() == settingsButton) {
+            JOptionPane.showMessageDialog(this, "Doesn't do anything yet");
         }
-    }
-
-    private class QuitButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent f) {
+        if(e.getSource() == quitButton) {
             System.exit(0);
         }
+
+    }
+    public static void main (String []args) throws IOException {
+        @SuppressWarnings("unused")
+        MainMenu menu = new MainMenu();
     }
 }
