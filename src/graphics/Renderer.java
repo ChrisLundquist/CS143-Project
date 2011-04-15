@@ -87,6 +87,7 @@ public class Renderer implements GLEventListener {
     public void drawHud(GL2 gl) {
         // Temporary disable lighting
         gl.glDisable(GL2.GL_LIGHTING);
+        gl.glDisable(GL2.GL_TEXTURE_2D);
 
         // Our HUD consists of a simple rectangle
         gl.glMatrixMode(GL2.GL_PROJECTION );
@@ -111,7 +112,8 @@ public class Renderer implements GLEventListener {
         
         gl.glPopMatrix(); /* recover projection matrix */
         gl.glMatrixMode(GL2.GL_MODELVIEW );
-        
+
+        gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_LIGHTING );
     }
 
