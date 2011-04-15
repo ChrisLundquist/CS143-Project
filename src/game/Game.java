@@ -11,7 +11,7 @@ public class Game {
     private static Map map;
    
     public static void init(){
-        map = Map.load("assets/maps/example_1.map");
+        map = Map.load("example_1");
         player = new Player();
 
         renderer = new graphics.Renderer();
@@ -54,5 +54,10 @@ public class Game {
 
     public static Map getMap() {
         return map;
+    }
+
+    public static void setMap(Map map2) {
+        // TODO Auto-generated method stub
+        
     }
 }

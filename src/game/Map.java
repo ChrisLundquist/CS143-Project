@@ -13,6 +13,7 @@ import actor.Actor;
 
 public class Map implements Serializable {
     private static final String MAP_DIR = "assets/maps/";
+    private static final String MAP_EXT = ".map";
     private static final long serialVersionUID = 4499508076059412730L;
 
     public static Map load(File file) {
@@ -34,8 +35,8 @@ public class Map implements Serializable {
         }
         return null;
     }  
-    public static Map load(String filepath) {
-        return load(new File(filepath));
+    public static Map load(String filename) {
+        return load(new File(MAP_DIR + filename + MAP_EXT));
     }
     public static void main(String[] args) {
         Map map = new Map("Example 1");
@@ -48,10 +49,10 @@ public class Map implements Serializable {
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, 20.0f));
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, -20.0f));
 
-        map.skybox = new graphics.Skybox("assets/skybox.obj");
+        map.skybox = new graphics.Skybox("assets/models/skybox.obj");
         map.write();
         
-        Map loaded = Map.load("assets/maps/example_1.map");
+        Map loaded = Map.load("example_1");
         
         assert loaded.spawningPositions.size() == 6;
     }
