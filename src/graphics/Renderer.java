@@ -35,7 +35,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("minimal.vert","minimal.frag");
+        shader = new Shader("texture.vert","texture.frag");
     }
 
     // Display is our main game loop since the animator calls it
@@ -189,7 +189,7 @@ public class Renderer implements GLEventListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //shader.enable(gl);
+        shader.enable(gl);
         System.gc(); // This is probably a good a idea
     }
 
