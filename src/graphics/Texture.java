@@ -122,9 +122,8 @@ public class Texture {
         // Rewind the buffer so we can read it starting and beginning
         dest.rewind();
 
-
         gl.glTexImage2D(target, 0, GL2.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, dest);
-        if(gl.glIsTexture(target) == false){
+        if(gl.glIsTexture(glTexture) == false){
             System.err.println("FAILED TO GENERATE TEXTURE");
             if(isPowerOfTwo(img.getWidth()) == false || isPowerOfTwo(img.getHeight()) == false){
                 System.err.println("Texture width or height is not power of two");
