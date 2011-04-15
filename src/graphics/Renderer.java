@@ -64,13 +64,8 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
         // update the camera position here so it doesn't fire on the dedicated server
         // Push the transformation for our player's Camera
-<<<<<<< HEAD
-        //game.Game.getPlayer().getCamera().setPerspective(gl);
-        
-        Game.getPlayer().getCamera().setPerspective(gl);
-=======
+
         Game.getPlayer().updateCamera().setPerspective(gl);
->>>>>>> c4b8c8eb256cc2b9c70c572391e2a716e6c22fc8
         Game.getMap().getSkybox().render(gl);
         
         
