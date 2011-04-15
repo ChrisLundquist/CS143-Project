@@ -1,6 +1,6 @@
-varying vec2 texture_coordinate;
+varying vec2 texCoordinate0;
 void main()
 {	
 	gl_Position = ftransform();
-	texture_coordinate = vec2(gl_MultiTexCood0);
+	texCoordinate0 = vec2(gl_MultiTexCoord0);
 }
