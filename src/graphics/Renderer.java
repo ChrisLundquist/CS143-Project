@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -26,12 +27,14 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     FPSAnimator animator;
+    Shader shader;
 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
+        shader = new Shader("minimal.vert","minimal.frag");
     }
 
     // Display is our main game loop since the animator calls it
@@ -100,6 +103,13 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         setLighting(gl);
         Model.initialize(gl); /* calls Texture.initialize */
+        try {
+            shader.init(gl);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //shader.enable(gl);
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {

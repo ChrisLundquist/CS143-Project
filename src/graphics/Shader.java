@@ -1,35 +1,37 @@
 package graphics;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.media.opengl.GL2;
 
 public class Shader {
+    private final static String SHADER_DIR = "assets/shaders/";
     private final String vertexFilePath;
     private final String fragmentFilePath;
     
     int vertexID;
     int fragmentID;
     int shaderID;
-    
-    private GL2 gl;
-    
+        
     public Shader(String vertexFilePath, String fragmentFilePath){
-        this.vertexFilePath = vertexFilePath;
-        this.fragmentFilePath = fragmentFilePath;
+        this.vertexFilePath = SHADER_DIR + vertexFilePath;
+        this.fragmentFilePath = SHADER_DIR + fragmentFilePath;
     }
     
     public Shader(String vertexFilePath, String fragmentFilePath,GL2 gl){
         this.vertexFilePath = vertexFilePath;
         this.fragmentFilePath = fragmentFilePath;
-        this.gl = gl;
+        try {
+            init(gl);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     public void init(GL2 gl) throws IOException{
-        this.gl = gl;
         
         this.vertexID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
         this.fragmentID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
@@ -47,7 +49,7 @@ public class Shader {
         gl.glValidateProgram(this.shaderID);
     }
     
-    public void enable(){
+    public void enable(GL2 gl){
         gl.glUseProgram(this.shaderID);
     }
     
@@ -60,5 +62,10 @@ public class Shader {
             toReturn[0] += line + "\n";
         }
         return toReturn;
+    }
+    
+    public static void main(String[] args){
+        @SuppressWarnings("unused")
+        Shader test = new Shader("minimal.vert", "minimal.frag");
     }
 }
