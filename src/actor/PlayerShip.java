@@ -46,6 +46,5 @@ public class PlayerShip extends Actor {
     
     public void update(){
         super.update();
-        game.Game.getPlayer().getCamera().updateFromActor(this);
     }
 }

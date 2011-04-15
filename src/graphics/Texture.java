@@ -1,8 +1,8 @@
 package graphics;
 
 import java.util.HashMap;
-import javax.media.opengl.*;
 import javax.imageio.*;
+import javax.media.opengl.GL2;
 import java.awt.Graphics2D;
 import java.awt.color.ColorSpace;
 import java.awt.geom.AffineTransform;
@@ -42,10 +42,10 @@ public class Texture {
         name = filePath;
     }
     
-    public void bind(GL gl){
+    public void bind(GL2 gl){
         if(glTexture == NO_TEXTURE)
             init(gl);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, glTexture);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, glTexture);
     }
     
     public int getGlTexture() {
@@ -56,7 +56,7 @@ public class Texture {
         return name;
     }
 
-    private void init(GL gl){
+    private void init(GL2 gl){
         BufferedImage image;
         File textureFile = new File(name);
         try {
@@ -70,11 +70,11 @@ public class Texture {
         gl.glGenTextures(1, texture_ids, 0); // not sure what the third argument is.
         glTexture = texture_ids[0];
 
-        gl.glBindTexture(GL.GL_TEXTURE_2D, glTexture);
-        makeRGBTexture(gl, image, GL.GL_TEXTURE_2D);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, glTexture);
+        makeRGBTexture(gl, image, GL2.GL_TEXTURE_2D);
         // Setup filters
-        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
     }
 
     /* Switched texture loading method, to method from
@@ -83,7 +83,7 @@ public class Texture {
      * This uses the Java graphics library to convert the color space
      * byte order and flip the image vertically so it is suitable for OpenGL.
      */
-    private void makeRGBTexture(GL gl, BufferedImage img, int target) {
+    private void makeRGBTexture(GL2 gl, BufferedImage img, int target) {
         /* Setup a BufferedImage suitable for OpenGL */
         WritableRaster raster = Raster.createInterleavedRaster (DataBuffer.TYPE_BYTE,
                 img.getWidth(),
@@ -122,6 +122,22 @@ public class Texture {
         // Rewind the buffer so we can read it starting and beginning
         dest.rewind();
 
-        gl.glTexImage2D(target, 0, GL.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, dest);
+        gl.glTexImage2D(target, 0, GL2.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, dest);
+        if(gl.glIsTexture(glTexture) == false){
+            System.err.println("FAILED TO GENERATE TEXTURE");
+            if(isPowerOfTwo(img.getWidth()) == false || isPowerOfTwo(img.getHeight()) == false){
+                System.err.println("Texture width or height is not power of two");
+                System.err.println("Texture width: " + img.getWidth());
+                System.err.println("Texture height: " + img.getHeight());
+                return;
+            }
+            System.err.println("Unknown reason texture did not generate");
+        }
+    }
+    
+    // http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
+    // Method 10
+    private boolean isPowerOfTwo (int x){
+      return ((x != 0) && ((x & (~x + 1)) == x));
     }
 }

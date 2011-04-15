@@ -2,8 +2,7 @@ package game;
  
 import input.InputHandler;
 
-public class Game { 
-
+public class Game {
     private static graphics.Renderer renderer;
     private static input.InputHandler input;
     private static boolean paused;
@@ -13,14 +12,42 @@ public class Game {
     public static void init(){
         map = Map.load("example_1");
         player = new Player();
-
+        
+        /*
+         * To test networking uncomment this block
+        try {
+            new network.ClientServerThread(java.net.InetAddress.getLocalHost(), player).start();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        */
+        
         renderer = new graphics.Renderer();
         input = new InputHandler();
         graphics.Model.loadModels();
         
         actor.Asteroid a = new actor.Asteroid();
         a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
-        actor.Actor.actors.add(a);
+        actor.Actor.addActor(a);
+    }
+    
+    public static void joinServer(String server) {
+        player = new Player();
+        map = Map.load("example_1");
+       
+        network.ClientServerThread.joinServer(server, player);
+        
+        renderer = new graphics.Renderer();
+        input = new InputHandler();
+        graphics.Model.loadModels();
+        
+        actor.Asteroid a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        actor.Actor.addActor(a);
     }
     
     public static void start(){
@@ -41,13 +68,13 @@ public class Game {
 
     public static void quitToMenu() {
         // TODO Auto-generated method stub
-        
+
     }
 
     public static void togglePause() {
         paused = !paused;
     }
-    
+
     public static void exit() {
         System.exit(0);
     }
@@ -56,8 +83,8 @@ public class Game {
         return map;
     }
 
-    public static void setMap(Map map2) {
-        // TODO Auto-generated method stub
-        
+    public static void setMap(Map m) {
+        map = m;
     }
+
 }

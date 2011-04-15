@@ -45,6 +45,14 @@ public class DedicatedServer {
         
         currentMap = Map.load("example_1");
         
+        // Sample asteroids
+        actor.Asteroid a;
+        for (int i = 0; i < 4; i++) {
+            a = new actor.Asteroid();
+            a.setPosition(new math.Vector3(0.0f, 0.0f, -10.0f * i));
+            actor.Actor.addActor(a);
+        }
+        
         new ListenerThread(this).start();
     }
 
@@ -122,5 +130,10 @@ public class DedicatedServer {
 
     public void addPlayer(Player player) {
         players.add(player);
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
+        Actor.removeActor(player.getShip());
     }
 }

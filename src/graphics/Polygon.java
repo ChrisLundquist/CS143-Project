@@ -35,9 +35,9 @@ public class Polygon {
 
     public Polygon(Material material, java.util.Collection<Vertex> verticies) {
         this.material = material;
-        this.materialName = material.getName();
+        materialName = material.getName();
         this.verticies = new Vector<Vertex>(verticies);
-        this.groups = new Vector<String>();
+        groups = new Vector<String>();
     }
 
     public void render(GL2 gl) {
@@ -46,7 +46,8 @@ public class Polygon {
         
         gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         getMaterial().prepare(gl);
-        if (verticies.size() == 3) {           
+        gl.glBegin(GL2.GL_TRIANGLES);
+        if (verticies.size() == 3) {
             for (Vertex v: verticies){
                 gl.glTexCoord2f(v.u, v.v); 
                 gl.glVertex3f(v.x, v.y, v.z);
@@ -67,6 +68,7 @@ public class Polygon {
             }
             
         }
+        gl.glEnd();
     }
     
     private Material getMaterial() {

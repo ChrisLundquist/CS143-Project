@@ -14,14 +14,19 @@ public class Player implements Serializable {
     private transient Camera camera;
     private transient PlayerShip ship;
     private int shipId;
+    // TODO ship preference - once we have ships
     
     public Player() {
         setName("Pilot");
         status = PlayerStatus.ALIVE;
         camera = new Camera();
         ship = new PlayerShip();
-        shipId = ship.getId();
-        Actor.actors.add(ship);
+        setShipId(ship.getId());
+        Actor.addActor(ship);
+    }
+    
+    public String toString() {
+        return "Player: " + name + " " + status;
     }
     
     public Camera getCamera() {
@@ -29,7 +34,12 @@ public class Player implements Serializable {
     }
 
     public PlayerShip getShip() {
-        return null;
+        if (ship == null) {
+            Actor a = Actor.findById(shipId);
+            if (a instanceof PlayerShip)
+                ship = (PlayerShip) a;
+        }
+        return ship;
     }
     
     public void input(PlayerInput action) {
@@ -68,14 +78,14 @@ public class Player implements Serializable {
     }
 
     public void respawn() {
-        Actor a =  Actor.findById(shipId);
+        Actor a =  Actor.findById(getShipId());
         if (a instanceof PlayerShip)
             ship = (PlayerShip)a;
         else {
             // TODO create ship of players preference
             ship = new PlayerShip();
-            shipId = ship.getId();
-            Actor.actors.add(ship);     
+            setShipId(ship.getId());
+            Actor.addActor(ship);     
         }
         status = PlayerStatus.ALIVE;
     }
@@ -88,10 +98,30 @@ public class Player implements Serializable {
         return name;
     }
 
+    public void setShipId(int shipId) {
+        this.shipId = shipId;
+    }
+
+    public int getShipId() {
+        return shipId;
+    }
+
     // Statuses for our Player state machine
     public static enum PlayerStatus {
         OBSERVING,
         ALIVE,
         DEAD,
+    }
+
+    /**
+     * Update the camera position based on the players status, ship position and camera model
+     * currently it's just set the camera to the players ship position and rotation.
+     * @return the players camera object so it can be chained with setPerspective()
+     */
+    public Camera updateCamera() {
+        if (ship != null)
+            camera.updateFromActor(ship);
+        
+        return camera;
     }
 }

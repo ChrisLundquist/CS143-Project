@@ -5,7 +5,7 @@ import javax.media.opengl.GL2;
 
 public class Model {
     private static final String MODEL_PATH = "assets/models/";
-    
+
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
@@ -42,11 +42,9 @@ public class Model {
     }
 
     private void renderPolygons(GL2 gl){
-        gl.glBegin(GL2.GL_TRIANGLES);
         for (Polygon p: polygons) {
             p.render(gl);
         }
-        gl.glEnd();
     }
 
     public void render_slow(GL2 gl){
@@ -58,9 +56,10 @@ public class Model {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
-        if(displayList == NO_LIST)
+        if(gl.glIsList(displayList) == false)
             init(gl);
-        gl.glCallList(displayList);
+        else
+            gl.glCallList(displayList);
     }
 
     public static int getModelIdFor(actor.Actor actor) {
