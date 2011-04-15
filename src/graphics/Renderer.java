@@ -46,30 +46,67 @@ public class Renderer implements GLEventListener {
         // Don't update the game state if we are paused
         if(game.Game.isPaused())
             return;
-        
+
         game.Game.getPlayer().updateCamera();
 
         GL2 gl = getGL2();
-
         // Update the actors
         actor.Actor.updateActors();
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
-        
+
         gl.glLoadIdentity();
         // Push the transformation for our player's Camera
         Game.getPlayer().getCamera().setPerspective(gl);
         Game.getMap().getSkybox().render(gl);
         
-       
+        
+        
+        drawHud(gl);
+
         // Render each actor       
         List<Actor> actors = Actor.getActors();
 
         synchronized(actors) {
             for(Actor a: actors)
-                    a.render(gl);
+                a.render(gl);
         }
+
+        
+    }
+    /**
+     * Draws hud, just a red square for now, still getting familiar with the code and testing
+     * @param gl
+     */
+    public void drawHud(GL2 gl) {
+        // Temporary disable lighting
+        gl.glDisable(GL2.GL_LIGHTING);
+
+        // Our HUD consists of a simple rectangle
+        gl.glMatrixMode(GL2.GL_PROJECTION );
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glOrtho( -100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
+
+        gl.glMatrixMode(GL2.GL_MODELVIEW );
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        
+        gl.glColor3f( 1.0f, 0.0f, 0.0f );
+        gl.glBegin(GL2.GL_QUADS );
+        gl.glVertex2f( -90.0f, 90.0f );
+        gl.glVertex2f( -90.0f, 40.0f );
+        gl.glVertex2f( -40.0f, 40.0f );
+        gl.glVertex2f( -40.0f, 90.0f );
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef( -90.0f, -90.0f, 0.0f );
+        gl.glScalef( 0.1f, 0.1f, 0.1f );
+        
+        gl.glEnable(GL2.GL_LIGHTING );
     }
 
 
@@ -77,7 +114,7 @@ public class Renderer implements GLEventListener {
         float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
         float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
         float light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        
+
         float[] light0 = {-1.0f,-2.0f,2.0f,0.0f};
         float[] light1 = {1.0f,2.0f,-2.0f,0.0f};
         gl.glEnable(GL2.GL_LIGHTING);
@@ -122,6 +159,7 @@ public class Renderer implements GLEventListener {
         System.gc(); // This is probably a good a idea
     }
 
+
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
         GL2 gl = getGL2();
         if (height <= 0) {
@@ -140,7 +178,7 @@ public class Renderer implements GLEventListener {
         frame.dispose();
         canvas.destroy();
     }
-    
+
     public void start() {
         canvas.addGLEventListener(this);
         frame.add(canvas);
