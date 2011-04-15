@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+import actor.Actor;
+
 public class ServerCli extends Thread {
     private InputStream in;
     private PrintStream out;
@@ -93,7 +95,10 @@ public class ServerCli extends Thread {
         List<Player> players = server.getPlayers();
         int playerCount = players.size();
 
-        out.println(playerCount + "players");
+        out.println(Actor.getActors().size() + " actors");
+        out.println(playerCount + " players");
+        for (Player p: players)
+            out.println("\t" + p);
         out.println(processors + " processors");
         out.println("Memory:\t" + usedMemory + "MB user\t" + freeMemory + "MB free\t" + totalMemory + "MB  total");
     }

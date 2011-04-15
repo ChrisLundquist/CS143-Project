@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import java.io.IOException;
 
 import javax.media.opengl.GL2;
@@ -45,6 +46,8 @@ public class Renderer implements GLEventListener {
         // Don't update the game state if we are paused
         if(game.Game.isPaused())
             return;
+        
+        game.Game.getPlayer().updateCamera();
 
         GL2 gl = getGL2();
 
@@ -58,9 +61,14 @@ public class Renderer implements GLEventListener {
         // Push the transformation for our player's Camera
         Game.getPlayer().getCamera().setPerspective(gl);
         Game.getMap().getSkybox().render(gl);
-        // Render each actor
-        for(Actor a : actor.Actor.actors ){
-            a.render(gl);
+        
+       
+        // Render each actor       
+        List<Actor> actors = Actor.getActors();
+
+        synchronized(actors) {
+            for(Actor a: actors)
+                    a.render(gl);
         }
     }
 
