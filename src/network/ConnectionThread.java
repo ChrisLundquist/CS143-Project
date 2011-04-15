@@ -3,15 +3,21 @@ package network;
 import java.net.*;
 import java.io.*;
 
-
+/**
+ * Abstract base class for Client and Server connection threads
+ * manages the input and output stream creation and exception handling
+ * @author Dustin Lundquist <dustin@null-ptr.net>
+ */
 public abstract class ConnectionThread extends Thread {
     private Socket socket;    
     
-    public ConnectionThread(Socket socket) {
+    protected ConnectionThread(Socket socket) {
         this.socket = socket;
     }
 
-    // This is the main body of the network connection thread
+    /**
+     * This is the main body of the network connection thread
+     */
     public void run() {
         Message msg;
         ObjectOutputStream out = null;
@@ -49,6 +55,11 @@ public abstract class ConnectionThread extends Thread {
         }
     }
 
+    /**
+     * Provides a hook for sending an intial message
+     * Either the client or server should override this, not both
+     * @return an message to send on connection establishment
+     */
     protected Message helloMessage() {
         return null;
     }

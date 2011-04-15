@@ -76,14 +76,18 @@ public class Quaternion implements Serializable {
 
         return r;
     }
-    
-    
-    // Optimization to avoid creating new quaternion objects when rotating
+
+
+    /**
+     *  Optimization to avoid creating new quaternion objects when rotating
+     * @param q the right hand side
+     * @return
+     */
     public Quaternion timesEquals(Quaternion q) {
         float tw = w_; // Temporary variables to hold components changed during rotation
         float tx = x_;
         float ty = y_;
-  
+
         w_ = w_ * q.w_ - x_ * q.x_ - y_ * q.y_ - z_ * q.z_;
         x_ = tw * q.x_ + x_ * q.w_ + y_ * q.z_ - z_ * q.y_;
         y_ = tw * q.y_ - tx * q.z_ + y_ * q.w_ + z_ * q.x_;
@@ -95,8 +99,8 @@ public class Quaternion implements Serializable {
     public float magnitude(){
         return (float) Math.sqrt( w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_);
     }
-   
-    /*
+
+    /**
      * Returns the square of the magnitude
      */ 
     public float magnitude2(){
@@ -113,7 +117,7 @@ public class Quaternion implements Serializable {
 
         return this;
     }
-    
+
     public Quaternion inverse(){
         float magnitude2 = magnitude2();
         return new Quaternion(w_ / magnitude2, -x_ / magnitude2, -y_ / magnitude2, -z_ / magnitude2 );
@@ -165,7 +169,7 @@ public class Quaternion implements Serializable {
 
         return matrix;
     }
-    
+
     public Vector3 pitchAxis() {
         return new Vector3(
                 -1.0f + 2.0f * ( y_ * y_ + z_ * z_ ),
@@ -181,7 +185,7 @@ public class Quaternion implements Serializable {
                 -2.0f * ( y_ * z_ - x_ * w_ )
         );
     }
-    
+
     public Vector3 rollAxis() {
         return new Vector3 (
                 -2.0f * (x_ * z_ - y_ * w_),
@@ -189,10 +193,25 @@ public class Quaternion implements Serializable {
                 -1.0f + 2.0f * ( x_ * x_ + y_ * y_ )
         );
     }
-    
+
+    float getPitch()
+    {
+        return (float) (Math.atan2(2*(y_*z_ + w_*x_), w_*w_ - x_*x_ - y_*y_ + z_*z_) * 180.0 / Math.PI);
+    }
+
+    float getYaw()
+    {
+        return (float) Math.asin(-2*(x_*z_ - w_*y_) * 180.0 / Math.PI); 
+    }
+
+    float getRoll()
+    {
+        return (float) ((float) Math.atan2(2*(x_*y_ + w_*z_), w_*w_ + x_*x_ - y_*y_ - z_*z_) * 180.0 / Math.PI);
+    }
+
     public static void main(String[] args) {
         System.out.println("Running quaternion tests");
-        
+
         // Test basic properties of quaternions
         {
             Quaternion n = new Quaternion(-1, 0, 0, 0);
@@ -202,7 +221,7 @@ public class Quaternion implements Serializable {
 
             assert n.equals(n) : "Quaturnion equality";
             assert n.times(n).equals(new Quaternion()) : "(-1)^2 == 1";
-            
+
             // i^2 = j^2 = k^2 = ijk = -1
             assert i.times(i).equals(n) : "i^2 == -1";
             assert j.times(j).equals(n) : "j^2 == -1";
@@ -217,15 +236,15 @@ public class Quaternion implements Serializable {
                 "| 00.000 -1.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 00.000 01.000 |"
         ));
-        
-        
+
+
         // Test roll, pitch and yaw axis
         {
             // Start with a fairly random rotation
             Quaternion r = new Quaternion(Vector3.UNIT_X, 15); 
             r.timesEquals(new Quaternion(Vector3.UNIT_Y, 7));
             r.timesEquals(new Quaternion(Vector3.UNIT_Z, -328));
-            
+
             assert(r.pitchAxis().toString().equals(Vector3.UNIT_X.times(r).toString()));
             assert(r.yawAxis().toString().equals(Vector3.UNIT_Y.times(r).toString()));
             assert(r.rollAxis().toString().equals(Vector3.UNIT_Z.times(r).toString()));
@@ -269,8 +288,8 @@ public class Quaternion implements Serializable {
             rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
         }
         rotation.normalize();
-        
-        
+
+
         // Test the inverse works as expected
         // Sometimes the inverse isn't quite accurate, but every near due to floating point
         rotation = new Quaternion();
@@ -278,11 +297,11 @@ public class Quaternion implements Serializable {
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 40));
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
         assert rotation.times(rotation.inverse()).toMatrixString().equals(new Quaternion().toMatrixString());
-        
+
 
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
         //System.out.println(r.pitchAxis());
-        
+
         System.out.println("Complete (did you -enableassertions ?)");
     }
 

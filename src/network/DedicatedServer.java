@@ -1,11 +1,13 @@
 package network;
 
+import game.Map;
+import game.Player;
 import java.io.*;
 import java.net.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import actor.Actor;
 
@@ -16,11 +18,16 @@ public class DedicatedServer {
     private ServerSocket socket;
     private boolean running;
     private Timer timer;
-
+    private List<Player> players;
+    private Map currentMap;
 
     public static void main(String[] args) {
         DedicatedServer server = new DedicatedServer();
         server.run();
+    }
+
+    public DedicatedServer() {
+        players = new CopyOnWriteArrayList<Player>();
     }
     
     private void startup() {
@@ -35,6 +42,8 @@ public class DedicatedServer {
         /* Start a timer to handle our per frame updates */
         timer = new Timer();
         timer.scheduleAtFixedRate(new UpdateTask(), 0, FRAME_RATE);
+        
+        currentMap = Map.load("example_1");
         
         new ListenerThread(this).start();
     }
@@ -71,8 +80,8 @@ public class DedicatedServer {
         return running;
     }
 
-    public Collection<Object> getPlayers() {
-        return new Vector<Object>();
+    public List<Player> getPlayers() {
+        return players;
     }
 
     private class ListenerThread extends Thread {
@@ -105,5 +114,13 @@ public class DedicatedServer {
         public void run() {
             update();
         }
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 }

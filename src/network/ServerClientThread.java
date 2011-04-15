@@ -12,11 +12,14 @@ public class ServerClientThread extends ConnectionThread {
     }
     
     protected Message helloMessage() {
-        return null;
+        return new HelloMessage(server);
     }
 
     protected Message handleMessage(Message msg) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        if (msg instanceof JoinMessage) {
+            server.addPlayer(((JoinMessage) msg).getPlayer());
+        } else if (msg instanceof UpdateMessage) {
+        }
+        return new UpdateMessage();
     }
 }

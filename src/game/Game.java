@@ -8,8 +8,10 @@ public class Game {
     private static input.InputHandler input;
     private static boolean paused;
     private static Player player;
+    private static Map map;
    
     public static void init(){
+        map = Map.load("example_1");
         player = new Player();
 
         renderer = new graphics.Renderer();
@@ -48,5 +50,14 @@ public class Game {
     
     public static void exit() {
         System.exit(0);
+    }
+
+    public static Map getMap() {
+        return map;
+    }
+
+    public static void setMap(Map map2) {
+        // TODO Auto-generated method stub
+        
     }
 }

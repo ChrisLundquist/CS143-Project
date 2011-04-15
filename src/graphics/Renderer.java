@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -28,12 +29,14 @@ public class Renderer implements GLEventListener {
     //Animator animator;
 
     FPSAnimator animator;
+    Shader shader;
 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
+        shader = new Shader("minimal.vert","minimal.frag");
     }
 
     // Display is our main game loop since the animator calls it
@@ -52,17 +55,19 @@ public class Renderer implements GLEventListener {
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
+        
         gl.glLoadIdentity();
         // Push the transformation for our player's Camera
         //game.Game.getPlayer().getCamera().setPerspective(gl);
         
         Game.getPlayer().getCamera().setPerspective(gl);
-        setLighting(gl);
+        Game.getMap().getSkybox().render(gl);
         // Render each actor
         for(Actor a : actor.Actor.actors ){
             a.render(gl);
         }
     }
+
 
     private void setLighting(GL2 gl) {
         float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -95,6 +100,7 @@ public class Renderer implements GLEventListener {
         gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
+        gl.glEnable(GL2.GL_CULL_FACE); // TODO, change our skybox to be textured from the inside out
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
@@ -102,6 +108,14 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         setLighting(gl);
         Model.initialize(gl); /* calls Texture.initialize */
+        try {
+            shader.init(gl);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        shader.enable(gl);
+        System.gc(); // This is probably a good a idea
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
