@@ -35,9 +35,9 @@ public class Polygon {
 
     public Polygon(Material material, java.util.Collection<Vertex> verticies) {
         this.material = material;
-        this.materialName = material.getName();
+        materialName = material.getName();
         this.verticies = new Vector<Vertex>(verticies);
-        this.groups = new Vector<String>();
+        groups = new Vector<String>();
     }
 
     public void render(GL2 gl) {
