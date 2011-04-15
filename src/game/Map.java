@@ -49,7 +49,7 @@ public class Map implements Serializable {
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, 20.0f));
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, -20.0f));
 
-        map.skybox = new graphics.Skybox("assets/skybox.obj");
+        map.skybox = new graphics.Skybox("assets/models/skybox.obj");
         map.write();
         
         Map loaded = Map.load("example_1");
