@@ -3,6 +3,7 @@ package graphics;
 import javax.media.opengl.GL2;
 
 import actor.Actor;
+import actor.Player;
 import math.Quaternion;
 import math.Vector3;
 
@@ -18,7 +19,8 @@ public class Camera {
         position = new Vector3();
         rotation = new Quaternion();
     }
-    
+
+
     public void updateFromActor(Actor actor) {
         position = actor.getPosition().times(-1.0f);
         rotation = actor.getRotation().inverse();

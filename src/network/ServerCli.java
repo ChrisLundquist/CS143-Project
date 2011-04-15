@@ -100,7 +100,7 @@ public class ServerCli extends Thread {
         for (Player p: players)
             out.println("\t" + p);
         out.println(processors + " processors");
-        out.println("Memory:\t" + usedMemory + "MB user\t" + freeMemory + "MB free\t" + totalMemory + "MB  total");
+        out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB  total");
     }
 
     private void displayList(StringTokenizer tokenizer) {

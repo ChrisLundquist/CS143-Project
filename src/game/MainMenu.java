@@ -29,7 +29,7 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
     //buttons
-    JButton playButton, settingsButton, quitButton;
+    JButton playButton, joinGameButton, settingsButton, quitButton;
 
     public boolean menuVisible;
 
@@ -53,11 +53,12 @@ public class MainMenu extends JPanel implements ActionListener {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(this);
         f.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
-        f.setVisible(true);
 
         //adds gui elements
         createGUI();
+
         //sets the menu visibility as true
+        f.setVisible(true);
         menuVisible = true;
     }
 
@@ -75,6 +76,9 @@ public class MainMenu extends JPanel implements ActionListener {
         playButton.setBorder(null);
         playButton.setRolloverIcon(play_selected);
         playButton.addActionListener(this);
+        
+        joinGameButton = new JButton("Join Game");
+        joinGameButton.addActionListener(this);
 
         settingsButton = new JButton(settings);
         settingsButton.setOpaque(false);
@@ -93,6 +97,7 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.addActionListener(this);
 
         add(playButton);
+        add(joinGameButton);
         add(settingsButton);
         add(quitButton);
 
@@ -129,6 +134,26 @@ public class MainMenu extends JPanel implements ActionListener {
             this.setVisible(false);
             menuVisible = false;
             Game.start();
+        }
+        if(e.getSource() == joinGameButton) {
+            // TODO a better way to populate the server list and an option to enter a custom address
+            String[] servers = {"localhost", "openspace.overthere.org"};
+            String server = (String)JOptionPane.showInputDialog(this,
+                    "Select a server to join",
+                    "Join a Network Game",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, // Icon
+                    servers,
+                    null // initial value
+                    );
+
+            if (server == null) // user hit cancel
+                return;
+            
+            Game.joinServer(server);
+            this.setVisible(false);
+            menuVisible = false;
+            Game.start(); 
         }
         if(e.getSource() == settingsButton) {
             JOptionPane.showMessageDialog(this, "Doesn't do anything yet");

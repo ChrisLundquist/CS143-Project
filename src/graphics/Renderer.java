@@ -27,6 +27,8 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
+    //Animator animator;
+
     FPSAnimator animator;
     Shader shader;
 
@@ -62,6 +64,7 @@ public class Renderer implements GLEventListener {
         gl.glLoadIdentity();
         // update the camera position here so it doesn't fire on the dedicated server
         // Push the transformation for our player's Camera
+
         Game.getPlayer().updateCamera().setPerspective(gl);
         Game.getMap().getSkybox().render(gl);
 

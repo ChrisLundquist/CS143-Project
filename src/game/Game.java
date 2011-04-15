@@ -2,8 +2,7 @@ package game;
  
 import input.InputHandler;
 
-public class Game { 
-
+public class Game {
     private static graphics.Renderer renderer;
     private static input.InputHandler input;
     private static boolean paused;
@@ -26,6 +25,21 @@ public class Game {
             e.printStackTrace();
         }
         */
+        
+        renderer = new graphics.Renderer();
+        input = new InputHandler();
+        graphics.Model.loadModels();
+        
+        actor.Asteroid a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        actor.Actor.addActor(a);
+    }
+    
+    public static void joinServer(String server) {
+        player = new Player();
+        map = Map.load("example_1");
+       
+        network.ClientServerThread.joinServer(server, player);
         
         renderer = new graphics.Renderer();
         input = new InputHandler();
@@ -72,4 +86,5 @@ public class Game {
     public static void setMap(Map m) {
         map = m;
     }
+
 }

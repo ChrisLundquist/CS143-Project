@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Vector;
 import math.Vector3;
 import actor.Actor;
 
 public class Map implements Serializable {
     private static final String MAP_DIR = "assets/maps/";
-    private static final String MAP_EXT = ".map";
+    private static final String MAP_EXTENSION = ".map";
     private static final long serialVersionUID = 4499508076059412730L;
 
     public static Map load(File file) {
@@ -34,13 +35,17 @@ public class Map implements Serializable {
             System.exit(-1);
         }
         return null;
-    }  
-    public static Map load(String filename) {
-        return load(new File(MAP_DIR + filename + MAP_EXT));
     }
+    
+    public static Map load(String filename) {
+        return load(new File(MAP_DIR + filename + MAP_EXTENSION));
+    }
+    
     public static void main(String[] args) {
         Map map = new Map("Example 1");
-        assert map.filename().equals("assets/maps/example_1.map") : "File name sanitization";
+        assert map.filepath().equals("assets/maps/example_1.map") : "File name sanitization";
+        assert map.actors != null : "Actors was not initialized";
+        assert map.spawningPositions != null : "Spawning positions was not initialized";
 
         map.spawningPositions.add(new Vector3(20.0f, 0.0f, 0.0f));
         map.spawningPositions.add(new Vector3(-20.0f, 0.0f, 0.0f));
@@ -56,11 +61,12 @@ public class Map implements Serializable {
         
         assert loaded.spawningPositions.size() == 6;
     }
-    public Vector<Actor> actors;
+    
+    
     public String name;
     public graphics.Skybox skybox;
-    public Vector<Vector3> spawningPositions;
-
+    public List<Actor> actors;
+    public List<Vector3> spawningPositions;
     // TODO private Vector<Object> triggers;
 
     public Map() {
@@ -69,15 +75,10 @@ public class Map implements Serializable {
     }
     
     public Map(String name) {
+        this();
         this.name = name;
-        this.spawningPositions = new Vector<Vector3>();
-        this.actors = new Vector<Actor>();
     }
-    
-    private String filename() {
-        return MAP_DIR + name.replaceAll("[^a-zA-Z0-9]", "_").toLowerCase() + ".map";
-    }
-    
+        
     public graphics.Skybox getSkybox() {
         return skybox;
     }
@@ -85,10 +86,35 @@ public class Map implements Serializable {
     public void setSkybox(graphics.Skybox skybox) {
         this.skybox = skybox;
     }
+    
+    /**
+     * Returns a safe file path for this map based on its name
+     * @return
+     */
+    private String filepath() {
+        return MAP_DIR + name.replaceAll("[^a-zA-Z0-9]", "_").toLowerCase() + ".map";
+    }
+    
+    private boolean valid() {
+        if (actors == null)
+            return false;
+        if (spawningPositions == null || spawningPositions.size() < 1)
+            return false;
+        if (name == null)
+            return false;
+        if (skybox == null)
+            return false;
+        
+        return true;
+    }
 
     public void write() {
+        if (!valid()) {
+            System.err.println("Not saving invalid map");
+            return;
+        }
         try {
-            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(filename()));
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(filepath()));
             output.writeObject(this);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -96,6 +122,4 @@ public class Map implements Serializable {
             e.printStackTrace();
         }
     }
-
-
 }
