@@ -10,16 +10,16 @@ public class Shader {
     private final static String SHADER_DIR = "assets/shaders/";
     private final String vertexFilePath;
     private final String fragmentFilePath;
-    
-    int vertexID;
-    int fragmentID;
-    int shaderID;
-        
+
+    protected transient int vertexID;
+    protected transient int fragmentID;
+    protected transient int shaderID;
+
     public Shader(String vertexFilePath, String fragmentFilePath){
         this.vertexFilePath = SHADER_DIR + vertexFilePath;
         this.fragmentFilePath = SHADER_DIR + fragmentFilePath;
     }
-    
+
     public Shader(String vertexFilePath, String fragmentFilePath,GL2 gl){
         this.vertexFilePath = vertexFilePath;
         this.fragmentFilePath = fragmentFilePath;
@@ -30,40 +30,40 @@ public class Shader {
             e.printStackTrace();
         }
     }
-    
+
     public void init(GL2 gl) throws IOException{
-        
-        this.vertexID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
-        this.fragmentID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
-        
-        gl.glShaderSource(this.vertexID, 1, readFile(this.vertexFilePath), (int[])null,0);  
+        vertexID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
+        fragmentID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
+
+        // Ugly parameters that we have to pass to make it work
+        gl.glShaderSource(vertexID, 1, readFile(vertexFilePath), (int[])null,0);  
         gl.glCompileShader(vertexID);
-        gl.glShaderSource(this.fragmentID, 1, readFile(this.fragmentFilePath), (int[])null,0);  
-        gl.glCompileShader(this.fragmentID);
-        
+        gl.glShaderSource(fragmentID, 1, readFile(fragmentFilePath), (int[])null,0);  
+        gl.glCompileShader(fragmentID);
+
         this.shaderID = gl.glCreateProgram();
-        gl.glAttachShader(this.shaderID, this.vertexID);
-        gl.glAttachShader(this.shaderID, this.vertexID);
-        
-        gl.glLinkProgram(this.shaderID);
-        gl.glValidateProgram(this.shaderID);
+        gl.glAttachShader(shaderID, vertexID);
+        gl.glAttachShader(shaderID, vertexID);
+
+        gl.glLinkProgram(shaderID);
+        gl.glValidateProgram(shaderID);
     }
-    
+
     public void enable(GL2 gl){
         gl.glUseProgram(this.shaderID);
     }
-    
+
     private String[] readFile(String path) throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader(this.vertexFilePath));
-        
-        String[] toReturn = new String[1];
+
+        String[] source = new String[1];
         String line;
         while((line = reader.readLine())!=null){
-            toReturn[0] += line + "\n";
+            source[0] += line + "\n";
         }
-        return toReturn;
+        return source;
     }
-    
+
     public static void main(String[] args){
         @SuppressWarnings("unused")
         Shader test = new Shader("minimal.vert", "minimal.frag");
