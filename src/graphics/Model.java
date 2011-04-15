@@ -4,6 +4,8 @@ import java.util.Vector;
 import javax.media.opengl.GL2;
 
 public class Model {
+    private static final String MODEL_PATH = "assets/models/";
+    
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
@@ -23,9 +25,9 @@ public class Model {
     public static void loadModels() {
         // CL - Do we want to generate display lists for everything at load time
         //      or do that lazily?
-        models.add( WavefrontObjLoader.load("assets/cube_cube.obj"));
-        models.add( WavefrontObjLoader.load("assets/cube.obj"));
-        models.add( WavefrontObjLoader.load("assets/skybox.obj"));
+        models.add( WavefrontObjLoader.load(MODEL_PATH+"cube_cube.obj"));
+        models.add( WavefrontObjLoader.load(MODEL_PATH+"cube.obj"));
+        models.add( WavefrontObjLoader.load(MODEL_PATH+"skybox.obj"));
     }
 
     /* 
