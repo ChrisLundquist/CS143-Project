@@ -42,11 +42,9 @@ public class Model {
     }
 
     private void renderPolygons(GL2 gl){
-        gl.glBegin(GL2.GL_TRIANGLES);
         for (Polygon p: polygons) {
             p.render(gl);
         }
-        gl.glEnd();
     }
 
     public void render_slow(GL2 gl){
