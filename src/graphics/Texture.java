@@ -1,6 +1,6 @@
 package graphics;
 
-import java.util.Vector;
+import java.util.HashMap;
 import javax.media.opengl.*;
 import javax.imageio.*;
 import java.awt.Graphics2D;
@@ -12,28 +12,53 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Texture {
-    private static Vector<Texture> textures = new Vector<Texture>();
-    private static int lastID = 0;
+    private static final int NO_TEXTURE = -1;
+    protected static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+    
+    public static Texture findByName(String name) {
+        return textures.get(name);
+    }
+    
+    public static Texture findOrCreateByName(String name){
+        Texture tex = textures.get(name);
+        if(tex == null){
+            tex = new Texture(name);
+            textures.put(name, tex);
+        }
+        return tex;
+    }
+    
+    public static void initialize(GL2 gl){
+        for(Texture tex : textures.values()){
+            tex.init(gl);
+        }
+    }
 
     private transient int glTexture;
-    private int id;
-
+    private String name; /* fileName */
+    
+    private Texture(String filePath){
+        glTexture = NO_TEXTURE;
+        name = filePath;
+    }
+    
+    public void bind(GL gl){
+        if(glTexture == NO_TEXTURE)
+            init(gl);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, glTexture);
+    }
+    
     public int getGlTexture() {
         return glTexture;
     }
-
-    public static Texture findById(int id) {
-        for(Texture texture : textures){
-            if(texture.id == id)
-                return texture;
-        }
-        return null;
+    
+    public String getName(){
+        return name;
     }
-    
-    
-    public Texture(GL gl, File textureFile) {
-        id = ++lastID;
+
+    private void init(GL gl){
         BufferedImage image;
+        File textureFile = new File(name);
         try {
             image = ImageIO.read(textureFile);
         } catch (IOException ie) {
@@ -52,7 +77,6 @@ public class Texture {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     }
 
-    
     /* Switched texture loading method, to method from
      * http://today.java.net/pub/a/today/2003/09/11/jogl2d.html
      * 

@@ -2,33 +2,38 @@ package graphics;
 
 import javax.media.opengl.GL2;
 
-import math.*;
+import actor.Actor;
+import actor.Player;
+import math.Quaternion;
+import math.Vector3;
+
+/*
+ * A camera is kind of like an actor in that it has a position and rotation
+ * but it's position and rotation are opposite of the actors.
+ */
 public class Camera {
-    //TODO make this network safe
-    actor.Player player;
+    Vector3 position;
+    Quaternion rotation;
     
-    public Camera(actor.Player player){
-        this.player = player;
+    public Camera(){
+        position = new Vector3();
+        rotation = new Quaternion();
     }
 
-    /* Based on the Nehe Tutorial by  Vic Hollis */
+
+    public void updateFromActor(Actor actor) {
+        position = actor.getPosition().times(-1.0f);
+        rotation = actor.getRotation().inverse();
+    }
+    
     public void setPerspective(GL2 gl) {
-        float[] matrix;
-        Quaternion q = new Quaternion();
-
-        // Make the Quaternions that will represent our rotations
-        Quaternion pitch = new Quaternion(1.0f, 0.0f, 0.0f, player.getPitchDegrees());
-        Quaternion heading = new Quaternion(0.0f, 1.0f, 0.0f, player.getHeadingDegrees());
-
+        float[] matrix;       
+        gl.glLoadIdentity();
         // Combine the pitch and heading rotations and store the results in q
-        q = pitch.times(heading);
-        matrix = q.toGlMatrix();
-
+        matrix = rotation.toGlMatrix();
         // Let OpenGL set our new perspective on the world!
         gl.glMultMatrixf(matrix,0);
-
         // Translate to our new position.
-        gl.glTranslatef(-player.getPosition().x, -player.getPosition().y, player.getPosition().z);
+        gl.glTranslatef(position.x, position.y, position.z);
     }
-
 }

@@ -1,7 +1,6 @@
 package game;
  
 import input.InputHandler;
-import actor.Player;
 
 public class Game { 
 
@@ -9,20 +8,21 @@ public class Game {
     private static input.InputHandler input;
     private static boolean paused;
     private static Player player;
-    //private static MainMenu menu;
-    
-    public static void main(String[] args) {
+   
+    public static void init(){
         player = new Player();
+
         renderer = new graphics.Renderer();
         input = new InputHandler();
-        // TODO figure out how to get a gLautodrawable
         graphics.Model.loadModels();
-        //menu = new MainMenu();
         
-        actor.Actor.actors.add(new actor.Asteroid());
-        
+        actor.Asteroid a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        actor.Actor.actors.add(a);
+    }
+    
+    public static void start(){
         renderer.start();
-      
     }
     
     public static InputHandler getInputHandler(){
@@ -45,12 +45,8 @@ public class Game {
     public static void togglePause() {
         paused = !paused;
     }
-
+    
     public static void exit() {
-        System.err.println("Exiting");
-        // FIXME This generates an exception when some threaded callback tries
-        //       to redraw the window
-        renderer.exit();
+        System.exit(0);
     }
-
 }

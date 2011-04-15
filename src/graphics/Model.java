@@ -1,7 +1,6 @@
 package graphics;
 
 import java.util.Vector;
-
 import javax.media.opengl.GL2;
 
 public class Model {
@@ -22,7 +21,10 @@ public class Model {
     }
 
     public static void loadModels() {
-        models.add( WavefrontObjLoader.load("assets/models/cube.obj"));
+        // CL - Do we want to generate display lists for everything at load time
+        //      or do that lazily?
+        models.add( WavefrontObjLoader.load("assets/cube_cube.obj"));
+        models.add( WavefrontObjLoader.load("assets/cube.obj"));
     }
 
     /* 
@@ -61,9 +63,17 @@ public class Model {
         // FIXME replace the magic numbers!
         if(actor instanceof actor.Asteroid){
             return 0;
-        } else if(actor instanceof actor.Player) {
+        } else if(actor instanceof actor.PlayerShip) {
             return 1;
         }
         return 0;
+    }
+
+    public static void initialize(GL2 gl) {
+        Texture.initialize(gl);
+        loadModels();
+        for(Model model : models){
+            model.init(gl);
+        }
     }
 }
