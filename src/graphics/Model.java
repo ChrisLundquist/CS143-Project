@@ -37,7 +37,8 @@ public class Model {
         displayList = gl.glGenLists(1);
         gl.glNewList(displayList, GL2.GL_COMPILE);
         renderPolygons(gl);
-        gl.glEndList();  
+        gl.glEndList();
+        polygons.clear(); // Free Our Polygons to save memory if we get this far
     }
 
     private void renderPolygons(GL2 gl){
