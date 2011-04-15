@@ -35,7 +35,7 @@ public class Player implements Serializable {
 
     public PlayerShip getShip() {
         if (ship == null) {
-            Actor a = Actor.findById(getShipId());
+            Actor a = Actor.findById(shipId);
             if (a instanceof PlayerShip)
                 ship = (PlayerShip) a;
         }
@@ -113,8 +113,15 @@ public class Player implements Serializable {
         DEAD,
     }
 
-    public void updateCamera() {
+    /**
+     * Update the camera position based on the players status, ship position and camera model
+     * currently it's just set the camera to the players ship position and rotation.
+     * @return the players camera object so it can be chained with setPerspective()
+     */
+    public Camera updateCamera() {
         if (ship != null)
-            camera.updateFromActor(ship);        
+            camera.updateFromActor(ship);
+        
+        return camera;
     }
 }

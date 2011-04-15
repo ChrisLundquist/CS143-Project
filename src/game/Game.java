@@ -1,8 +1,5 @@
 package game;
  
-import java.io.IOException;
-import java.net.UnknownHostException;
-
 import input.InputHandler;
 
 public class Game { 
@@ -57,13 +54,13 @@ public class Game {
 
     public static void quitToMenu() {
         // TODO Auto-generated method stub
-        
+
     }
 
     public static void togglePause() {
         paused = !paused;
     }
-    
+
     public static void exit() {
         System.exit(0);
     }
@@ -73,6 +70,6 @@ public class Game {
     }
 
     public static void setMap(Map m) {
-            map = m;
+        map = m;
     }
 }

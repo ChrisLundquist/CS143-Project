@@ -47,31 +47,59 @@ public class Renderer implements GLEventListener {
         if(game.Game.isPaused())
             return;
         
-        game.Game.getPlayer().updateCamera();
-
         GL2 gl = getGL2();
 
         // Update the actors
         actor.Actor.updateActors();
 
+
+
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
         
         gl.glLoadIdentity();
+        // update the camera position here so it doesn't fire on the dedicated server
         // Push the transformation for our player's Camera
-        Game.getPlayer().getCamera().setPerspective(gl);
+        Game.getPlayer().updateCamera().setPerspective(gl);
         Game.getMap().getSkybox().render(gl);
         
        
         // Render each actor       
         List<Actor> actors = Actor.getActors();
-
         synchronized(actors) {
             for(Actor a: actors)
                     a.render(gl);
         }
+        
+        checkForGLErrors(gl);
     }
 
+
+    private static void checkForGLErrors(GL2 gl) {
+        int errno = gl.glGetError();
+        switch (errno) {
+            case GL2.GL_INVALID_ENUM:
+                System.err.println("OpenGL Error: Invalid ENUM");
+                break;
+            case GL2.GL_INVALID_VALUE:
+                System.err.println("OpenGL Error: Invalid Value");
+                break;
+            case GL2.GL_INVALID_OPERATION:
+                System.err.println("OpenGL Error: Invalid Operation");
+                break;
+            case GL2.GL_STACK_OVERFLOW:
+                System.err.println("OpenGL Error: Stack Overflow");
+                break;
+            case GL2.GL_STACK_UNDERFLOW:
+                System.err.println("OpenGL Error: Stack Underflow");
+                break;
+            case GL2.GL_OUT_OF_MEMORY:
+                System.err.println("OpenGL Error: Out of Memory");
+                break;
+            default:
+                return;
+        }
+    }
 
     private void setLighting(GL2 gl) {
         float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
