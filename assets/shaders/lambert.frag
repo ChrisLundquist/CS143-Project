@@ -1,5 +1,5 @@
 uniform sampler2D texture0;
-
+uniform int numLights;
 varying vec3 N;
 varying vec3 v;
 varying vec2 texCoordinate0;
@@ -7,12 +7,12 @@ varying vec2 texCoordinate0;
 vec4 effectiveLight()
 {
 	vec4 color;
-	vec3 L = normalize(gl_LightSource[i].position.xyz - v); 
 	vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
-	vec3 R = normalize(-reflect(L,N)); 
 
 
 	for(int i = 0; i < numLights; i++){
+		vec3 L = normalize(gl_LightSource[i].position.xyz - v); 
+		vec3 R = normalize(-reflect(L,N)); 
 		float dist = length(L);
 
 		float atten = 1.0f / (gl_LightSource[i].constantAttenuation +
