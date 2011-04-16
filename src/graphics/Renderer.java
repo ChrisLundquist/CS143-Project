@@ -1,3 +1,4 @@
+
 package graphics;
 
 import game.Game;
@@ -28,16 +29,16 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     //Animator animator;
-
     FPSAnimator animator;
     Shader shader;
-
+    Hud hud;
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("texture.vert","texture.frag");
+        shader = new Shader("lighting.vert","lighting.frag");
+        hud = new Hud();
     }
 
     // Display is our main game loop since the animator calls it
@@ -48,15 +49,13 @@ public class Renderer implements GLEventListener {
         // Don't update the game state if we are paused
         if(game.Game.isPaused())
             return;
-        
+
 
         game.Game.getPlayer().updateCamera();
 
         GL2 gl = getGL2();
         // Update the actors
         actor.Actor.updateActors();
-
-
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -67,10 +66,6 @@ public class Renderer implements GLEventListener {
 
         Game.getPlayer().updateCamera().setPerspective(gl);
         Game.getMap().getSkybox().render(gl);
-        
-        
-        
-        //drawHud(gl);
 
         // Render each actor       
         List<Actor> actors = Actor.getActors();
@@ -79,47 +74,13 @@ public class Renderer implements GLEventListener {
                 a.render(gl);
         }
         
+        //draws hud
+        hud.drawHud(glDrawable);
+        
         checkForGLErrors(gl);
 
-        
+
     }
-    /**
-     * Draws hud, just a red square for now, still getting familiar with the code and testing
-     * @param gl
-     */
-    public void drawHud(GL2 gl) {
-        // Temporary disable lighting
-        gl.glDisable(GL2.GL_LIGHTING);
-        gl.glDisable(GL2.GL_TEXTURE_2D);
-
-        // Our HUD consists of a simple rectangle
-        gl.glMatrixMode(GL2.GL_PROJECTION );
-        gl.glPushMatrix(); /*  save projection matrix */
-        gl.glLoadIdentity();
-        gl.glOrtho( -100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
-
-        gl.glMatrixMode(GL2.GL_MODELVIEW );
-        gl.glPushMatrix(); /* save our model matrix */
-        gl.glLoadIdentity();
-        
-        gl.glColor3f( 1.0f, 0.0f, 0.0f );
-        gl.glBegin(GL2.GL_QUADS );
-        gl.glVertex2f( -90.0f, 90.0f );
-        gl.glVertex2f( -90.0f, 40.0f );
-        gl.glVertex2f( -40.0f, 40.0f );
-        gl.glVertex2f( -40.0f, 90.0f );
-        gl.glEnd();
-        
-        gl.glPopMatrix(); /* recover model matrix*/
-        gl.glMatrixMode(GL2.GL_PROJECTION );
-        
-        gl.glPopMatrix(); /* recover projection matrix */
-        gl.glMatrixMode(GL2.GL_MODELVIEW );
-
-        gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glEnable(GL2.GL_LIGHTING );
-    }
-
 
     private static void checkForGLErrors(GL2 gl) {
         int errno = gl.glGetError();
@@ -147,26 +108,47 @@ public class Renderer implements GLEventListener {
         }
     }
 
-    private void setLighting(GL2 gl) {
-        float light_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-        float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        float light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    private void setLighting(GL2 gl, int numLights) {
+        int[] maxLights = new int[1];
+        float[][] lightAmbient = { 
+                /* light 0 */{0.5f, 0.0f, 0.0f, 1.0f },
+                /* light 1 */{0.0f, 0.5f, 0.0f, 1.0f },
+                /* light 2 */{0.0f, 0.0f, 0.5f, 1.0f },
+                };
+        float[][] lightDiffuse = { 
+                /* light 0 */{1.0f, 0.0f, 0.0f, 1.0f },
+                /* light 1 */{0.0f, 1.0f, 0.0f, 1.0f },
+                /* light 2 */{0.0f, 0.0f, 1.0f, 1.0f },
+                };
+        float[][] lightSpecular = { 
+                /* light 0 */{1.0f, 0.0f, 0.0f, 1.0f },
+                /* light 1 */{0.0f, 1.0f, 0.0f, 1.0f },
+                /* light 2 */{0.0f, 0.0f, 1.0f, 1.0f },
+                };
 
-        float[] light0 = {-1.0f,-2.0f,2.0f,0.0f};
-        float[] light1 = {1.0f,2.0f,-2.0f,0.0f};
+        float[][] lightPos = {
+                /* light 0 */ {10.0f, 0.0f, 0.0f, 0.0f},
+                /* light 1 */ {0.0f, 10.0f, 0.0f, 0.0f},
+                /* light 2 */ {0.0f, 0.0f, 10.0f, 0.0f},
+                
+        };
+
         gl.glEnable(GL2.GL_LIGHTING);
-        gl.glEnable(GL2.GL_LIGHT0);
-        gl.glEnable(GL2.GL_LIGHT1);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, light_ambient, 0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, light_diffuse, 0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, light_specular, 0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, light0, 0);
 
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, light_ambient, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, light_diffuse, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, light_specular, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, light1, 0);
-        gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, light_ambient, 0);
+        gl.glGetIntegerv(GL2.GL_MAX_LIGHTS, maxLights, 0);
+
+        numLights = Math.min(numLights, maxLights[0]);
+
+        for(int i = 0; i < numLights; i++){
+            gl.glEnable(GL2.GL_LIGHT0 + i);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, lightAmbient[i], 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, lightDiffuse[i], 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, lightSpecular[i], 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, lightPos[i], 0);
+        }
+        shader.setUniform1i(gl, "numLights", numLights);
+
+
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
@@ -184,7 +166,7 @@ public class Renderer implements GLEventListener {
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
-        setLighting(gl);
+        setLighting(gl,3);
         Model.initialize(gl); /* calls Texture.initialize */
         try {
             shader.init(gl);

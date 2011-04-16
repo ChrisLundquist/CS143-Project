@@ -40,9 +40,8 @@ public class ServerCli extends Thread {
             try {
                 processCliCommand(kbd.nextLine());
             } catch (Exception e) {
-                out.println(
-                        "Exception: " + e.toString() + "\n"
-                        + e.getStackTrace().toString());
+                out.println("Exception: " + e);
+                e.printStackTrace(out);
             }
         }
     }
@@ -58,7 +57,8 @@ public class ServerCli extends Thread {
 
         switch(tokenType(token)) {
             case QUIT:
-                out.println("exiting ...");
+                if (out != System.out)
+                    out.println("exiting ...");
                 System.out.println("exiting ...");
                 server.setRunning(false);
                 break;
@@ -95,12 +95,12 @@ public class ServerCli extends Thread {
         List<Player> players = server.getPlayers();
         int playerCount = players.size();
 
-        out.println(Actor.getActors().size() + " actors");
+        out.println(Actor.getActorCount() + " actors");
         out.println(playerCount + " players");
         for (Player p: players)
             out.println("\t" + p);
         out.println(processors + " processors");
-        out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB  total");
+        out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB total");
     }
 
     private void displayList(StringTokenizer tokenizer) {

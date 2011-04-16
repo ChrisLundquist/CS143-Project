@@ -25,9 +25,10 @@ public class Model {
     public static void loadModels() {
         // CL - Do we want to generate display lists for everything at load time
         //      or do that lazily?
-        models.add( WavefrontObjLoader.load(MODEL_PATH+"cube_cube.obj"));
-        models.add( WavefrontObjLoader.load(MODEL_PATH+"cube.obj"));
-        models.add( WavefrontObjLoader.load(MODEL_PATH+"skybox.obj"));
+        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube_cube.obj"));
+        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube.obj"));
+        models.add(WavefrontObjLoader.load(MODEL_PATH + "skybox.obj"));
+        models.add(WavefrontObjLoader.load(MODEL_PATH + "shuttle.obj"));
     }
 
     /* 
@@ -66,8 +67,8 @@ public class Model {
         // FIXME replace the magic numbers!
         if(actor instanceof actor.Asteroid){
             return 0;
-        } else if(actor instanceof actor.PlayerShip) {
-            return 1;
+        } else if (actor instanceof actor.PlayerShip) {
+            return 3;
         }
         return 0;
     }

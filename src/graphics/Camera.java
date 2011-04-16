@@ -3,7 +3,6 @@ package graphics;
 import javax.media.opengl.GL2;
 
 import actor.Actor;
-import actor.Player;
 import math.Quaternion;
 import math.Vector3;
 

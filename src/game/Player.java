@@ -26,7 +26,11 @@ public class Player implements Serializable {
     }
     
     public String toString() {
-        return "Player: " + name + " " + status;
+        String msg = name + " " + status;
+        Actor ship = getShip();
+        if (ship != null)
+            msg += " @ " + ship.getPosition();
+        return msg;
     }
     
     public Camera getCamera() {
@@ -43,9 +47,10 @@ public class Player implements Serializable {
     }
     
     public void input(PlayerInput action) {
-        if (ship == null)
+        if (getShip() == null)
             return;
-                
+        
+        
         switch(action) {
             case SHOOT:
                 ship.shoot();

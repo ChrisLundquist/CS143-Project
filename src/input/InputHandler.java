@@ -31,6 +31,8 @@ public class InputHandler implements KeyListener {
         KeyEvent.VK_Z,
         KeyEvent.VK_F11,
         KeyEvent.VK_BACK_SLASH,
+        KeyEvent.VK_PAGE_UP,
+        KeyEvent.VK_PAGE_DOWN,
     };
     /**
      * This is a mask to indicate if each key is disabled when the game is paused
@@ -47,11 +49,15 @@ public class InputHandler implements KeyListener {
         false,//KeyEvent.VK_P,
         true, //KeyEvent.VK_W,
         true, //KeyEvent.VK_S,
+        true, //KeyEvent.VK_A,
+        true, //KeyEvent.VK_Z,
         true, //KeyEvent.VK_F11,
         true, //KeyEvent.VK_BLACK_SLASH,
+        true, //KeyEvent.VK_PAGE_UP
+        true, //KeyEvent.VK_PAGE_DOWN
     };
     /**
-     * This is a mask to indicate if each key is disabled when the game is paused
+     * This is a mask to indicate if each key should be debounced
      */
     private static final boolean[] KEY_DEBOUNCE_MASK = {
         false,//KeyEvent.VK_SPACE,
@@ -69,6 +75,8 @@ public class InputHandler implements KeyListener {
         false, // Z
         true, //KeyEvent.VK_F11,
         true, //KeyEvent.VK_BLACK_SLASH,
+        false, //KeyEvent.VK_PAGE_UP
+        false, //KeyEvent.VK_PAGE_DOWN
     };
 
 
@@ -78,6 +86,8 @@ public class InputHandler implements KeyListener {
     public InputHandler() {
         keyState = new boolean[KEYS_IN_USE.length];
         keyDebounce = new int[KEYS_IN_USE.length];
+        assert(KEY_PAUSE_MASK.length == KEYS_IN_USE.length);
+        assert(KEY_DEBOUNCE_MASK.length == KEYS_IN_USE.length);
     }
 
     @Override
@@ -156,6 +166,12 @@ public class InputHandler implements KeyListener {
                     break;
                 case(KeyEvent.VK_RIGHT):
                     player.input(PlayerInput.YAW_RIGHT);
+                    break;
+                case(KeyEvent.VK_PAGE_UP):
+                    player.input(PlayerInput.ROLL_LEFT);
+                    break;
+                case(KeyEvent.VK_PAGE_DOWN):
+                    player.input(PlayerInput.ROLL_RIGHT);
                     break;
                 case(KeyEvent.VK_A):
                     player.input(PlayerInput.FORWARD);
