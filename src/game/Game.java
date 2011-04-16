@@ -1,5 +1,7 @@
 package game;
  
+import math.Vector3;
+import actor.Asteroid;
 import input.InputHandler;
 
 public class Game {
@@ -9,6 +11,9 @@ public class Game {
     private static Player player;
     private static Map map;
    
+    //for HUD radar testing, will be removed later
+    static actor.Asteroid a;
+    
     public static void init(){
         map = Map.load("example_1");
         player = new Player();
@@ -30,9 +35,15 @@ public class Game {
         input = new InputHandler();
         graphics.Model.loadModels();
         
-        actor.Asteroid a = new actor.Asteroid();
+        a = new actor.Asteroid();
         a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        
         actor.Actor.addActor(a);
+    }
+    
+    //for HUD radar testing, will be removed later
+    public static Asteroid getAsteroid() {
+        return a;
     }
     
     public static void joinServer(String server) {
@@ -48,6 +59,7 @@ public class Game {
         actor.Asteroid a = new actor.Asteroid();
         a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
         actor.Actor.addActor(a);
+        
     }
     
     public static void start(){
