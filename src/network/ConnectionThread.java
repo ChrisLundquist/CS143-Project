@@ -53,6 +53,7 @@ public abstract class ConnectionThread extends Thread {
                 msg = handleMessage(msg);
                 out.writeObject(msg);
                 out.flush();
+                out.reset(); // Flush the object cache so the next update will actually update stuff
             }
         } catch (IOException e) {
             e.printStackTrace();
