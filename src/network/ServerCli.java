@@ -95,7 +95,7 @@ public class ServerCli extends Thread {
         List<Player> players = server.getPlayers();
         int playerCount = players.size();
 
-        out.println(Actor.getActors().size() + " actors");
+        out.println(Actor.getActorCount() + " actors");
         out.println(playerCount + " players");
         for (Player p: players)
             out.println("\t" + p);

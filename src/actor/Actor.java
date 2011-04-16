@@ -279,4 +279,10 @@ public abstract class Actor implements Serializable {
         }
     }
 
+    public static int getActorCount() {
+        synchronized(actors) {
+            return actors.size();
+        }
+    }
+
 }

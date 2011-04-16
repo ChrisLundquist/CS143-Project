@@ -38,6 +38,7 @@ public class ServerClientThread extends ConnectionThread {
                     throw new IllegalArgumentException("Duplicate Player Ship ID" + playerUpdate.getShipId());
                 
                 // Easiest way to resolve update
+                // TODO this doesn't notify the server process of the new player so we should probably do a member by member copy
                 player = playerUpdate;
             }
             Actor.updateFromNetwork(update.getActors(), null);
