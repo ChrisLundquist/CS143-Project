@@ -75,7 +75,8 @@ public class Renderer implements GLEventListener {
         }
         
         //draws hud
-        //hud.drawHud(glDrawable);
+        
+        hud.drawHud(glDrawable);
         
         checkForGLErrors(gl);
 
