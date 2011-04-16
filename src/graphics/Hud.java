@@ -1,8 +1,7 @@
 package graphics;
-/**
- * @author Tim Mikeladze
- */
+
 import java.awt.Color;
+import actor.Actor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -11,11 +10,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.awt.Overlay;
+import actor.*;
+import game.Game;
 /**
+ * @author Tim Mikeladze
+ * 
  * Draws hud elements on an Overlay with Graphics2d
  * @author Tim Mikeladze
  *
@@ -45,6 +47,7 @@ public class Hud implements ImageObserver {
      * @param glDrawable
      */
     public void drawHud(GLAutoDrawable glDrawable) {
+        //System.out.println("Velocity" + game.Game.getPlayer().getShip().getDirection());
         overlay = new Overlay(glDrawable);
 
         Graphics2D graphics = overlay.createGraphics();
@@ -52,6 +55,7 @@ public class Hud implements ImageObserver {
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
         graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
+        graphics.drawString(game.Game.getPlayer().getShip().getDirection().toString(), screenWidth-400, screenHeight-50);
         graphics.finalize();
         overlay.drawAll(); 
     }
