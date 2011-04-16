@@ -244,6 +244,10 @@ public abstract class Actor implements Serializable {
 
                     if (a.id != u.id)
                         continue;
+                    
+                    // Do not update the players ship position from the network
+                    if (ship != null && u.id == ship.id)
+                        continue;
 
                     actors_iter.set(u);
                     update_iter.remove();
