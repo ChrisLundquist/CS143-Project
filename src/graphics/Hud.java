@@ -56,6 +56,7 @@ public class Hud implements ImageObserver {
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
         graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
+       // graphics.drawImage(healthBar, 500, 500, this);
        
     
         graphics.drawString("Distance " + calcDistanceVector(), screenWidth-1200, screenHeight-50);
