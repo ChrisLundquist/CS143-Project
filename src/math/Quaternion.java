@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Quaternion implements Serializable {
     private static final long serialVersionUID = 5284423308557214091L;
+    private static final Quaternion IDENTITY = new Quaternion();
 
     public Quaternion() {
         w_ = 1.0f; // real
@@ -67,14 +68,12 @@ public class Quaternion implements Serializable {
     }
 
     public Quaternion times(Quaternion q) {
-        Quaternion r =  new Quaternion();
-
-        r.w_ = w_ * q.w_ - x_ * q.x_ - y_ * q.y_ - z_ * q.z_;
-        r.x_ = w_ * q.x_ + x_ * q.w_ + y_ * q.z_ - z_ * q.y_;
-        r.y_ = w_ * q.y_ - x_ * q.z_ + y_ * q.w_ + z_ * q.x_;
-        r.z_ = w_ * q.z_ + x_ * q.y_ - y_ * q.x_ + z_ * q.w_;
-
-        return r;
+        return new Quaternion(
+                w_ * q.w_ - x_ * q.x_ - y_ * q.y_ - z_ * q.z_,
+                w_ * q.x_ + x_ * q.w_ + y_ * q.z_ - z_ * q.y_,
+                w_ * q.y_ - x_ * q.z_ + y_ * q.w_ + z_ * q.x_,
+                w_ * q.z_ + x_ * q.y_ - y_ * q.x_ + z_ * q.w_
+        );
     }
 
 
@@ -124,11 +123,10 @@ public class Quaternion implements Serializable {
     }
 
     public Quaternion dampen(float strength){
-        Quaternion q = new Quaternion(); // Identity Quaternion
-        w_ = (1.0f - strength) * w_ + strength * q.w_;
-        x_ = (1.0f - strength) * x_ + strength * q.x_;
-        y_ = (1.0f - strength) * y_ + strength * q.y_;
-        z_ = (1.0f - strength) * z_ + strength * q.z_;
+        w_ = (1.0f - strength) * w_ + strength * IDENTITY.w_;
+        x_ = (1.0f - strength) * x_ + strength * IDENTITY.x_;
+        y_ = (1.0f - strength) * y_ + strength * IDENTITY.y_;
+        z_ = (1.0f - strength) * z_ + strength * IDENTITY.z_;
 
         // CL - We have to normalize after our weighted average above
         normalize();
@@ -220,7 +218,7 @@ public class Quaternion implements Serializable {
             Quaternion k = new Quaternion(0, 0, 0, 1);
 
             assert n.equals(n) : "Quaturnion equality";
-            assert n.times(n).equals(new Quaternion()) : "(-1)^2 == 1";
+            assert n.times(n).equals(IDENTITY) : "(-1)^2 == 1";
 
             // i^2 = j^2 = k^2 = ijk = -1
             assert i.times(i).equals(n) : "i^2 == -1";
@@ -257,7 +255,7 @@ public class Quaternion implements Serializable {
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, -90));
         // There should be a better way to compare within epsilon
-        assert(rotation.toMatrixString().equals(new Quaternion().toMatrixString()));
+        assert(rotation.toMatrixString().equals(IDENTITY.toMatrixString()));
 
         // Test that rotating through 360 degrees on all axies brings us back to normal
         rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
@@ -273,12 +271,12 @@ public class Quaternion implements Serializable {
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
         // Here we get a negative real component by the transformation matrix is the same
-        assert(rotation.toMatrixString().equals(new Quaternion().toMatrixString()));
+        assert(rotation.toMatrixString().equals(IDENTITY.toMatrixString()));
 
 
         rotation = new Quaternion();
         assert rotation.magnitude() == 1.0f;
-        assert rotation.normalize().equals(new Quaternion());
+        assert rotation.normalize().equals(IDENTITY);
 
         for( int i = 0; i < (4 * 4096); i++){
             // Rotate a lot to denormalize our vector
@@ -296,7 +294,7 @@ public class Quaternion implements Serializable {
         rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 40));
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 40));
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
-        assert rotation.times(rotation.inverse()).toMatrixString().equals(new Quaternion().toMatrixString());
+        assert rotation.times(rotation.inverse()).toMatrixString().equals(IDENTITY.toMatrixString());
 
 
         //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
