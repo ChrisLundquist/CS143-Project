@@ -69,7 +69,15 @@ public class Vector3 implements Serializable {
     public float magnitude() {
         return (float)Math.sqrt(x*x + y*y + z*z);
     }
-
+    
+    /**
+     * Subtracts Vectors
+     * @param Vector to subtract
+     * @return 
+     */
+    public Vector3 minus(Vector3 other) {
+        return new Vector3(x - other.x, y - other.y, z - other.z);
+    }
     public Vector3 minusEquals(Vector3 other) {
         x -= other.x;
         y -= other.y;
