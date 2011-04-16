@@ -70,8 +70,8 @@ public class Editor extends JFrame {
         this.map = map;
         map.actors.add(new Asteroid());
         mapNameField.setText(map.name);
-        spawningPositionTable.setModel(new PositionTable(map.spawningPositions));
-        actorTable.setModel(new ActorTable(map.actors));
+        //spawningPositionTable.setModel(new PositionTable(map.spawningPositions));
+       // actorTable.setModel(new ActorTable(map.actors));
     }
 
     /**

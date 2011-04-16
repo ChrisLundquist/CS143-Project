@@ -15,7 +15,7 @@ public class Player extends Actor {
         super();
         alive = true;
         name = DEFAULT_NAME;
-        camera = new graphics.Camera(this);
+        //camera = new graphics.Camera(this);
     }
     @Override
     public void handleCollision(Actor other) {
@@ -60,11 +60,11 @@ public class Player extends Actor {
 
 
     public void turnLeft() {
-        changeHeading(TURN_SPEED);
+    //    changeHeading(TURN_SPEED);
     }
 
     public void turnRight() {
-        changeHeading(-TURN_SPEED);
+    //    changeHeading(-TURN_SPEED);
     }
 
     public Camera getCamera() {

@@ -185,6 +185,7 @@ public class Renderer implements GLEventListener {
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, lightSpecular[i], 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, lightPos[i], 0);
         }
+        shader.setUniform1i(gl, "numLights", numLights);
 
 
     }
