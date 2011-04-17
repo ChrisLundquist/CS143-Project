@@ -31,8 +31,8 @@ public class Hud implements ImageObserver {
     BufferedImage healthBar;
 
 
-    private int screenHeight;
-    private int screenWidth;
+    int screenHeight;
+    int screenWidth;
 
     private static final String HEALTHBAR_PATH="assets/images/healthbar.png";
     
