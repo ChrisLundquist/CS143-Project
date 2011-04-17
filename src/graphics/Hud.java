@@ -31,17 +31,19 @@ public class Hud implements ImageObserver {
     BufferedImage healthBar;
 
 
-    private int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-    private int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private int screenHeight;
+    private int screenWidth;
 
     private static final String HEALTHBAR_PATH="assets/images/healthbar.png";
-
+    
     /**
-     * Constructor loads images
+     * Loads the images and gets screen resolution passed from canvas
+     * @param width of the canvas
+     * @param height of the canvas
      */
-    public Hud() {
-
-
+    public Hud(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
         try {
             healthBar = ImageIO.read(new File(HEALTHBAR_PATH));  
         } catch (IOException e) {

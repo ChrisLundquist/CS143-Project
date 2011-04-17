@@ -29,6 +29,8 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
+    
+    
     //Animator animator;
     FPSAnimator animator;
     Shader shader;
@@ -39,7 +41,7 @@ public class Renderer implements GLEventListener {
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
         shader = new Shader("texture.vert","texture.frag");
-        hud = new Hud();
+        hud = new Hud(canvas.getWidth(), canvas.getHeight());
     }
 
     // Display is our main game loop since the animator calls it
