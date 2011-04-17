@@ -49,21 +49,22 @@ public class Hud implements ImageObserver {
      */
     public void drawHud(GLAutoDrawable glDrawable) {
 
-        overlay = new Overlay(glDrawable);  
+        
+        /*overlay = new Overlay(glDrawable);  
 
         Graphics2D graphics = overlay.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-        graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
-       // graphics.drawImage(healthBar, 500, 500, this);
+        //graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
+        //graphics.drawImage(healthBar, 500, 500, this);
        
     
-        graphics.drawString("Distance " + calcDistanceVector(), screenWidth-1200, screenHeight-50);
+        graphics.drawString("Distance " + calcDistanceVector(), 200, 200);
         graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
         
         graphics.finalize();
-        overlay.drawAll(); 
+        overlay.drawAll(); */
     }
 
     /**
