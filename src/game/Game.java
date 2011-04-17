@@ -1,5 +1,7 @@
 package game;
  
+import java.io.IOException;
+
 import math.Vector3;
 import actor.Asteroid;
 import input.InputHandler;
@@ -98,5 +100,9 @@ public class Game {
     public static void setMap(Map m) {
         map = m;
     }
-
+    
+    public static void main (String []args) throws IOException {
+        Game.init();
+        Game.start();
+    }
 }
