@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
@@ -74,9 +75,7 @@ public class Renderer implements GLEventListener {
                 a.render(gl);
         }
         
-        //draws hud
-        
-        //hud.drawHud(glDrawable);
+        hud.drawHud(glDrawable);
         
         checkForGLErrors(gl);
 
@@ -156,6 +155,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
+      
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
@@ -169,7 +169,8 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         setLighting(gl,3);
         Model.initialize(gl); /* calls Texture.initialize */
-        try {
+        
+       try {
             shader.init(gl);
         } catch (IOException e) {
             // TODO Auto-generated catch block
