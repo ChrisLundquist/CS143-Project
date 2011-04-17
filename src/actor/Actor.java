@@ -201,7 +201,7 @@ public abstract class Actor implements Serializable {
         dampenAngularVelocity();
         // This should also take into effect our maximum angular velocity --
         // this may be an overridden in subclasses to provide different handling
-        rotation = rotation.times(angularVelocity);
+        rotation.timesEquals(angularVelocity);
     }
 
     private void dampenAngularVelocity() {
