@@ -52,7 +52,7 @@ public class MainMenu extends JPanel implements ActionListener {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(this);
-        f.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
+        f.setSize(900,900);
 
         //adds gui elements
         createGUI();

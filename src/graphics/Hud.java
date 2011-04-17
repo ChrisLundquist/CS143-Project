@@ -55,13 +55,13 @@ public class Hud implements ImageObserver {
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-        /*graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
-        graphics.drawString(game.Game.getPlayer().getShip().getDirection().toString(), screenWidth-400, screenHeight-50);
-        graphics.drawString(game.Game.getAsteroid().getPosition().toString(), screenWidth-800, screenHeight-50);*/
-        game.Game.getPlayer().getShip().update();
+        graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
+       // graphics.drawImage(healthBar, 500, 500, this);
+       
+    
         graphics.drawString("Distance " + calcDistanceVector(), screenWidth-1200, screenHeight-50);
         graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
-        //game.Game.getPlayer().getShip().getDirection()
+        
         graphics.finalize();
         overlay.drawAll(); 
     }
@@ -74,6 +74,7 @@ public class Hud implements ImageObserver {
         float distance=0;  
         float xPlayer, yPlayer, zPlayer;
         float xAsteroid, yAsteroid, zAsteroid;
+        
         xPlayer = game.Game.getPlayer().getShip().getPosition().x;
         yPlayer = game.Game.getPlayer().getShip().getPosition().y;
         zPlayer = game.Game.getPlayer().getShip().getPosition().z;
@@ -93,7 +94,6 @@ public class Hud implements ImageObserver {
      */
     public Vector3 calcDistanceVector() {
         return game.Game.getPlayer().getShip().getPosition().minus(game.Game.getAsteroid().getPosition());
-
     }
 
 
