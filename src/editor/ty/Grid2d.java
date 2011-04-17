@@ -20,10 +20,15 @@ import actor.Actor;
 
 
 public class Grid2d extends JPanel {
-    private final Color VERTEX = Color.BLACK;
+    private final Color X_COLOR = Color.RED;
+    private final Color Y_COLOR = Color.GREEN;
+    private final Color Z_COLOR = Color.BLUE;
+
+    private final Color hVertexColor;
+    private final Color vVertexColor;
     private final Color TEXT = Color.BLUE;
 
-    private final Context context;
+    public final Context context;
     private ArrayList<Actor> actors = new ArrayList<Actor>();
 
     private double scale = 1;
@@ -40,7 +45,25 @@ public class Grid2d extends JPanel {
             }
         });		
         this.context = context;
-        this.setSize(500, 500);	
+
+        switch(context){
+            case XY:
+                hVertexColor = X_COLOR;
+                vVertexColor = Y_COLOR;
+                break;
+            case XZ:
+                hVertexColor = X_COLOR;
+                vVertexColor = Z_COLOR;
+                break;
+            case YZ:
+                hVertexColor = Z_COLOR;
+                vVertexColor = Y_COLOR;
+                break;
+            default:
+                hVertexColor = Color.GRAY;
+                vVertexColor = Color.GRAY;
+        }
+
         setLayout(null);
     }
 
@@ -79,12 +102,9 @@ public class Grid2d extends JPanel {
         int hL = (int) (10/scale); //stands for hash Length
         int spacing = (int) (10/scale);
 
-        //draw the vertical axis
-        g.setColor(VERTEX);
-        g.drawLine(w/2, 0, w/2, h);
+        //horizontal
+        g.setColor(hVertexColor);
         g.drawLine(0, h/2, w, h/2);
-
-        //set hashes on horizontal
         for(int i=0;i<(w/2)/scale;i+=spacing){
             Point pos1 = ltg(i,-hL/2);
             Point pos2 = ltg(i,hL/2);
@@ -92,12 +112,13 @@ public class Grid2d extends JPanel {
             Point neg1 = ltg(-i,-hL/2);
             Point neg2 = ltg(-i,hL/2);
 
-            g.setColor(VERTEX);
             g.drawLine(pos1.x, pos1.y, pos2.x, pos2.y);
             g.drawLine(neg1.x, neg1.y, neg2.x, neg2.y);
 
         }
         //vertical
+        g.setColor(vVertexColor);
+        g.drawLine(w/2, 0, w/2, h);
         for(int i=0;i<(h/2)/scale;i+=spacing){
             Point pos1 = ltg(-hL/2,i);
             Point pos2 = ltg(hL/2,i);
@@ -140,16 +161,57 @@ public class Grid2d extends JPanel {
         this.refresh();
     }
 
+    public void mouseChange(Grid2d exGrid,int x,int y){
+        int lx =1110,ly=1110;
+
+        switch(exGrid.context){
+            case XY:
+                switch(this.context){                   
+                    case XZ:
+                        lx=x;
+                        break;
+                    case YZ:
+                        lx=y;
+                        ly=y;
+                        break;
+                }
+            case XZ:
+                switch(this.context){                   
+                    case XY:
+                        lx=x;
+                        break;
+                    case YZ:
+                        lx=y;
+                        break;
+                }
+            case YZ:
+                switch(this.context){
+                    case XY:
+                        ly=y;
+                        break;
+                    case XZ:
+                        ly=x;
+                        break;
+                }
+
+        }
+        
+        this.mouseCoords(lx, ly);
+    }
+
     private void mouseCoords(int x, int y){
         Graphics g = this.getGraphics();
 
         refresh();
         //draw vertical line
+        g.setColor(hVertexColor);
         g.drawLine(x, 0, x, this.getHeight());
         //draw horizontal line
+        g.setColor(vVertexColor);
         g.drawLine(0, y, this.getWidth(), y);
         Point pos = gtl(x,y);
 
+        g.setColor(Color.BLACK);
         g.drawString("("+pos.x+","+pos.y+")",10,10);
     }
 
@@ -165,6 +227,7 @@ public class Grid2d extends JPanel {
             this.drawAxis();
             g.drawString(String.valueOf(this.scale), 10, 25);
             this.drawActors();
+            g.drawString(this.context.toString(), 100, 100);
         }
         catch(NullPointerException e){
             //not ready yet.

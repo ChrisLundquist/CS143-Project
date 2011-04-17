@@ -37,7 +37,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("texture.vert","texture.frag");
+        shader = new Shader("test.vert","test.frag");
         hud = new Hud();
     }
 
