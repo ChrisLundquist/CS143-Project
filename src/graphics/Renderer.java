@@ -208,7 +208,7 @@ public class Renderer implements GLEventListener {
     public void start() {
         canvas.addGLEventListener(this);
         frame.add(canvas);
-        frame.setSize(1024, 758);
+        frame.setSize(600, 480);
         frame.setUndecorated(true);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.addWindowListener(new WindowAdapter() {

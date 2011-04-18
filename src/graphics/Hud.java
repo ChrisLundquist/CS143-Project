@@ -37,8 +37,8 @@ public class Hud implements ImageObserver {
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
         
 
-    int screenHeight = 1024;
-    int screenWidth = 768;
+    int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+    int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     
     /**
      * Loads the images and gets screen resolution passed from canvas
@@ -48,9 +48,11 @@ public class Hud implements ImageObserver {
     public Hud() {
 
         try {
+            health_backdrop = new BufferedImage(122, 410, BufferedImage.TYPE_INT_ARGB);
             health_backdrop = ImageIO.read(new File(HEALTHBACKDROP));  
             health_bar = ImageIO.read(new File(HEALTHBAR));
             health_cross = ImageIO.read(new File(HEALTHCROSS));
+            
             
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
@@ -67,21 +69,22 @@ public class Hud implements ImageObserver {
         if(overlay == null)
         {
             overlay = new Overlay(glDrawable); 
-            
         }
         // if an overlay has been created
         else
         {
           overlay.markDirty(0, 0, screenWidth, screenHeight);   
         }
+        
         graphics = overlay.createGraphics(); 
         overlay.beginRendering();
         
-        graphics.drawImage(health_backdrop, 0, 0, this);
+      //  graphics.drawImage(health_backdrop, 0, 0, this);
+     //   health_backdrop.setRGB(0, 0, BufferedImage.TYPE_INT_ARGB);
+        graphics.drawImage(health_backdrop, screenWidth-244, 0, 122, 410, this);
         
-        
-        /* graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);*/
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         
         graphics.finalize();
         overlay.draw(0, 0, screenWidth, screenHeight);

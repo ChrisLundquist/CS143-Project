@@ -126,6 +126,7 @@ public class MainMenu extends JPanel implements ActionListener {
         y = (h - height)/2;
         //paints image
         g2.drawImage(background, x, y, width, height, this);
+        g2.drawImage(background, x, y, width, height, this);
     }
 
     public void actionPerformed(ActionEvent e) {
