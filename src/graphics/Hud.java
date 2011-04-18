@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLDrawable;
+
 import com.jogamp.opengl.util.awt.Overlay;
 import actor.*;
 import game.Game;
@@ -20,22 +22,28 @@ import math.Vector3;
  * @author Tim Mikeladze
  * 
  * Draws hud elements on an Overlay with Graphics2d
- * @author Tim Mikeladze
+ * 
  *
  */
 public class Hud implements ImageObserver {
     Overlay overlay;
     Graphics2D graphics;
     BufferedImage healthBar;
-    private int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-    private int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+
+
+    int screenHeight;
+    int screenWidth;
 
     private static final String HEALTHBAR_PATH="assets/images/healthbar.png";
-
+    
     /**
-     * Constructor loads images
+     * Loads the images and gets screen resolution passed from canvas
+     * @param width of the canvas
+     * @param height of the canvas
      */
-    public Hud() {
+    public Hud(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
         try {
             healthBar = ImageIO.read(new File(HEALTHBAR_PATH));  
         } catch (IOException e) {
@@ -49,13 +57,6 @@ public class Hud implements ImageObserver {
      */
     public void drawHud(GLAutoDrawable glDrawable) {
 
-        
-        /*overlay = new Overlay(glDrawable);  
-
-        Graphics2D graphics = overlay.createGraphics();
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
         //graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
         //graphics.drawImage(healthBar, 500, 500, this);
        
@@ -64,7 +65,17 @@ public class Hud implements ImageObserver {
         graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
         
         graphics.finalize();
-        overlay.drawAll(); */
+        overlay.drawAll(); 
+        graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
+
+        // graphics.drawString("Distance " + calcDistanceVector(), screenWidth-1200, screenHeight-50);
+        // graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
+
+        graphics.finalize();
+
+        //problems with exact coordinates
+        overlay.draw(0, 0, screenWidth, screenHeight);
+        overlay.endRendering();
     }
 
     /**
@@ -75,7 +86,7 @@ public class Hud implements ImageObserver {
         float distance=0;  
         float xPlayer, yPlayer, zPlayer;
         float xAsteroid, yAsteroid, zAsteroid;
-        
+
         xPlayer = game.Game.getPlayer().getShip().getPosition().x;
         yPlayer = game.Game.getPlayer().getShip().getPosition().y;
         zPlayer = game.Game.getPlayer().getShip().getPosition().z;
@@ -83,8 +94,8 @@ public class Hud implements ImageObserver {
         xAsteroid = game.Game.getAsteroid().getPosition().x;
         yAsteroid = game.Game.getAsteroid().getPosition().y;
         zAsteroid = game.Game.getAsteroid().getPosition().z;
-        
-        
+
+
         distance = (float)Math.sqrt(Math.pow((xPlayer - xAsteroid),2) + Math.pow((yPlayer - yAsteroid),2) + 
                 Math.pow((zPlayer - zAsteroid),2)); 
         return distance;

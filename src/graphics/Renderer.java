@@ -12,10 +12,12 @@ import java.io.IOException;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
+import javax.swing.JOptionPane;
 
 import actor.Actor;
 
@@ -28,6 +30,8 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
+    
+    
     //Animator animator;
     FPSAnimator animator;
     Shader shader;
@@ -37,8 +41,10 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("texture.vert","texture.frag");
-        hud = new Hud();
+        
+     //   shader = new Shader("texture.vert","texture.frag");
+        hud = new Hud(frame.getWidth(),frame.getWidth());
+        JOptionPane.showMessageDialog(null, frame.getWidth());
     }
 
     // Display is our main game loop since the animator calls it
@@ -73,9 +79,6 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
-        
-        //draws hud
-        
         hud.drawHud(glDrawable);
         
         checkForGLErrors(gl);
@@ -147,7 +150,7 @@ public class Renderer implements GLEventListener {
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, lightSpecular[i], 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, lightPos[i], 0);
         }
-        shader.setUniform1i(gl, "numLights", numLights);
+      //  shader.setUniform1i(gl, "numLights", numLights);
 
 
     }
@@ -156,6 +159,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
+      
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
@@ -169,13 +173,14 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         setLighting(gl,3);
         Model.initialize(gl); /* calls Texture.initialize */
-        try {
+        
+      /* try {
             shader.init(gl);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        shader.enable(gl);
+        }*/
+      //  shader.enable(gl);
         System.gc(); // This is probably a good a idea
     }
 

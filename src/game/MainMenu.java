@@ -164,7 +164,9 @@ public class MainMenu extends JPanel implements ActionListener {
 
     }
     public static void main (String []args) throws IOException {
-        @SuppressWarnings("unused")
-        MainMenu menu = new MainMenu();
+       /* @SuppressWarnings("unused")
+        MainMenu menu = new MainMenu();*/
+        Game.init();
+        Game.start(); 
     }
 }
