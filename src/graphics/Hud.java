@@ -1,3 +1,4 @@
+
 package graphics;
 
 import java.awt.Color;
@@ -28,56 +29,65 @@ import math.Vector3;
 public class Hud implements ImageObserver {
     Overlay overlay;
     Graphics2D graphics;
-    BufferedImage healthBar;
+    BufferedImage health_backdrop, health_bar, health_cross;
 
+    //244, 821
+    private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
+    private static final String HEALTHBAR = "assets/images/hud/health_bar.png";
+    private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
+        
 
-    int screenHeight;
-    int screenWidth;
-
-    private static final String HEALTHBAR_PATH="assets/images/healthbar.png";
+    int screenHeight = 1024;
+    int screenWidth = 768;
     
     /**
      * Loads the images and gets screen resolution passed from canvas
      * @param width of the canvas
      * @param height of the canvas
      */
-    public Hud(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
+    public Hud() {
+
         try {
-            healthBar = ImageIO.read(new File(HEALTHBAR_PATH));  
+            health_backdrop = ImageIO.read(new File(HEALTHBACKDROP));  
+            health_bar = ImageIO.read(new File(HEALTHBAR));
+            health_cross = ImageIO.read(new File(HEALTHCROSS));
+            
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
             e.printStackTrace();
         }
     }
     /**
-     * Draws the hud elements
+     * Draws static hud elements that don't change throughout the game
      * @param glDrawable
      */
-    public void drawHud(GLAutoDrawable glDrawable) {
+    public void drawStaticHud(GLAutoDrawable glDrawable) {
 
-        //graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
-        //graphics.drawImage(healthBar, 500, 500, this);
-       
-    
-        graphics.drawString("Distance " + calcDistanceVector(), 200, 200);
-        graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
+        //creates new overlay
+        if(overlay == null)
+        {
+            overlay = new Overlay(glDrawable); 
+            
+        }
+        // if an overlay has been created
+        else
+        {
+          overlay.markDirty(0, 0, screenWidth, screenHeight);   
+        }
+        graphics = overlay.createGraphics(); 
+        overlay.beginRendering();
+        
+        graphics.drawImage(health_backdrop, 0, 0, this);
+        
+        
+        /* graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);*/
         
         graphics.finalize();
-        overlay.drawAll(); 
-        graphics.drawImage(healthBar, screenWidth-250, screenHeight-50, this);
-
-        // graphics.drawString("Distance " + calcDistanceVector(), screenWidth-1200, screenHeight-50);
-        // graphics.drawString("Player Direction " + game.Game.getPlayer().getShip().getDirection(), screenWidth-1200, screenHeight-100);
-
-        graphics.finalize();
-
-        //problems with exact coordinates
         overlay.draw(0, 0, screenWidth, screenHeight);
         overlay.endRendering();
     }
-
+    
     /**
      * Calculates distance between player and asteroid
      * @return distance
@@ -107,6 +117,27 @@ public class Hud implements ImageObserver {
     public Vector3 calcDistanceVector() {
         return game.Game.getPlayer().getShip().getPosition().minus(game.Game.getAsteroid().getPosition());
     }
+    public Vector3 getPlayerPosition() {
+        return game.Game.getPlayer().getShip().getPosition();
+    }
+    public Vector3 getAsteroidPosition() {
+        return game.Game.getAsteroid().getPosition();
+    }
+    
+    /**
+     * Gets player direction
+     * @return player direction vector
+     */
+    public Vector3 getPlayerDirection() {
+        return game.Game.getPlayer().getShip().getDirection();
+    }
+    /**
+     * Gets asteroid direction
+     * @return asteroid direction vector
+     */
+    public Vector3 getAsteroidDirection() {
+        return game.Game.getAsteroid().getDirection();
+    }
 
 
     @Override
@@ -116,3 +147,4 @@ public class Hud implements ImageObserver {
         return false;
     }
 }
+

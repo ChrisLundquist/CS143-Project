@@ -42,8 +42,8 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         
      //   shader = new Shader("texture.vert","texture.frag");
-        hud = new Hud(frame.getWidth(),frame.getWidth());
-        JOptionPane.showMessageDialog(null, frame.getWidth());
+        hud = new Hud();
+        
     }
 
     // Display is our main game loop since the animator calls it
@@ -78,7 +78,9 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
-        hud.drawHud(glDrawable);
+        hud.drawStaticHud(glDrawable);
+        
+        
         
         checkForGLErrors(gl);
 
@@ -206,7 +208,7 @@ public class Renderer implements GLEventListener {
     public void start() {
         canvas.addGLEventListener(this);
         frame.add(canvas);
-        frame.setSize(640, 480);
+        frame.setSize(1024, 758);
         frame.setUndecorated(true);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.addWindowListener(new WindowAdapter() {
