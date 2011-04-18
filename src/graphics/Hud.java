@@ -1,8 +1,6 @@
 
 package graphics;
 
-import java.awt.Color;
-import actor.Actor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -11,14 +9,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLDrawable;
+
+import math.Vector3;
 
 import com.jogamp.opengl.util.awt.Overlay;
-import actor.*;
-import game.Game;
-import math.Vector3;
 /**
  * @author Tim Mikeladze
  * 

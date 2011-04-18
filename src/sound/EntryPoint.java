@@ -1,9 +1,5 @@
 package sound;
-import java.io.File;
 import java.util.ArrayList;
-
-import sound.Piece;
-import sound.Theme;
 
 public class EntryPoint {
     

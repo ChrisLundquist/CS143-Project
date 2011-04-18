@@ -7,10 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import math.Vector3;
-
 import actor.Actor;
-import actor.PlayerShip;
 
 public class GridPacker extends JPanel {
     Grid2d xyGrid;

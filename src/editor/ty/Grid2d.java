@@ -2,19 +2,11 @@ package editor.ty;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-
-import javax.swing.JPanel;
-import javax.swing.JButton;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import actor.Actor;
 
