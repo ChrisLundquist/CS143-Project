@@ -78,7 +78,7 @@ public class Hud implements ImageObserver {
         }
          
         
-        graphics.clearRect(0, 0,2000,2000);
+        //graphics.clearRect(0, 0,2000,2000);
         overlay.beginRendering();
         
       //  graphics.drawImage(health_backdrop, 0, 0, this);
