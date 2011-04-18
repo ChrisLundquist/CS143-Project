@@ -2,11 +2,21 @@ package editor.ty;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.SwingConstants;
+import javax.swing.JLabel;
 
 import actor.Actor;
 
@@ -21,7 +31,7 @@ public class Grid2d extends JPanel {
     private final Color TEXT = Color.BLUE;
 
     public final Context context;
-    private ArrayList<Actor> actors = new ArrayList<Actor>();
+    private Map<Actor,Color> actorMap = new HashMap<Actor,Color>();
 
     private double scale = 1;
 
@@ -29,7 +39,7 @@ public class Grid2d extends JPanel {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
                 try{
-                    moveCrosshair(gtl(e.getX(),e.getY()));
+                    mouseCoords(e.getX(),e.getY());
                 }
                 catch(Exception e1){
                     e1.printStackTrace();
@@ -65,24 +75,6 @@ public class Grid2d extends JPanel {
         refresh();
     }
 
-    private void moveCrosshair(Point p){
-        Graphics g = this.getGraphics();
-        
-        Point global = ltg(p);
-
-        refresh();
-        //draw vertical line
-        g.setColor(hVertexColor);
-        g.drawLine(global.x, 0, global.x, this.getHeight());
-        //draw horizontal line
-        g.setColor(vVertexColor);
-        g.drawLine(0, global.y, this.getWidth(), global.y);
-        Point pos = gtl(global.x,global.y);
-
-        g.setColor(Color.BLACK);
-        g.drawString("("+pos.x+","+pos.y+")",10,10);
-    }
-    
     private Point ltg(int x,int y){
         int w = this.getWidth();
         int h = this.getHeight();
@@ -97,7 +89,7 @@ public class Grid2d extends JPanel {
         int w = this.getWidth();
         int h = this.getHeight();
 
-        return new Point((int)(-(w/2-x-w/2)/scale),(int)((h/2-y)/scale));
+        return new Point((int)(-(w/2-x)/scale),(int)((h/2-y)/scale));
     }
     private Point gtl(Point p){
         return gtl(p.x,p.y);
@@ -143,7 +135,7 @@ public class Grid2d extends JPanel {
 
     private void drawActors(){
         Graphics g = this.getGraphics();
-        for(Actor a: this.actors){
+        for(Actor a: this.actorMap.keySet()){
             Point p;
             int defSize = (int)a.getSize();
             int size = (int) (defSize* this.scale);
@@ -163,12 +155,71 @@ public class Grid2d extends JPanel {
             }
 
             Point glo = ltg(p);
+            g.setColor(this.actorMap.get(a));
             g.drawOval(glo.x-size/2, glo.y-size/2, size, size);
         }
     }
-    public void updateActors(ArrayList<Actor> actors){
-        this.actors = actors;
+    
+    
+    public void updateActors(Map<Actor,Color> actors){
+        this.actorMap = actors;
         this.refresh();
+    }
+
+    public void mouseChange(Grid2d exGrid,int x,int y){
+        int lx =1110,ly=1110;
+
+        switch(exGrid.context){
+            case XY:
+                switch(this.context){                   
+                    case XZ:
+                        lx=x;
+                        break;
+                    case YZ:
+                        ly=y;
+                        break;
+                }
+                break;
+            case XZ:
+                switch(this.context){                   
+                    case XY:
+                        lx=x;
+                        break;
+                    case YZ:
+                        lx=exGrid.getWidth()-y;
+                        break;
+                }
+                break;
+            case YZ:
+                switch(this.context){
+                    case XY:
+                        ly=y;
+                        break;
+                    case XZ:
+                        ly=exGrid.getHeight() - x;
+                        break;
+                }
+                break;
+
+        }
+        
+        this.mouseCoords(lx, ly);
+    }
+
+    private void mouseCoords(int x, int y){
+        Graphics g = this.getGraphics();
+
+        refresh();
+        //draw vertical line
+        g.setColor(hVertexColor);
+        g.drawLine(x, 0, x, this.getHeight());
+        //draw horizontal line
+        g.setColor(vVertexColor);
+        g.drawLine(0, y, this.getWidth(), y);
+        Point pos = gtl(x,y);
+
+        g.setColor(Color.BLACK);
+        g.drawString("("+pos.x+","+pos.y+")",x+5,y-5);
     }
 
     public void zoom(double diff){
@@ -181,16 +232,14 @@ public class Grid2d extends JPanel {
             Graphics g = this.getGraphics();
             g.clearRect(0, 0, this.getWidth(), this.getHeight());
             this.drawAxis();
-            g.drawString(String.valueOf(this.scale), 10, 25);
             this.drawActors();
-            g.drawString(this.context.toString(), 100, 100);
         }
         catch(NullPointerException e){
             //not ready yet.
         }
     }
 
-    public static class Point{
+    private static class Point{
         public int x;
         public int y;
 

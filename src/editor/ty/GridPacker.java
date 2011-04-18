@@ -1,9 +1,11 @@
 package editor.ty;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -56,7 +58,7 @@ public class GridPacker extends JPanel {
     private void updateMouseLines(Grid2d grid,int x,int y){
         for(Grid2d g:grids){
             if(!g.equals(grid)){
-                //g.mouseChange(grid,new Grid2d.Point(x,y));
+                g.mouseChange(grid,x,y);
             }
         }
     }
@@ -67,7 +69,7 @@ public class GridPacker extends JPanel {
         }
     }
     
-    public void updateActors(ArrayList<Actor> actors){
+    public void updateActors(Map<Actor,Color> actors){
         for(Grid2d grid:grids){
             grid.updateActors(actors);
         }
