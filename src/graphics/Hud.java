@@ -69,14 +69,16 @@ public class Hud implements ImageObserver {
         if(overlay == null)
         {
             overlay = new Overlay(glDrawable); 
+            graphics = overlay.createGraphics();
         }
         // if an overlay has been created
         else
         {
           overlay.markDirty(0, 0, screenWidth, screenHeight);   
         }
+         
         
-        graphics = overlay.createGraphics(); 
+        graphics.clearRect(0, 0,2000,2000);
         overlay.beginRendering();
         
       //  graphics.drawImage(health_backdrop, 0, 0, this);
@@ -87,8 +89,11 @@ public class Hud implements ImageObserver {
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         
         graphics.finalize();
+        
+        
         overlay.draw(0, 0, screenWidth, screenHeight);
         overlay.endRendering();
+        
     }
     
     /**
