@@ -78,6 +78,7 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
+        
         hud.drawStaticHud(glDrawable);
         
         

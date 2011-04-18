@@ -59,7 +59,7 @@ public class GridPacker extends JPanel {
     private void updateMouseLines(Grid2d grid,int x,int y){
         for(Grid2d g:grids){
             if(!g.equals(grid)){
-                g.mouseChange(grid,x,y);
+                //g.mouseChange(grid,new Grid2d.Point(x,y));
             }
         }
     }

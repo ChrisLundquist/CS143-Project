@@ -37,7 +37,7 @@ public class Grid2d extends JPanel {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
                 try{
-                    mouseCoords(e.getX(),e.getY());
+                    moveCrosshair(gtl(e.getX(),e.getY()));
                 }
                 catch(Exception e1){
                     e1.printStackTrace();
@@ -73,6 +73,24 @@ public class Grid2d extends JPanel {
         refresh();
     }
 
+    private void moveCrosshair(Point p){
+        Graphics g = this.getGraphics();
+        
+        Point global = ltg(p);
+
+        refresh();
+        //draw vertical line
+        g.setColor(hVertexColor);
+        g.drawLine(global.x, 0, global.x, this.getHeight());
+        //draw horizontal line
+        g.setColor(vVertexColor);
+        g.drawLine(0, global.y, this.getWidth(), global.y);
+        Point pos = gtl(global.x,global.y);
+
+        g.setColor(Color.BLACK);
+        g.drawString("("+pos.x+","+pos.y+")",10,10);
+    }
+    
     private Point ltg(int x,int y){
         int w = this.getWidth();
         int h = this.getHeight();
@@ -87,7 +105,7 @@ public class Grid2d extends JPanel {
         int w = this.getWidth();
         int h = this.getHeight();
 
-        return new Point((int)(-(w/2-x)/scale),(int)((h/2-y)/scale));
+        return new Point((int)(-(w/2-x-w/2)/scale),(int)((h/2-y)/scale));
     }
     private Point gtl(Point p){
         return gtl(p.x,p.y);
@@ -146,7 +164,7 @@ public class Grid2d extends JPanel {
                     p = new Point((int)a.getPosition().x,(int)a.getPosition().z);
                     break;
                 case YZ:
-                    p = new Point((int)a.getPosition().y,(int)a.getPosition().z);
+                    p = new Point((int)a.getPosition().z,(int)a.getPosition().y);
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -159,60 +177,6 @@ public class Grid2d extends JPanel {
     public void updateActors(ArrayList<Actor> actors){
         this.actors = actors;
         this.refresh();
-    }
-
-    public void mouseChange(Grid2d exGrid,int x,int y){
-        int lx =1110,ly=1110;
-
-        switch(exGrid.context){
-            case XY:
-                switch(this.context){                   
-                    case XZ:
-                        lx=x;
-                        break;
-                    case YZ:
-                        lx=y;
-                        ly=y;
-                        break;
-                }
-            case XZ:
-                switch(this.context){                   
-                    case XY:
-                        lx=x;
-                        break;
-                    case YZ:
-                        lx=y;
-                        break;
-                }
-            case YZ:
-                switch(this.context){
-                    case XY:
-                        ly=y;
-                        break;
-                    case XZ:
-                        ly=x;
-                        break;
-                }
-
-        }
-        
-        this.mouseCoords(lx, ly);
-    }
-
-    private void mouseCoords(int x, int y){
-        Graphics g = this.getGraphics();
-
-        refresh();
-        //draw vertical line
-        g.setColor(hVertexColor);
-        g.drawLine(x, 0, x, this.getHeight());
-        //draw horizontal line
-        g.setColor(vVertexColor);
-        g.drawLine(0, y, this.getWidth(), y);
-        Point pos = gtl(x,y);
-
-        g.setColor(Color.BLACK);
-        g.drawString("("+pos.x+","+pos.y+")",10,10);
     }
 
     public void zoom(double diff){
@@ -234,7 +198,7 @@ public class Grid2d extends JPanel {
         }
     }
 
-    private static class Point{
+    public static class Point{
         public int x;
         public int y;
 
