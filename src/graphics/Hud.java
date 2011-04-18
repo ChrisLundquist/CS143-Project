@@ -11,7 +11,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.nio.IntBuffer;
+
 import javax.imageio.ImageIO;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLDrawable;
 
@@ -27,6 +31,7 @@ import math.Vector3;
  *
  */
 public class Hud implements ImageObserver {
+    private final GL2 gl2;
     Overlay overlay;
     Graphics2D graphics;
     BufferedImage health_backdrop, health_bar, health_cross;
@@ -45,8 +50,9 @@ public class Hud implements ImageObserver {
      * @param width of the canvas
      * @param height of the canvas
      */
-    public Hud() {
-
+    public Hud(GL2 gl2) {
+        this.gl2=gl2;
+        
         try {
             health_backdrop = new BufferedImage(122, 410, BufferedImage.TYPE_INT_ARGB);
             health_backdrop = ImageIO.read(new File(HEALTHBACKDROP));  
@@ -64,8 +70,8 @@ public class Hud implements ImageObserver {
      * @param glDrawable
      */
     public void drawStaticHud(GLAutoDrawable glDrawable) {
-
-        //creates new overlay
+        
+        /*//creates new overlay
         if(overlay == null)
         {
             overlay = new Overlay(glDrawable); 
@@ -92,9 +98,45 @@ public class Hud implements ImageObserver {
         
         
         overlay.draw(0, 0, screenWidth, screenHeight);
-        overlay.endRendering();
+        overlay.endRendering();*/
+        
+        glEnable2D();
+        gl2.glBegin(GL2.GL_TRIANGLES);
+        gl2.glColor3i(255, 0, 0);
+        gl2.glVertex2d(0, 0);
+        gl2.glColor3i(0, 255, 0);
+        gl2.glVertex2d(100,0);
+        gl2.glColor3i(0, 0, 255);
+        gl2.glVertex2f(50, 50);
+        gl2.glEnd();
+        glDisable2D();
         
     }
+    
+    void glEnable2D()
+    {
+        int[] vPort = new int[4];
+
+       //gl2.glGetIntegerv(gl2.GL_VIEWPORT, vPort);
+
+       gl2.glMatrixMode(GL2.GL_PROJECTION);
+       gl2.glPushMatrix();
+       gl2.glLoadIdentity();
+
+       gl2.glOrtho(0, vPort[2], 0, vPort[3], -1, 1);
+       gl2.glMatrixMode(GL2.GL_MODELVIEW);
+       gl2.glPushMatrix();
+       gl2.glLoadIdentity();
+    }
+
+    void glDisable2D()
+    {
+       gl2.glMatrixMode(GL2.GL_PROJECTION);
+       gl2.glPopMatrix();   
+       gl2.glMatrixMode(GL2.GL_MODELVIEW);
+       gl2.glPopMatrix();   
+    }
+
     
     /**
      * Calculates distance between player and asteroid

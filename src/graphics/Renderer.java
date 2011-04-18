@@ -42,7 +42,7 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         
      //   shader = new Shader("texture.vert","texture.frag");
-        hud = new Hud();
+        hud = new Hud(glu.getCurrentGL().getGL2());
         
     }
 
@@ -78,6 +78,7 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
+        
         hud.drawStaticHud(glDrawable);
         
         
