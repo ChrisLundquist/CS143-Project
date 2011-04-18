@@ -3,16 +3,13 @@ package editor;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventObject;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.CellEditorListener;
 import javax.swing.table.TableCellEditor;
 
-import math.Quaternion;
 import math.Vector3;
 
 public class Vector3Editor extends AbstractCellEditor implements TableCellEditor, ActionListener {

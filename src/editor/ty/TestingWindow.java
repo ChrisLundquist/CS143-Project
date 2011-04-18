@@ -1,13 +1,11 @@
 package editor.ty;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import math.Vector3;
-
 import actor.Actor;
 import actor.PlayerShip;
 

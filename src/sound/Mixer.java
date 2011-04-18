@@ -1,9 +1,7 @@
 package sound;
 
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.Vector;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * The main class that deals with the mixing of music.  
