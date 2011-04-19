@@ -24,6 +24,12 @@ public class Vector3 implements Serializable {
         this.z = z;
     }
     
+    public Vector3(Vector3 xyz) {
+        this.x = xyz.x;
+        this.y = xyz.y;
+        this.z = xyz.z;
+    }
+
     public String toString() {
         return String.format("<%g, %g, %g>", x, y, z);
     }

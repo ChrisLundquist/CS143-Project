@@ -6,7 +6,7 @@ varying vec2 texCoordinate0;
 
 vec4 effectiveLight()
 {
-	vec4 color;
+	vec4 color = vec4(0.0f,0.0f,0.0f,0.0f);
 	vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
 
 
@@ -20,7 +20,7 @@ vec4 effectiveLight()
 				gl_LightSource[i].quadraticAttenuation * dist * dist);
 
 		//calculate Ambient Term:
-		vec4 Iamb = gl_LightSource[i].ambient*gl_FrontMaterial.ambient;
+		vec4 Iamb = gl_LightSource[i].ambient * gl_FrontMaterial.ambient;
 
 		//calculate Diffuse Term:
 		vec4 Idiff = (gl_LightSource[i].diffuse * max(dot(N,L), 0.0f)) * gl_FrontMaterial.diffuse;
