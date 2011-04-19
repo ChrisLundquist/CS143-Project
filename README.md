@@ -20,15 +20,19 @@ Sound
 Math Utils
 ----------
 
-- Vector3D
+- Vector3
+- Vector4
 - Quaternions
 
-OpenGL
+Graphics
 ------
 
 - Model (referenced by id)
 - Texture (referenced by id)
-- Viewport
+- Material (referenced by name)
+- Wavefront Object and Material Loader
+- Shaders / per pixel lighting
+
 
 Network
 -------
