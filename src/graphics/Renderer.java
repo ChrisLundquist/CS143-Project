@@ -27,20 +27,18 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
 
-
     //Animator animator;
     FPSAnimator animator;
-    Shader shader;
+   // Shader shader;
     Hud hud;
+ 
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-
-        shader = new Shader("lambert.vert","lambert.frag");
+       // shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
-
     }
 
     // Display is our main game loop since the animator calls it
@@ -51,7 +49,6 @@ public class Renderer implements GLEventListener {
         // Don't update the game state if we are paused
         if(game.Game.isPaused())
             return;
-
 
         game.Game.getPlayer().updateCamera();
 
@@ -75,17 +72,11 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
-
+        
         hud.drawStaticHud(glDrawable);
-
-
-
-
+        
         checkForGLErrors(gl);
-
-
     }
-
     private static void checkForGLErrors(GL2 gl) {
         int errno = gl.glGetError();
         switch (errno) {
@@ -111,7 +102,6 @@ public class Renderer implements GLEventListener {
                 return;
         }
     }
-
     private void setLighting(GL2 gl, int numLights) {
         int[] maxLights = new int[1];
 
@@ -134,13 +124,14 @@ public class Renderer implements GLEventListener {
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.toFloatArray(), 0);
         }
         // Tell the shader how many lights we are using
-        shader.setUniform1i(gl, "numLights", numLights);
+      //  shader.setUniform1i(gl, "numLights", numLights);
     }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
+
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
@@ -151,16 +142,18 @@ public class Renderer implements GLEventListener {
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         Model.initialize(gl); /* calls Texture.initialize */
 
-        try {
+
+         /* try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);
+        shader.enable(gl);*/
         // We have to setup the lights after we enable the shader so we can set the uniform
         setLighting(gl,1);
 

@@ -17,8 +17,7 @@ public class Game {
     public static void init(){
         map = Map.load("example_1");
         player = new Player();
-        
-        
+                
         renderer = new graphics.Renderer();
         input = new InputHandler();
         graphics.Model.loadModels();

@@ -32,11 +32,11 @@ public class Hud implements ImageObserver {
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
     private static final String HEALTHBAR = "assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
-        
+
 
     int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
     int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-    
+
     /**
      * Loads the images and gets screen resolution passed from canvas
      * @param width of the canvas
@@ -45,12 +45,11 @@ public class Hud implements ImageObserver {
     public Hud() {
 
         try {
-            health_backdrop = new BufferedImage(122, 410, BufferedImage.TYPE_INT_ARGB);
+           // health_backdrop = new BufferedImage(122, 410, BufferedImage.TYPE_INT_ARGB);
             health_backdrop = ImageIO.read(new File(HEALTHBACKDROP));  
             health_bar = ImageIO.read(new File(HEALTHBAR));
             health_cross = ImageIO.read(new File(HEALTHCROSS));
-            
-            
+
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
             e.printStackTrace();
@@ -71,28 +70,27 @@ public class Hud implements ImageObserver {
         // if an overlay has been created
         else
         {
-          overlay.markDirty(0, 0, screenWidth, screenHeight);   
+            overlay.markDirty(0, 0, screenWidth, screenHeight);   
         }
-         
         
         //graphics.clearRect(0, 0,2000,2000);
         overlay.beginRendering();
-        
-      //  graphics.drawImage(health_backdrop, 0, 0, this);
-     //   health_backdrop.setRGB(0, 0, BufferedImage.TYPE_INT_ARGB);
-        graphics.drawImage(health_backdrop, screenWidth-244, 0, 122, 410, this);
+
+        //  graphics.drawImage(health_backdrop, 0, 0, this);
+        //   health_backdrop.setRGB(0, 0, BufferedImage.TYPE_INT_ARGB);
+        graphics.drawImage(health_backdrop, 50, 50, this);
         
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        
+
         graphics.finalize();
-        
-        
+
         overlay.draw(0, 0, screenWidth, screenHeight);
         overlay.endRendering();
         
+
     }
-    
+
     /**
      * Calculates distance between player and asteroid
      * @return distance
@@ -128,7 +126,7 @@ public class Hud implements ImageObserver {
     public Vector3 getAsteroidPosition() {
         return game.Game.getAsteroid().getPosition();
     }
-    
+
     /**
      * Gets player direction
      * @return player direction vector

@@ -76,7 +76,7 @@ public class MainMenu extends JPanel implements ActionListener {
         playButton.setBorder(null);
         playButton.setRolloverIcon(play_selected);
         playButton.addActionListener(this);
-        
+
         joinGameButton = new JButton("Join Game");
         joinGameButton.addActionListener(this);
 
@@ -146,11 +146,11 @@ public class MainMenu extends JPanel implements ActionListener {
                     null, // Icon
                     servers,
                     null // initial value
-                    );
+            );
 
             if (server == null) // user hit cancel
                 return;
-            
+
             Game.joinServer(server);
             this.setVisible(false);
             menuVisible = false;
@@ -165,8 +165,8 @@ public class MainMenu extends JPanel implements ActionListener {
 
     }
     public static void main (String []args) throws IOException {
-       /* @SuppressWarnings("unused")
-        MainMenu menu = new MainMenu();*/
+        //@SuppressWarnings("unused")
+        //MainMenu menu = new MainMenu();
         Game.init();
         Game.start(); 
     }
