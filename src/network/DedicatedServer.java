@@ -39,10 +39,6 @@ public class DedicatedServer {
             System.exit(-1);
         }
         
-        /* Start a timer to handle our per frame updates */
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new UpdateTask(), 0, FRAME_RATE);
-        
         currentMap = Map.load("example_1");
         
         // Sample asteroids
@@ -52,6 +48,10 @@ public class DedicatedServer {
             a.setPosition(new math.Vector3(0.0f, 0.0f, -10.0f * i));
             actor.Actor.addActor(a);
         }
+
+        /* Start a timer to handle our per frame updates */
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new UpdateTask(), 0, FRAME_RATE);
         
         new ListenerThread(this).start();
     }
