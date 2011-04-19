@@ -1,6 +1,5 @@
 package sound;
 
-import java.io.File;
 
 /**
  * The Piece is just a part of a theme.  It contains one .wav file, and the name of that wav file.

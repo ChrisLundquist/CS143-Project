@@ -1,13 +1,14 @@
 package editor.ty;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
 import math.Vector3;
-
 import actor.Actor;
 import actor.PlayerShip;
 
@@ -49,15 +50,19 @@ public class TestingWindow {
 		GridPacker grids = new GridPacker();
 		frame.add(grids);
 		
-        
-        ArrayList<Actor> actors = new ArrayList<Actor>();
+        Map<Actor,Color> actormap = new HashMap<Actor,Color>();
         
         Actor ship = new PlayerShip();
         ship.setPosition(new Vector3(50,20,-20));
         ship.setSize(10);
-        actors.add(ship);
+        actormap.put(ship,Color.RED);
         
-        grids.updateActors(actors);
+        Actor ship2 = new PlayerShip();
+        ship2.setPosition(new Vector3(10,-5,20));
+        ship2.setSize(10);
+        actormap.put(ship2,Color.BLUE);
+        
+        grids.updateActors(actormap);
 		
 		frame.setBounds(300, 300, 900, 300);
 		frame.setResizable(false);

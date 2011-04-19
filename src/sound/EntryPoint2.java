@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
-import javax.sound.sampled.*;
-
 import sound.Mixer.ThemeEnum;
 
 public class EntryPoint2 {

@@ -6,7 +6,6 @@ package sound;
 
 import java.lang.reflect.Field;
 import java.util.Scanner;
-import java.io.*;
 
 public class LastFM {
     //gets OS

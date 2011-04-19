@@ -1,16 +1,15 @@
 package editor.ty;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
-import math.Vector3;
-
 import actor.Actor;
-import actor.PlayerShip;
 
 public class GridPacker extends JPanel {
     Grid2d xyGrid;
@@ -70,7 +69,7 @@ public class GridPacker extends JPanel {
         }
     }
     
-    public void updateActors(ArrayList<Actor> actors){
+    public void updateActors(Map<Actor,Color> actors){
         for(Grid2d grid:grids){
             grid.updateActors(actors);
         }

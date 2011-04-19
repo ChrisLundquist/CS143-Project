@@ -1,10 +1,8 @@
 package game;
  
-import java.io.IOException;
-
-import math.Vector3;
-import actor.Asteroid;
 import input.InputHandler;
+import java.io.IOException;
+import actor.Asteroid;
 
 public class Game {
     private static graphics.Renderer renderer;

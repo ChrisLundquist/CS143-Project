@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
@@ -29,7 +31,7 @@ public class Grid2d extends JPanel {
     private final Color TEXT = Color.BLUE;
 
     public final Context context;
-    private ArrayList<Actor> actors = new ArrayList<Actor>();
+    private Map<Actor,Color> actorMap = new HashMap<Actor,Color>();
 
     private double scale = 1;
 
@@ -133,7 +135,7 @@ public class Grid2d extends JPanel {
 
     private void drawActors(){
         Graphics g = this.getGraphics();
-        for(Actor a: this.actors){
+        for(Actor a: this.actorMap.keySet()){
             Point p;
             int defSize = (int)a.getSize();
             int size = (int) (defSize* this.scale);
@@ -146,18 +148,21 @@ public class Grid2d extends JPanel {
                     p = new Point((int)a.getPosition().x,(int)a.getPosition().z);
                     break;
                 case YZ:
-                    p = new Point((int)a.getPosition().y,(int)a.getPosition().z);
+                    p = new Point((int)a.getPosition().z,(int)a.getPosition().y);
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
 
             Point glo = ltg(p);
+            g.setColor(this.actorMap.get(a));
             g.drawOval(glo.x-size/2, glo.y-size/2, size, size);
         }
     }
-    public void updateActors(ArrayList<Actor> actors){
-        this.actors = actors;
+    
+    
+    public void updateActors(Map<Actor,Color> actors){
+        this.actorMap = actors;
         this.refresh();
     }
 
@@ -171,28 +176,30 @@ public class Grid2d extends JPanel {
                         lx=x;
                         break;
                     case YZ:
-                        lx=y;
                         ly=y;
                         break;
                 }
+                break;
             case XZ:
                 switch(this.context){                   
                     case XY:
                         lx=x;
                         break;
                     case YZ:
-                        lx=y;
+                        lx=exGrid.getWidth()-y;
                         break;
                 }
+                break;
             case YZ:
                 switch(this.context){
                     case XY:
                         ly=y;
                         break;
                     case XZ:
-                        ly=x;
+                        ly=exGrid.getHeight() - x;
                         break;
                 }
+                break;
 
         }
         
@@ -212,7 +219,7 @@ public class Grid2d extends JPanel {
         Point pos = gtl(x,y);
 
         g.setColor(Color.BLACK);
-        g.drawString("("+pos.x+","+pos.y+")",10,10);
+        g.drawString("("+pos.x+","+pos.y+")",x+5,y-5);
     }
 
     public void zoom(double diff){
@@ -225,9 +232,7 @@ public class Grid2d extends JPanel {
             Graphics g = this.getGraphics();
             g.clearRect(0, 0, this.getWidth(), this.getHeight());
             this.drawAxis();
-            g.drawString(String.valueOf(this.scale), 10, 25);
             this.drawActors();
-            g.drawString(this.context.toString(), 100, 100);
         }
         catch(NullPointerException e){
             //not ready yet.
