@@ -18,18 +18,6 @@ public class Game {
         map = Map.load("example_1");
         player = new Player();
         
-        /*
-         * To test networking uncomment this block
-        try {
-            new network.ClientServerThread(java.net.InetAddress.getLocalHost(), player).start();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        */
         
         renderer = new graphics.Renderer();
         input = new InputHandler();

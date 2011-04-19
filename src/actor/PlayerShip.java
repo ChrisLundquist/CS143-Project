@@ -46,5 +46,6 @@ public class PlayerShip extends Actor {
     
     public void update(){
         super.update();
+        dampenAngularVelocity();
     }
 }
