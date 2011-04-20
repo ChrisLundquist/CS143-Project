@@ -1,8 +1,7 @@
-package editor.ty;
+package editor;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import actor.Actor;
 import actor.PlayerShip;
 
 
-public class TestingWindow {
+public class GridTester {
 
 	private JFrame frame;
 
@@ -24,7 +23,7 @@ public class TestingWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestingWindow window = new TestingWindow();
+					GridTester window = new GridTester();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,7 +35,7 @@ public class TestingWindow {
 	/**
 	 * Create the application.
 	 */
-	public TestingWindow() {
+	public GridTester() {
 		initialize();
 	}
 
