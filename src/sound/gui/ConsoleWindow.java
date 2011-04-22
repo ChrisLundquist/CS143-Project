@@ -1,7 +1,6 @@
 package sound.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -10,6 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class ConsoleWindow extends JFrame {
+
+    private static final long serialVersionUID = 573961112477887944L;
     private JTextArea textConsole = new JTextArea();
     private JScrollPane scrollPane = new JScrollPane(textConsole);
     public ConsoleWindow()
@@ -22,7 +23,6 @@ public class ConsoleWindow extends JFrame {
         //don't mess with this stuff
         
         this.setSize(250, 400);
-        this.setMinimumSize(new Dimension(250,400));
         this.setTitle("Console");
         this.setVisible(true);
         this.addWindowListener(new WindowAdapter() {
@@ -40,7 +40,8 @@ public class ConsoleWindow extends JFrame {
     }
     
     public void align(JFrame parent){
-        this.setLocation(parent.getX()+parent.getWidth(), parent.getY());
+//        this.setLocation(parent.getX()+parent.getWidth(), parent.getY());
+        this.setBounds(parent.getX()+parent.getWidth(), parent.getY(), this.getWidth(), parent.getHeight());
     }
     public void hack(){
         this.setSize(this.getWidth()+1, this.getHeight());

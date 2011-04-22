@@ -25,7 +25,7 @@ public class Sound{
 
 	private final int EXTERNAL_BUFFER_SIZE = 524288; // 128Kb 
 
-	public Sound(String wavfile) { 
+	public Sound(String wavfile) throws UnsupportedAudioFileException, IOException { 
 		filename = wavfile;
 
 		setup();
@@ -34,8 +34,10 @@ public class Sound{
 	/**
 	 * Prepares the audio file for execution.  
 	 * This should be run at the beginning of the game otherwise you can see lag.
+	 * @throws IOException 
+	 * @throws UnsupportedAudioFileException 
 	 */
-	private void setup(){
+	private void setup() throws UnsupportedAudioFileException, IOException{
 	    //Try to construct the file object to read
 		this.soundFile = new File(filename);
 		if (!this.soundFile.exists()) { 
@@ -44,15 +46,9 @@ public class Sound{
 		} 
 		
 		//Gets the input stream
-		try { 
-			audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
-		} catch (UnsupportedAudioFileException e1) { 
-			e1.printStackTrace();
-			return;
-		} catch (IOException e1) { 
-			e1.printStackTrace();
-			return;
-		} 
+
+		audioInputStream = AudioSystem.getAudioInputStream(this.soundFile);
+
 
 		AudioFormat format = audioInputStream.getFormat();
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);

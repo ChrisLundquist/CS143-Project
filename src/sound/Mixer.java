@@ -40,7 +40,6 @@ public class Mixer implements Runnable {
             else{
                 break;
             }
-            //TODO: make the song recycle back into the loop
         }
     }
     
