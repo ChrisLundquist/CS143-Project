@@ -91,4 +91,21 @@ public class Vector3 implements Serializable {
         
         return this;
     }
+    
+    /**
+     * 
+     * @param other the other vector to compare against
+     * @return checks if the members of this vector are equal to another
+     *         and returns true if they are
+     */
+    public boolean equals(Vector3 other){
+        return x == other.x && y == other.y && z == other.z;
+    }
+
+    /**
+     * @return The square of the magnitude of this
+     */
+    public float magnitude2() {
+        return x * x + y * y + z * z;
+    }
 }

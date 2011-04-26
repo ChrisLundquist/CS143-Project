@@ -10,12 +10,16 @@ public class Model {
     protected int id;
     int displayList;
     Vector<Polygon> polygons;
+    protected physics.Collidable collisionModel;
 
     private static Vector<Model> models = new Vector<Model>();
 
     public Model(Vector<Polygon> polygons){
         this.polygons = polygons;
         displayList = NO_LIST;
+        //TODO load collision models from a manifest file
+        //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
+        
     }
 
     public static Model findById(int modelId) {
@@ -62,6 +66,10 @@ public class Model {
         else
             gl.glCallList(displayList);
     }
+    
+    public physics.Collidable getCollidable(){
+        return collisionModel;
+    }
 
     public static int getModelIdFor(actor.Actor actor) {
         // FIXME replace the magic numbers!
@@ -73,6 +81,10 @@ public class Model {
         return 0;
     }
 
+    /**
+     * Initializes the models and needed textures
+     * @param gl the current OpenGL Context
+     */
     public static void initialize(GL2 gl) {
         Texture.initialize(gl);
         loadModels();

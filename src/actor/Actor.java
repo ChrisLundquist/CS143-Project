@@ -52,6 +52,7 @@ public abstract class Actor implements Serializable {
 
     public static void updateActors() {
         synchronized(actors) {
+            checkCollisions();
             // Update each actor
             for (Actor a : actors) {
                 // Track down actors without ids.
@@ -61,6 +62,26 @@ public abstract class Actor implements Serializable {
                 a.update();
             }
         }
+    }
+    
+    public static void checkCollisions(){
+        for(Actor a : actors) {
+            for(Actor b : actors){
+               if(a.isColliding(b)){
+                   a.handleCollision(b);
+                   b.handleCollision(a);
+               }
+            }
+        }
+    }
+    
+    /**
+     * Helper method to get rid of stupid syntax
+     * @param other the other actor to test collision with
+     * @return true if colliding, else false
+     */
+    public boolean isColliding(Actor other){
+        return getModel().getCollidable().isColliding(other.getModel().getCollidable());
     }
     
     /**

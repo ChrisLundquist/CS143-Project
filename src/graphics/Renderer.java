@@ -73,7 +73,7 @@ public class Renderer implements GLEventListener {
                 a.render(gl);
         }
         
-        hud.drawStaticHud(glDrawable);
+        //hud.drawStaticHud(glDrawable);
         
         checkForGLErrors(gl);
     }
