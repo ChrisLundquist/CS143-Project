@@ -31,8 +31,6 @@ public class EntryPoint2 {
 	    mix.change(ThemeEnum.VICTORY);
 	    mix.run();
 	    print("test");
-	    
-	    
 	}
 	
 	public static void print(Object o){

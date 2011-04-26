@@ -8,7 +8,7 @@ import java.util.Stack;
  * @author ty
  * TODO: Make this actually run in a thread.
  */
-public class Mixer implements Runnable {
+public class Mixer extends Thread {
     //TODO: get rid of this shit
     public enum ThemeEnum{
         FIGHT,
@@ -19,27 +19,21 @@ public class Mixer implements Runnable {
     //The map of ThemeEnums to actual Themes that it plays from.
     private Map<ThemeEnum,Theme> map;
     //The stack that is played from
-    private Stack<Piece> songList = new Stack<Piece>();
+    private Recycler<Piece> songList = new Recycler<Piece>();
     //Theoretically stops the music.  TODO: test this
     private boolean stop = false;
     
     public Mixer(Map<ThemeEnum,Theme> map){
         this.map = map;
     }
+    
     /**
      * Starts playing on the mix.
      */
     private void play(){
         System.out.println("Starting to play music");
         while(!this.stop){
-            System.out.println("Playing a new song");
-            if(!songList.empty()){
-                Piece cur = songList.pop();
-                cur.play();
-            }
-            else{
-                break;
-            }
+            songList.grab().play();
         }
     }
     
