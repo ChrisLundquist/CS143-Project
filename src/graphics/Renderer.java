@@ -26,7 +26,6 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
-
     //Animator animator;
     FPSAnimator animator;
    // Shader shader;
@@ -35,12 +34,13 @@ public class Renderer implements GLEventListener {
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
-        frame = new Frame("cs143 project");
+        frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
        // shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
+        
+        
     }
-
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
         // CL - We need to get input even if the game is paused,
@@ -73,11 +73,11 @@ public class Renderer implements GLEventListener {
                 a.render(gl);
         }
         
-        //hud.drawStaticHud(glDrawable);
-        
+        hud.drawStaticHud(gl);
         checkForGLErrors(gl);
     }
     private static void checkForGLErrors(GL2 gl) {
+       
         int errno = gl.glGetError();
         switch (errno) {
             case GL2.GL_INVALID_ENUM:
@@ -145,7 +145,7 @@ public class Renderer implements GLEventListener {
 
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         Model.initialize(gl); /* calls Texture.initialize */
-
+        ///hud.init(gLDrawable);
 
          /* try {
             shader.init(gl);
@@ -159,6 +159,8 @@ public class Renderer implements GLEventListener {
 
         System.gc(); // This is probably a good a idea
     }
+    
+    
 
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {

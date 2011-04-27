@@ -1,153 +1,83 @@
-
 package graphics;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.File;
 import java.io.IOException;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLContext;
+import javax.media.opengl.GLDrawable;
+import javax.media.opengl.glu.GLU;
+import com.jogamp.opengl.util.gl2.GLUT;
 
-import javax.imageio.ImageIO;
-import javax.media.opengl.GLAutoDrawable;
+public class Hud {
+    Texture healthbackdrop, healthbar, healthcross;
 
-import math.Vector3;
-
-import com.jogamp.opengl.util.awt.Overlay;
-/**
- * @author Tim Mikeladze
- * 
- * Draws hud elements on an Overlay with Graphics2d
- * 
- *
- */
-public class Hud implements ImageObserver {
-    Overlay overlay;
-    Graphics2D graphics;
-    BufferedImage health_backdrop, health_bar, health_cross;
-
-    //244, 821
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
-    private static final String HEALTHBAR = "assets/images/hud/health_bar.png";
+    private static final String HEALTHBAR="assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
 
-
-    int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-    int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-
     /**
-     * Loads the images and gets screen resolution passed from canvas
-     * @param width of the canvas
-     * @param height of the canvas
+     * Constructor loads all the textures
      */
-    public Hud() {
+    public Hud() {   
+        healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
+        healthbar = Texture.findOrCreateByName(HEALTHBAR);
+        healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
+    }
+    /**
+     * Draws the static elements of the HUD
+     * @param gl
+     */
+    public void drawStaticHud(GL2 gl) {
+        start2D(gl);
 
-        try {
-           // health_backdrop = new BufferedImage(122, 410, BufferedImage.TYPE_INT_ARGB);
-            health_backdrop = ImageIO.read(new File(HEALTHBACKDROP));  
-            health_bar = ImageIO.read(new File(HEALTHBAR));
-            health_cross = ImageIO.read(new File(HEALTHCROSS));
-
-        } catch (IOException e) {
-            System.out.println("Can't find image in assets");
-            e.printStackTrace();
+        if(healthbackdrop != null) {
+            healthbackdrop.bind(gl);
         }
+
+        gl.glBegin(GL2.GL_QUADS );
+
+        gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d( -90.0f, 90.0f );
+        gl.glTexCoord2d(0.0, 1.0); gl.glVertex2d( -90.0f, 40.0f );
+        gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d( -40.0f, 40.0f );
+        gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d( -40.0f, 90.0f );
+
+        gl.glEnd();
+        gl.glFlush();
+        stop2D(gl);
     }
     /**
-     * Draws static hud elements that don't change throughout the game
-     * @param glDrawable
+     * Changes to 2D
+     * @param gl
      */
-    public void drawStaticHud(GLAutoDrawable glDrawable) {
+    public void start2D(GL2 gl) {
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glEnable(GL2.GL_BLEND);
+        gl.glDisable(GL2.GL_LIGHTING);
 
-        //creates new overlay
-        if(overlay == null)
-        {
-            overlay = new Overlay(glDrawable); 
-            graphics = overlay.createGraphics();
-        }
-        // if an overlay has been created
-        else
-        {
-            overlay.markDirty(0, 0, screenWidth, screenHeight);   
-        }
-        
-        //graphics.clearRect(0, 0,2000,2000);
-        overlay.beginRendering();
+        gl.glMatrixMode(GL2.GL_PROJECTION );
+        gl.glPushMatrix();   // projection matrix 
+        gl.glLoadIdentity();
+        gl.glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
 
-        //  graphics.drawImage(health_backdrop, 0, 0, this);
-        //   health_backdrop.setRGB(0, 0, BufferedImage.TYPE_INT_ARGB);
-        graphics.drawImage(health_backdrop, 50, 50, this);
-        
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-        graphics.finalize();
-
-        overlay.draw(0, 0, screenWidth, screenHeight);
-        overlay.endRendering();
-        
-
-    }
-
-    /**
-     * Calculates distance between player and asteroid
-     * @return distance
-     */
-    public float calcDistance() {
-        float distance=0;  
-        float xPlayer, yPlayer, zPlayer;
-        float xAsteroid, yAsteroid, zAsteroid;
-
-        xPlayer = game.Game.getPlayer().getShip().getPosition().x;
-        yPlayer = game.Game.getPlayer().getShip().getPosition().y;
-        zPlayer = game.Game.getPlayer().getShip().getPosition().z;
-
-        xAsteroid = game.Game.getAsteroid().getPosition().x;
-        yAsteroid = game.Game.getAsteroid().getPosition().y;
-        zAsteroid = game.Game.getAsteroid().getPosition().z;
-
-
-        distance = (float)Math.sqrt(Math.pow((xPlayer - xAsteroid),2) + Math.pow((yPlayer - yAsteroid),2) + 
-                Math.pow((zPlayer - zAsteroid),2)); 
-        return distance;
+        gl.glMatrixMode(GL2.GL_MODELVIEW );
+        gl.glPushMatrix(); // save our model matrix 
+        gl.glLoadIdentity();
     }
     /**
-     * Calculates Vector distance between player and asteroid
-     * @return Vector3 distance
+     * Stops 2D and goes back to 3D
+     * @param gl
      */
-    public Vector3 calcDistanceVector() {
-        return game.Game.getPlayer().getShip().getPosition().minus(game.Game.getAsteroid().getPosition());
-    }
-    public Vector3 getPlayerPosition() {
-        return game.Game.getPlayer().getShip().getPosition();
-    }
-    public Vector3 getAsteroidPosition() {
-        return game.Game.getAsteroid().getPosition();
-    }
+    public void stop2D(GL2 gl) {
+        gl.glPopMatrix(); // recover model matrix
+        gl.glMatrixMode(GL2.GL_PROJECTION );
 
-    /**
-     * Gets player direction
-     * @return player direction vector
-     */
-    public Vector3 getPlayerDirection() {
-        return game.Game.getPlayer().getShip().getDirection();
-    }
-    /**
-     * Gets asteroid direction
-     * @return asteroid direction vector
-     */
-    public Vector3 getAsteroidDirection() {
-        return game.Game.getAsteroid().getDirection();
-    }
+        gl.glPopMatrix(); // recover projection matrix 
+        gl.glMatrixMode(GL2.GL_MODELVIEW ); 
 
-
-    @Override
-    public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3,
-            int arg4, int arg5) {
-        // TODO Auto-generated method stub
-        return false;
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glEnable(GL2.GL_LIGHTING );
+        gl.glDisable(GL2.GL_BLEND);
     }
 }
 

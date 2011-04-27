@@ -205,7 +205,6 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
                 return next();
             }
 
-
             return history.pop().subTree;
         }
 

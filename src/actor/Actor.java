@@ -10,7 +10,7 @@ import java.util.Random;
 
 import javax.media.opengl.GL2;
 
-public abstract class Actor implements Serializable {
+public abstract class Actor implements Serializable, Supportable, Rotatable {
     private static final long serialVersionUID = 744085604446096658L;
     /**
      * All the actors currently in play We use the fully qualified named space
@@ -29,7 +29,7 @@ public abstract class Actor implements Serializable {
      * @param idToRemove
      */
     public static void removeActorId(int idToRemove) {
-       synchronized(actors) {
+        synchronized(actors) {
             for (ListIterator<Actor> it = actors.listIterator(); it.hasNext(); ) {
                 Actor a = it.next();
                 if (a.getId() == idToRemove)
@@ -37,7 +37,7 @@ public abstract class Actor implements Serializable {
             }
         }
     }
-    
+
     public static void addActor(Actor actor) {
         synchronized(actors) {
             actors.add(actor);
@@ -63,27 +63,27 @@ public abstract class Actor implements Serializable {
             }
         }
     }
-    
+
     public static void checkCollisions(){
         for(Actor a : actors) {
             for(Actor b : actors){
-               if(a.isColliding(b)){
-                   a.handleCollision(b);
-                   b.handleCollision(a);
-               }
+                if(a.isColliding(b)){
+                    a.handleCollision(b);
+                    b.handleCollision(a);
+                }
             }
         }
     }
-    
+
     /**
      * Helper method to get rid of stupid syntax
      * @param other the other actor to test collision with
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        return getModel().getCollidable().isColliding(other.getModel().getCollidable());
+        return false;
     }
-    
+
     /**
      * Update all the actors
      * @author Dustin Lundquist <dustin@null-ptr.net>
@@ -103,7 +103,7 @@ public abstract class Actor implements Serializable {
 
                     if (a.id != u.id)
                         continue;
-                    
+
                     // Do not update the players ship position from the network
                     if (ship != null && u.id == ship.id)
                         continue;
@@ -116,7 +116,7 @@ public abstract class Actor implements Serializable {
                 // Skip the last step if running on the server
                 if (ship == null)
                     continue;
-                
+
                 // Remove actors that where not present in the update, except for the players ship
                 if (!found && a != ship)
                     actors_iter.remove();
@@ -147,8 +147,8 @@ public abstract class Actor implements Serializable {
             return actors.size();
         }
     }
-    
-    
+
+
 
     private int id; // unique ID for each Actor
     protected int modelId;
@@ -280,12 +280,19 @@ public abstract class Actor implements Serializable {
     public void setVelocity(Vector3 velocity) {
         this.velocity = velocity;
     }
+    
+    public Vector3 getFarthestPointInDirection(Vector3 direction){
+        // CL - put it into world space by translating it and rotating it
+        // CL - NOTE we have to push the inverse of our transform of the direction
+        //      so we can figure it out in model space
+        return getModel().getFarthestPointInDirection(direction.times(getRotation().inverse())).times(getRotation()).plus(getPosition());
+    }
 
     // CL - updates the state of the actor for the next frame
     public void update() {
         position.plusEquals(velocity);
         rotation.normalize();
-        
+
         // This should also take into effect our maximum angular velocity --
         // this may be an overridden in subclasses to provide different handling
         rotation.timesEquals(angularVelocity);

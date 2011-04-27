@@ -9,13 +9,14 @@ public class Vector3 implements Serializable {
     public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
     public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
-    
+    public static final Vector3 ORIGIN = new Vector3(0.0f,0.0f,0.0f);
+
     public float x,y,z;
 
     public Vector3(){
-        x = 0;
-        y = 0;
-        z = 0;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
     }
 
     public Vector3(float x, float y, float z){
@@ -23,7 +24,7 @@ public class Vector3 implements Serializable {
         this.y = y;
         this.z = z;
     }
-    
+
     public Vector3(Vector3 xyz) {
         this.x = xyz.x;
         this.y = xyz.y;
@@ -41,31 +42,52 @@ public class Vector3 implements Serializable {
     public Vector3 plus(Vector3 other) {
         return new Vector3(x + other.x, y + other.y, z + other.z);
     }
-    
+
     public Vector3 plusEquals(Vector3 other){
         x += other.x;
         y += other.y;
         z += other.z;
-        
+
         return this;
     }
-    
+
+
+    public Vector3 normalize(){
+        float magnitude = magnitude();
+        x /= magnitude;
+        y /= magnitude;
+        z /= magnitude;
+        return this;
+    }
     /*
      * Returns the dot product between this and another vector
      */
     public float dotProduct(Vector3 other){
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
-    
+
+    /**
+     * 
+     * @param rhs the right hand side of the cross product
+     * @return the cross product of the this vector with other
+     */
+    public Vector3 cross(Vector3 rhs){
+        return new Vector3(
+                y * rhs.z - z * rhs.y,
+                -(x * rhs.z - z * rhs.x),
+                x * rhs.y - y * rhs.x
+        );
+    }
+
     public Vector3 times(Quaternion rotation) {
         float[] m = rotation.toGlMatrix();
-        
+
         return times(m);
     }
-    
+
     public Vector3 times(float[] m) {
         Vector3 result = new Vector3();
-        
+
         result.x = x * m[0] + y * m[4] + z * m[8];
         result.y = x * m[1] + y * m[5] + z * m[9];
         result.z = x * m[2] + y * m[6] + z * m[10];
@@ -75,7 +97,7 @@ public class Vector3 implements Serializable {
     public float magnitude() {
         return (float)Math.sqrt(x*x + y*y + z*z);
     }
-    
+
     /**
      * Subtracts Vectors
      * @param Vector to subtract
@@ -88,10 +110,10 @@ public class Vector3 implements Serializable {
         x -= other.x;
         y -= other.y;
         z -= other.z;
-        
+
         return this;
     }
-    
+
     /**
      * 
      * @param other the other vector to compare against
@@ -103,9 +125,26 @@ public class Vector3 implements Serializable {
     }
 
     /**
+     * Override the object equals method so it doesn't get explicitly called accidentally
+     */
+    public boolean equals(Object other){
+        if(other instanceof Vector3)
+            return equals((Vector3)other);
+        else return false;
+    }
+
+    /**
      * @return The square of the magnitude of this
      */
     public float magnitude2() {
         return x * x + y * y + z * z;
+    }
+
+    /**
+     * 
+     * @return The negation of this vector
+     */
+    public Vector3 negate() {
+        return this.times(-1.0f);
     }
 }
