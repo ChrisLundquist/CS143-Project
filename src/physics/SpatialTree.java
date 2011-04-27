@@ -1,36 +1,49 @@
 
-package actor;
+package physics;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.Stack;
-
+import actor.Positionable;
 import math.Vector3;
 
 public class SpatialTree<E extends Object & Positionable> implements Iterable<E> {
-    SpatialTree<E> octant1; // +,+,+
-    SpatialTree<E> octant2; // -,+,+
-    SpatialTree<E> octant3; // -,-,+
-    SpatialTree<E> octant4; // +,-,+
-    SpatialTree<E> octant5; // +,+,-
-    SpatialTree<E> octant6; // -,+,-
-    SpatialTree<E> octant7; // -,-,-
-    SpatialTree<E> octant8; // +,-,-
-    Set<E> objects;
-    float division_x;
-    float division_y;
-    float division_z;
-    float min_x = 0.0f;
-    float max_x = 0.0f;
-    float min_y = 0.0f;
-    float max_y = 0.0f;
-    float min_z = 0.0f;
-    float max_z = 0.0f;
-    private final int max_objects_per_leaf;
-    private boolean internal_node;   
+    private static final int DEFAULT_MAX_OBJECTS_PER_LEAF = 3;
+    
 
+    /**
+     * Build a spatial tree from a collection of objects
+     * @param objects
+     */
+    public SpatialTree(Collection <E> objects) {
+        this(objects, DEFAULT_MAX_OBJECTS_PER_LEAF);
+    }
 
-    public SpatialTree(float min_x, float min_y, float min_z, float max_x, float max_y, float max_z, int max_objects_per_leaf) {
+    /**
+     * Build a spatial tree from a collection of objects indicated the max leaf node size
+     * @param objects
+     * @param max_objects_per_leaf
+     */
+    public SpatialTree(Collection<E> objects, int max_objects_per_leaf) {
+        this.max_objects_per_leaf = max_objects_per_leaf;
+        find_bounds(objects);
+        this.objects = new java.util.ArrayList<E>();
+        for (E obj: objects)
+            add(obj);
+    }
+
+    /**
+     * Use to create child notes as we build the tree
+     * @param min_x
+     * @param min_y
+     * @param min_z
+     * @param max_x
+     * @param max_y
+     * @param max_z
+     * @param max_objects_per_leaf
+     */
+    private SpatialTree(float min_x, float min_y, float min_z, float max_x, float max_y, float max_z, int max_objects_per_leaf) {
         this.max_x = max_x;
         this.max_y = max_y;
         this.max_z = max_z;
@@ -38,7 +51,63 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
         this.min_y = min_y;
         this.min_z = min_z;
         this.max_objects_per_leaf = max_objects_per_leaf;
+        this.objects = new java.util.ArrayList<E>();
+        
+        compute_divisions();
     }
+
+    private void compute_divisions() {
+        division_x = 0.5f * (max_x + min_x);
+        division_y = 0.5f * (max_y + min_y);
+        division_z = 0.5f * (max_z + min_z);
+    }
+
+    public boolean add(E e) {
+        if (isLeaf())
+            return objects.add(e);
+        else
+            return octant(e.getPosition()).add(e);
+    }
+
+    /**
+     * Iterate through the objects in this leaf node
+     */
+    public Iterator<E> iterator() {
+        return objects.iterator();
+    }
+
+    /**
+     * Iterate through the leaf nodes in this tree
+     * @return
+     */
+    public Iterator<SpatialTree<E>> leafInterator() {
+        return new SpatialTreeIterator(this);
+    }
+    
+    
+    
+    
+    private SpatialTree<E> octant1; // +,+,+
+    private SpatialTree<E> octant2; // -,+,+
+    private SpatialTree<E> octant3; // -,-,+
+    private SpatialTree<E> octant4; // +,-,+
+    private SpatialTree<E> octant5; // +,+,-
+    private SpatialTree<E> octant6; // -,+,-
+    private SpatialTree<E> octant7; // -,-,-
+    private SpatialTree<E> octant8; // +,-,-
+    private List<E> objects;
+    private float division_x;
+    private float division_y;
+    private float division_z;
+    private float min_x;
+    private float max_x;
+    private float min_y;
+    private float max_y;
+    private float min_z;
+    private float max_z;
+    private final int max_objects_per_leaf;
+    private boolean internal_node = false;
+    
 
     private SpatialTree<E> octant(Vector3 position) {
         if (position.x > division_x) {
@@ -102,7 +171,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
         objects = null;
     }
 
-    private void find_bounds(Set<E> objects) {   
+    private void find_bounds(Collection<E> objects) {   
         for (E obj: objects) {
             Vector3 pos = obj.getPosition();
             max_x = Math.max(max_x, pos.x);
@@ -112,37 +181,14 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
             max_z = Math.max(max_z, pos.z);
             min_z = Math.min(min_z, pos.z);
         }
-        division_x = 0.5f * (max_x + min_x);
-        division_y = 0.5f * (max_y + min_y);
-        division_z = 0.5f * (max_z + min_z);
+        compute_divisions();
     }
 
-    public boolean add(E e) {
-        if (isLeaf())
-            return objects.add(e);
-        else
-            return octant(e.getPosition()).add(e);
-    }
 
-    /**
-     * Iterate through the objects in this leaf node
-     */
-    public Iterator<E> iterator() {
-        return objects.iterator();
-    }
-
-    /**
-     * Iterate through the leaf nodes in this tree
-     * @return
-     */
-    public Iterator<SpatialTree<E>> leafInterator() {
-        return new SpatialTreeIterator(this);
-    }
 
     /**
      * An iterator for our spatial tree that iterates through our leaf nodes.
-     * @author dustin
-     *
+     * @author Dustin Lundquist
      */
     private class SpatialTreeIterator implements Iterator<SpatialTree<E>>  {
         private class History {
