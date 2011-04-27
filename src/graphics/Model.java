@@ -3,14 +3,15 @@ package graphics;
 import java.util.Vector;
 import javax.media.opengl.GL2;
 
-public class Model {
+import math.Vector3;
+
+public class Model implements math.Supportable{
     private static final String MODEL_PATH = "assets/models/";
 
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
     Vector<Polygon> polygons;
-    protected physics.Collidable collisionModel;
 
     private static Vector<Model> models = new Vector<Model>();
 
@@ -43,7 +44,7 @@ public class Model {
         gl.glNewList(displayList, GL2.GL_COMPILE);
         renderPolygons(gl);
         gl.glEndList();
-        polygons.clear(); // Free Our Polygons to save memory if we get this far
+        // CL -We don't free our geometry so we can keep it for collision detection
     }
 
     private void renderPolygons(GL2 gl){
@@ -67,9 +68,6 @@ public class Model {
             gl.glCallList(displayList);
     }
     
-    public physics.Collidable getCollidable(){
-        return collisionModel;
-    }
 
     public static int getModelIdFor(actor.Actor actor) {
         // FIXME replace the magic numbers!
@@ -91,5 +89,11 @@ public class Model {
         for(Model model : models){
             model.init(gl);
         }
+    }
+
+    @Override
+    public Vector3 getFarthestPointInDirection(Vector3 direction) {
+        //TODO Loop through our geometry and find that point
+        return new Vector3();
     }
 }

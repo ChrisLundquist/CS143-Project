@@ -9,6 +9,7 @@ public class Vector3 implements Serializable {
     public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
     public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
+    public static final Vector3 ORIGIN = new Vector3(0.0f,0.0f,0.0f);
     
     public float x,y,z;
 
@@ -107,5 +108,13 @@ public class Vector3 implements Serializable {
      */
     public float magnitude2() {
         return x * x + y * y + z * z;
+    }
+
+    /**
+     * 
+     * @return The negation of this vector
+     */
+    public Vector3 negate() {
+        return this.times(-1.0f);
     }
 }
