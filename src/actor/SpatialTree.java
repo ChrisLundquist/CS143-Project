@@ -1,7 +1,6 @@
 
 package actor;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
@@ -29,7 +28,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
     float max_z = 0.0f;
     private final int max_objects_per_leaf;
     private boolean internal_node;   
-    
+
 
     public SpatialTree(float min_x, float min_y, float min_z, float max_x, float max_y, float max_z, int max_objects_per_leaf) {
         this.max_x = max_x;
@@ -68,24 +67,24 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
             }            
         }
     }
-    
+
     private boolean isLeaf() {
         if (internal_node)
             return false;
         if (objects.size() < max_objects_per_leaf)
             return true;
-        
+
         grow_leaves();
         return false;
     }
-    
+
     /**
      * Turns a leaf node into an internal node
      */
     private void grow_leaves() {
         if (internal_node)
             return;
-               
+
         octant1 = new SpatialTree<E>(division_x, division_y, division_z, max_x, max_y, max_z, max_objects_per_leaf);
         octant2 = new SpatialTree<E>(min_x, division_y, division_z, division_x, max_y, max_z, max_objects_per_leaf);
         octant3 = new SpatialTree<E>(min_x, min_y, division_z, division_x, division_y, max_z, max_objects_per_leaf);
@@ -102,7 +101,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
 
         objects = null;
     }
-    
+
     private void find_bounds(Set<E> objects) {   
         for (E obj: objects) {
             Vector3 pos = obj.getPosition();
@@ -125,40 +124,94 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
             return octant(e.getPosition()).add(e);
     }
 
+    /**
+     * Iterate through the objects in this leaf node
+     */
     public Iterator<E> iterator() {
         return objects.iterator();
     }
-    
+
+    /**
+     * Iterate through the leaf nodes in this tree
+     * @return
+     */
     public Iterator<SpatialTree<E>> leafInterator() {
-        return new Iterator<SpatialTree<E>>() {
-            class History {
-                SpatialTree<E> subTree;
-                int lastOctent;
-                
-                History(SpatialTree<E> subTree, int lastOctent) {
-                    this.subTree = subTree;
-                    this.lastOctent = lastOctent;
+        return new SpatialTreeIterator(this);
+    }
+
+    /**
+     * An iterator for our spatial tree that iterates through our leaf nodes.
+     * @author dustin
+     *
+     */
+    private class SpatialTreeIterator implements Iterator<SpatialTree<E>>  {
+        private class History {
+            SpatialTree<E> subTree;
+            int lastOctent;
+
+            History(SpatialTree<E> subTree) {
+                this.subTree = subTree;
+                this.lastOctent = 0;
+            }
+        }
+        private Stack<History> history;
+
+        public SpatialTreeIterator(SpatialTree<E> tree) {
+            history = new Stack<History>();
+            history.push(new History(tree));
+        }
+
+        @Override
+        public boolean hasNext() {
+            return history.size() > 1 || history.firstElement().lastOctent < 8;
+        }
+
+        @Override
+        public SpatialTree<E> next() {
+            History last = history.peek();
+            if (last.subTree.internal_node) {
+                SpatialTree<E> next;
+                switch (last.lastOctent) {
+                    case 0:
+                        next = last.subTree.octant1;
+                        break;
+                    case 1:
+                        next = last.subTree.octant2;
+                        break;
+                    case 2:
+                        next = last.subTree.octant3;
+                        break;
+                    case 3:
+                        next = last.subTree.octant4;
+                        break;
+                    case 4:
+                        next = last.subTree.octant5;
+                        break;
+                    case 5:
+                        next = last.subTree.octant6;
+                        break;
+                    case 6:
+                        next = last.subTree.octant7;
+                        break;
+                    case 7:
+                        next = last.subTree.octant8;
+                        break;
+                    default: // We have passed through all the descendant of this node
+                        history.pop();
+                        return next();
                 }
-            }
-            private Stack<History> stack = new Stack<History>();
-
-            @Override
-            public boolean hasNext() {
-                // TODO Auto-generated method stub
-                return false;
+                last.lastOctent++;
+                history.push(new History(next));
+                return next();
             }
 
-            @Override
-            public SpatialTree<E> next() {
-                
-                // TODO Auto-generated method stub
-                return null;
-            }
 
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
+            return history.pop().subTree;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
     }
 }
