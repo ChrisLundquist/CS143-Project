@@ -159,6 +159,6 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
             public void remove() {
                 throw new UnsupportedOperationException();
             }
-        }
+        };
     }
 }

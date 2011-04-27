@@ -51,11 +51,32 @@ public class Vector3 implements Serializable {
         return this;
     }
     
+    
+    public Vector3 normalize(){
+        float magnitude = magnitude();
+        x /= magnitude;
+        y /= magnitude;
+        z /= magnitude;
+        return this;
+    }
     /*
      * Returns the dot product between this and another vector
      */
     public float dotProduct(Vector3 other){
         return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+    
+    /**
+     * 
+     * @param rhs the right hand side of the cross product
+     * @return the cross product of the this vector with other
+     */
+    public Vector3 cross(Vector3 rhs){
+        return new Vector3(
+                y * rhs.z - z * rhs.y,
+              -(x * rhs.z - z * rhs.x),
+                x * rhs.y - y * rhs.x
+                );
     }
     
     public Vector3 times(Quaternion rotation) {

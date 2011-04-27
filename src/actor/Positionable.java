@@ -5,5 +5,4 @@ import math.Quaternion;
 
 public interface Positionable {
     public Vector3 getPosition();
-    public Quaternion getRotation();
 }

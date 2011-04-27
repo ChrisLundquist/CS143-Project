@@ -10,7 +10,7 @@ import java.util.Random;
 
 import javax.media.opengl.GL2;
 
-public abstract class Actor implements Serializable, Supportable {
+public abstract class Actor implements Serializable, Supportable, Rotatable {
     private static final long serialVersionUID = 744085604446096658L;
     /**
      * All the actors currently in play We use the fully qualified named space
