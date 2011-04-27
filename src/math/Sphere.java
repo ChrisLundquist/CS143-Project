@@ -13,7 +13,7 @@ public class Sphere implements Supportable, Positionable{
     
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        return getPosition().minus(direction.normalize().times(radius));
+        return getPosition().plus(direction.normalize().times(radius));
     }
 
     @Override

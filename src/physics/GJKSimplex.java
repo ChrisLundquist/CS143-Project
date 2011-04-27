@@ -6,7 +6,7 @@ import math.Supportable;
 
 // http://mollyrocket.com/forums/viewtopic.php?t=245
 public class GJKSimplex{
-    private boolean containsOrigin(List<Vector3> simplex) {
+    static private boolean containsOrigin(List<Vector3> simplex) {
         // If we don't have 4 points, then we can't enclose the origin in R3
         if(simplex.size() < 4)
             return false;
@@ -17,7 +17,7 @@ public class GJKSimplex{
     /**
      *  updated the simplex and the new direction
      */
-    public Vector3 findSimplex(List<Vector3> simplex, Vector3 direction ){
+    static public Vector3 findSimplex(List<Vector3> simplex, Vector3 direction ){
         switch(simplex.size()){
             case 2:
                 return findLineSimplex(simplex,direction);
@@ -28,7 +28,7 @@ public class GJKSimplex{
         }
     }
 
-    private Vector3 findLineSimplex(List<Vector3> simplex, Vector3 direction){
+    static private Vector3 findLineSimplex(List<Vector3> simplex, Vector3 direction){
         Vector3 a = simplex.get(1); // always the end of the list
         Vector3 b = simplex.get(0);
 
@@ -43,20 +43,20 @@ public class GJKSimplex{
         return direction;
     }
 
-    private Vector3 findTriangleSimplex(List<Vector3> simplex, Vector3 direction){
+    static private Vector3 findTriangleSimplex(List<Vector3> simplex, Vector3 direction){
         return direction;
 
     }
-    
-    private Vector3 findTetrahedronSimplex(List<Vector3> simplex, Vector3 direction){
+
+    static private Vector3 findTetrahedronSimplex(List<Vector3> simplex, Vector3 direction){
         return direction;
     }
 
-    private Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
+    static private Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
         return lhs.getFarthestPointInDirection(direction).minus(rhs.getFarthestPointInDirection(direction.negate()));
     }
 
-    public boolean isColliding(math.Supportable lhs, math.Supportable rhs){
+    static public boolean isColliding(math.Supportable lhs, math.Supportable rhs){
         Vector3 support = getSupport(lhs,rhs,new Vector3(1.0f,0.0f,0.0f));
         List<Vector3> simplex = new java.util.ArrayList<Vector3>();
         Vector3 direction = support.negate();
@@ -76,11 +76,11 @@ public class GJKSimplex{
         return false;
     }
 
-    private boolean sameDirection(Vector3 a, Vector3 b){
+    static private boolean sameDirection(Vector3 a, Vector3 b){
         return a.dotProduct(b) > 0;
     }
 
-    private Vector3 trippleProduct(Vector3 i, Vector3 j, Vector3 k){
+    static private Vector3 trippleProduct(Vector3 i, Vector3 j, Vector3 k){
         return i.cross(j).cross(k);
     }
 }
