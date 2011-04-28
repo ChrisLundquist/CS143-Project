@@ -20,6 +20,10 @@ public class Vector4 extends Vector3 {
         super();
         t = 0.0f;
     }
+    
+    public boolean equals(Vector4 other){
+       return super.equals(other) && t == other.t;
+    }
 
     public float[] toFloatArray(){
         float[] toRet = {x,y,z,t};
