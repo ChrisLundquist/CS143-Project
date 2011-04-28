@@ -12,6 +12,6 @@ public class Asteroid extends Actor {
 
     @Override
     public void handleCollision(Actor other) {
-        // TODO Auto-generated method stub
+        System.err.println("DEBUG: Collision Detected");
     }
 }
