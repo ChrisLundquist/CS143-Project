@@ -2,6 +2,7 @@ package game;
 
 import java.io.Serializable;
 import graphics.Camera;
+import input.InputRouter;
 import input.PlayerInput;
 import actor.Actor;
 import actor.PlayerShip;
@@ -46,10 +47,9 @@ public class Player implements Serializable {
         return ship;
     }
     
-    public void input(PlayerInput action) {
+    public void input(InputRouter.Interaction action) {
         if (getShip() == null)
             return;
-        
         
         switch(action) {
             case SHOOT:
