@@ -148,14 +148,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         }
     }
 
-
-
     private int id; // unique ID for each Actor
     protected int modelId;
     protected transient Model model; // CL - Used to store the model reference
     // after we look it up once
-    protected Vector3 position, velocity;
-    protected Vector3 scale;
+    protected Vector3 position, velocity, scale;
 
     // Rotation
     protected Quaternion rotation, angularVelocity;
@@ -279,7 +276,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         scale.z = size;
         return this;
     }
-    
+
     public Actor setSize(Vector3 size){
         scale = size;
         return this;
@@ -288,7 +285,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     public void setVelocity(Vector3 velocity) {
         this.velocity = velocity;
     }
-    
+
     public Vector3 getFarthestPointInDirection(Vector3 direction){
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
