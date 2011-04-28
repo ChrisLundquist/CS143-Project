@@ -4,10 +4,16 @@ package physics;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 import actor.Positionable;
 import math.Vector3;
 
+/**
+ * Implements a spatial OctTree 
+ * @author Dustin Lundquist <dustin@null-ptr.net>
+ * @param <E>
+ */
 public class SpatialTree<E extends Object & Positionable> implements Iterable<E> {
     private static final int DEFAULT_MAX_OBJECTS_PER_LEAF = 3;
     
@@ -52,27 +58,43 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
         this.min_z = min_z;
         this.max_objects_per_leaf = max_objects_per_leaf;
         this.objects = new java.util.ArrayList<E>();
-        
-        compute_divisions();
-    }
-
-    private void compute_divisions() {
-        division_x = 0.5f * (max_x + min_x);
-        division_y = 0.5f * (max_y + min_y);
-        division_z = 0.5f * (max_z + min_z);
     }
 
     public boolean add(E e) {
         if (isLeaf())
             return objects.add(e);
         else
+            // TODO if the object spans more than one quadrant add it to all of the octant it spans
             return octant(e.getPosition()).add(e);
+    }
+    
+    /**
+     * Returns spatial tree in an XML like format for easy inspection
+     */
+    public String toString() {
+        if (internal_node) {
+            String children = "";
+            children += "\n" + octant1;
+            children += "\n" + octant2;
+            children += "\n" + octant3;
+            children += "\n" + octant4;
+            children += "\n" + octant5;
+            children += "\n" + octant6;
+            children += "\n" + octant7;
+            children += "\n" + octant8;
+            
+            return ("<SpatialTree:internal>" + children.replace("\n", "\n  ") + "\n</SpatialTree:internal>");
+        } else
+            return "<SpatialTree:leaf " + objects.size() + " object(s)>";
     }
 
     /**
      * Iterate through the objects in this leaf node
      */
     public Iterator<E> iterator() {
+        if (internal_node)
+            return null;
+        
         return objects.iterator();
     }
 
@@ -84,9 +106,12 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
         return new SpatialTreeIterator(this);
     }
     
-    
-    
-    
+    /*
+     * Two types of nodes
+     *   internal nodes:    8 octants, no objects
+     *   leaf nodes:        no octants, a list of objects 
+     */
+    private boolean internal_node = false;
     private SpatialTree<E> octant1; // +,+,+
     private SpatialTree<E> octant2; // -,+,+
     private SpatialTree<E> octant3; // -,-,+
@@ -96,6 +121,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
     private SpatialTree<E> octant7; // -,-,-
     private SpatialTree<E> octant8; // +,-,-
     private List<E> objects;
+    
     private float division_x;
     private float division_y;
     private float division_z;
@@ -106,9 +132,13 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
     private float min_z;
     private float max_z;
     private final int max_objects_per_leaf;
-    private boolean internal_node = false;
     
 
+    /**
+     * Returns the octant corresponding to a given position.
+     * @param position
+     * @return
+     */
     private SpatialTree<E> octant(Vector3 position) {
         if (position.x > division_x) {
             if (position.y > division_y) {
@@ -153,6 +183,8 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
     private void grow_leaves() {
         if (internal_node)
             return;
+        
+        compute_divisions();
 
         octant1 = new SpatialTree<E>(division_x, division_y, division_z, max_x, max_y, max_z, max_objects_per_leaf);
         octant2 = new SpatialTree<E>(min_x, division_y, division_z, division_x, max_y, max_z, max_objects_per_leaf);
@@ -171,6 +203,11 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
         objects = null;
     }
 
+    /**
+     * Traverse a collection collection of objects finding the spatial bounds
+     * used to determine where divide our octants
+     * @param objects
+     */
     private void find_bounds(Collection<E> objects) {   
         for (E obj: objects) {
             Vector3 pos = obj.getPosition();
@@ -182,6 +219,15 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
             min_z = Math.min(min_z, pos.z);
         }
         compute_divisions();
+    }
+    
+    /**
+     * Compute our division planes
+     */
+    private void compute_divisions() {
+        division_x = 0.5f * (max_x + min_x);
+        division_y = 0.5f * (max_y + min_y);
+        division_z = 0.5f * (max_z + min_z);
     }
 
 
@@ -209,11 +255,17 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
 
         @Override
         public boolean hasNext() {
-            return history.size() > 1 || history.firstElement().lastOctent < 8;
+            return history.size() > 1 ||
+                (history.firstElement().lastOctent < 8 && history.firstElement().subTree.internal_node);
         }
 
         @Override
         public SpatialTree<E> next() {
+            if (history.empty())
+                throw new NoSuchElementException();
+            
+
+            
             History last = history.peek();
             if (last.subTree.internal_node) {
                 SpatialTree<E> next;
@@ -242,7 +294,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
                     case 7:
                         next = last.subTree.octant8;
                         break;
-                    default: // We have passed through all the descendant of this node
+                    default: // We have passed through all the descendant of this node  
                         history.pop();
                         return next();
                 }
@@ -250,7 +302,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
                 history.push(new History(next));
                 return next();
             }
-
+            
             return history.pop().subTree;
         }
 
