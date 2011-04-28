@@ -155,7 +155,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     protected transient Model model; // CL - Used to store the model reference
     // after we look it up once
     protected Vector3 position, velocity;
-    protected float scale;
+    protected Vector3 scale;
 
     // Rotation
     protected Quaternion rotation, angularVelocity;
@@ -170,6 +170,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         position = new Vector3();
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
+        scale = new Vector3(1.0f,1.0f,1.0f);
     }
 
     public void changeYaw(float degrees) {
@@ -224,7 +225,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     /**
      * @return the actors size (for texture scaling and collision detection)
      */
-    public float getSize() {
+    public Vector3 getSize() {
         return scale;
     }
 
@@ -261,7 +262,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         // Rotate the actor
         gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
         // Scale the Actor
-
+        gl.glScalef(scale.x, scale.y, scale.z);
         // CL - Render our model.
         getModel().render(gl);
         gl.glPopMatrix();
@@ -272,8 +273,15 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     }
 
     // Lets you reference chain
-    public Actor setSize(float newSize) {
-        scale = newSize;
+    public Actor setSize(float size) {
+        scale.x = size;
+        scale.y = size;
+        scale.z = size;
+        return this;
+    }
+    
+    public Actor setSize(Vector3 size){
+        scale = size;
         return this;
     }
 
