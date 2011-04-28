@@ -1,4 +1,4 @@
-package sound;
+package music;
 
 
 public interface Audio {

@@ -1,4 +1,4 @@
-package sound.gui;
+package music.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;

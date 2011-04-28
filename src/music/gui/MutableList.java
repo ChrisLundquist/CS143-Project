@@ -1,4 +1,4 @@
-package sound.gui;
+package music.gui;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
