@@ -78,6 +78,23 @@ public class Vector3 implements Serializable {
                 x * rhs.y - y * rhs.x
         );
     }
+    
+    /**
+     * Finds the projection from the other vector onto this one
+     * @param other
+     * @return
+     */
+    public Vector3 projectionFrom(Vector3 other){
+        return (this.times(dotProduct(other) / other.magnitude()));
+    }
+    /**
+     * Projects this vector onto the other
+     * @param other
+     * @return
+     */
+    public Vector3 projectionTo(Vector3 other){
+        return new Vector3(other.projectionFrom(this));
+    }
 
     public Vector3 times(Quaternion rotation) {
         float[] m = rotation.toGlMatrix();
