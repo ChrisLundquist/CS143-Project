@@ -1,4 +1,4 @@
-package sound;
+package music;
 
 
 // TODO What if someone wanted to play with sound off?

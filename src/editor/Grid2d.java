@@ -173,7 +173,7 @@ public class Grid2d extends JPanel {
         //Goes through all of the actors
         for(Actor a: this.actorMap.keySet()){
             Point p;
-            int defSize = (int)a.getSize();
+            int defSize = (int)a.getSize().magnitude();
             int size = (int) (defSize* this.scale);
 
             switch(this.context){

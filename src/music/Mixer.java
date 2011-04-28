@@ -1,4 +1,4 @@
-package sound;
+package music;
 
 import java.util.Map;
 import java.util.Stack;

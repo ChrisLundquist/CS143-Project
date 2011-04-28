@@ -2,7 +2,7 @@
  * @author Tim Mikeladze
  * Open new browser with Last.FM url 
  */
-package sound;
+package music;
 
 import java.lang.reflect.Field;
 import java.util.Scanner;

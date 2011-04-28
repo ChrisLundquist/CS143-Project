@@ -1,4 +1,4 @@
-package sound.gui;
+package music.gui;
 
 import java.awt.EventQueue;
 
@@ -21,10 +21,11 @@ import javax.swing.JRadioButton;
 import java.awt.Component;
 import javax.swing.Box;
 
-import sound.Mixer;
-import sound.Piece;
-import sound.Theme;
-import sound.Mixer.ThemeEnum;
+import music.Mixer;
+import music.Piece;
+import music.Theme;
+import music.Mixer.ThemeEnum;
+
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;

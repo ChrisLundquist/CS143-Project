@@ -1,4 +1,4 @@
-package sound;
+package music;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +7,8 @@ import java.util.Map;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import sound.Mixer.ThemeEnum;
+import music.Mixer.ThemeEnum;
+
 
 public class EntryPoint2 {
 	

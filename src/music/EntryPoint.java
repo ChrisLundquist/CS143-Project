@@ -1,4 +1,4 @@
-package sound;
+package music;
 import java.io.IOException;
 import java.util.ArrayList;
 
