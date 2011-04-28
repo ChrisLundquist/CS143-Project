@@ -1,12 +1,12 @@
 package game;
  
-import input.InputHandler;
+import input.KeyboardListener;
 import java.io.IOException;
 import actor.Asteroid;
 
 public class Game {
     private static graphics.Renderer renderer;
-    private static input.InputHandler input;
+    private static input.KeyboardListener input;
     private static boolean paused;
     private static Player player;
     private static Map map;
@@ -19,7 +19,7 @@ public class Game {
         player = new Player();
                 
         renderer = new graphics.Renderer();
-        input = new InputHandler();
+        input = new KeyboardListener();
         graphics.Model.loadModels();
         
         a = new actor.Asteroid();
@@ -40,7 +40,7 @@ public class Game {
         network.ClientServerThread.joinServer(server, player);
         
         renderer = new graphics.Renderer();
-        input = new InputHandler();
+        input = new KeyboardListener();
         graphics.Model.loadModels();
         
         actor.Asteroid a = new actor.Asteroid();
@@ -53,7 +53,7 @@ public class Game {
         renderer.start();
     }
     
-    public static InputHandler getInputHandler(){
+    public static KeyboardListener getInputHandler(){
         return input;
     }
 
