@@ -21,6 +21,14 @@ public class Vector4 extends Vector3 {
         t = 0.0f;
     }
     
+    /**
+     * This version ignores the 4th vector component
+     */
+    public Vector4 times(Quaternion q){
+        super.times(q);
+        return this;
+    }
+    
     public boolean equals(Vector4 other){
        return super.equals(other) && t == other.t;
     }

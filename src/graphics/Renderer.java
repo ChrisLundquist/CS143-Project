@@ -64,6 +64,7 @@ public class Renderer implements GLEventListener {
         // Push the transformation for our player's Camera
 
         Game.getPlayer().updateCamera().setPerspective(gl);
+        Light.update(gl);
         Game.getMap().getSkybox().render(gl);
 
         // Render each actor       
@@ -102,30 +103,6 @@ public class Renderer implements GLEventListener {
                 return;
         }
     }
-    private void setLighting(GL2 gl, int numLights) {
-        int[] maxLights = new int[1];
-
-        // Make Sure lighting is turned on
-        gl.glEnable(GL2.GL_LIGHTING);
-
-        // Check to make sure we aren't enable more lights than the graphics card can support
-        gl.glGetIntegerv(GL2.GL_MAX_LIGHTS, maxLights, 0);
-
-        // Make sure we don't enable more lights than the graphics card can handle.
-        numLights = Math.min(numLights, maxLights[0]);
-
-        for(int i = 0; i < numLights; i++){
-            Light light = Light.newRandom(256);
-
-            gl.glEnable(GL2.GL_LIGHT0 + i);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, light.ambient.toFloatArray(), 0);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.toFloatArray(), 0);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.toFloatArray(), 0);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.toFloatArray(), 0);
-        }
-        // Tell the shader how many lights we are using
-      //  shader.setUniform1i(gl, "numLights", numLights);
-    }
 
     public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
     }
@@ -155,7 +132,7 @@ public class Renderer implements GLEventListener {
         }
         shader.enable(gl);*/
         // We have to setup the lights after we enable the shader so we can set the uniform
-        setLighting(gl,1);
+        Light.initialize(gl, 1);
 
         System.gc(); // This is probably a good a idea
     }
