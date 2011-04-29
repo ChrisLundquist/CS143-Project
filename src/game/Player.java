@@ -1,9 +1,10 @@
 package game;
 
-import java.io.Serializable;
 import graphics.Camera;
 import input.InputRouter;
-import input.PlayerInput;
+
+import java.io.Serializable;
+
 import actor.Actor;
 import actor.PlayerShip;
 
@@ -12,7 +13,7 @@ public class Player implements Serializable {
 
     private String name;
     private PlayerStatus status;
-    private transient Camera camera;
+    private transient final Camera camera;
     private transient PlayerShip ship;
     private int shipId;
     // TODO ship preference - once we have ships
@@ -26,11 +27,13 @@ public class Player implements Serializable {
         Actor.addActor(ship);
     }
     
+    @Override
     public String toString() {
         String msg = name + " " + status;
         Actor ship = getShip();
-        if (ship != null)
+        if (ship != null) {
             msg += " @ " + ship.getPosition();
+        }
         return msg;
     }
     
@@ -41,15 +44,17 @@ public class Player implements Serializable {
     public PlayerShip getShip() {
         if (ship == null) {
             Actor a = Actor.findById(shipId);
-            if (a instanceof PlayerShip)
+            if (a instanceof PlayerShip) {
                 ship = (PlayerShip) a;
+            }
         }
         return ship;
     }
     
     public void input(InputRouter.Interaction action) {
-        if (getShip() == null)
+        if (getShip() == null) {
             return;
+        }
         
         switch(action) {
             case SHOOT:
@@ -84,13 +89,13 @@ public class Player implements Serializable {
 
     public void respawn() {
         Actor a =  Actor.findById(getShipId());
-        if (a instanceof PlayerShip)
+        if (a instanceof PlayerShip) {
             ship = (PlayerShip)a;
-        else {
+        } else {
             // TODO create ship of players preference
             ship = new PlayerShip();
             setShipId(ship.getId());
-            Actor.addActor(ship);     
+            Actor.addActor(ship);
         }
         status = PlayerStatus.ALIVE;
     }
@@ -124,8 +129,9 @@ public class Player implements Serializable {
      * @return the players camera object so it can be chained with setPerspective()
      */
     public Camera updateCamera() {
-        if (ship != null)
+        if (ship != null) {
             camera.updateFromActor(ship);
+        }
         
         return camera;
     }

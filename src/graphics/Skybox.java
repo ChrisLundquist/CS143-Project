@@ -6,9 +6,9 @@ import javax.media.opengl.GL2;
 
 public class Skybox implements Serializable{
     private static final long serialVersionUID = 1229301019236369376L;
-    public static final float SKYBOX_SIZE = 128.0f;
+    public static final float SKYBOX_SIZE = -128.0f;
     private transient Model model;
-    private String modelName;
+    private final String modelName;
     
     public Skybox(String waveFrontObjectFilepath){
         modelName = waveFrontObjectFilepath;
@@ -19,8 +19,9 @@ public class Skybox implements Serializable{
     }
     
     public void render(GL2 gl) {
-        if(model == null)
+        if(model == null) {
             init(gl);
+        }
         gl.glPushMatrix();
         math.Vector3 pos = game.Game.getPlayer().getCamera().position;
         gl.glTranslatef(-pos.x, -pos.y, -pos.z);
