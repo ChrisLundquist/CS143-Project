@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
+
 import math.Vector3;
 import actor.Actor;
 
@@ -22,8 +23,9 @@ public class Map implements Serializable {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
 
             Object obj = input.readObject();
-            if (obj instanceof Map)
+            if (obj instanceof Map) {
                 return (Map)obj;
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -54,7 +56,7 @@ public class Map implements Serializable {
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, 20.0f));
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, -20.0f));
 
-        map.skybox = new graphics.Skybox("assets/models/skybox.obj");
+        map.skybox = new graphics.Skybox("assets/models/milky-way.obj");
         map.write();
         
         Map loaded = Map.load("example_1");
@@ -96,14 +98,18 @@ public class Map implements Serializable {
     }
     
     private boolean valid() {
-        if (actors == null)
+        if (actors == null) {
             return false;
-        if (spawningPositions == null || spawningPositions.size() < 1)
+        }
+        if ((spawningPositions == null) || (spawningPositions.size() < 1)) {
             return false;
-        if (name == null)
+        }
+        if (name == null) {
             return false;
-        if (skybox == null)
+        }
+        if (skybox == null) {
             return false;
+        }
         
         return true;
     }
