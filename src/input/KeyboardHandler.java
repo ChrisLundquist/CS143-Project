@@ -1,10 +1,11 @@
 package input;
 import game.Game;
 import game.Player;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
 
-public class InputHandler implements KeyListener {
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class KeyboardHandler implements KeyListener {
     private static final int DEBOUNCE_TIME = 20;
     /*
      * To handle multiple keys pressed at once, we maintain a keyState array of
@@ -80,10 +81,10 @@ public class InputHandler implements KeyListener {
     };
 
 
-    private boolean[] keyState;
-    private int[] keyDebounce;
+    private final boolean[] keyState;
+    private final int[] keyDebounce;
 
-    public InputHandler() {
+    public KeyboardHandler() {
         keyState = new boolean[KEYS_IN_USE.length];
         keyDebounce = new int[KEYS_IN_USE.length];
         assert(KEY_PAUSE_MASK.length == KEYS_IN_USE.length);
@@ -120,23 +121,27 @@ public class InputHandler implements KeyListener {
         Player player = Game.getPlayer();
 
         // On state transition to player death, clear key state
-        if(player != null && player.isAlive() == false) {
+        if((player != null) && (player.isAlive() == false)) {
             clearKeyState();
         }
 
         // Update our debounce timers
-        for (int i = 0; i < keyDebounce.length; i++)
-            if (keyDebounce[i] > 0)
+        for (int i = 0; i < keyDebounce.length; i++) {
+            if (keyDebounce[i] > 0) {
                 keyDebounce[i]--;
+            }
+        }
 
         for (int i = 0; i < KEYS_IN_USE.length; i++) {
             /* Skip keys that are up */
-            if (keyState[i] == false)
+            if (keyState[i] == false) {
                 continue;
+            }
 
             // Skip keys that are disabled when the game is paused
-            if (Game.isPaused() && KEY_PAUSE_MASK[i])
+            if (Game.isPaused() && KEY_PAUSE_MASK[i]) {
                 continue;
+            }
 
             // Respawn player on first key stroke after death
             if (player.isAlive() == false) {
@@ -145,39 +150,40 @@ public class InputHandler implements KeyListener {
 
             // Skip keys who's debounce timer is running
             if (KEY_DEBOUNCE_MASK[i]) {
-                if (keyDebounce[i] > 0)
+                if (keyDebounce[i] > 0) {
                     continue;
-                else
+                } else {
                     keyDebounce[i] = DEBOUNCE_TIME;
+                }
             }
 
             switch(KEYS_IN_USE[i]){
                 case(KeyEvent.VK_SPACE):
-                    player.input(PlayerInput.SHOOT);
+                    player.input(InputRouter.Interaction.SHOOT);
                     break;
                 case(KeyEvent.VK_UP):
-                    player.input(PlayerInput.PITCH_UP);
+                    player.input(InputRouter.Interaction.PITCH_UP);
                     break;
                 case(KeyEvent.VK_DOWN):
-                    player.input(PlayerInput.PITCH_DOWN);
+                    player.input(InputRouter.Interaction.PITCH_DOWN);
                     break;
                 case(KeyEvent.VK_LEFT):
-                    player.input(PlayerInput.YAW_LEFT);
+                    player.input(InputRouter.Interaction.YAW_LEFT);
                     break;
                 case(KeyEvent.VK_RIGHT):
-                    player.input(PlayerInput.YAW_RIGHT);
+                    player.input(InputRouter.Interaction.YAW_RIGHT);
                     break;
                 case(KeyEvent.VK_PAGE_UP):
-                    player.input(PlayerInput.ROLL_LEFT);
+                    player.input(InputRouter.Interaction.ROLL_LEFT);
                     break;
                 case(KeyEvent.VK_PAGE_DOWN):
-                    player.input(PlayerInput.ROLL_RIGHT);
+                    player.input(InputRouter.Interaction.ROLL_RIGHT);
                     break;
                 case(KeyEvent.VK_A):
-                    player.input(PlayerInput.FORWARD);
+                    player.input(InputRouter.Interaction.FORWARD);
                     break;
                 case(KeyEvent.VK_Z):
-                    player.input(PlayerInput.BACK);
+                    player.input(InputRouter.Interaction.BACK);
                     break;
                 case(KeyEvent.VK_Q):
                 case(KeyEvent.VK_ESCAPE):
@@ -202,8 +208,9 @@ public class InputHandler implements KeyListener {
      * Reset key states
      */
     private void clearKeyState() {
-        for (int i = 0; i < keyState.length; i++)
+        for (int i = 0; i < keyState.length; i++) {
             keyState[i] = false;
+        }
     }
 }
 
