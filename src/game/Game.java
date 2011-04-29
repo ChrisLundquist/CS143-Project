@@ -90,4 +90,8 @@ public class Game {
         Game.init();
         Game.start();
     }
+
+    public static graphics.Renderer getRenderer() {
+        return renderer;
+    }
 }

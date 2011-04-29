@@ -28,7 +28,7 @@ public class Renderer implements GLEventListener {
     Frame frame;
     //Animator animator;
     FPSAnimator animator;
-   // Shader shader;
+    Shader shader;
     Hud hud;
  
     public Renderer(){
@@ -36,7 +36,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
-       // shader = new Shader("lambert.vert","lambert.frag");
+        shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         
         
@@ -124,13 +124,13 @@ public class Renderer implements GLEventListener {
         Model.initialize(gl); /* calls Texture.initialize */
         ///hud.init(gLDrawable);
 
-         /* try {
+          try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);*/
+        shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, 1);
 
