@@ -20,7 +20,7 @@ public class Model implements math.Supportable{
         displayList = NO_LIST;
         //TODO load collision models from a manifest file
         //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
-        
+
     }
 
     public static Model findById(int modelId) {
@@ -67,7 +67,7 @@ public class Model implements math.Supportable{
         else
             gl.glCallList(displayList);
     }
-    
+
 
     public static int getModelIdFor(actor.Actor actor) {
         // FIXME replace the magic numbers!
@@ -93,7 +93,20 @@ public class Model implements math.Supportable{
 
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        //TODO Loop through our geometry and find that point
-        return new Vector3();
+        float furthestMagnitude = 0.0f;
+        // Normalize our direction for good measure.
+        direction.normalize();
+        // Loop though all of our polygons
+        for(Polygon p : polygons){
+            // And all of the vertices in each polygon
+            for(Vertex v : p.verticies){
+                // find the magnitude of the projected vertex on our direction vector
+                float magnitude = direction.dotProduct(v.coord) / v.coord.dotProduct(v.coord);
+                // if it is bigger than what we have, keep it
+                furthestMagnitude = Math.max(furthestMagnitude, magnitude);
+            }
+        }
+        // The answer we want to return is our best magnitude times the direction
+        return direction.times(furthestMagnitude);
     }
 }

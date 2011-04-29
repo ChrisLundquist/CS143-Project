@@ -95,6 +95,15 @@ public class Vector3 implements Serializable {
     public Vector3 projectionTo(Vector3 other){
         return new Vector3(other.projectionFrom(this));
     }
+    
+    /**
+     * Returns true if this and the input vector < 90 degrees apart
+     * @param b
+     * @return
+     */
+    public boolean sameDirection(Vector3 b){
+        return dotProduct(b) > 0;
+    }
 
     public Vector3 times(Quaternion rotation) {
         float[] m = rotation.toGlMatrix();
