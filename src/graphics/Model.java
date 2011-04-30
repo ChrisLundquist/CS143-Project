@@ -1,5 +1,6 @@
 package graphics;
 
+import java.util.HashMap;
 import java.util.Vector;
 import javax.media.opengl.GL2;
 
@@ -12,28 +13,39 @@ public class Model implements math.Supportable{
     protected int id;
     int displayList;
     Vector<Polygon> polygons;
-
-    private static Vector<Model> models = new Vector<Model>();
+    protected static HashMap<String, Model> models = new HashMap<String, Model>();
 
     public Model(Vector<Polygon> polygons){
         this.polygons = polygons;
         displayList = NO_LIST;
         //TODO load collision models from a manifest file
         //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
-
     }
 
-    public static Model findById(int modelId) {
-        return models.get(modelId);
+    public static Model findOrCreateByName(String filePath) {
+        Model model = models.get(filePath);
+        if(model == null)
+            model = createByName(filePath);
+        return model;
+    }
+    
+    public static Model findByName(String filePath){
+        return models.get(filePath);
+    }
+    
+    public static Model createByName(String filePath){
+        Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
+        models.put(filePath, model);
+        return model;
     }
 
     public static void loadModels() {
         // CL - Do we want to generate display lists for everything at load time
         //      or do that lazily?
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube_cube.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "skybox.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "shuttle.obj"));
+        Model.findOrCreateByName("cube_cube.obj");
+        Model.findOrCreateByName("cube.obj");
+        Model.findOrCreateByName("skybox.obj");
+        Model.findOrCreateByName("shuttle.obj");
     }
 
     /* 
@@ -86,7 +98,7 @@ public class Model implements math.Supportable{
     public static void initialize(GL2 gl) {
         Texture.initialize(gl);
         loadModels();
-        for(Model model : models){
+        for(Model model : models.values()){
             model.init(gl);
         }
     }
@@ -109,4 +121,6 @@ public class Model implements math.Supportable{
         // The answer we want to return is our best magnitude times the direction
         return direction.times(furthestMagnitude);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package test.physics;
 
 import static org.junit.Assert.*;
+import graphics.Model;
 
 import org.junit.Test;
 
@@ -17,6 +18,16 @@ public class GJKSimplexTest {
 
     @Test
     public void testIsColliding() {
+        sphereColliding();
+        cubeColliding();
+        
+    }
+    
+    private void cubeColliding(){
+        Model cube = Model.findOrCreateByName("cube.obj");
+    }
+    
+    private void sphereColliding(){
         // spheres at an arbitrary location and is obviously not colliding
         Sphere s4441 = new Sphere(new Vector3(4.0f,4.0f,4.0f),1.0f);
         Sphere s8881 = new Sphere(new Vector3(8.0f,8.0f,8.0f),1.0f);
@@ -46,7 +57,6 @@ public class GJKSimplexTest {
         assertTrue(GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, s0004));
         assertFalse(GJKSimplex.isColliding(s4441, s0004));
         assertFalse(GJKSimplex.isColliding(s0004,s8881));
-        
     }
 
 }
