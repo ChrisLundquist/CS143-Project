@@ -21,9 +21,9 @@ public class Game {
         renderer = new graphics.Renderer();
         input = new KeyboardListener();
         graphics.Model.loadModels();
-        
+      
         a = new actor.Asteroid();
-        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
         
         actor.Actor.addActor(a);
     }

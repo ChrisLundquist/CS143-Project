@@ -157,6 +157,7 @@ public class KeyboardListener implements KeyListener {
 
             switch(KEYS_IN_USE[i]){
                 case(KeyEvent.VK_SPACE):
+                    
                     inputRouter.sendAction(InputRouter.Interaction.SHOOT);
                     break;
                 case(KeyEvent.VK_UP):
