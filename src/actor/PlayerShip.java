@@ -1,11 +1,8 @@
 package actor;
 
-import game.Player;
-
 public class PlayerShip extends Actor {
     private static final float TURN_SPEED = 0.01f;
     private static final long serialVersionUID = 260627862699350716L;
-    private static actor.Bullet bullet;
     long time;
     int i=0;
     public PlayerShip(){
@@ -29,21 +26,13 @@ public class PlayerShip extends Actor {
         switch(i) {
             case 0:
                 time=System.currentTimeMillis();
-                bullet = new actor.Bullet();
-                bullet.setPosition(new math.Vector3(this.getPosition()));
-                bullet.setVelocity(new math.Vector3(0.0f, 0.0f, -.2f));
-                bullet.setSize(.1f);
-                actor.Actor.addActor(bullet);
+                actor.Actor.addActor(new actor.Bullet(this));
                 i=1;
                 break;
             case 1:
                 //calculates time passed in milliseconds
                 if((System.currentTimeMillis() - time) > 2000) {
-                    bullet = new actor.Bullet();
-                    bullet.setPosition(new math.Vector3(this.getPosition()));
-                    bullet.setVelocity(new math.Vector3(0.0f, 0.0f, -.2f));
-                    bullet.setSize(.1f);
-                    actor.Actor.addActor(bullet);
+                    actor.Actor.addActor(new actor.Bullet(this));
                     time=System.currentTimeMillis();
                     i=0;
                 }

@@ -1,12 +1,6 @@
 package graphics;
 
-import java.io.IOException;
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.GLDrawable;
-import javax.media.opengl.glu.GLU;
-import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Hud {
     Texture healthbackdrop, healthbar, healthcross;

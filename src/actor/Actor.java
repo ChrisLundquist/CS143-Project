@@ -1,17 +1,18 @@
 package actor;
 
-import math.*;
 import graphics.Model;
+
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
-import graphics.Renderer;
 
 import javax.media.opengl.GL2;
-import javax.swing.JOptionPane;
+
+import math.Quaternion;
+import math.Supportable;
+import math.Vector3;
 
 public abstract class Actor implements Serializable, Supportable, Rotatable {
     private static final long serialVersionUID = 744085604446096658L;
@@ -171,7 +172,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
         scale = new Vector3(1.0f,1.0f,1.0f);
-        
+        age = 0;
         //sets the time of the actor's birth 
         setTimeStamp();
     }
@@ -307,6 +308,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         // This should also take into effect our maximum angular velocity --
         // this may be an overridden in subclasses to provide different handling
         rotation.timesEquals(angularVelocity);
+        age++;
     }
 
     protected void dampenAngularVelocity() {
