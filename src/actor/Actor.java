@@ -149,7 +149,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     }
 
     private int id; // unique ID for each Actor
-    protected int modelId;
+    protected String modelName;
     protected transient Model model; // CL - Used to store the model reference
     // after we look it up once
     protected Vector3 position, velocity, scale;
@@ -166,7 +166,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         angularVelocity = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
-        modelId = Model.getModelIdFor(this);
+        modelName = Model.getModelIdFor(this);
         scale = new Vector3(1.0f,1.0f,1.0f);
     }
 
@@ -203,7 +203,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null)
-            model = Model.findById(modelId);
+            model = Model.findByName(modelName);
 
         return model;
     }

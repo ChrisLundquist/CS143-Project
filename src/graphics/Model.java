@@ -8,7 +8,9 @@ import math.Vector3;
 
 public class Model implements math.Supportable{
     private static final String MODEL_PATH = "assets/models/";
-
+    private static final String ASTEROID = "cube_cube.obj";
+    private static final String PLAYER = "cube_cube.obj";
+    
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
@@ -81,14 +83,14 @@ public class Model implements math.Supportable{
     }
 
 
-    public static int getModelIdFor(actor.Actor actor) {
+    public static String getModelIdFor(actor.Actor actor) {
         // FIXME replace the magic numbers!
         if(actor instanceof actor.Asteroid){
-            return 0;
+            return ASTEROID;
         } else if (actor instanceof actor.PlayerShip) {
-            return 3;
+            return PLAYER;
         }
-        return 0;
+        return ASTEROID;
     }
 
     /**
