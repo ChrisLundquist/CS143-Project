@@ -4,11 +4,14 @@ import math.*;
 import graphics.Model;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import graphics.Renderer;
 
 import javax.media.opengl.GL2;
+import javax.swing.JOptionPane;
 
 public abstract class Actor implements Serializable, Supportable, Rotatable {
     private static final long serialVersionUID = 744085604446096658L;
@@ -157,7 +160,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     // Rotation
     protected Quaternion rotation, angularVelocity;
 
-    protected int age; // Actor age in frames
+   // protected int age; // Actor age in frames
     protected int parentId;
 
     public Actor() {
@@ -168,6 +171,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         velocity = new Vector3();
         modelId = Model.getModelIdFor(this);
         scale = new Vector3(1.0f,1.0f,1.0f);
+        
+        //sets the time of the actor's birth 
+        setTimeStamp();
     }
 
     public void changeYaw(float degrees) {
@@ -323,5 +329,21 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
 
     public Quaternion getAngularVelocity() {
         return angularVelocity;
+    }
+    
+    protected long age;
+    
+    /**
+     * Sets the time when the Actor was born
+     * Current uses System.currentTimeMillis, this might be problematic on different OS
+     * Should be changed to deal with FPS from open gl
+     * 
+     */
+    protected void setTimeStamp() {
+       age = System.currentTimeMillis();       
+    }
+    
+    protected long getAge() {
+        return age;
     }
 }
