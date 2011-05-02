@@ -48,15 +48,17 @@ public class GJKSimplexTest {
         assertTrue(GJKSimplex.isColliding(cube3, cube2));
         assertTrue(GJKSimplex.isColliding(cube2, cube3));
 
-        for(int i = 0; i < 4096; i++){
-            actor.Asteroid cubeA = new actor.Asteroid();
-            cubeA.setPosition(new Vector3(gen.nextFloat(),gen.nextFloat(),gen.nextFloat()));
-            cubeA.setSize(gen.nextInt());
-            actor.Asteroid cubeB= new actor.Asteroid();
-            cubeA.setPosition(new Vector3(gen.nextFloat(),gen.nextFloat(),gen.nextFloat()));
-            cubeA.setSize(gen.nextInt());
-            assertEquals(cubeA.isColliding(cubeB),GJKSimplex.isColliding(cubeA, cubeB));
-            assertEquals(cubeB.isColliding(cubeA),GJKSimplex.isColliding(cubeB, cubeA));
+        for(int range = 0; range < 4096; range++){
+            for(int i = 0; i < 4096; i++){
+                actor.Asteroid cubeA = new actor.Asteroid();
+                cubeA.setPosition(getRandomPosition(range));
+                cubeA.setSize(gen.nextInt(range / 16));
+                actor.Asteroid cubeB= new actor.Asteroid();
+                cubeA.setPosition(getRandomPosition(range));
+                cubeA.setSize(gen.nextInt(range / 16));
+                assertEquals(cubeA.isColliding(cubeB),GJKSimplex.isColliding(cubeA, cubeB));
+                assertEquals(cubeB.isColliding(cubeA),GJKSimplex.isColliding(cubeB, cubeA));
+            }
         }
     }
 
