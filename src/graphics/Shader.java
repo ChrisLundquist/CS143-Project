@@ -28,12 +28,12 @@ public class Shader {
             e.printStackTrace();
         }
     }
-    
+
     public void setUniform1f(GL2 gl, String name, float value){
         int location = gl.glGetUniformLocation(programID, name);
         gl.glUniform1f(location, value);
     }
-    
+
     public void setUniform1i(GL2 gl, String name, int value){
         int location = gl.glGetUniformLocation(programID, name);
         gl.glUniform1i(location, value);

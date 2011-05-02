@@ -135,7 +135,7 @@ public class Light implements java.io.Serializable{
             gl.glEnable(GL2.GL_LIGHT0 + i);
         }
         // Tell the shader how many lights we are using
-        Game.getRenderer().shader.setUniform1i(gl, "numLights", numLights);
+        Game.getRenderer().getShader().setUniform1i(gl, "numLights", numLights);
     }
 
 

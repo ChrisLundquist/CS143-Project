@@ -31,7 +31,7 @@ public class Renderer implements GLEventListener {
     FPSAnimator animator;
     Shader shader;
     Hud hud;
- 
+
     public Renderer(){
         glu = new GLU();
         canvas = new GLCanvas();
@@ -39,8 +39,6 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
-        
-        
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -66,7 +64,7 @@ public class Renderer implements GLEventListener {
 
         Game.getPlayer().updateCamera().setPerspective(gl);
         Light.update(gl);
-   //     Game.getMap().getSkybox().render(gl);
+        //     Game.getMap().getSkybox().render(gl);
 
         // Render each actor       
         List<Actor> actors = Actor.getActors();
@@ -74,12 +72,12 @@ public class Renderer implements GLEventListener {
             for(Actor a: actors)
                 a.render(gl);
         }
-        
+
         hud.drawStaticHud(gl);
         checkForGLErrors(gl);
     }
     private static void checkForGLErrors(GL2 gl) {
-       
+
         int errno = gl.glGetError();
         switch (errno) {
             case GL2.GL_INVALID_ENUM:
@@ -125,7 +123,7 @@ public class Renderer implements GLEventListener {
         Model.initialize(gl); /* calls Texture.initialize */
         ///hud.init(gLDrawable);
 
-          try {
+        try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             // TODO Auto-generated catch block
@@ -133,12 +131,12 @@ public class Renderer implements GLEventListener {
         }
         shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
-        Light.initialize(gl, 1);
+        Light.initialize(gl, 8);
 
         System.gc(); // This is probably a good a idea
     }
-    
-    
+
+
 
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
@@ -190,5 +188,8 @@ public class Renderer implements GLEventListener {
             System.exit(-1);
         }
         return gl;
+    }
+    public Shader getShader() {
+        return shader;
     }
 }
