@@ -34,7 +34,7 @@ public class GJKSimplex{
 
         Vector3 ab = b.minus(a);
 
-        if(sameDirection(ab,Vector3.ORIGIN)){ /* The simplex is on the segment AB*/
+        if(ab.sameDirection(Vector3.ORIGIN)){ /* The simplex is on the segment AB*/
             direction = trippleProduct(ab,Vector3.ORIGIN,ab);
         }else { /* The newest point is the simplex */
             direction = Vector3.ORIGIN.minus(a);
@@ -65,7 +65,7 @@ public class GJKSimplex{
 
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
-        while(sameDirection(a = getSupport(lhs,rhs,direction),direction)){
+        while(direction.sameDirection(a = getSupport(lhs,rhs,direction))){
             simplex.add(a);
             // If the simplex has enclosed the origin then the two objects are colliding
             direction = findSimplex(simplex,direction);
@@ -76,9 +76,7 @@ public class GJKSimplex{
         return false;
     }
 
-    static private boolean sameDirection(Vector3 a, Vector3 b){
-        return a.dotProduct(b) > 0;
-    }
+
 
     static private Vector3 trippleProduct(Vector3 i, Vector3 j, Vector3 k){
         return i.cross(j).cross(k);

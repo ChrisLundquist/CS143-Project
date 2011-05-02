@@ -2,39 +2,49 @@
  * 
  */
 package graphics;
-
+import math.Vector3;
 public class Vertex {
-    float x; // Model space coordinates
-    float y;
-    float z;
+    Vector3 coord; // Model space coordinates
     float u; // Texture coordinates
     float v;
 
     public Vertex(float x, float y, float z, float u, float v) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this(new Vector3(x,y,z));
         this.u = u;
         this.v = v;
     }
 
     public Vertex(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this(new Vector3(x,y,z));
         this.u = 0.0f;
         this.v = 0.0f; 
     }
-    
+
+    public Vertex(Vector3 coord){
+        this.coord = coord;
+        u = 0.0f;
+        v = 0.0f;
+    }
+
     public Vertex(Vertex other) {
-        this.x = other.x;
-        this.y = other.y;
-        this.z = other.z;
+        this.coord = other.coord;
         this.u = other.u;
         this.v = other.v;
     }
-    
+
     public String toString() {
-        return "<" + x + ", " + y + ", " + z + ">";
+        return "<" + coord.x + ", " + coord.y + ", " + coord.z + ">";
+    }
+    
+    public float getX(){
+        return coord.x;
+    }
+    
+    public float getY(){
+        return coord.y;
+    }
+    
+    public float getZ(){
+        return coord.z;
     }
 }

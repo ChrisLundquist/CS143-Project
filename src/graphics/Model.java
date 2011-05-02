@@ -1,5 +1,6 @@
 package graphics;
 
+import java.util.HashMap;
 import java.util.Vector;
 import javax.media.opengl.GL2;
 
@@ -7,33 +8,46 @@ import math.Vector3;
 
 public class Model implements math.Supportable{
     private static final String MODEL_PATH = "assets/models/";
-
+    private static final String ASTEROID = "cube_cube.obj";
+    private static final String PLAYER = "cube_cube.obj";
+    
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
     Vector<Polygon> polygons;
-
-    private static Vector<Model> models = new Vector<Model>();
+    protected static HashMap<String, Model> models = new HashMap<String, Model>();
 
     public Model(Vector<Polygon> polygons){
         this.polygons = polygons;
         displayList = NO_LIST;
         //TODO load collision models from a manifest file
         //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
-        
     }
 
-    public static Model findById(int modelId) {
-        return models.get(modelId);
+    public static Model findOrCreateByName(String filePath) {
+        Model model = models.get(filePath);
+        if(model == null)
+            model = createByName(filePath);
+        return model;
+    }
+    
+    public static Model findByName(String filePath){
+        return models.get(filePath);
+    }
+    
+    public static Model createByName(String filePath){
+        Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
+        models.put(filePath, model);
+        return model;
     }
 
     public static void loadModels() {
         // CL - Do we want to generate display lists for everything at load time
         //      or do that lazily?
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube_cube.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "cube.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "skybox.obj"));
-        models.add(WavefrontObjLoader.load(MODEL_PATH + "shuttle.obj"));
+        Model.findOrCreateByName("cube_cube.obj");
+        Model.findOrCreateByName("cube.obj");
+        Model.findOrCreateByName("skybox.obj");
+        Model.findOrCreateByName("shuttle.obj");
     }
 
     /* 
@@ -67,16 +81,16 @@ public class Model implements math.Supportable{
         else
             gl.glCallList(displayList);
     }
-    
 
-    public static int getModelIdFor(actor.Actor actor) {
+
+    public static String getModelIdFor(actor.Actor actor) {
         // FIXME replace the magic numbers!
         if(actor instanceof actor.Asteroid){
-            return 0;
+            return ASTEROID;
         } else if (actor instanceof actor.PlayerShip) {
-            return 3;
+            return PLAYER;
         }
-        return 0;
+        return ASTEROID;
     }
 
     /**
@@ -86,14 +100,29 @@ public class Model implements math.Supportable{
     public static void initialize(GL2 gl) {
         Texture.initialize(gl);
         loadModels();
-        for(Model model : models){
+        for(Model model : models.values()){
             model.init(gl);
         }
     }
 
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        //TODO Loop through our geometry and find that point
-        return new Vector3();
+        float furthestMagnitude = 0.0f;
+        // Normalize our direction for good measure.
+        direction.normalize();
+        // Loop though all of our polygons
+        for(Polygon p : polygons){
+            // And all of the vertices in each polygon
+            for(Vertex v : p.verticies){
+                // find the magnitude of the projected vertex on our direction vector
+                float magnitude = direction.dotProduct(v.coord) / v.coord.dotProduct(v.coord);
+                // if it is bigger than what we have, keep it
+                furthestMagnitude = Math.max(furthestMagnitude, magnitude);
+            }
+        }
+        // The answer we want to return is our best magnitude times the direction
+        return direction.times(furthestMagnitude);
     }
+
+
 }

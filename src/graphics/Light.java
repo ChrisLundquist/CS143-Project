@@ -143,9 +143,9 @@ public class Light implements java.io.Serializable{
         math.Quaternion inverseRot = Game.getPlayer().getCamera().rotation.inverse();
         for(int i = 0; i < lights.size(); i++) {
             Light light = lights.get(i);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, light.ambient.times(inverseRot).toFloatArray(), 0);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.times(inverseRot).toFloatArray(), 0);
-            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.times(inverseRot).toFloatArray(), 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, light.ambient.toFloatArray(), 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.toFloatArray(), 0);
+            gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.times(inverseRot).toFloatArray(), 0);
         }
     }

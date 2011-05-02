@@ -42,6 +42,7 @@ public class Player implements Serializable {
     }
 
     public PlayerShip getShip() {
+        
         if (ship == null) {
             Actor a = Actor.findById(shipId);
             if (a instanceof PlayerShip) {
@@ -131,6 +132,8 @@ public class Player implements Serializable {
     public Camera updateCamera() {
         if (ship != null) {
             camera.updateFromActor(ship);
+            
+            
         }
         
         return camera;

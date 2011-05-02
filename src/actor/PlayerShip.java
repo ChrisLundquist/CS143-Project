@@ -2,8 +2,9 @@ package actor;
 
 public class PlayerShip extends Actor {
     private static final float TURN_SPEED = 0.01f;
+    private static final int SHOT_COOLDOWN = 1000;
     private static final long serialVersionUID = 260627862699350716L;
-    private static actor.Bullet bullet;
+    long lastShotTime;
     public PlayerShip(){
         super();
     }
@@ -11,13 +12,23 @@ public class PlayerShip extends Actor {
     public void handleCollision(Actor other) {
         // TODO Auto-generated method stub
     }
-    public void shoot() {
-        bullet= new actor.Bullet();
-        bullet.setPosition(new math.Vector3(5.0f,0.0f,0.0f));
-        bullet.setVelocity(new math.Vector3(5.0f,0.0f,-0.001f));
-        bullet.setSize(.1f);
-        actor.Actor.addActor(bullet);
+    /**
+     * @author Tim Mikeladze
+     * 
+     * Shoot your cube_cube!
+     * 
+     * Currently a switch statement that prevent you from shooting constantly shooting bullets
+     * Will be moved into more suitable location once we have more projectiles and/or xbox controller input is implemented
+     * 
+     */
+    public void shoot() {  
+        //calculates time passed in milliseconds
+        if((System.currentTimeMillis() - lastShotTime) > SHOT_COOLDOWN) {
+            actor.Actor.addActor(new actor.Bullet(this));
+            lastShotTime = System.currentTimeMillis();
+        }
     }
+
     public void forwardThrust() {
         position.plusEquals(getDirection().times(0.1f));
     }

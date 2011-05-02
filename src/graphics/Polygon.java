@@ -50,7 +50,7 @@ public class Polygon {
         if (verticies.size() == 3) {
             for (Vertex v: verticies){
                 gl.glTexCoord2f(v.u, v.v); 
-                gl.glVertex3f(v.x, v.y, v.z);
+                gl.glVertex3f(v.getX(), v.getY(), v.getZ());
             }
         } else {
             Vertex a = verticies.get(0);
@@ -60,11 +60,11 @@ public class Polygon {
                 Vertex c = verticies.get(i);
                 
                 gl.glTexCoord2f(a.u, a.v); 
-                gl.glVertex3f(a.x, a.y, a.z);
+                gl.glVertex3f(a.getX(), a.getY(), a.getZ());
                 gl.glTexCoord2f(b.u, b.v); 
-                gl.glVertex3f(b.x, b.y, b.z);
+                gl.glVertex3f(b.getX(), b.getY(), b.getZ());
                 gl.glTexCoord2f(c.u, c.v); 
-                gl.glVertex3f(c.x, c.y, c.z);
+                gl.glVertex3f(c.getX(), c.getY(), c.getZ());
             }
             
         }
