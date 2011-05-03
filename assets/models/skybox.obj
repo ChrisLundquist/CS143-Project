@@ -1,7 +1,7 @@
 # XSI Wavefront OBJ Export v3.0
 # File Created: Sun Apr 17 02:10:16 2011
 # XSI Version: 8.0.201.0
-mtllib assets/materials/sky_cube.mtl
+mtllib sky_cube.mtl
 
 o cube
 # Hierarchy (from self to top father)

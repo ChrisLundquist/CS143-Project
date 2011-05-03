@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
+    public static final String MATERIAL_DIR = "assets/materials/";
+    
     public static int load(String filepath){
-        return load(new File(filepath));
+        return load(new File(MATERIAL_DIR + filepath));
     }
     
     public static int load(File file) {
