@@ -24,7 +24,7 @@ public class Bullet extends Actor {
         super.update();
         if(age > MAX_AGE){
             // FIXME this throws a concurrent access exception
-            //actor.Actor.removeActor(this);
+            //delete();
         }
     }
 }
