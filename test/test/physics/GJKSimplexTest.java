@@ -39,13 +39,11 @@ public class GJKSimplexTest {
         Sphere a = new Sphere(new Vector3(4, 0, 0), 1);
         Sphere b = new Sphere(new Vector3(0, 0, 0), 1);
         
+        // Test two no intersecting spheres considering the simple case where they are all on the x axis
         assertEquals(new Vector3(6, 0, 0),
                 GJKSimplex.getSupport(a, b, Vector3.UNIT_X));
         assertEquals(new Vector3(2, 0, 0),
                 GJKSimplex.getSupport(a, b, Vector3.UNIT_X.negate()));
-
-        
-        
     }
     
     
