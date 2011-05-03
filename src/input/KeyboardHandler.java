@@ -34,6 +34,8 @@ public class KeyboardHandler implements KeyListener {
         KeyEvent.VK_BACK_SLASH,
         KeyEvent.VK_PAGE_UP,
         KeyEvent.VK_PAGE_DOWN,
+        KeyEvent.VK_J,
+        KeyEvent.VK_L,
     };
     /**
      * This is a mask to indicate if each key is disabled when the game is paused
@@ -56,6 +58,8 @@ public class KeyboardHandler implements KeyListener {
         true, //KeyEvent.VK_BLACK_SLASH,
         true, //KeyEvent.VK_PAGE_UP
         true, //KeyEvent.VK_PAGE_DOWN
+        true,
+        true,
     };
     /**
      * This is a mask to indicate if each key should be debounced
@@ -78,6 +82,8 @@ public class KeyboardHandler implements KeyListener {
         true, //KeyEvent.VK_BLACK_SLASH,
         false, //KeyEvent.VK_PAGE_UP
         false, //KeyEvent.VK_PAGE_DOWN
+        false,
+        false,
     };
 
 

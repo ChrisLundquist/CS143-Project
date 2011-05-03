@@ -3,6 +3,7 @@ package game;
 import input.KeyboardListener;
 import java.io.IOException;
 import actor.Asteroid;
+import actor.CapitalShip;
 
 public class Game {
     private static graphics.Renderer renderer;
@@ -26,6 +27,14 @@ public class Game {
         a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
         
         actor.Actor.addActor(a);
+        
+        CapitalShip capitalShip = new actor.CapitalShip();
+       // capitalShip.setSize(5f);
+        capitalShip.setSize(new math.Vector3(5,4,8));
+        capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
+        capitalShip.setVelocity(new math.Vector3(-.3f, 0f,-.4f));
+        actor.Actor.addActor(capitalShip);
+        
     }
     
     //for HUD radar testing, will be removed later

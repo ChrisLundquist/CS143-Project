@@ -79,6 +79,12 @@ public class Player implements Serializable {
             case BACK:
                 ship.reverseThrust();
                 break;
+            case ROLL_LEFT:
+                ship.rollLeft();
+                break;
+            case ROLL_RIGHT:
+                ship.rollRight();
+                break;
             default:
                 System.err.println("Player: unhandled input: " + action);
         }

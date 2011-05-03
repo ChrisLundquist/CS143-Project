@@ -89,6 +89,9 @@ public class Model implements math.Supportable{
         } else if (actor instanceof Skybox){
             return SKYBOX;
         }
+        else if (actor instanceof actor.CapitalShip){
+            return ASTEROID;
+        }
         return ASTEROID;
     }
 

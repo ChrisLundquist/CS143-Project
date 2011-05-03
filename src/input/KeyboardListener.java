@@ -12,9 +12,6 @@ public class KeyboardListener implements KeyListener {
      * spread from 0 to 65535 we have an array of the keys we are interested in
      * and use the same index in the key state array as in the KEYS_IN_USE array.
      */
-    /**
-     * These are the keys we will maintain key state for.
-     */
     private static final int[] KEYS_IN_USE = {
         KeyEvent.VK_SPACE,
         KeyEvent.VK_UP,
@@ -33,6 +30,8 @@ public class KeyboardListener implements KeyListener {
         KeyEvent.VK_BACK_SLASH,
         KeyEvent.VK_PAGE_UP,
         KeyEvent.VK_PAGE_DOWN,
+        KeyEvent.VK_J,
+        KeyEvent.VK_L,
     };
     /**
      * This is a mask to indicate if each key is disabled when the game is paused
@@ -55,6 +54,8 @@ public class KeyboardListener implements KeyListener {
         true, //KeyEvent.VK_BLACK_SLASH,
         true, //KeyEvent.VK_PAGE_UP
         true, //KeyEvent.VK_PAGE_DOWN
+        true,
+        true,
     };
     /**
      * This is a mask to indicate if each key should be debounced
@@ -77,8 +78,9 @@ public class KeyboardListener implements KeyListener {
         true, //KeyEvent.VK_BLACK_SLASH,
         false, //KeyEvent.VK_PAGE_UP
         false, //KeyEvent.VK_PAGE_DOWN
+        false,
+        false,
     };
-
 
     private boolean[] keyState;
     private int[] keyDebounce;
@@ -176,6 +178,13 @@ public class KeyboardListener implements KeyListener {
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
                     break;
                 case(KeyEvent.VK_PAGE_DOWN):
+                    inputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
+                    break;
+                    //the following two key presses are so I can test since my laptop doesnt have page up/down keys
+                case(KeyEvent.VK_J):
+                    inputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
+                    break;
+                case(KeyEvent.VK_L):
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
                     break;
                 case(KeyEvent.VK_A):

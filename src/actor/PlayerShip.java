@@ -2,6 +2,7 @@ package actor;
 
 public class PlayerShip extends Actor {
     private static final float TURN_SPEED = 0.01f;
+    private static final float ROLL_DEGREE = 0.05f;
     private static final int SHOT_COOLDOWN = 1000;
     private static final long serialVersionUID = 260627862699350716L;
     long lastShotTime;
@@ -17,7 +18,6 @@ public class PlayerShip extends Actor {
      * 
      * Shoot your cube_cube!
      * 
-     * Currently a switch statement that prevent you from shooting constantly shooting bullets
      * Will be moved into more suitable location once we have more projectiles and/or xbox controller input is implemented
      * 
      */
@@ -46,6 +46,12 @@ public class PlayerShip extends Actor {
     }
     public void turnRight() {
         changeYaw(-TURN_SPEED);
+    }
+    public void rollLeft() {
+        changeRoll(ROLL_DEGREE);
+    }
+    public void rollRight() {
+        changeRoll(-ROLL_DEGREE);
     }
     public void update(){
         super.update();

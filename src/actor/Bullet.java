@@ -14,6 +14,14 @@ public class Bullet extends Actor {
         position = new math.Vector3(player.getPosition());
         setSize(.1f);
     }
+    
+    public Bullet(CapitalShip capitalShip){
+        super();
+        angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
+        this.velocity = capitalShip.velocity.plus(capitalShip.getDirection().times(BULLET_SPEED));
+        position = new math.Vector3(capitalShip.getPosition());
+        setSize(.1f);
+    }
 
     @Override
     public void handleCollision(Actor other) {
