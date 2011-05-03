@@ -14,7 +14,6 @@ public class Bullet extends Actor {
         position = new math.Vector3(actor.getPosition());
         setSize(.1f);
     }
-
     @Override
     public void handleCollision(Actor other) {
         System.err.println("DEBUG: Collision Detected");

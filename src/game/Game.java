@@ -2,6 +2,8 @@ package game;
  
 import input.KeyboardListener;
 import java.io.IOException;
+
+import settings.Settings;
 import actor.Asteroid;
 import actor.CapitalShip;
 
@@ -16,6 +18,11 @@ public class Game {
     static actor.Asteroid a;
     
     public static void init(){
+        try {
+            Settings.init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         map = Map.load("example_1");
         player = new Player();
                 
@@ -25,7 +32,7 @@ public class Game {
       
         a = new actor.Asteroid();
         a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
-        
+ 
         actor.Actor.addActor(a);
         
         CapitalShip capitalShip = new actor.CapitalShip();
@@ -34,10 +41,7 @@ public class Game {
         capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
         capitalShip.setVelocity(new math.Vector3(-.3f, 0f,-.4f));
         actor.Actor.addActor(capitalShip);
-     
-        
     }
-    
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
         return a;

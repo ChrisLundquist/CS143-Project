@@ -15,9 +15,10 @@ public class InputRouter{
         YAW_RIGHT,
         ROLL_LEFT,
         ROLL_RIGHT,
+        CHANGE_WEAPON,
     }
 
-    public void sendAction(Interaction i) {
+    public static void sendAction(Interaction i) {
         Player player = Game.getPlayer();
         player.input(i);
     }

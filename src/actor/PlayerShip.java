@@ -28,7 +28,6 @@ public class PlayerShip extends Actor {
             lastShotTime = System.currentTimeMillis();
         }
     }
-
     public void forwardThrust() {
         position.plusEquals(getDirection().times(0.1f));
     }
@@ -48,13 +47,17 @@ public class PlayerShip extends Actor {
         changeYaw(-TURN_SPEED);
     }
     public void rollLeft() {
-        changeRoll(-ROLL_DEGREE);
+        changeRoll(ROLL_DEGREE);
     }
     public void rollRight() {
-        changeRoll(ROLL_DEGREE);
+        changeRoll(-ROLL_DEGREE);
+    }
+    public void changeWeapon() {
+        
     }
     public void update(){
         super.update();
         dampenAngularVelocity();
     }
+
 }
