@@ -2,6 +2,8 @@ package game;
  
 import input.KeyboardListener;
 import java.io.IOException;
+
+import settings.Settings;
 import actor.Asteroid;
 import actor.CapitalShip;
 
@@ -16,6 +18,11 @@ public class Game {
     static actor.Asteroid a;
     
     public static void init(){
+        try {
+            Settings.init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         map = Map.load("example_1");
         player = new Player();
                 

@@ -17,7 +17,7 @@ public class InputRouter{
         ROLL_RIGHT,
     }
 
-    public void sendAction(Interaction i) {
+    public static void sendAction(Interaction i) {
         Player player = Game.getPlayer();
         player.input(i);
     }

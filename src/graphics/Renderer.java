@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.List;
 
 import javax.media.opengl.GL2;
@@ -14,6 +15,8 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
+
+import settings.Settings;
 
 import actor.Actor;
 
@@ -109,7 +112,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
-
+        
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
