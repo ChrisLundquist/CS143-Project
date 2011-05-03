@@ -34,6 +34,7 @@ public class Game {
         capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
         capitalShip.setVelocity(new math.Vector3(-.3f, 0f,-.4f));
         actor.Actor.addActor(capitalShip);
+     
         
     }
     

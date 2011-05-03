@@ -5,7 +5,7 @@ public class PlayerShip extends Actor {
     private static final float ROLL_DEGREE = 0.05f;
     private static final int SHOT_COOLDOWN = 1000;
     private static final long serialVersionUID = 260627862699350716L;
-    long lastShotTime;
+    long lastShotTime, lastRollLeftTime;
     public PlayerShip(){
         super();
     }
@@ -48,10 +48,10 @@ public class PlayerShip extends Actor {
         changeYaw(-TURN_SPEED);
     }
     public void rollLeft() {
-        changeRoll(ROLL_DEGREE);
+        changeRoll(-ROLL_DEGREE);
     }
     public void rollRight() {
-        changeRoll(-ROLL_DEGREE);
+        changeRoll(ROLL_DEGREE);
     }
     public void update(){
         super.update();

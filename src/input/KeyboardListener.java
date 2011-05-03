@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 public class KeyboardListener implements KeyListener {
+
     private static final int DEBOUNCE_TIME = 20;
     /*
      * To handle multiple keys pressed at once, we maintain a keyState array of
@@ -80,7 +81,7 @@ public class KeyboardListener implements KeyListener {
         false, //KeyEvent.VK_PAGE_DOWN
         false,
         false,
-    };
+    };  
 
     private boolean[] keyState;
     private int[] keyDebounce;
@@ -158,8 +159,7 @@ public class KeyboardListener implements KeyListener {
             }
 
             switch(KEYS_IN_USE[i]){
-                case(KeyEvent.VK_SPACE):
-                    
+                case(KeyEvent.VK_SPACE): 
                     inputRouter.sendAction(InputRouter.Interaction.SHOOT);
                     break;
                 case(KeyEvent.VK_UP):
@@ -167,7 +167,7 @@ public class KeyboardListener implements KeyListener {
                     break;
                 case(KeyEvent.VK_DOWN):
                     inputRouter.sendAction(InputRouter.Interaction.PITCH_DOWN);
-                    break;
+                    break; 
                 case(KeyEvent.VK_LEFT):
                     inputRouter.sendAction(InputRouter.Interaction.YAW_LEFT);
                     break;
@@ -178,11 +178,13 @@ public class KeyboardListener implements KeyListener {
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
                     break;
                 case(KeyEvent.VK_PAGE_DOWN):
+                   
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
                     break;
                     //the following two key presses are so I can test since my laptop doesnt have page up/down keys
                 case(KeyEvent.VK_J):
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
+                   
                     break;
                 case(KeyEvent.VK_L):
                     inputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
