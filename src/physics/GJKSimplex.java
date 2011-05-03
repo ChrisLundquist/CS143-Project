@@ -6,7 +6,7 @@ import math.Supportable;
 
 // http://mollyrocket.com/forums/viewtopic.php?t=245
 public class GJKSimplex{
-    static private boolean containsOrigin(List<Vector3> simplex) {
+    static public boolean containsOrigin(List<Vector3> simplex) {
         // If we don't have 4 points, then we can't enclose the origin in R3
         if(simplex.size() < 4)
             return false;
@@ -187,7 +187,7 @@ public class GJKSimplex{
         return findTriangleSimplex(simplex,direction);
     }
 
-    static private Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
+    static public Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
         return lhs.getFarthestPointInDirection(direction).minus(rhs.getFarthestPointInDirection(direction.negate()));
     }
 
