@@ -29,7 +29,6 @@ public class KeyboardListener implements KeyListener {
 
     public void update() {
         for(int key:currentKeys){
-            System.out.println(key);
             //Directions
             if(key==Settings.Profile.Keys.forward){
                 InputRouter.sendAction(InputRouter.Interaction.FORWARD);
