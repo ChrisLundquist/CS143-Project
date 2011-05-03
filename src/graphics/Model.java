@@ -10,6 +10,7 @@ public class Model implements math.Supportable{
     private static final String MODEL_PATH = "assets/models/";
     private static final String ASTEROID = "cube_cube.obj";
     private static final String PLAYER = "cube_cube.obj";
+    private static final String SKYBOX = "skybox.obj";
 
     private static final int NO_LIST = -1;
     protected int id;
@@ -42,12 +43,9 @@ public class Model implements math.Supportable{
     }
 
     public static void loadModels() {
-        // CL - Do we want to generate display lists for everything at load time
-        //      or do that lazily?
-        Model.findOrCreateByName("cube_cube.obj");
-        Model.findOrCreateByName("cube.obj");
-        Model.findOrCreateByName("skybox.obj");
-        Model.findOrCreateByName("shuttle.obj");
+        Model.findOrCreateByName(ASTEROID);
+        Model.findOrCreateByName(SKYBOX);
+        Model.findOrCreateByName(PLAYER);
     }
 
     /* 
@@ -83,12 +81,13 @@ public class Model implements math.Supportable{
     }
 
 
-    public static String getModelIdFor(actor.Actor actor) {
-        // FIXME replace the magic numbers!
+    public static String getModelIdFor(Object actor) {
         if(actor instanceof actor.Asteroid){
             return ASTEROID;
         } else if (actor instanceof actor.PlayerShip) {
             return PLAYER;
+        } else if (actor instanceof Skybox){
+            return SKYBOX;
         }
         return ASTEROID;
     }
