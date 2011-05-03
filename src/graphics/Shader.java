@@ -24,7 +24,6 @@ public class Shader {
         try {
             init(gl);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

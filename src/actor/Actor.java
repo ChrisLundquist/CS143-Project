@@ -203,14 +203,13 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     }
 
     public Vector3 getDirection() {
-        // FIXME this often points in a negative direction
         return rotation.rollAxis();
     }
 
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null)
-            model = Model.findByName(modelName);
+            model = Model.findOrCreateByName(modelName);
 
         return model;
     }

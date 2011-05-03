@@ -3,14 +3,16 @@
  */
 package graphics;
 
+import java.util.List;
 import java.util.Vector;
 import javax.media.opengl.GL2;
 
 public class Polygon {
     private transient Material material;
     Vector<Vertex> verticies;
-    Vector<String> groups;
+    List<String> groups;
     private String materialName;
+    public String object;
 
     public Polygon(String materialName, Vertex[] verticies) {
         this.materialName = materialName;

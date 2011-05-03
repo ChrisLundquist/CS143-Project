@@ -9,17 +9,10 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
-    public static void main(String[] args) {
-        load("assets/materials/example.mtl");
-        
-        for (Material m: Material.materials.values())
-            System.out.println(m);
-       
-        System.out.println("Complete");
-    }
-
+    public static final String MATERIAL_DIR = "assets/materials/";
+    
     public static int load(String filepath){
-        return load(new File(filepath));
+        return load(new File(MATERIAL_DIR + filepath));
     }
     
     public static int load(File file) {
