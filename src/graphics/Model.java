@@ -118,7 +118,6 @@ public class Model implements math.Supportable{
                 } 
             }
         }
-        // The answer we want to return is our best magnitude times the direction
         return max;
     }
 
