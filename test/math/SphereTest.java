@@ -1,5 +1,4 @@
-package test.math;
-import math.*;
+package math;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

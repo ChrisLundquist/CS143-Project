@@ -1,4 +1,4 @@
-package test.physics;
+package physics;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.Test;
 
 import physics.GJKSimplex;
-import test.math.SphereTest;
 import math.*;
 
 public class GJKSimplexTest {
