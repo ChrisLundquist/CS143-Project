@@ -7,19 +7,11 @@ public class Bullet extends Actor {
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     private static final float BULLET_SPEED = 1.0f;
     
-    public Bullet(PlayerShip player){
+    public Bullet(Actor actor){
         super();
         angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
-        this.velocity = player.velocity.plus(player.getDirection().times(BULLET_SPEED));
-        position = new math.Vector3(player.getPosition());
-        setSize(.1f);
-    }
-    
-    public Bullet(CapitalShip capitalShip){
-        super();
-        angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
-        this.velocity = capitalShip.velocity.plus(capitalShip.getDirection().times(BULLET_SPEED));
-        position = new math.Vector3(capitalShip.getPosition());
+        this.velocity = actor.velocity.plus(actor.getDirection().times(BULLET_SPEED));
+        position = new math.Vector3(actor.getPosition());
         setSize(.1f);
     }
 

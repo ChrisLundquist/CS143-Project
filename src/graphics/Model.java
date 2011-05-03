@@ -11,6 +11,10 @@ public class Model implements math.Supportable{
     private static final String ASTEROID = "cube_cube.obj";
     private static final String PLAYER = "cube_cube.obj";
     private static final String SKYBOX = "skybox.obj";
+    private static final String BULLET = "bullet.obj";
+    private static final String MISSILE = "missile.obj";
+    private static final String CAPITAL_SHIP = "cube_cube.obj";
+
 
     private static final int NO_LIST = -1;
     protected int id;
@@ -88,9 +92,12 @@ public class Model implements math.Supportable{
             return PLAYER;
         } else if (actor instanceof Skybox){
             return SKYBOX;
-        }
-        else if (actor instanceof actor.CapitalShip){
-            return ASTEROID;
+        }else if (actor instanceof actor.CapitalShip){
+            return CAPITAL_SHIP;
+        } else if(actor instanceof actor.Bullet){
+            return BULLET;
+        } else if ( actor instanceof actor.Missile){
+            return MISSILE;
         }
         return ASTEROID;
     }
