@@ -85,6 +85,9 @@ public class Player implements Serializable {
             case ROLL_RIGHT:
                 ship.rollRight();
                 break;
+            case CHANGE_WEAPON:
+                ship.changeWeapon();
+                break;
             default:
                 System.err.println("Player: unhandled input: " + action);
         }
