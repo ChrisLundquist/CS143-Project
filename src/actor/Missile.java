@@ -4,8 +4,7 @@ import math.Quaternion;
 import math.Vector3;
 
 public class Missile extends Actor {
-    private static final float MISSILE_SPEED = 1.0f;
-
+    private static final float MISSILE_SPEED = 0.5f;
 
     @Override
     public void handleCollision(Actor other) {
