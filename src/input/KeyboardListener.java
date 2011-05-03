@@ -1,6 +1,4 @@
 package input;
-import game.Game;
-import game.Player;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
