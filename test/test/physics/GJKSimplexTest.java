@@ -78,8 +78,8 @@ public class GJKSimplexTest {
 
         // According to the simplex algorithm two of the same object should be colliding
         // We handle this before we test them against each other to keep the detection simpler
-        assertTrue(GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
-        assertTrue(GJKSimplex.isColliding(s4441, s4441));
+        assertEquals(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE),GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
+        assertEquals(s4441.isColliding(s4441),GJKSimplex.isColliding(s4441, s4441));
 
         // partially colliding Spheres
         assertTrue(GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, s0505051));
@@ -101,12 +101,13 @@ public class GJKSimplexTest {
                     assertEquals(sphere2.isColliding(sphere1),GJKSimplex.isColliding(sphere2, sphere1));
                 } catch (AssertionError e){
                     System.err.println(e);
-                    System.err.println(sphere1.distance(sphere2));
+                    System.err.println("Distance " + sphere1.distance(sphere2));
                     System.err.println(sphere1);
                     System.err.println(sphere2);
                     throw e;
                 }
             }
+            //System.out.print(".");
         }
     }
 }

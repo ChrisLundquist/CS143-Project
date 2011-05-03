@@ -10,7 +10,7 @@ public class Model implements math.Supportable{
     private static final String MODEL_PATH = "assets/models/";
     private static final String ASTEROID = "cube_cube.obj";
     private static final String PLAYER = "cube_cube.obj";
-    
+
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
@@ -30,11 +30,11 @@ public class Model implements math.Supportable{
             model = createByName(filePath);
         return model;
     }
-    
+
     public static Model findByName(String filePath){
         return models.get(filePath);
     }
-    
+
     public static Model createByName(String filePath){
         Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
         models.put(filePath, model);
@@ -107,21 +107,20 @@ public class Model implements math.Supportable{
 
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        float furthestMagnitude = 0.0f;
+        Vector3 max = polygons.firstElement().verticies.firstElement().coord;
         // Normalize our direction for good measure.
         direction.normalize();
         // Loop though all of our polygons
         for(Polygon p : polygons){
             // And all of the vertices in each polygon
             for(Vertex v : p.verticies){
-                // find the magnitude of the projected vertex on our direction vector
-                float magnitude = direction.dotProduct(v.coord) / v.coord.dotProduct(v.coord);
-                // if it is bigger than what we have, keep it
-                furthestMagnitude = Math.max(furthestMagnitude, magnitude);
+                if (max.dotProduct(direction) < v.coord.dotProduct(direction)) { 
+                    max = v.coord; 
+                } 
             }
         }
         // The answer we want to return is our best magnitude times the direction
-        return direction.times(furthestMagnitude);
+        return max;
     }
 
 
