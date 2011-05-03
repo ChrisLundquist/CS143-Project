@@ -1,5 +1,6 @@
 package settings;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -87,6 +88,186 @@ public class Settings {
     }
 
     public static int stringToKey(String input){
+        
+        /**
+         * LETTERS
+         */
+        if(input.equalsIgnoreCase("a")){
+            return KeyEvent.VK_A;
+        }
+        if(input.equalsIgnoreCase("b")){
+            return KeyEvent.VK_B;
+        }
+        if(input.equalsIgnoreCase("c")){
+            return KeyEvent.VK_C;
+        }
+        if(input.equalsIgnoreCase("d")){
+            return KeyEvent.VK_D;
+        }
+        if(input.equalsIgnoreCase("e")){
+            return KeyEvent.VK_E;
+        }
+        if(input.equalsIgnoreCase("f")){
+            return KeyEvent.VK_F;
+        }
+        if(input.equalsIgnoreCase("g")){
+            return KeyEvent.VK_G;
+        }
+        if(input.equalsIgnoreCase("h")){
+            return KeyEvent.VK_H;
+        }
+        if(input.equalsIgnoreCase("i")){
+            return KeyEvent.VK_I;
+        }
+        if(input.equalsIgnoreCase("j")){
+            return KeyEvent.VK_J;
+        }
+        if(input.equalsIgnoreCase("k")){
+            return KeyEvent.VK_K;
+        }
+        if(input.equalsIgnoreCase("l")){
+            return KeyEvent.VK_L;
+        }
+        if(input.equalsIgnoreCase("m")){
+            return KeyEvent.VK_M;
+        }
+        if(input.equalsIgnoreCase("n")){
+            return KeyEvent.VK_N;
+        }
+        if(input.equalsIgnoreCase("o")){
+            return KeyEvent.VK_O;
+        }
+        if(input.equalsIgnoreCase("p")){
+            return KeyEvent.VK_P;
+        }
+        if(input.equalsIgnoreCase("q")){
+            return KeyEvent.VK_R;
+        }
+        if(input.equalsIgnoreCase("s")){
+            return KeyEvent.VK_S;
+        }
+        if(input.equalsIgnoreCase("t")){
+            return KeyEvent.VK_T;
+        }
+        if(input.equalsIgnoreCase("u")){
+            return KeyEvent.VK_U;
+        }
+        if(input.equalsIgnoreCase("v")){
+            return KeyEvent.VK_V;
+        }
+        if(input.equalsIgnoreCase("w")){
+            return KeyEvent.VK_W;
+        }
+        if(input.equalsIgnoreCase("x")){
+            return KeyEvent.VK_X;
+        }
+        if(input.equalsIgnoreCase("y")){
+            return KeyEvent.VK_Y;
+        }
+        if(input.equalsIgnoreCase("z")){
+            return KeyEvent.VK_Z;
+        }
+        
+        /**
+         * Arrows
+         */
+        if(input.equalsIgnoreCase("up")){
+            return KeyEvent.VK_UP;
+        }
+        if(input.equalsIgnoreCase("down")){
+            return KeyEvent.VK_DOWN;
+        }
+        if(input.equalsIgnoreCase("left")){
+            return KeyEvent.VK_LEFT;
+        }
+        if(input.equalsIgnoreCase("right")){
+            return KeyEvent.VK_RIGHT;
+        }
+        
+        /**
+         * NUMBERS
+         */
+        if(input.equalsIgnoreCase("0")){
+            return KeyEvent.VK_0;
+        }
+        if(input.equalsIgnoreCase("1")){
+            return KeyEvent.VK_1;
+        }
+        if(input.equalsIgnoreCase("2")){
+            return KeyEvent.VK_A;
+        }
+        if(input.equalsIgnoreCase("3")){
+            return KeyEvent.VK_3;
+        }
+        if(input.equalsIgnoreCase("4")){
+            return KeyEvent.VK_4;
+        }
+        if(input.equalsIgnoreCase("5")){
+            return KeyEvent.VK_5;
+        }
+        if(input.equalsIgnoreCase("6")){
+            return KeyEvent.VK_6;
+        }
+        if(input.equalsIgnoreCase("7")){
+            return KeyEvent.VK_7;
+        }
+        if(input.equalsIgnoreCase("8")){
+            return KeyEvent.VK_8;
+        }
+        if(input.equalsIgnoreCase("9")){
+            return KeyEvent.VK_9;
+        }
+        
+        /**
+         * Numpad
+         */
+        if(input.equalsIgnoreCase("num_0")){
+            return KeyEvent.VK_NUMPAD0;
+        }
+        if(input.equalsIgnoreCase("num_1")){
+            return KeyEvent.VK_NUMPAD1;
+        }
+        if(input.equalsIgnoreCase("num_2")){
+            return KeyEvent.VK_NUMPAD2;
+        }
+        if(input.equalsIgnoreCase("num_3")){
+            return KeyEvent.VK_NUMPAD3;
+        }
+        if(input.equalsIgnoreCase("num_4")){
+            return KeyEvent.VK_NUMPAD4;
+        }
+        if(input.equalsIgnoreCase("num_5")){
+            return KeyEvent.VK_NUMPAD5;
+        }
+        if(input.equalsIgnoreCase("num_6")){
+            return KeyEvent.VK_NUMPAD6;
+        }
+        if(input.equalsIgnoreCase("num_7")){
+            return KeyEvent.VK_NUMPAD7;
+        }
+        if(input.equalsIgnoreCase("num_8")){
+            return KeyEvent.VK_NUMPAD8;
+        }
+        if(input.equalsIgnoreCase("num_9")){
+            return KeyEvent.VK_NUMPAD9;
+        }
+        
+        /**
+         * misc keys
+         */
+        if(input.equalsIgnoreCase("space")){
+            return KeyEvent.VK_SPACE;
+        }
+        if(input.equalsIgnoreCase("shift")){
+            return KeyEvent.VK_SHIFT;
+        }
+        if(input.equalsIgnoreCase("ctrl")){
+            return KeyEvent.VK_CONTROL;
+        }
+        if(input.equalsIgnoreCase("alt")){
+            return KeyEvent.VK_ALT;
+        }
+        
         try{
             return Integer.parseInt(input);
         }

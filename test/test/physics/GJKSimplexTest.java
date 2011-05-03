@@ -31,6 +31,44 @@ public class GJKSimplexTest {
         sphereColliding();
         cubeColliding();
     }
+    
+    @Test
+    public void testGetSupport() {
+        assertEquals(Vector3.UNIT_X.times(2),
+                GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, Vector3.UNIT_X));
+        Sphere a = new Sphere(new Vector3(4, 0, 0), 1);
+        Sphere b = new Sphere(new Vector3(0, 0, 0), 1);
+        
+        // Test two no intersecting spheres considering the simple case where they are all on the x axis
+        assertEquals(new Vector3(6, 0, 0),
+                GJKSimplex.getSupport(a, b, Vector3.UNIT_X));
+        assertEquals(new Vector3(2, 0, 0),
+                GJKSimplex.getSupport(a, b, Vector3.UNIT_X.negate()));
+    }
+    
+    
+    @Test
+    public void testContainsOrigin() {
+        java.util.List<Vector3> simplex = new java.util.ArrayList<Vector3>();
+        
+        simplex.add(new Vector3(0f,    0f,    1f));
+        simplex.add(new Vector3(1f,    0f,    -0.5f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  -0.5f));
+        simplex.add(new Vector3(-0.5f, -0.5f, -0.5f));
+        assertTrue(GJKSimplex.containsOrigin(simplex));
+        
+        // A tetrahedron above the origin should not contain the origin.
+        simplex.clear();
+        simplex.add(new Vector3(0f,    0f,    2f));
+        simplex.add(new Vector3(1f,    0f,    0.5f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        
+        // An empty simplex should not contain the origin
+        simplex.clear();
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+    }
 
     private void cubeColliding(){
         actor.Asteroid cube1 = new actor.Asteroid();
@@ -78,7 +116,9 @@ public class GJKSimplexTest {
 
         // According to the simplex algorithm two of the same object should be colliding
         // We handle this before we test them against each other to keep the detection simpler
-        assertEquals(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE),GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
+        assertTrue(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE));
+        assertTrue(GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
+        assertEquals(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE), GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
         assertEquals(s4441.isColliding(s4441),GJKSimplex.isColliding(s4441, s4441));
 
         // partially colliding Spheres
