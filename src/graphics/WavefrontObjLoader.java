@@ -8,12 +8,6 @@ import java.util.Vector;
  *  lass to load Wavefront .obj files
  */
 public class WavefrontObjLoader {
-    public static void main(String[] args) {
-        File file = new File("assets/cube.obj");
-        load(file);
-        System.out.println("Complete");
-    }
-
     public static Model load(String filepath){
         return load(new File(filepath));
     }
@@ -37,19 +31,23 @@ public class WavefrontObjLoader {
         return wol.generateModel();
     }
 
-    private Vector<ObjVertex> geo_verticies;
-    private Vector<ObjVertex> texture_verticies;
-    private Vector<ObjVertex> vertex_normals;
+    private Vector<ObjVertex> geoVerticies;
+    private Vector<ObjVertex> textureverticies;
+    private Vector<ObjVertex> vertexNormals;
     private Vector<Polygon> polygons;
-    private Material current_material;
+    private Material currentMaterial;
+    private String currentObject;
+    private java.util.List<String> currentGroups;
 
 
     private WavefrontObjLoader() {
-        geo_verticies = new Vector<ObjVertex>();
-        texture_verticies = new Vector<ObjVertex>();
-        vertex_normals = new Vector<ObjVertex>();
+        geoVerticies = new Vector<ObjVertex>();
+        textureverticies = new Vector<ObjVertex>();
+        vertexNormals = new Vector<ObjVertex>();
         polygons = new Vector<Polygon>();
-        current_material = Material.DEFAULT_MATERIAL;
+        currentMaterial = Material.DEFAULT_MATERIAL;
+        currentObject = "";
+        currentGroups = new Vector<String>();
     }
 
     private void readLine(String line) {
@@ -60,19 +58,24 @@ public class WavefrontObjLoader {
             String token = tokenizer.nextToken();
 
             switch(tokenType(token)) {
+                case SMOOTHING_GROUP: /* NOT IMPLEMENTED */
                 case COMMENT:
                     /* NOOP - skip remainder of this line */
                     return;
                 case GROUP:
-                    break;
+                    setGroup(tokenizer);
+                    return;
+                case OBJECT_NAME:
+                    setObject(tokenizer.nextToken());
+                    return;
                 case GEOMETRIC_VERTEX:
-                    geo_verticies.add(readVertex(tokenizer));
+                    geoVerticies.add(readVertex(tokenizer));
                     break;
                 case VERTEX_NORMAL:
-                    vertex_normals.add(readVertex(tokenizer));
+                    vertexNormals.add(readVertex(tokenizer));
                     break;
                 case TEXTURE_COORDINATE:
-                    texture_verticies.add(readVertex(tokenizer));
+                    textureverticies.add(readVertex(tokenizer));
                     break;
                 case USEMAP:
                     break;
@@ -84,7 +87,7 @@ public class WavefrontObjLoader {
                         WavefrontMtlLoader.load(tokenizer.nextToken());
                     break;
                 case USEMTL:
-                        setMaterial(tokenizer.nextToken());
+                    setMaterial(tokenizer.nextToken());
                     return;
                 case FACE:
                     polygons.add(readPolygon(tokenizer));
@@ -96,8 +99,18 @@ public class WavefrontObjLoader {
         }
     }
 
+    private void setObject(String nextToken) {
+        currentObject = nextToken;
+    }
+
+    private void setGroup(StringTokenizer tokenizer) {
+        currentGroups.clear();
+        while(tokenizer.hasMoreTokens())
+            currentGroups.add(tokenizer.nextToken());
+    }
+
     private void setMaterial(String nextToken) {
-        current_material = Material.findOrCreateByName(nextToken);
+        currentMaterial = Material.findOrCreateByName(nextToken);
     }
 
     private TokenType tokenType(String token) {
@@ -123,6 +136,10 @@ public class WavefrontObjLoader {
             return TokenType.GROUP;
         if (token.regionMatches(0, "#", 0, 1))
             return TokenType.COMMENT;
+        if (token.equals("o"))
+            return TokenType.OBJECT_NAME;
+        if (token.equals("s"))
+            return TokenType.SMOOTHING_GROUP;
 
         return TokenType.UNKNOWN;
     }
@@ -149,28 +166,30 @@ public class WavefrontObjLoader {
             switch(vertex_tokens.length) {
                 case 1:
                     /* Single number - lookup geo vertex only */
-                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0]) - 1); /* Obj files starts w/ vertex 1 */
+                    geo = geoVerticies.get(Integer.parseInt(vertex_tokens[0]) - 1); /* Obj files starts w/ vertex 1 */
                     verticies.add(new Vertex(geo.x, geo.y, geo.z));
                     break;
                 case 2:
                     /* Two numbers - geo vertex, and texture coordinate */
-                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
-                    tex = texture_verticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
+                    geo = geoVerticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
+                    tex = textureverticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
                     verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
                     break;
                 case 3:
                     /* geo vertex, texture coordinate and normal */
-                    geo = geo_verticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
-                    tex = texture_verticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
-                    norm = vertex_normals.get(Integer.parseInt(vertex_tokens[2]) - 1);
+                    geo = geoVerticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
+                    tex = textureverticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
+                    norm = vertexNormals.get(Integer.parseInt(vertex_tokens[2]) - 1);
                     verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
                     break;
                 default:
                     throw new IllegalArgumentException("Malformed vertex token: " + token);
             }
         }
-
-        return new Polygon(current_material, verticies);
+        Polygon p = new Polygon(currentMaterial, verticies);
+        p.groups = currentGroups;
+        p.object = currentObject;
+        return p;
     }
 
     private Model generateModel() {
@@ -188,7 +207,9 @@ public class WavefrontObjLoader {
         USEMTL,
         MAPLIB,
         MATLIB,
-        GROUP,
+        GROUP, 
+        OBJECT_NAME,
+        SMOOTHING_GROUP
     }
 
     private static class ObjVertex {
