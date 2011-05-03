@@ -1,4 +1,4 @@
-package test.graphics;
+package graphics;
 
 import graphics.WavefrontObjLoader;
 
