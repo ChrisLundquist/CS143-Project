@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.List;
 
 import javax.media.opengl.GL2;
@@ -16,10 +15,7 @@ import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
-import settings.Settings;
-
 import actor.Actor;
-
 
 import com.jogamp.opengl.util.FPSAnimator;
 
