@@ -147,6 +147,8 @@ public class WavefrontMtlLoader {
             return TokenType.TEXTURE_MAP_FILENAME;
         if (token.equals("map_Kd"))
             return TokenType.TEXTURE_MAP_FILENAME;
+        if (token.regionMatches(0, "#", 0, 1))
+            return TokenType.COMMENT;
         return TokenType.UNKNOWN;
     }
 
