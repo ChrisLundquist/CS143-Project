@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Quaternion implements Serializable {
     private static final long serialVersionUID = 5284423308557214091L;
-    private static final Quaternion IDENTITY = new Quaternion();
+    public static final Quaternion IDENTITY = new Quaternion();
 
     public Quaternion() {
         w_ = 1.0f; // real
@@ -192,119 +192,20 @@ public class Quaternion implements Serializable {
         );
     }
 
-    float getPitch()
-    {
+    float getPitch() {
         return (float) (Math.atan2(2*(y_*z_ + w_*x_), w_*w_ - x_*x_ - y_*y_ + z_*z_) * 180.0 / Math.PI);
     }
 
-    float getYaw()
-    {
+    float getYaw() {
         return (float) Math.asin(-2*(x_*z_ - w_*y_) * 180.0 / Math.PI); 
     }
 
-    float getRoll()
-    {
+    float getRoll() {
         return (float) ((float) Math.atan2(2*(x_*y_ + w_*z_), w_*w_ + x_*x_ - y_*y_ - z_*z_) * 180.0 / Math.PI);
     }
 
-    public static void main(String[] args) {
-        System.out.println("Running quaternion tests");
-
-        // Test basic properties of quaternions
-        {
-            Quaternion n = new Quaternion(-1, 0, 0, 0);
-            Quaternion i = new Quaternion(0, 1, 0, 0);
-            Quaternion j = new Quaternion(0, 0, 1, 0);
-            Quaternion k = new Quaternion(0, 0, 0, 1);
-
-            assert n.equals(n) : "Quaturnion equality";
-            assert n.times(n).equals(IDENTITY) : "(-1)^2 == 1";
-
-            // i^2 = j^2 = k^2 = ijk = -1
-            assert i.times(i).equals(n) : "i^2 == -1";
-            assert j.times(j).equals(n) : "j^2 == -1";
-            assert k.times(k).equals(n) : "k^2 == -1";
-            assert i.times(j).times(k).equals(n) : "ijk == -1";
-        }
-
-        // This transformation matrix should rotate 90 degrees about the x axis
-        assert(new Quaternion(Vector3.UNIT_X, 90).toMatrixString().equals(
-                "| 01.000 00.000 00.000 00.000 |\n" +
-                "| 00.000 00.000 01.000 00.000 |\n" +
-                "| 00.000 -1.000 00.000 00.000 |\n" +
-                "| 00.000 00.000 00.000 01.000 |"
-        ));
-
-
-        // Test roll, pitch and yaw axis
-        {
-            // Start with a fairly random rotation
-            Quaternion r = new Quaternion(Vector3.UNIT_X, 15); 
-            r.timesEquals(new Quaternion(Vector3.UNIT_Y, 7));
-            r.timesEquals(new Quaternion(Vector3.UNIT_Z, -328));
-
-            assert(r.pitchAxis().toString().equals(Vector3.UNIT_X.times(r).toString()));
-            assert(r.yawAxis().toString().equals(Vector3.UNIT_Y.times(r).toString()));
-            assert(r.rollAxis().toString().equals(Vector3.UNIT_Z.times(r).toString()));
-        }
-
-        // Test for gimble lock
-        Quaternion rotation = new Quaternion();
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, -90));
-        // There should be a better way to compare within epsilon
-        assert(rotation.toMatrixString().equals(IDENTITY.toMatrixString()));
-
-        // Test that rotating through 360 degrees on all axies brings us back to normal
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        // Here we get a negative real component by the transformation matrix is the same
-        assert(rotation.toMatrixString().equals(IDENTITY.toMatrixString()));
-
-
-        rotation = new Quaternion();
-        assert rotation.magnitude() == 1.0f;
-        assert rotation.normalize().equals(IDENTITY);
-
-        for( int i = 0; i < (4 * 4096); i++){
-            // Rotate a lot to denormalize our vector
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
-        }
-        rotation.normalize();
-
-
-        // Test the inverse works as expected
-        // Sometimes the inverse isn't quite accurate, but every near due to floating point
-        rotation = new Quaternion();
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 40));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 40));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
-        assert rotation.times(rotation.inverse()).toMatrixString().equals(IDENTITY.toMatrixString());
-
-
-        //Quaternion r = new Quaternion(Vector3.UNIT_Z, 30);
-        //System.out.println(r.pitchAxis());
-
-        System.out.println("Complete (did you -enableassertions ?)");
-    }
-
-    private float w_; // real
-    private float x_; // i
-    private float y_; // j
-    private float z_; // k
+    float w_; // real
+    float x_; // i
+    float y_; // j
+    float z_; // k
 }
