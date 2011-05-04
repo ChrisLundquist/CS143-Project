@@ -143,27 +143,27 @@ public class Quaternion implements Serializable {
      *  | m[3]  m[7]  m[11] m[15] |
      */
     public float[] toGlMatrix(){
-        float[] matrix = new float[16];
-
-        matrix[0]  = 1.0f - 2.0f * ( y_ * y_ + z_ * z_ );
-        matrix[1]  = 2.0f * ( x_ * y_ - z_ * w_ );
-        matrix[2]  = 2.0f * ( x_ * z_ + y_ * w_ );
-        matrix[3]  = 0.0f;
-
-        matrix[4]  = 2.0f * (x_ * y_ + z_ * w_);
-        matrix[5]  = 1.0f - 2.0f * ( x_ * x_ + z_ * z_ );
-        matrix[6]  = 2.0f * ( y_ * z_ - x_ * w_ );
-        matrix[7]  = 0.0f;
-
-        matrix[8]  = 2.0f * (x_ * z_ - y_ * w_);
-        matrix[9]  = 2.0f * (z_ * y_ + x_ * w_ );
-        matrix[10] = 1.0f - 2.0f * ( x_ * x_ + y_ * y_ );
-        matrix[11] = 0.0f;
-
-        matrix[12] = 0.0f;
-        matrix[13] = 0.0f;
-        matrix[14] = 0.0f;
-        matrix[15] = 1.0f;
+        float[] matrix = {
+                1.0f - 2.0f * ( y_ * y_ + z_ * z_ ),
+                2.0f * ( x_ * y_ - z_ * w_ ),
+                2.0f * ( x_ * z_ + y_ * w_ ),
+                0.0f,
+                
+                2.0f * (x_ * y_ + z_ * w_),
+                1.0f - 2.0f * ( x_ * x_ + z_ * z_ ),
+                2.0f * ( y_ * z_ - x_ * w_ ),
+                0.0f,
+                
+                2.0f * (x_ * z_ - y_ * w_),
+                2.0f * (z_ * y_ + x_ * w_ ),
+                1.0f - 2.0f * ( x_ * x_ + y_ * y_ ),
+                0.0f,
+                
+                0.0f,
+                0.0f,
+                0.0f,
+                1.0f
+        };
 
         return matrix;
     }

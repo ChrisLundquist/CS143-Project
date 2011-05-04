@@ -98,9 +98,10 @@ public class QuaternionTest {
     @Test
     public void testNormalize() {
         Quaternion rotation = new Quaternion();
-        assertEquals(1.0, rotation.magnitude(), EPSILON);
+        assertEquals(1.0, rotation.magnitude(), 0);
         assertQuaternionEquals(Quaternion.IDENTITY, rotation.normalize());
-
+        assertQuaternionEquals(Quaternion.IDENTITY, rotation);
+        
         for( int i = 0; i < (4 * 4096); i++){
             // Rotate a lot to denormalize our vector
             rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
@@ -121,6 +122,44 @@ public class QuaternionTest {
         rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
         assertQuaternionEquals(Quaternion.IDENTITY, rotation.times(rotation.inverse()));
 
+    }
+    
+    @Test
+    public void testInversePerformance() {
+        // This was showing up in TPTP as a slow spot
+        Quaternion original = new Quaternion(Vector3.UNIT_Z, 30);
+        original.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        
+        Quaternion rotation = new Quaternion(original);
+        
+        for (int i = 0; i < 16 * 1024; i++)
+            rotation = rotation.inverse();
+        
+        assertQuaternionEquals(original, rotation);
+    }
+    
+    @Test
+    public void testRotationPreformance() {
+        // This was showing up in TPTP as a slow spot
+        Quaternion rotation = new Quaternion(Vector3.UNIT_Z, 30);
+        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        
+        Quaternion rotationDelta = new Quaternion(Vector3.UNIT_X, 0.1f);
+        
+        for (int i = 0; i < 16 * 1024; i++)
+            rotation.timesEquals(rotationDelta);
+
+    }
+    
+    @Test
+    public void testToGlMatrixPreformance() {
+        // This was showing up in TPTP as a slow spot
+        Quaternion rotation = new Quaternion(Vector3.UNIT_Z, 30);
+        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        
+        for (int i = 0; i < 16 * 1024; i++)
+            rotation.toGlMatrix();
+        
     }
 
     private static void assertQuaternionEquals(Quaternion a, Quaternion b) {
