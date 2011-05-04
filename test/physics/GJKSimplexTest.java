@@ -49,6 +49,9 @@ public class GJKSimplexTest {
     @Test
     public void testContainsOrigin() {
         java.util.List<Vector3> simplex = new java.util.ArrayList<Vector3>();
+
+        // An empty simplex should not contain the origin
+        assertFalse(GJKSimplex.containsOrigin(simplex));
         
         simplex.add(new Vector3(0f,    0f,    1f));
         simplex.add(new Vector3(1f,    0f,    -0.5f));
@@ -63,9 +66,51 @@ public class GJKSimplexTest {
         simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
         simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
         assertFalse(GJKSimplex.containsOrigin(simplex));
-        
-        // An empty simplex should not contain the origin
+
+        // Try each permutation of this tetrahedren to test logic on all faces
         simplex.clear();
+        simplex.add(new Vector3(1f,    0f,    0.5f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
+        simplex.add(new Vector3(0f,    0f,    2f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        simplex.clear();
+        simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
+        simplex.add(new Vector3(0f,    0f,    2f));
+        simplex.add(new Vector3(1f,    0f,    0.5f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        simplex.clear();
+        simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
+        simplex.add(new Vector3(0f,    0f,    2f));
+        simplex.add(new Vector3(1f,    0f,    0.5f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+
+        // Now try the same tetrahedren inverted: vertex pointing at the origin
+        simplex.clear();
+        simplex.add(new Vector3(0f,    0f,    0.5f));
+        simplex.add(new Vector3(1f,    0f,    2f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 2f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        simplex.clear();
+        simplex.add(new Vector3(1f,    0f,    2f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 2f));
+        simplex.add(new Vector3(0f,    0f,    0.5f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        simplex.clear();
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+        simplex.add(new Vector3(-0.5f, -0.5f, 2f));
+        simplex.add(new Vector3(0f,    0f,    0.5f));
+        simplex.add(new Vector3(1f,    0f,    2f));
+        assertFalse(GJKSimplex.containsOrigin(simplex));
+        simplex.clear();
+        simplex.add(new Vector3(-0.5f, -0.5f, 2f));
+        simplex.add(new Vector3(0f,    0f,    0.5f));
+        simplex.add(new Vector3(1f,    0f,    2f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
         assertFalse(GJKSimplex.containsOrigin(simplex));
     }
 
