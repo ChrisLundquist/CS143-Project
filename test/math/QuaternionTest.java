@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class QuaternionTest {
 
-    private static final double EPSILON = 1.00E-8;
+    private static final double EPSILON = 1.00E-6;
 
     @Test
     public void testEqualsQuaternion() {
@@ -48,9 +48,9 @@ public class QuaternionTest {
         r.timesEquals(new Quaternion(Vector3.UNIT_Y, 7));
         r.timesEquals(new Quaternion(Vector3.UNIT_Z, -328));
 
-        assertVector3Equals(Vector3.UNIT_X.times(r), r.pitchAxis());
-        assertVector3Equals(Vector3.UNIT_Y.times(r), r.yawAxis());
-        assertVector3Equals(Vector3.UNIT_Z.times(r), r.rollAxis());
+        Vector3Test.assertVector3Equals(Vector3.UNIT_X.negate().times(r), r.pitchAxis());
+        Vector3Test.assertVector3Equals(Vector3.UNIT_Y.negate().times(r), r.yawAxis());
+        Vector3Test.assertVector3Equals(Vector3.UNIT_Z.negate().times(r), r.rollAxis());
     }
    
 
@@ -127,19 +127,8 @@ public class QuaternionTest {
         assertQuaternionEquals(a, b, EPSILON);
     }
 
-    private void assertVector3Equals(Vector3 a, Vector3 b) {
-        assertVector3Equals(a, b, EPSILON);
-    }
-
-    
-    private void assertVector3Equals(Vector3 a, Vector3 b, double delta) {
-        assertEquals(a.x, b.x, delta);
-        assertEquals(a.y, b.y, delta);
-        assertEquals(a.z, b.z, delta);
-    }
-
     private static void assertQuaternionEquals(Quaternion a, Quaternion b, double delta) {
-        assertEquals(a.w_, b.w_, delta);
+        assertEquals(Math.abs(a.w_), Math.abs(b.w_), delta);
         assertEquals(a.x_, b.x_, delta);
         assertEquals(a.y_, b.y_, delta);
         assertEquals(a.z_, b.z_, delta);       

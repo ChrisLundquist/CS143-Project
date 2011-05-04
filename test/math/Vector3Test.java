@@ -7,32 +7,51 @@ import math.Vector3;
 import org.junit.Test;
 
 public class Vector3Test {
+    private static final double EPSILON = 1.00E-6;
+
 
     @Test
     public void testVector3() {
-        fail("Not yet implemented"); // TODO
+        Vector3 v = new Vector3();
+        
+        assertEquals(0.0f, v.x, EPSILON);
+        assertEquals(0.0f, v.y, EPSILON);
+        assertEquals(0.0f, v.z, EPSILON);
     }
 
     @Test
     public void testVector3FloatFloatFloat() {
-        fail("Not yet implemented"); // TODO
+        float x = 1.23f;
+        float y = -2.34f;
+        float z = 0.23f;
+        
+        Vector3 v = new Vector3(x, y, z);
+        
+        assertEquals(x, v.x, EPSILON);
+        assertEquals(y, v.y, EPSILON);
+        assertEquals(z, v.z, EPSILON);
     }
 
     @Test
     public void testVector3Vector3() {
-        fail("Not yet implemented"); // TODO
+        Vector3 original = new Vector3(1.23f, -2.34f, 0.23f);
+        
+        Vector3 copy = new Vector3(original);
+
+        assertVector3Equals(original, copy);
     }
 
     @Test
     public void testToString() {
-        fail("Not yet implemented"); // TODO
+        Vector3 v = new Vector3(1.23f, -2.34f, 0.23f);
+        assertEquals("<1.23000, -2.34000, 0.230000>", v.toString());
     }
 
     @Test
     public void testTimesFloat() {
         Vector3 v1 = new Vector3(0.0f, -2.0f, 6.3f);
-        assertEquals(new Vector3(0.0f, -4.0f, 12.6f),v1.times(2.0f));
-        assertEquals(v1,v1.times(1.0f));
+        assertVector3Equals(new Vector3(0.0f, -4.0f, 12.6f),v1.times(2.0f));
+        assertVector3Equals(v1,v1.times(1.0f));
     }
 
     @Test
@@ -41,9 +60,9 @@ public class Vector3Test {
         Vector3 v1_copy = new Vector3(v1);
         Vector3 v2 = new Vector3( -3.0f, 0.0f, 7.2f);
         Vector3 v2_copy = new Vector3(v2);
-        assertEquals(new Vector3(-2.0f, 1.0f, -6.2f), v1.minus(v2));
-        assertEquals(v1_copy, v1);
-        assertEquals(v2_copy, v2);
+        assertVector3Equals(new Vector3(4.0f, 1.0f, -6.2f), v1.minus(v2));
+        assertVector3Equals(v1_copy, v1);
+        assertVector3Equals(v2_copy, v2);
         
     }
 
@@ -122,4 +141,14 @@ public class Vector3Test {
         fail("Not yet implemented"); // TODO
     }
 
+    public static void assertVector3Equals(Vector3 a, Vector3 b) {
+        assertVector3Equals(a, b, EPSILON);
+    }
+
+    
+    public static void assertVector3Equals(Vector3 a, Vector3 b, double delta) {
+        assertEquals(a.x, b.x, delta);
+        assertEquals(a.y, b.y, delta);
+        assertEquals(a.z, b.z, delta);
+    }
 }
