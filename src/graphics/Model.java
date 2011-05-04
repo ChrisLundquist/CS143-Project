@@ -7,7 +7,7 @@ import javax.media.opengl.GL2;
 import math.Vector3;
 
 public class Model implements math.Supportable{
-    private static final String MODEL_PATH = "assets/models/";
+    static final String MODEL_PATH = "assets/models/";
     private static final String ASTEROID = "cube_cube.obj";
     private static final String PLAYER = "cube_cube.obj";
     private static final String SKYBOX = "skybox.obj";
