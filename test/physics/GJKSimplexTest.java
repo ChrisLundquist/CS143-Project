@@ -171,7 +171,6 @@ public class GJKSimplexTest {
 
         actor.Asteroid cube2 = new actor.Asteroid();
         cube2.setPosition(new Vector3(16.0f,16.0f,16.0f));
-        // TODO add setSize to be taken into account when computing collision
 
         actor.Asteroid cube3 = new actor.Asteroid();
         cube3.setPosition(new Vector3(16.0f,16.0f,15.0f));
