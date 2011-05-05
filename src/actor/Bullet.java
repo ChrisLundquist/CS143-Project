@@ -30,7 +30,7 @@ public class Bullet extends Actor {
     public void handleCollision(Actor other) {
         System.err.println("DEBUG: Collision Detected");
     }
-    
+
     public void update(){
         super.update();
         if(age > MAX_AGE){

@@ -10,6 +10,7 @@ public class Vector3 implements Serializable {
     public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
     public static final Vector3 ORIGIN = new Vector3(0.0f,0.0f,0.0f);
+    public static final Vector3 ZERO = ORIGIN; // makes semantic differences in some if checks
 
     public float x,y,z;
 
@@ -54,6 +55,8 @@ public class Vector3 implements Serializable {
 
     public Vector3 normalize(){
         float magnitude = magnitude();
+        if(magnitude == 0.0) // prevent division by 0
+            return this;
         x /= magnitude;
         y /= magnitude;
         z /= magnitude;

@@ -33,6 +33,14 @@ public class Vector3Test {
     }
 
     @Test
+    public void testSameDirection(){
+        assertTrue(Vector3.UNIT_X.sameDirection(Vector3.UNIT_X));
+        assertFalse(Vector3.UNIT_X.sameDirection(Vector3.UNIT_X.negate()));
+        assertFalse(Vector3.UNIT_X.sameDirection(Vector3.UNIT_Y));
+        assertFalse(Vector3.UNIT_X.sameDirection(Vector3.UNIT_Z));
+    }
+
+    @Test
     public void testVector3Vector3() {
         Vector3 original = new Vector3(1.23f, -2.34f, 0.23f);
         
@@ -73,12 +81,21 @@ public class Vector3Test {
 
     @Test
     public void testNormalize() {
-        fail("Not yet implemented"); // TODO
+        assertEquals(Vector3.UNIT_X, (new Vector3(5,0,0)).normalize());
+        assertEquals(Vector3.UNIT_Y, (new Vector3(0,5,0)).normalize());
+        assertEquals(Vector3.UNIT_Z, (new Vector3(0,0,5)).normalize());
+        assertEquals(Vector3.ORIGIN, Vector3.ORIGIN.normalize());
     }
 
     @Test
     public void testDotProduct() {
-        fail("Not yet implemented"); // TODO
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_X),1.0f,EPSILON);
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_X.negate()),-1.0f,EPSILON);
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_Y),0.0f,EPSILON);
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_Y.negate()),0.0f,EPSILON);
+
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_Z),0.0f,EPSILON);
+        assertEquals(Vector3.UNIT_X.dotProduct(Vector3.UNIT_Z.negate()),0.0f,EPSILON);
     }
 
     @Test
@@ -123,12 +140,8 @@ public class Vector3Test {
 
     @Test
     public void testEqualsVector3() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    @Test
-    public void testEqualsObject() {
-        fail("Not yet implemented"); // TODO
+        assertTrue(Vector3.UNIT_X.equals(Vector3.UNIT_X));
+        assertTrue(Vector3.UNIT_X.equals(new Vector3(Vector3.UNIT_X)));
     }
 
     @Test

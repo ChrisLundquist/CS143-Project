@@ -9,15 +9,15 @@ public class Skybox implements Serializable{
     public static final float SKYBOX_SIZE = -128.0f;
     private transient Model model;
     private final String modelName;
-    
+
     public Skybox(String waveFrontObjectFilepath){
         modelName = waveFrontObjectFilepath;
     }
-    
+
     private void init(GL2 gl){
         model = WavefrontObjLoader.load(modelName);
     }
-    
+
     public void render(GL2 gl) {
         if(model == null) {
             init(gl);
