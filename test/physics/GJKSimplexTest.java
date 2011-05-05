@@ -161,7 +161,6 @@ public class GJKSimplexTest {
         // According to the simplex algorithm two of the same object should be colliding
         // We handle this before we test them against each other to keep the detection simpler
         assertTrue(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE));
-        assertTrue(GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
         assertEquals(SphereTest.UNIT_SPHERE.isColliding(SphereTest.UNIT_SPHERE), GJKSimplex.isColliding(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE));
         assertEquals(s4441.isColliding(s4441),GJKSimplex.isColliding(s4441, s4441));
 
