@@ -114,6 +114,7 @@ public class Vector3 implements Serializable {
     public Vector3 times(float[] m) {
         Vector3 result = new Vector3();
 
+        // NOTE we are assuming this is just a rotation matrix
         result.x = x * m[0] + y * m[4] + z * m[8];
         result.y = x * m[1] + y * m[5] + z * m[9];
         result.z = x * m[2] + y * m[6] + z * m[10];

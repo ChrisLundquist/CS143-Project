@@ -10,11 +10,9 @@ public abstract class Particle extends actor.Actor {
     public void update(){
         // Update our position
         super.update();
-
         // Change our color
         updateColor();
     }
-
     abstract protected void updateColor();
 
     public void delete(){

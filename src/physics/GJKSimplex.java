@@ -6,38 +6,74 @@ import math.Supportable;
 
 // http://mollyrocket.com/forums/viewtopic.php?t=245
 public class GJKSimplex{
-    static private boolean containsOrigin(List<Vector3> simplex) {
+    static boolean containsOrigin(List<Vector3> simplex) {
         // If we don't have 4 points, then we can't enclose the origin in R3
         if(simplex.size() < 4)
             return false;
+        
         Vector3 a = simplex.get(3); 
         Vector3 b = simplex.get(2); 
         Vector3 c = simplex.get(1); 
         Vector3 d = simplex.get(0); 
 
-        Vector3 ao = Vector3.ORIGIN.minus(a); 
-        Vector3 ab = b.minus(a); 
-        Vector3 ac = c.minus(a); 
-        Vector3 ad = d.minus(a); 
-        Vector3 abc = ab.cross(ac); 
-        Vector3 acd = ac.cross(ad); 
-        Vector3 adb = ad.cross(ab); 
+        // Compute all the edges we will use first, to avoid computing the same edge twice.
+        Vector3 ac = c.minus(a);
+        Vector3 ab = b.minus(a);
+        Vector3 bc = c.minus(b);
+        Vector3 bd = d.minus(b);
+        Vector3 ad = d.minus(a);
+        Vector3 ba = ab.negate();
+        Vector3 ao = a.negate();
+        Vector3 bo = b.negate();
 
-        //the side (positive or negative) of B, C and D relative to the planes of ACD, ADB and ABC respectively 
-        int BsideOnACD = acd.dotProduct(ab) > 0.0f ? 1 : 0; 
-        int CsideOnADB = adb.dotProduct(ac) > 0.0f ? 1 : 0; 
-        int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
+        
+        /* We need to find the normals of all the faces
+         * of a tetrahedron
+         * 
+         * Tetrahedron net (unfolded)
+         * A-----------------B-----------------A
+         *  \               / \               /
+         *   \             /   \             /
+         *    \  AC x AB  /     \  AB x AD  /
+         *     \         /       \         /
+         *      \       /         \       /
+         *       \     /  BC x BD  \     /
+         *        \   /             \   /
+         *         \ /               \ /
+         *          C-----------------D
+         *           \               /
+         *            \             /
+         *             \  AD x AC  /
+         *              \         /
+         *               \       /
+         *                \     /
+         *                 \   /
+         *                  \ /
+         *                   A
+         */
+        Vector3 abc = ac.cross(ab);
+        Vector3 bcd = bc.cross(bd);
+        Vector3 adb = ab.cross(ad);
+        Vector3 acd = ad.cross(ac);
 
-        //whether the origin is on the same side of ACD/ADB/ABC as B, C and D respectively 
-        boolean ABsameAsOrigin = (acd.dotProduct(ao) > 0.0f ? 1 : 0) == BsideOnACD; 
-        boolean ACsameAsOrigin = (adb.dotProduct(ao) > 0.0f ? 1 : 0) == CsideOnADB; 
-        boolean ADsameAsOrigin = (abc.dotProduct(ao) > 0.0f ? 1 : 0) == DsideOnABC; 
-
-        //if the origin is on the same side as all B, C and D, the origin is inside the tetrahedron and thus there is a collision 
-        if (ABsameAsOrigin && ACsameAsOrigin && ADsameAsOrigin) { 
-            return true; 
-        } 
-        return false;
+        /*
+         * We don't know which way our sides are described, so we could have an inside out
+         * tetrahedron.
+         * 
+         * So we multiple two dot products, the first tells us which way the normal is facing
+         * and the second tells us which way the origin is from that face, if they are the same
+         * sign then the origin and the vertex opposite that face are in the same direction.
+         * 
+         * Since we just want to know if they are the same sign we multiple the two dot products
+         * together and see if the product is positive.
+         * 
+         * For the origin to be within the tetrahedron, it must be on the inside of all four faces.
+         */
+        return
+            (abc.dotProduct(ad) * abc.dotProduct(ao) > 0.0f) &&
+            (bcd.dotProduct(ba) * bcd.dotProduct(bo) > 0.0f) &&
+            (adb.dotProduct(ac) * adb.dotProduct(ao) > 0.0f) &&
+            (acd.dotProduct(ab) * acd.dotProduct(ao) > 0.0f);
     }
 
     /**
@@ -187,7 +223,7 @@ public class GJKSimplex{
         return findTriangleSimplex(simplex,direction);
     }
 
-    static private Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
+    static Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
         return lhs.getFarthestPointInDirection(direction).minus(rhs.getFarthestPointInDirection(direction.negate()));
     }
 

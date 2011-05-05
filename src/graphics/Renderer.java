@@ -17,7 +17,6 @@ import javax.media.opengl.glu.GLU;
 
 import actor.Actor;
 
-
 import com.jogamp.opengl.util.FPSAnimator;
 
 /* @author Chris Lundquist
@@ -64,7 +63,7 @@ public class Renderer implements GLEventListener {
 
         Game.getPlayer().updateCamera().setPerspective(gl);
         Light.update(gl);
-        //     Game.getMap().getSkybox().render(gl);
+        Game.getMap().getSkybox().render(gl);
 
         // Render each actor       
         List<Actor> actors = Actor.getActors();
@@ -107,7 +106,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
-
+        
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
