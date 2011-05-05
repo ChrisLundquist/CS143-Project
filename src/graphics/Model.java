@@ -13,7 +13,7 @@ public class Model implements math.Supportable{
     private static final String SKYBOX = "skybox.obj";
     private static final String BULLET = "bullet.obj";
     private static final String MISSILE = "missile.obj";
-    private static final String CAPITAL_SHIP = "cube_cube.obj";
+    private static final String CAPITAL_SHIP = "round_capital.obj";
 
 
     private static final int NO_LIST = -1;

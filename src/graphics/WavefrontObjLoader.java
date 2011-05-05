@@ -13,11 +13,16 @@ public class WavefrontObjLoader {
     }
 
     public static Model load(File file) {
+        File transform_file = new File(file.getPath().replaceAll(".obj$", ".trfm"));
         WavefrontObjLoader wol = new WavefrontObjLoader();
         BufferedReader in;
         String line;
 
+
         try {
+            if (transform_file.exists())
+                wol.loadTranform(transform_file);
+
             in = new BufferedReader(new FileReader(file));
 
             // While we have lines in our file
@@ -35,6 +40,13 @@ public class WavefrontObjLoader {
     private Vector<ObjVertex> textureverticies;
     private Vector<ObjVertex> vertexNormals;
     private Vector<Polygon> polygons;
+    // our default transform
+    private float[] transform = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+    };
     private Material currentMaterial;
     private String currentObject;
     private java.util.List<String> currentGroups;
@@ -69,10 +81,10 @@ public class WavefrontObjLoader {
                     setObject(tokenizer.nextToken());
                     return;
                 case GEOMETRIC_VERTEX:
-                    geoVerticies.add(readVertex(tokenizer));
+                    geoVerticies.add(readVertex(tokenizer).transform(transform));
                     break;
                 case VERTEX_NORMAL:
-                    vertexNormals.add(readVertex(tokenizer));
+                    vertexNormals.add(readVertex(tokenizer).transform(transform));
                     break;
                 case TEXTURE_COORDINATE:
                     textureverticies.add(readVertex(tokenizer));
@@ -97,6 +109,32 @@ public class WavefrontObjLoader {
                     return;
             }
         }
+    }
+
+    private void loadTranform(File file) throws IOException {
+        String line;
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        float[] newTransform = new float[16];
+        int pos = 0;
+
+        try {
+            while (pos < newTransform.length && (line = in.readLine()) != null) {
+                StringTokenizer tokenizer = new StringTokenizer(line);
+
+                while (pos < newTransform.length && tokenizer.hasMoreTokens())
+                    newTransform[pos++] = Float.parseFloat(tokenizer.nextToken());
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Malformed tranform file " + file.getPath());
+            return;
+        }
+
+        // Check that we loaded a complete transform
+        if (pos != 16) {
+            System.err.println("Malformed tranform file " + file.getPath());
+            return;
+        }
+        transform = newTransform;
     }
 
     private void setObject(String nextToken) {
@@ -214,7 +252,6 @@ public class WavefrontObjLoader {
 
     private static class ObjVertex {
         int dim;
-        @SuppressWarnings("unused")
         float x, y, z, w;
 
         public ObjVertex() {
@@ -222,7 +259,24 @@ public class WavefrontObjLoader {
             this.x = 0.0f;
             this.y = 0.0f;
             this.z = 0.0f;
-            this.w = 0.0f;
+            this.w = 1.0f;
+        }
+
+        public ObjVertex(float x, float y, float z, float w) {
+            dim = 0;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        public ObjVertex transform(float[] transform) {
+            return new ObjVertex(
+                    x * transform[0]  + y * transform[1]  + z * transform[2]  + w * transform[3], 
+                    x * transform[4]  + y * transform[5]  + z * transform[6]  + w * transform[7], 
+                    x * transform[8]  + y * transform[9]  + z * transform[10] + w * transform[11], 
+                    x * transform[12] + y * transform[13] + z * transform[14] + w * transform[15]
+            );
         }
 
         void add(float v) {
