@@ -238,7 +238,7 @@ public class GJKSimplex{
 
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
-        while((support = getSupport(lhs,rhs,direction)).dotProduct(direction) < 0){
+        while((support = getSupport(lhs,rhs,direction)).sameDirection(direction)){
             simplex.add(support);
             direction = findSimplex(simplex);
             
