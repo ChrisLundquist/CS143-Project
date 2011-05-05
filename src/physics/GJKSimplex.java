@@ -99,6 +99,7 @@ public class GJKSimplex{
         Vector3 ao = Vector3.ORIGIN.minus(a); 
 
         if (ab.sameDirection(ao)) { 
+            // The new direction is perpendicular to AB pointing to the origin
             newDirection = ab.cross(ao).cross(ab); 
         } else { 
             newDirection = ao; 
@@ -230,21 +231,21 @@ public class GJKSimplex{
     }
 
     static public boolean isColliding(math.Supportable lhs, math.Supportable rhs){
-        Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
         List<Vector3> simplex = new java.util.ArrayList<Vector3>();
+        Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
+        simplex.add(support);
         Vector3 direction = support.negate();
-        simplex.add(direction);
 
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
-        do{
+        while((support = getSupport(lhs,rhs,direction)).dotProduct(direction) < 0){
             simplex.add(support);
             direction = findSimplex(simplex);
             
             // If the simplex has enclosed the origin then the two objects are colliding
-            if(containsOrigin(simplex))
+            if(direction.equals(Vector3.ZERO) || containsOrigin(simplex))
                 return true;
-        }while((support = getSupport(lhs,rhs,direction)).dotProduct(direction) < 0);
+        }
         return false;
     }
 }

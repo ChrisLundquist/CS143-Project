@@ -10,6 +10,7 @@ import physics.GJKSimplex;
 import math.*;
 
 public class GJKSimplexTest {
+    private static final float EPSILON = 1.00E-6f;
     protected static Random gen = new Random(42); /* constant seed to make our tests determined */
     private Vector3 getRandomPosition(int range){
         return new Vector3(
@@ -43,6 +44,13 @@ public class GJKSimplexTest {
                 GJKSimplex.getSupport(a, b, Vector3.UNIT_X));
         assertEquals(new Vector3(2, 0, 0),
                 GJKSimplex.getSupport(a, b, Vector3.UNIT_X.negate()));
+        
+        // Test two spheres of radius one on top of each other, support should be 2 in all directions
+        for (int i = 0; i < 4096; i++) {
+            Vector3 direction = getRandomPosition(100);
+            assertEquals(2, GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, direction).magnitude(), EPSILON); 
+        }
+        
     }
     
     
