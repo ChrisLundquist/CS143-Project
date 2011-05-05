@@ -1,6 +1,7 @@
 package graphics;
 
 import game.Game;
+import graphics.particles.ParticleSystem;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -30,6 +31,8 @@ public class Renderer implements GLEventListener {
     FPSAnimator animator;
     Shader shader;
     Hud hud;
+    
+    ParticleSystem particle;
 
     public Renderer(){
         glu = new GLU();
@@ -38,6 +41,7 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
+        particle = new ParticleSystem();
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -63,6 +67,7 @@ public class Renderer implements GLEventListener {
 
         hud.drawStaticHud(gl);
         checkForGLErrors(gl);
+        particle.draw(gl);
     }
     private static void checkForGLErrors(GL2 gl) {
 
