@@ -42,8 +42,20 @@ public class GJKSimplexTest {
      * Tests to make sure that actor size is taken into account when finding Minkowski sum
      */
     private void sizeVariation() {
-        // TODO Auto-generated method stub
+        actor.Asteroid cubeA = new actor.Asteroid();
         
+        actor.Asteroid cubeB = new actor.Asteroid();
+        cubeB.setPosition(new Vector3(4,0,0));
+        
+        // They should be Colliding right now
+        assertTrue(GJKSimplex.isColliding(cubeA, cubeB));
+        
+        // Make both of them smaller
+        cubeA.setSize(0.5f);
+        cubeB.setSize(0.25f);
+        // So now they shouldn't be colliding
+        assertFalse(GJKSimplex.isColliding(cubeA, cubeB));
+  
     }
 
     @Test

@@ -301,7 +301,15 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
         //      so we can figure it out in model space
-        return getModel().getFarthestPointInDirection(direction.times(getRotation().inverse())).times(getRotation()).plus(getPosition());
+        Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
+        // Scale the point by our actor's scale in world space
+        max.x *= scale.x;
+        max.y *= scale.y;
+        max.z *= scale.z;
+
+        // Rotate and translate our point to world space
+        max = max.times(getRotation()).plus(getPosition());
+        return max;
     }
 
     // CL - updates the state of the actor for the next frame
