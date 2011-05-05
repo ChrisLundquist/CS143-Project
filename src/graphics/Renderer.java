@@ -128,7 +128,7 @@ public class Renderer implements GLEventListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);
+        //shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, 8);
 
