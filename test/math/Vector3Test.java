@@ -125,23 +125,26 @@ public class Vector3Test {
     }
 
     @Test
-    public void testProjectionFrom() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    @Test
-    public void testProjectionTo() {
-        fail("Not yet implemented"); // TODO
-    }
-
-    @Test
     public void testTimesQuaternion() {
-        fail("Not yet implemented"); // TODO
+        Quaternion rotate90ccwAboutZ = new Quaternion(Vector3.UNIT_Z, -90); // Quaternion angles are backwards to facilitate pitch, yaw and roll
+        
+        assertVector3Equals(Vector3.UNIT_Y, new Vector3(Vector3.UNIT_X).times(rotate90ccwAboutZ));
+        assertVector3Equals(Vector3.UNIT_Z, new Vector3(Vector3.UNIT_Z).times(rotate90ccwAboutZ));
+        assertVector3Equals(Vector3.UNIT_X.negate(), new Vector3(Vector3.UNIT_Y).times(rotate90ccwAboutZ));
     }
 
     @Test
     public void testTimesFloatArray() {
-        fail("Not yet implemented"); // TODO
+        float[] rotate90ccwAboutZ = {
+                0.0f,  1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f,  0.0f, 1.0f, 0.0f,
+                0.0f,  0.0f, 0.0f, 1.0f
+        };
+        
+        assertVector3Equals(Vector3.UNIT_Y, new Vector3(Vector3.UNIT_X).times(rotate90ccwAboutZ));
+        assertVector3Equals(Vector3.UNIT_Z, new Vector3(Vector3.UNIT_Z).times(rotate90ccwAboutZ));
+        assertVector3Equals(Vector3.UNIT_X.negate(), new Vector3(Vector3.UNIT_Y).times(rotate90ccwAboutZ));
     }
 
     @Test
