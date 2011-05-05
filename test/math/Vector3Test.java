@@ -30,6 +30,7 @@ public class Vector3Test {
         assertEquals(x, v.x, EPSILON);
         assertEquals(y, v.y, EPSILON);
         assertEquals(z, v.z, EPSILON);
+    }
 
     @Test
     public void testSameDirection(){
