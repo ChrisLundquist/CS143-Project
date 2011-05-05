@@ -134,8 +134,8 @@ public class Light implements java.io.Serializable{
             Light.add(Light.newRandom(256));
             gl.glEnable(GL2.GL_LIGHT0 + i);
         }
-        // Tell the shader how many lights we are using
-        //  shader.setUniform1i(gl, "numLights", numLights);
+        // FIXME the shader should query this
+        // shader.setUniform1i(gl, "numLights", numLights);
     }
 
 

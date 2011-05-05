@@ -23,7 +23,7 @@ public class Bullet extends Actor {
      */
     public Bullet(Actor actor, Vector3 positionOffset){
         this(actor);
-        position.minusEquals(positionOffset);
+        position.plusEquals(positionOffset);
     }
     
     @Override
