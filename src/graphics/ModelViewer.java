@@ -6,19 +6,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JFileChooser;
+import java.io.File;
+
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.JFileChooser;
 
 import math.Quaternion;
 import math.Vector3;
- 
+
 import com.jogamp.opengl.util.Animator;
  
 public class ModelViewer implements GLEventListener, KeyListener {
