@@ -96,6 +96,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
         
         
         ((Component) gLDrawable).addKeyListener(this);
+        /*
         try {
             shader.init(gl);
         } catch (IOException e) {
@@ -103,6 +104,8 @@ public class ModelViewer implements GLEventListener, KeyListener {
             e.printStackTrace();
         }
         shader.enable(gl);
+         
+         */
     }
  
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
