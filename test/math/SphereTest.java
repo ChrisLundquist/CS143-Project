@@ -24,5 +24,10 @@ public class SphereTest {
     public void testGetPosition() {
         assertEquals(Vector3.ORIGIN,UNIT_SPHERE.getPosition());
     }
+    
+    @Test
+    public void testGetVelocity(){
+        assertEquals(Vector3.ZERO,UNIT_SPHERE.getPosition());
+    }
 
 }

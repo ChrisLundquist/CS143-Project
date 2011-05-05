@@ -301,6 +301,12 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
         //      so we can figure it out in model space
+        
+        // CL - We need to do the sweeping further point so we need to see if we want where we
+        // are or where we will be is better
+        
+            
+        
         Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
         // Scale the point by our actor's scale in world space
         max.x *= scale.x;
@@ -309,6 +315,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
 
         // Rotate and translate our point to world space
         max = max.times(getRotation()).plus(getPosition());
+        
+        // If our velocity is in the same direction as the direction, then
+        // we need to sweep the furthest point by our velocity
+        if(velocity.sameDirection(direction))
+            max.plusEquals(velocity);
         return max;
     }
 

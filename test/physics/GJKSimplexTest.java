@@ -18,30 +18,32 @@ public class GJKSimplexTest {
     public void testFindSimplex() {
         //fail("Not yet implemented"); // TODO
     }
-
-    @Test
-    public void testIsColliding() {
-        sphereColliding();
-        cubeColliding();
-        // Make sure the actor size is taken into account
-        // When preforming collision checks
-        sizeVariation();
-        // Make sure we sweep our objects so they don't pass through each other without colliding
-        sweepingCollision();
-    }
     
     /**
      * Tests to make sure we can't miss collisions based on velocity
      */
-    private void sweepingCollision() {
-        // TODO Auto-generated method stub
+    @Test 
+    public void testLinearSweepingCollision() {
+        Sphere sphereA = new Sphere(new Vector3(-2,0,0),1);
+        Sphere sphereB = new Sphere(new Vector3(2,0,0),1);
         
+        sphereA.setVelocity(new Vector3(5,0,0));
+        sphereB.setVelocity(new Vector3(-5,0,0));
+        
+        // The two spheres should pass through each other
+        assertTrue(GJKSimplex.isColliding(sphereA, sphereB));
+        
+    }
+    
+    public void testAngularSweepingCollision(){
+        // TODO
     }
 
     /**
      * Tests to make sure that actor size is taken into account when finding Minkowski sum
      */
-    private void sizeVariation() {
+    @Test
+    public void testSizeVariation() {
         actor.Asteroid cubeA = new actor.Asteroid();
         
         actor.Asteroid cubeB = new actor.Asteroid();
@@ -166,7 +168,8 @@ public class GJKSimplexTest {
         assertTrue(GJKSimplex.containsOrigin(simplex));
     }
 
-    private void cubeColliding(){
+    @Test
+    public void testCubeColliding(){
         actor.Asteroid cube1 = new actor.Asteroid();
 
         actor.Asteroid cube2 = new actor.Asteroid();
@@ -198,7 +201,8 @@ public class GJKSimplexTest {
         */
     }
 
-    private void sphereColliding(){
+    @Test
+    public void testSphereColliding(){
         // spheres at an arbitrary location and is obviously not colliding
         Sphere s4441 = new Sphere(new Vector3(4.0f,4.0f,4.0f),1.0f);
         Sphere s8881 = new Sphere(new Vector3(8.0f,8.0f,8.0f),1.0f);

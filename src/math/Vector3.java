@@ -160,4 +160,13 @@ public class Vector3 implements Serializable {
     public Vector3 negate() {
         return this.times(-1.0f);
     }
+
+    public Vector3 timesEquals(Quaternion rotation) {
+        // TODO OPTIMIZE Auto-generated method stub
+        Vector3 temp = this.times(rotation);
+        x = temp.x;
+        y = temp.y;
+        z = temp.z;
+        return this;
+    }
 }
