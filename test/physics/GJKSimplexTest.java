@@ -12,14 +12,7 @@ import math.*;
 public class GJKSimplexTest {
     private static final float EPSILON = 1.00E-6f;
     protected static Random gen = new Random(42); /* constant seed to make our tests determined */
-    private Vector3 getRandomPosition(int range){
-        return new Vector3(
-                gen.nextFloat() * range - range / 2.0f,
-                gen.nextFloat() * range - range / 2.0f,
-                gen.nextFloat() * range - range / 2.0f
-        );
 
-    }
 
     @Test
     public void testFindSimplex() {
@@ -47,7 +40,7 @@ public class GJKSimplexTest {
         
         // Test two spheres of radius one on top of each other, support should be 2 in all directions
         for (int i = 0; i < 4096; i++) {
-            Vector3 direction = getRandomPosition(100);
+            Vector3 direction = Vector3Test.getRandom(100);
             assertEquals(2, GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, direction).magnitude(), EPSILON); 
         }
         
@@ -159,10 +152,10 @@ public class GJKSimplexTest {
         for(int range = 0; range < 4096; range++){
             for(int i = 0; i < 4096; i++){
                 actor.Asteroid cubeA = new actor.Asteroid();
-                cubeA.setPosition(getRandomPosition(range));
+                cubeA.setPosition(Vector3Test.getRandom(range));
                 cubeA.setSize(gen.nextInt(range / 16));
                 actor.Asteroid cubeB= new actor.Asteroid();
-                cubeA.setPosition(getRandomPosition(range));
+                cubeA.setPosition(Vector3Test.getRandom(range));
                 cubeA.setSize(gen.nextInt(range / 16));
                 assertEquals(cubeA.isColliding(cubeB),GJKSimplex.isColliding(cubeA, cubeB));
                 assertEquals(cubeB.isColliding(cubeA),GJKSimplex.isColliding(cubeB, cubeA));
@@ -203,8 +196,8 @@ public class GJKSimplexTest {
         assertFalse(GJKSimplex.isColliding(s0004,s8881));
         for(int range = 0; range < 4096; range++){
             for(int i = 0; i < 4096; i++){
-                Sphere sphere1 = new Sphere(getRandomPosition(range),gen.nextFloat() * range / 64.0f);
-                Sphere sphere2 = new Sphere(getRandomPosition(range),gen.nextFloat() * range / 64.0f);
+                Sphere sphere1 = new Sphere(Vector3Test.getRandom(range),gen.nextFloat() * range / 64.0f);
+                Sphere sphere2 = new Sphere(Vector3Test.getRandom(range),gen.nextFloat() * range / 64.0f);
                 try {
                     assertEquals(sphere1.isColliding(sphere2),GJKSimplex.isColliding(sphere1, sphere2));
                     assertEquals(sphere2.isColliding(sphere1),GJKSimplex.isColliding(sphere2, sphere1));

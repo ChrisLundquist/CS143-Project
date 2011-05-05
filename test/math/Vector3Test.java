@@ -1,21 +1,28 @@
 package math;
 
 import static org.junit.Assert.*;
-
+import java.util.Random;
 import math.Vector3;
-
 import org.junit.Test;
 
-import physics.GJKSimplexTest;
 
 public class Vector3Test {
     private static final double EPSILON = 1.00E-6;
+    protected static Random gen = new Random(42); /* constant seed to make our tests determined */
 
+    public static Vector3 getRandom(int range){
+        return new Vector3(
+                gen.nextFloat() * 2.0f * range - range,
+                gen.nextFloat() * 2.0f * range - range,
+                gen.nextFloat() * 2.0f * range - range
+        );
+
+    }
 
     @Test
     public void testVector3() {
         Vector3 v = new Vector3();
-        
+
         assertEquals(0.0f, v.x, EPSILON);
         assertEquals(0.0f, v.y, EPSILON);
         assertEquals(0.0f, v.z, EPSILON);
@@ -26,9 +33,9 @@ public class Vector3Test {
         float x = 1.23f;
         float y = -2.34f;
         float z = 0.23f;
-        
+
         Vector3 v = new Vector3(x, y, z);
-        
+
         assertEquals(x, v.x, EPSILON);
         assertEquals(y, v.y, EPSILON);
         assertEquals(z, v.z, EPSILON);
@@ -45,7 +52,7 @@ public class Vector3Test {
     @Test
     public void testVector3Vector3() {
         Vector3 original = new Vector3(1.23f, -2.34f, 0.23f);
-        
+
         Vector3 copy = new Vector3(original);
 
         assertVector3Equals(original, copy);
@@ -73,12 +80,19 @@ public class Vector3Test {
         assertVector3Equals(new Vector3(4.0f, 1.0f, -6.2f), v1.minus(v2));
         assertVector3Equals(v1_copy, v1);
         assertVector3Equals(v2_copy, v2);
-        
+
     }
 
     @Test
     public void testPlusEquals() {
-        fail("Not yet implemented"); // TODO
+        for (int i = 0; i < 4096; i++) {
+            Vector3 v = getRandom(100);
+            Vector3 original = new Vector3(v);
+            Vector3 result = v.plusEquals(v);
+            assertVector3Equals(original.times(2.0f), v);           
+            assertVector3Equals(original.times(2.0f), result);
+            assertTrue(v == result);
+        }
     }
 
     @Test
@@ -87,6 +101,11 @@ public class Vector3Test {
         assertEquals(Vector3.UNIT_Y, (new Vector3(0,5,0)).normalize());
         assertEquals(Vector3.UNIT_Z, (new Vector3(0,0,5)).normalize());
         assertEquals(Vector3.ORIGIN, Vector3.ORIGIN.normalize());
+
+        for (int i = 0; i < 4096; i++) {
+            Vector3 v = getRandom(100);
+            assertEquals(1.0f, v.normalize().magnitude(), EPSILON);
+        }
     }
 
     @Test
@@ -134,12 +153,23 @@ public class Vector3Test {
 
     @Test
     public void testMinus() {
-        fail("Not yet implemented"); // TODO
+        for (int i = 0; i < 4096; i++) {
+            Vector3 v = getRandom(100);
+            Vector3 result = v.minus(v);
+            assertVector3Equals(Vector3.ZERO, result);
+            assertFalse(v == result); // Minus() should return a new instances of a Vector3       
+        }
     }
 
     @Test
     public void testMinusEquals() {
-        fail("Not yet implemented"); // TODO
+        for (int i = 0; i < 4096; i++) {
+            Vector3 v = getRandom(100);
+            Vector3 result = v.minusEquals(v);
+            assertVector3Equals(Vector3.ZERO, v);           
+            assertVector3Equals(Vector3.ZERO, result);
+            assertTrue(v == result);
+        }
     }
 
     @Test
@@ -157,14 +187,17 @@ public class Vector3Test {
 
     @Test
     public void testNegate() {
-        assertEquals(Vector3.ZERO, Vector3.UNIT_X.plus(Vector3.UNIT_X.negate()));
+        for (int i = 0; i < 4096; i++) {
+            Vector3 v = getRandom(100);
+            assertVector3Equals(Vector3.ZERO, v.plus(v.negate()));
+        }
     }
 
     public static void assertVector3Equals(Vector3 a, Vector3 b) {
         assertVector3Equals(a, b, EPSILON);
     }
 
-    
+
     public static void assertVector3Equals(Vector3 a, Vector3 b, double delta) {
         assertEquals(a.x, b.x, delta);
         assertEquals(a.y, b.y, delta);
