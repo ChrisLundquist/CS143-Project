@@ -5,8 +5,9 @@ import input.InputRouter;
 
 import java.io.Serializable;
 
+import ship.PlayerShip;
+
 import actor.Actor;
-import actor.PlayerShip;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 8330574859953611636L;

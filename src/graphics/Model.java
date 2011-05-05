@@ -7,7 +7,7 @@ import javax.media.opengl.GL2;
 import math.Vector3;
 
 public class Model implements math.Supportable{
-    private static final String MODEL_PATH = "assets/models/";
+    static final String MODEL_PATH = "assets/models/";
     private static final String ASTEROID = "cube_cube.obj";
     private static final String PLAYER = "cube_cube.obj";
     private static final String SKYBOX = "skybox.obj";
@@ -88,11 +88,11 @@ public class Model implements math.Supportable{
     public static String getModelIdFor(Object actor) {
         if(actor instanceof actor.Asteroid){
             return ASTEROID;
-        } else if (actor instanceof actor.PlayerShip) {
+        } else if (actor instanceof ship.PlayerShip) {
             return PLAYER;
         } else if (actor instanceof Skybox){
             return SKYBOX;
-        }else if (actor instanceof actor.CapitalShip){
+        }else if (actor instanceof ship.CapitalShip){
             return CAPITAL_SHIP;
         } else if(actor instanceof actor.Bullet){
             return BULLET;

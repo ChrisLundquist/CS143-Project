@@ -6,7 +6,7 @@ varying vec2 texCoordinate0;
 
 vec4 effectiveLight()
 {
-	vec4 color = vec4(0.0f,0.0f,0.0f,0.0f);
+	vec4 color = vec4(0.0,0.0,0.0,0.0);
 	vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
 
 
@@ -15,7 +15,7 @@ vec4 effectiveLight()
 		vec3 R = normalize(-reflect(L,N)); 
 		float dist = length(L);
 
-		float atten = 1.0f / (gl_LightSource[i].constantAttenuation +
+		float atten = 1.0 / (gl_LightSource[i].constantAttenuation +
 				gl_LightSource[i].linearAttenuation * dist +
 				gl_LightSource[i].quadraticAttenuation * dist * dist);
 
@@ -23,10 +23,10 @@ vec4 effectiveLight()
 		vec4 Iamb = gl_LightSource[i].ambient * gl_FrontMaterial.ambient;
 
 		//calculate Diffuse Term:
-		vec4 Idiff = (gl_LightSource[i].diffuse * max(dot(N,L), 0.0f)) * gl_FrontMaterial.diffuse;
+		vec4 Idiff = (gl_LightSource[i].diffuse * max(dot(N,L), 0.0)) * gl_FrontMaterial.diffuse;
 
 		// calculate Specular Term:
-		vec4 Ispec = gl_FrontMaterial.specular * pow(max(dot(R,E),0.0f),0.3f * gl_FrontMaterial.shininess);
+		vec4 Ispec = gl_FrontMaterial.specular * pow(max(dot(R,E),0.0),0.3 * gl_FrontMaterial.shininess);
 
 		color += gl_FrontMaterial.emission+Iamb+atten*(gl_FrontMaterial.ambient + Idiff + Ispec);
 	}

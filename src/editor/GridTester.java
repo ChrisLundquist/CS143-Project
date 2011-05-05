@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 import math.Vector3;
 import actor.Actor;
-import actor.PlayerShip;
+import ship.PlayerShip;
 
 
 public class GridTester {

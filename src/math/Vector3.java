@@ -10,6 +10,7 @@ public class Vector3 implements Serializable {
     public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
     public static final Vector3 ORIGIN = new Vector3(0.0f,0.0f,0.0f);
+    public static final Vector3 ZERO = ORIGIN; // makes semantic differences in some if checks
 
     public float x,y,z;
 
@@ -54,6 +55,8 @@ public class Vector3 implements Serializable {
 
     public Vector3 normalize(){
         float magnitude = magnitude();
+        if(magnitude == 0.0) // prevent division by 0
+            return this;
         x /= magnitude;
         y /= magnitude;
         z /= magnitude;
@@ -114,6 +117,7 @@ public class Vector3 implements Serializable {
     public Vector3 times(float[] m) {
         Vector3 result = new Vector3();
 
+        // NOTE we are assuming this is just a rotation matrix
         result.x = x * m[0] + y * m[4] + z * m[8];
         result.y = x * m[1] + y * m[5] + z * m[9];
         result.z = x * m[2] + y * m[6] + z * m[10];

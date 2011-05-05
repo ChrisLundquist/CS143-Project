@@ -11,7 +11,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 import java.io.File;
@@ -36,7 +35,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
     static GLCanvas canvas = new GLCanvas();
     static Frame frame = new Frame("Model Viewer");
     static Animator animator = new Animator(canvas);
-    static Shader shader = new Shader("minimal.vert","minimal.frag");
+    static Shader shader = new Shader("minimal.vert", "minimal.frag");
  
     public ModelViewer(File objFile) {
         model = WavefrontObjLoader.load(objFile);
@@ -64,10 +63,13 @@ public class ModelViewer implements GLEventListener, KeyListener {
  
     public void init(GLAutoDrawable gLDrawable) {
         GL2 gl = gLDrawable.getGL().getGL2();
-        gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
+        gl.glShadeModel(GL2.GL_SMOOTH);
+        gl.setSwapInterval(1); // Enable V-Sync supposedly
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
+        gl.glEnable(GL2.GL_CULL_FACE);
         gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         
@@ -188,7 +190,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
     }
     
     private static File guiPromptForFilename() {
-        JFileChooser jfc = new JFileChooser("assets");
+        JFileChooser jfc = new JFileChooser(Model.MODEL_PATH);
         
         if (jfc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
             System.err.println("User did not specify an input file.");
