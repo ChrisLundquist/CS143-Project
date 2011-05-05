@@ -10,11 +10,13 @@ import java.util.Random;
 
 import javax.media.opengl.GL2;
 
+import physics.GJKSimplex;
+
 import math.Quaternion;
 import math.Supportable;
 import math.Vector3;
 
-public abstract class Actor implements Serializable, Supportable, Rotatable {
+public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable {
     private static final long serialVersionUID = 744085604446096658L;
     /**
      * All the actors currently in play We use the fully qualified named space
@@ -90,7 +92,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        return false;
+        return GJKSimplex.isColliding(this, other);
     }
 
     /**
@@ -225,6 +227,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     public Vector3 getPosition() {
         return position;
     }
+    
+    public Actor setRotation(Quaternion rot){
+        rotation = rot;
+        return this;
+    }
 
     public Quaternion getRotation() {
         return rotation;
@@ -276,8 +283,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         gl.glPopMatrix();
     }
 
-    public void setPosition(Vector3 position) {
+    public Actor setPosition(Vector3 position) {
         this.position = position;
+        return this;
     }
 
     // Lets you reference chain
@@ -293,9 +301,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         return this;
     }
 
-    public void setVelocity(Vector3 velocity) {
+    public Actor setVelocity(Vector3 velocity) {
         this.velocity = velocity;
+        return this;
     }
+    
 
     public Vector3 getFarthestPointInDirection(Vector3 direction){
         // CL - put it into world space by translating it and rotating it
