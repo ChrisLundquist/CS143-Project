@@ -70,10 +70,10 @@ public class GJKSimplex{
          * For the origin to be within the tetrahedron, it must be on the inside of all four faces.
          */
         return
-            (abc.dotProduct(ad) * abc.dotProduct(ao) > 0.0f) &&
-            (bcd.dotProduct(ba) * bcd.dotProduct(bo) > 0.0f) &&
-            (adb.dotProduct(ac) * adb.dotProduct(ao) > 0.0f) &&
-            (acd.dotProduct(ab) * acd.dotProduct(ao) > 0.0f);
+            (abc.dotProduct(ad) * abc.dotProduct(ao) >= 0.0f) &&
+            (bcd.dotProduct(ba) * bcd.dotProduct(bo) >= 0.0f) &&
+            (adb.dotProduct(ac) * adb.dotProduct(ao) >= 0.0f) &&
+            (acd.dotProduct(ab) * acd.dotProduct(ao) >= 0.0f);
     }
 
     /**
@@ -165,10 +165,10 @@ public class GJKSimplex{
                 } 
                 else { 
                     simplex.clear(); 
-                    simplex.add(a); 
+                    simplex.add(a);
                     simplex.add(c); 
                     simplex.add(b); 
-
+                    
                     newDirection = abc.negate(); 
                 } 
             } 
@@ -240,11 +240,12 @@ public class GJKSimplex{
         // so that means we can't get to the origin
         while((support = getSupport(lhs,rhs,direction)).sameDirection(direction)){
             simplex.add(support);
-            direction = findSimplex(simplex);
             
             // If the simplex has enclosed the origin then the two objects are colliding
-            if(direction.equals(Vector3.ZERO) || containsOrigin(simplex))
+            if(containsOrigin(simplex))
                 return true;
+            
+            direction = findSimplex(simplex);
         }
         return false;
     }

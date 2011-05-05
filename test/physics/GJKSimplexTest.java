@@ -120,6 +120,24 @@ public class GJKSimplexTest {
         simplex.add(new Vector3(1f,    0f,    2f));
         simplex.add(new Vector3(-0.5f, 0.5f,  2f));
         assertFalse(GJKSimplex.containsOrigin(simplex));
+        
+        
+        // Test corner case
+        simplex.clear();
+        simplex.add(new Vector3(0f,    0f,    0f));
+        simplex.add(new Vector3(0f,    0f,    0.5f));
+        simplex.add(new Vector3(1f,    0f,    2f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+        assertTrue(GJKSimplex.containsOrigin(simplex));
+        
+        // and edge case
+        // Test corner case
+        simplex.clear();
+        simplex.add(new Vector3(-1f,   0f,    0f));
+        simplex.add(new Vector3(1f,    0f,    0f));
+        simplex.add(new Vector3(1f,    0f,    2f));
+        simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+        assertTrue(GJKSimplex.containsOrigin(simplex));
     }
 
     private void cubeColliding(){
