@@ -1,4 +1,6 @@
-package actor;
+package ship;
+
+import actor.Actor;
 
 public class PlayerShip extends ship.Ship {
     private static final float TURN_SPEED = 0.01f;
@@ -8,7 +10,8 @@ public class PlayerShip extends ship.Ship {
     
     public PlayerShip(){
         super();
-        weapons.add(new weapon.TwinLinkedMachineGun());
+        weapons.add(new weapon.TwinLinkedMachinegun());
+        weapons.add(new weapon.Machinegun());
     }
     @Override
     public void handleCollision(Actor other) {
@@ -40,7 +43,9 @@ public class PlayerShip extends ship.Ship {
         changeRoll(-ROLL_DEGREE);
     }
     public void changeWeapon() {
-        
+        System.err.println("Changing Weapon");
+        // Get the next weapon in the list
+        selectedWeapon = selectedWeapon + 1 % weapons.size();
     }
     public void update(){
         super.update();

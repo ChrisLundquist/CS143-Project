@@ -4,8 +4,8 @@ import input.KeyboardListener;
 import java.io.IOException;
 
 import settings.Settings;
+import ship.CapitalShip;
 import actor.Asteroid;
-import actor.CapitalShip;
 
 public class Game {
     private static graphics.Renderer renderer;
@@ -35,7 +35,7 @@ public class Game {
  
         actor.Actor.addActor(a);
         
-        CapitalShip capitalShip = new actor.CapitalShip();
+        CapitalShip capitalShip = new ship.CapitalShip();
        // capitalShip.setSize(5f);
         capitalShip.setSize(new math.Vector3(5,4,8));
         capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));

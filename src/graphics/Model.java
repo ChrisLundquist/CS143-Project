@@ -88,11 +88,11 @@ public class Model implements math.Supportable{
     public static String getModelIdFor(Object actor) {
         if(actor instanceof actor.Asteroid){
             return ASTEROID;
-        } else if (actor instanceof actor.PlayerShip) {
+        } else if (actor instanceof ship.PlayerShip) {
             return PLAYER;
         } else if (actor instanceof Skybox){
             return SKYBOX;
-        }else if (actor instanceof actor.CapitalShip){
+        }else if (actor instanceof ship.CapitalShip){
             return CAPITAL_SHIP;
         } else if(actor instanceof actor.Bullet){
             return BULLET;
