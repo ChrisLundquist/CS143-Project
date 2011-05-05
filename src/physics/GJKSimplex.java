@@ -247,6 +247,8 @@ public class GJKSimplex{
             
             direction = findSimplex(simplex);
         }
+        if(support.equals(Vector3.ORIGIN))
+            return true;
         return false;
     }
 }
