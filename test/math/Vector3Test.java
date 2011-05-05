@@ -100,7 +100,7 @@ public class Vector3Test {
 
     @Test
     public void testCross() {
-        fail("Not yet implemented"); // TODO
+        assertVector3Equals(Vector3.UNIT_Z, Vector3.UNIT_X.cross(Vector3.UNIT_Y));
     }
 
     @Test
