@@ -14,7 +14,6 @@ public class WavefrontObjLoader {
 
     public static Model load(File file) {
         File transform_file = new File(file.getPath().replaceAll(".obj$", ".trfm"));
-        System.out.println(transform_file.getPath());
         WavefrontObjLoader wol = new WavefrontObjLoader();
         BufferedReader in;
         String line;
