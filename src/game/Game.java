@@ -40,6 +40,8 @@ public class Game {
         capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
         capitalShip.setVelocity(new math.Vector3(-.3f, 0f,-.4f));
         actor.Actor.addActor(capitalShip);
+        
+        new GameThread().start();
     }
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
@@ -59,7 +61,8 @@ public class Game {
         actor.Asteroid a = new actor.Asteroid();
         a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
         actor.Actor.addActor(a);
-
+        
+        new GameThread().start();
     }
 
     public static void start(){

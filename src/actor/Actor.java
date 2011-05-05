@@ -54,9 +54,14 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         }
     }
 
-    public static void updateActors() {
+    /**
+     * 
+     * @param frames the number of frames since the last update
+     */
+    public static void updateActors(int frames) {
         synchronized(actors) {
-            checkCollisions();
+            // TODO this is slowing down the game using n^2 of noop calls
+            //checkCollisions();
             // Update each actor
             for (Actor a : actors) {
                 // Track down actors without ids.

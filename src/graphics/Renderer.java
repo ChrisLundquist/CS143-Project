@@ -41,18 +41,7 @@ public class Renderer implements GLEventListener {
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
-        // CL - We need to get input even if the game is paused,
-        //      that way we can unpause the game.
-        game.Game.getInputHandler().update();
-        // Don't update the game state if we are paused
-        if(game.Game.isPaused())
-            return;
-
-        game.Game.getPlayer().updateCamera();
-
         GL2 gl = getGL2();
-        // Update the actors
-        actor.Actor.updateActors();
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -128,7 +117,7 @@ public class Renderer implements GLEventListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);
+        //shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, 8);
 
