@@ -4,5 +4,5 @@ import math.Vector3;;
 
 public interface Velocitable {
     public Vector3 getVelocity();
-    public Vector3 setVelocity();
+    public Object setVelocity( Vector3 vel);
 }
