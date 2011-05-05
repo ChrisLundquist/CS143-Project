@@ -4,18 +4,21 @@ public class GameThread extends Thread {
     private static final long FRAME_RATE = 1000 / 60;
     private long lastUpdate = 0;
     
+    
+    
+    
     public void run() {
         
         while (true) {
             int frames = waitForNextFrame();
-            
+             
             // CL - We need to get input even if the game is paused,
             //      that way we can unpause the game.
             game.Game.getInputHandler().update();
             
             // Don't update the game state if we are paused
             if(game.Game.isPaused())
-                return;
+                continue;
 
             game.Game.getPlayer().updateCamera();
 
@@ -25,7 +28,11 @@ public class GameThread extends Thread {
         }
         
     }
-
+    
+    /**
+     * This acts as a frame rate controller for our game logic
+     * @return the number of frames elapsed.
+     */
     private int waitForNextFrame() {
         long current = System.currentTimeMillis();
         // handle first frame case
@@ -42,7 +49,6 @@ public class GameThread extends Thread {
         try {
             sleep(delay);
         } catch (InterruptedException e) {
-          
             e.printStackTrace();
         }
         
