@@ -54,7 +54,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         }
     }
 
-    public static void updateActors() {
+    /**
+     * 
+     * @param frames the number of frames since the last update
+     */
+    public static void updateActors(int frames) {
         synchronized(actors) {
             checkCollisions();
             // Update each actor

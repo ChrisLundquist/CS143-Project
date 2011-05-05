@@ -77,7 +77,7 @@ public class DedicatedServer {
 
     // Main server update code
     private void update() {
-        Actor.updateActors();
+        Actor.updateActors(1);
     }
     
     public void setRunning(boolean running) {
