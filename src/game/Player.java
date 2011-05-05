@@ -5,8 +5,9 @@ import input.InputRouter;
 
 import java.io.Serializable;
 
+import ship.PlayerShip;
+
 import actor.Actor;
-import actor.PlayerShip;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 8330574859953611636L;
@@ -84,6 +85,9 @@ public class Player implements Serializable {
                 break;
             case ROLL_RIGHT:
                 ship.rollRight();
+                break;
+            case CHANGE_WEAPON:
+                ship.changeWeapon();
                 break;
             default:
                 System.err.println("Player: unhandled input: " + action);

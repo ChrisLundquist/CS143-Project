@@ -1,4 +1,4 @@
-package test.physics;
+package physics;
 
 import static org.junit.Assert.*;
 import org.junit.After;
@@ -61,14 +61,7 @@ public class SpatialTreeTest {
     @Test
     public final void testLeafInterator() {
         int count = 0;
-        Iterator<SpatialTree<Sphere>> it;
-        
-        SpatialTree<Sphere> empty_tree = new SpatialTree<Sphere>(new java.util.ArrayList<Sphere>());
-        it = empty_tree.leafInterator();
-        assertFalse(it.hasNext());
-        
-        System.out.println(empty_tree);
-        
+        Iterator<SpatialTree<Sphere>> it;    
         
         SpatialTree<Sphere> tree = new SpatialTree<Sphere>(objects);
 
