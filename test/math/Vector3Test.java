@@ -6,6 +6,8 @@ import math.Vector3;
 
 import org.junit.Test;
 
+import physics.GJKSimplexTest;
+
 public class Vector3Test {
     private static final double EPSILON = 1.00E-6;
 
@@ -125,7 +127,9 @@ public class Vector3Test {
 
     @Test
     public void testMagnitude() {
-        fail("Not yet implemented"); // TODO
+        assertEquals(1.0f, Vector3.UNIT_X.magnitude(), EPSILON);
+        assertEquals(0.0f, Vector3.ZERO.magnitude(), EPSILON);
+        assertEquals(5.0f, new Vector3(3.0f, 4.0f, 0.0f).magnitude(), EPSILON);
     }
 
     @Test
@@ -146,12 +150,14 @@ public class Vector3Test {
 
     @Test
     public void testMagnitude2() {
-        fail("Not yet implemented"); // TODO
+        assertEquals(1.0f, Vector3.UNIT_X.magnitude2(), EPSILON);
+        assertEquals(0.0f, Vector3.ZERO.magnitude2(), EPSILON);
+        assertEquals(25.0f, new Vector3(3.0f, 4.0f, 0.0f).magnitude2(), EPSILON);
     }
 
     @Test
     public void testNegate() {
-        fail("Not yet implemented"); // TODO
+        assertEquals(Vector3.ZERO, Vector3.UNIT_X.plus(Vector3.UNIT_X.negate()));
     }
 
     public static void assertVector3Equals(Vector3 a, Vector3 b) {
