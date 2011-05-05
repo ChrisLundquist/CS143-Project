@@ -14,6 +14,18 @@ public class Bullet extends Actor {
         position = new math.Vector3(actor.getPosition());
         setSize(.1f);
     }
+    
+    /**
+     * 
+     * @param actor
+     * @param positionOffset the offset relative to the actor
+     * @param direction
+     */
+    public Bullet(Actor actor, Vector3 positionOffset){
+        this(actor);
+        position.minusEquals(positionOffset);
+    }
+    
     @Override
     public void handleCollision(Actor other) {
         System.err.println("DEBUG: Collision Detected");

@@ -1,13 +1,11 @@
 package actor;
 
-public class CapitalShip extends Actor {
+public class CapitalShip extends ship.Ship {
 
     public CapitalShip() {
         super();
     }
-    public void shoot() {
-        actor.Actor.addActor(new actor.Bullet(this));
-    }
+
     @Override
     public void handleCollision(Actor other) {
         // TODO Auto-generated method stub
