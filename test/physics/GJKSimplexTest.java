@@ -34,7 +34,7 @@ public class GJKSimplexTest {
      * Tests to make sure we can't miss collisions based on velocity
      */
     private void sweepingCollision() {
-        // TODO Auto-generated method stub
+
         
     }
 
