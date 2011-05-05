@@ -11,7 +11,8 @@ public class Bullet extends Actor {
         super();
         angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
         this.velocity = actor.velocity.plus(actor.getDirection().times(BULLET_SPEED));
-        position = new math.Vector3(actor.getPosition());
+        position = new Vector3(actor.getPosition());
+        rotation = new Quaternion(actor.getRotation());
         setSize(.1f);
     }
     
