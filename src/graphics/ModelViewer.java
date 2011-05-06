@@ -15,6 +15,7 @@ import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import math.Quaternion;
 import math.Vector3;
@@ -194,6 +195,18 @@ public class ModelViewer implements GLEventListener, KeyListener {
     
     private static File guiPromptForFilename() {
         JFileChooser jfc = new JFileChooser(Model.MODEL_PATH);
+        
+        jfc.setFileFilter(new FileFilter(){
+            @Override
+            public boolean accept(File file) {               
+                return file.getName().toLowerCase().endsWith(".obj");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Wavefront 3d Object";
+            }
+        });
         
         if (jfc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
             System.err.println("User did not specify an input file.");
