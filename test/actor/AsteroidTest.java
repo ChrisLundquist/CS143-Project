@@ -64,9 +64,9 @@ public class AsteroidTest {
         assertEquals(Math.cos(Math.PI / 6.0) + Math.sin(Math.PI / 6.0), a.getFarthestPointInDirection(Vector3.UNIT_Y).y, EPSILON);
 
         // Test angular velocity
-        a.position = new Vector3();
-        a.velocity = new Vector3();
-        a.rotation = new Quaternion();
+        a.setPosition(new Vector3());
+        a.setVelocity(new Vector3());
+        a.setRotation(new Quaternion());
         a.angularVelocity = new Quaternion(Vector3.UNIT_Z, 30);
         assertEquals(1.0f, a.getFarthestPointInDirection(Vector3.UNIT_Z).z, EPSILON);
         assertEquals(Math.cos(Math.PI / 6.0) + Math.sin(Math.PI / 6.0), a.getFarthestPointInDirection(Vector3.UNIT_X).x, EPSILON);

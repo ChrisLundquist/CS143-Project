@@ -19,6 +19,7 @@ public class Model implements math.Supportable{
     protected int id;
     int displayList;
     List<Polygon> polygons;
+    protected String name;
     protected static Map<String, Model> models = new java.util.HashMap<String, Model>();
 
     public Model(List<Polygon> polygons){
@@ -41,6 +42,7 @@ public class Model implements math.Supportable{
 
     public static Model createByName(String filePath){
         Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
+        model.name = filePath;
         models.put(filePath, model);
         return model;
     }
@@ -133,5 +135,9 @@ public class Model implements math.Supportable{
         }
         // It is important we return a new vector and not a reference to one in our geometry
         return new Vector3(max);
+    }
+
+    public String getName() {
+        return name;
     }
 }
