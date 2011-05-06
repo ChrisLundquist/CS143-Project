@@ -3,7 +3,6 @@ package graphics;
 import java.io.*;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /*
  *  lass to load Wavefront .obj files
@@ -40,10 +39,10 @@ public class WavefrontObjLoader {
         return wol.generateModel();
     }
 
-    private Vector<ObjVertex> geoVerticies;
-    private Vector<ObjVertex> textureverticies;
-    private Vector<ObjVertex> vertexNormals;
-    private Vector<Polygon> polygons;
+    private List<ObjVertex> geoVerticies;
+    private List<ObjVertex> textureverticies;
+    private List<ObjVertex> vertexNormals;
+    private List<Polygon> polygons;
     // our default transform
     private float[] transform = {
             1, 0, 0, 0,
@@ -53,18 +52,18 @@ public class WavefrontObjLoader {
     };
     private Material currentMaterial;
     private String currentObject;
-    private java.util.List<String> currentGroups;
+    private List<String> currentGroups;
     private File file;
 
 
     private WavefrontObjLoader(File file) {
-        geoVerticies = new Vector<ObjVertex>();
-        textureverticies = new Vector<ObjVertex>();
-        vertexNormals = new Vector<ObjVertex>();
-        polygons = new Vector<Polygon>();
+        geoVerticies = new java.util.ArrayList<ObjVertex>();
+        textureverticies = new java.util.ArrayList<ObjVertex>();
+        vertexNormals = new java.util.ArrayList<ObjVertex>();
+        polygons = new java.util.ArrayList<Polygon>();
         currentMaterial = Material.DEFAULT_MATERIAL;
         currentObject = "";
-        currentGroups = new Vector<String>();
+        currentGroups = new java.util.ArrayList<String>();
         this.file = file;
     }
 
@@ -200,7 +199,7 @@ public class WavefrontObjLoader {
     }
 
     private Polygon readPolygon(StringTokenizer tokenizer) {
-        Vector<Vertex> verticies = new Vector<Vertex>();
+        List<Vertex> verticies = new java.util.ArrayList<Vertex>();
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             String vertex_tokens[] = token.split("/");

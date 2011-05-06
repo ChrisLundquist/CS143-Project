@@ -1,6 +1,6 @@
 package graphics;
 
-import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.*;
 import javax.media.opengl.GL2;
 import java.awt.Graphics2D;
@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
 
 public class Texture {
     private static final int NO_TEXTURE = -1;
-    protected static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+    protected static Map<String, Texture> textures = new java.util.HashMap<String, Texture>();
     
     public static Texture findByName(String name) {
         return textures.get(name);

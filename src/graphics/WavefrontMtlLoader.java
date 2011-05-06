@@ -5,8 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
@@ -33,19 +33,19 @@ public class WavefrontMtlLoader {
             return 0;
         }
 
-        HashMap<String, Material> newMaterials = mtl.getMaterials();
+        Map<String, Material> newMaterials = mtl.getMaterials();
         Material.materials.putAll(newMaterials);
 
         return newMaterials.size();
     }
 
     private Material current_material;
-    private HashMap<String, Material> materials;
+    private Map<String, Material> materials;
     private File file;
 
 
     private WavefrontMtlLoader(File file) {
-        materials = new HashMap<String, Material>();
+        materials = new java.util.HashMap<String, Material>();
         this.file = file;
     }
 
@@ -127,7 +127,7 @@ public class WavefrontMtlLoader {
         return null;
     }
 
-    private HashMap<String, Material> getMaterials() {
+    private Map<String, Material> getMaterials() {
         return materials;
     }
 

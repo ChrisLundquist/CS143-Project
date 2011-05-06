@@ -4,42 +4,26 @@
 package graphics;
 
 import java.util.List;
-import java.util.Vector;
 import javax.media.opengl.GL2;
 
 public class Polygon {
     private transient Material material;
-    Vector<Vertex> verticies;
+    List<Vertex> verticies;
     List<String> groups;
     private String materialName;
     public String object;
 
-    public Polygon(String materialName, Vertex[] verticies) {
-        this.materialName = materialName;
-        this.verticies = new Vector<Vertex>(verticies.length);
-        this.groups = new Vector<String>();
-        this.verticies.copyInto(verticies);
-    }
-
     public Polygon(String materialName, java.util.Collection<Vertex> verticies) {
         this.materialName = materialName;
-        this.verticies = new Vector<Vertex>(verticies);
-        this.groups = new Vector<String>();
+        this.verticies = new java.util.ArrayList<Vertex>(verticies);
+        this.groups = new java.util.ArrayList<String>();
     }
     
-    public Polygon(Material material, Vertex[] verticies) {
-        this.materialName = material.getName();
-        this.material = material;
-        this.verticies = new Vector<Vertex>(verticies.length);
-        this.groups = new Vector<String>();
-        this.verticies.copyInto(verticies);
-    }
-
     public Polygon(Material material, java.util.Collection<Vertex> verticies) {
         this.material = material;
-        materialName = material.getName();
-        this.verticies = new Vector<Vertex>(verticies);
-        groups = new Vector<String>();
+        this.materialName = material.getName();
+        this.verticies = new java.util.ArrayList<Vertex>(verticies);
+        this.groups = new java.util.ArrayList<String>();
     }
 
     public void render(GL2 gl) {

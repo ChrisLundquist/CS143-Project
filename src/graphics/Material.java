@@ -1,7 +1,6 @@
 package graphics;
 
-import java.util.HashMap;
-
+import java.util.Map;
 import javax.media.opengl.GL2;
 
 public class Material {
@@ -54,7 +53,7 @@ public class Material {
         }
     }
     protected static final Material DEFAULT_MATERIAL = new Material("NONE");
-    protected static HashMap<String, Material> materials = new HashMap<String, Material>();
+    protected static Map<String, Material> materials = new java.util.HashMap<String, Material>();
     
     public static Material findByName(String name) {
         // TODO Optimize: See if we can load this and get rid of the if statement

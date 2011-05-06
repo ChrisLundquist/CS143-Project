@@ -1,7 +1,6 @@
 package ship;
 
 import java.util.List;
-import java.util.Vector;
 
 import actor.Actor;
 
@@ -15,8 +14,8 @@ public abstract class Ship extends Actor {
     public Ship(){
         super();
         selectedWeapon = 0;
-        weapons = new Vector<Weapon>();
-        shields = new Vector<Shield>();
+        weapons = new java.util.ArrayList<Weapon>();
+        shields = new java.util.ArrayList<Shield>();
     }
     
     public void shoot(){
