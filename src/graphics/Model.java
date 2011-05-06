@@ -131,6 +131,7 @@ public class Model implements math.Supportable{
                 } 
             }
         }
-        return max;
+        // It is important we return a new vector and not a reference to one in our geometry
+        return new Vector3(max);
     }
 }

@@ -49,7 +49,7 @@ public class GJKSimplexTest {
             assertTrue(GJKSimplex.isColliding(a, b));
             
             
-            // Check case where they are moving perpedicular to each other
+            // Check case where they are moving perpendicular to each other
             a.setPosition(new Vector3(0, 2, 0));
             b.setPosition(new Vector3(2, 0, 0));
             
@@ -57,7 +57,7 @@ public class GJKSimplexTest {
             b.setVelocity(new Vector3(0, 4, 0));
             assertTrue(GJKSimplex.isColliding(a, b));
             
-            // Check case where one is appoching the other from behind
+            // Check case where one is approaching the other from behind
             a.setPosition(new Vector3(0, 0, 0));
             b.setPosition(new Vector3(4, 0, 0));
             
