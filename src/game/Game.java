@@ -18,6 +18,7 @@ public class Game {
     static actor.Asteroid a;
 
     public static void init(){
+        System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
         try {
             Settings.init();
         } catch (IOException e) {

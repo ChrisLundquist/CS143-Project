@@ -16,7 +16,7 @@ import math.Quaternion;
 import math.Supportable;
 import math.Vector3;
 
-public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable {
+public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable, Collidable {
     private static final long serialVersionUID = 744085604446096658L;
     /**
      * All the actors currently in play We use the fully qualified named space
@@ -62,32 +62,17 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      */
     public static void updateActors(int frames) {
         synchronized(actors) {
-            // TODO this is slowing down the game using n^2 of noop calls
-            checkCollisions();
             // Update each actor
             for (Actor a : actors) {
                 // Track down actors without ids.
                 if (a.getId() == 0)
                     System.err.println("DEBUG: " + a + " actor without ID set");
-
                 a.update();
             }
         }
     }
 
-    public static void checkCollisions(){
-        for(Actor a : actors) {
-            for(Actor b : actors){
-                if(a == b) // if it is the same exact object in memory
-                    continue; // skip it against itself
-                if(a.isColliding(b)){
-                    a.handleCollision(b);
-                    b.handleCollision(a);
-                }
-            }
-        }
-    }
-
+    
     /**
      * Helper method to get rid of stupid syntax
      * @param other the other actor to test collision with

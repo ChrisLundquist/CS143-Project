@@ -1,14 +1,17 @@
 package game;
 
+import actor.Actor;
+
 public class GameThread extends Thread {
     private static final long FRAME_RATE = 1000 / 60;
     private long lastUpdate = 0;
+    private int maxCores = 0;
     
     
     
     
     public void run() {
-        
+        maxCores = Runtime.getRuntime().availableProcessors();
         while (true) {
             int frames = waitForNextFrame();
              
@@ -22,9 +25,10 @@ public class GameThread extends Thread {
 
             game.Game.getPlayer().updateCamera();
 
-            
+            for(int i = 0; i < maxCores; i++)
+                new physics.CollisionSolverThread(Actor.getActors(),i + 1).start();
             // Update the actors
-            actor.Actor.updateActors(frames);         
+            actor.Actor.updateActors(frames);
         }
         
     }
