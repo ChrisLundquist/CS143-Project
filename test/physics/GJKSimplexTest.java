@@ -2,9 +2,13 @@ package physics;
 
 import static org.junit.Assert.*;
 
+import graphics.Model;
+
 import java.util.Random;
 
 import org.junit.Test;
+
+import actor.Asteroid;
 
 import physics.GJKSimplex;
 import math.*;
@@ -24,15 +28,45 @@ public class GJKSimplexTest {
      */
     @Test 
         public void testLinearSweepingCollision() {
-            Sphere sphereA = new Sphere(new Vector3(-2,0,0),1);
-            Sphere sphereB = new Sphere(new Vector3(2,0,0),1);
+            Asteroid a = new Asteroid();
+            Asteroid b = new Asteroid();
+            
+            a.setModel(Model.findOrCreateByName("cube_centered.obj")); // Cube 2x2x2
+            b.setModel(Model.findOrCreateByName("cube_centered.obj"));
+            a.setSize(0.5f); // Scale to 1x1x1
+            b.setSize(0.5f);
+            
+            a.setPosition(new Vector3(-2, 0, 0));
+            b.setPosition(new Vector3(2, 0, 0));
 
-            sphereA.setVelocity(new Vector3(5,0,0));
-            sphereB.setVelocity(new Vector3(-5,0,0));
+            // They are not moving, so they shouldn't be colliding
+            assertFalse(GJKSimplex.isColliding(a, b));
 
-            // The two spheres should pass through each other
-            assertTrue(GJKSimplex.isColliding(sphereA, sphereB));
+            a.setVelocity(new Vector3(2, 0, 0));
+            b.setVelocity(new Vector3(-2, 0, 0));
 
+            // The two cubes should pass through each other
+            assertTrue(GJKSimplex.isColliding(a, b));
+            
+            
+            // Check case where they are moving perpedicular to each other
+            a.setPosition(new Vector3(0, 2, 0));
+            b.setPosition(new Vector3(2, 0, 0));
+            
+            a.setVelocity(new Vector3(4, 0, 0));
+            b.setVelocity(new Vector3(0, 4, 0));
+            assertTrue(GJKSimplex.isColliding(a, b));
+            
+            // Check case where one is appoching the other from behind
+            a.setPosition(new Vector3(0, 0, 0));
+            b.setPosition(new Vector3(4, 0, 0));
+            
+            a.setVelocity(new Vector3(3, 0, 0));
+            b.setVelocity(new Vector3(2, 0, 0));
+            assertFalse(GJKSimplex.isColliding(a, b)); // not fast enough
+            
+            a.setVelocity(new Vector3(10, 0, 0));
+            assertTrue(GJKSimplex.isColliding(a, b));
         }
 
     public void testAngularSweepingCollision(){

@@ -161,7 +161,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
     private int id; // unique ID for each Actor
     protected String modelName;
-    protected transient Model model; // CL - Used to store the model reference
+    private transient Model model; // CL - Used to store the model reference
     // after we look it up once
     protected Vector3 position, velocity, scale;
 
@@ -380,5 +380,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     
     protected long getAge() {
         return age;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

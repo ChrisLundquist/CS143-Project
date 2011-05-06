@@ -246,9 +246,11 @@ public class GJKSimplex{
                 return true;
             
             direction = findSimplex(simplex);
+            
+            // If our dot product gave us the zero vector, our vectors must be colinear and we contain the origin and further test will break
+            if (direction.equals(Vector3.ZERO))
+                return true;
         }
-        if(support.equals(Vector3.ORIGIN))
-            return true;
         return false;
     }
 }
