@@ -50,6 +50,10 @@ public class Model implements math.Supportable{
         Model.findOrCreateByName(ASTEROID);
         Model.findOrCreateByName(SKYBOX);
         Model.findOrCreateByName(PLAYER);
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+            System.err.println(err);
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
+            System.err.println(err);
     }
 
     /* 
@@ -130,6 +134,4 @@ public class Model implements math.Supportable{
         }
         return max;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package graphics;
 
+import static org.junit.Assert.*;
 import graphics.WavefrontObjLoader;
 
 import org.junit.Test;
@@ -19,9 +20,9 @@ public class WavrfrontObjLoaderTest {
     /* No output should be printed about unhandled tokens */
     public void testLoadString() {
         for(String file : FILES){
-            System.out.print("Loading " + file + ":\t"); // Print the file name so we can track down which model has issues
-            graphics.Model model = WavefrontObjLoader.load(MODEL_DIR + file);
-            System.out.println(model);
+            WavefrontObjLoader.load(MODEL_DIR + file);
         }
+        assertEquals(0, WavefrontMtlLoader.getErrors().size());
+        assertEquals(0, WavefrontObjLoader.getErrors().size());
     }
 }
