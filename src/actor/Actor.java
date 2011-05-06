@@ -63,7 +63,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public static void updateActors(int frames) {
         synchronized(actors) {
             // TODO this is slowing down the game using n^2 of noop calls
-            //checkCollisions();
+            checkCollisions();
             // Update each actor
             for (Actor a : actors) {
                 // Track down actors without ids.
@@ -78,6 +78,8 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public static void checkCollisions(){
         for(Actor a : actors) {
             for(Actor b : actors){
+                if(a == b) // if it is the same exact object in memory
+                    continue; // skip it against itself
                 if(a.isColliding(b)){
                     a.handleCollision(b);
                     b.handleCollision(a);
@@ -138,21 +140,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
     }
 
-    /**
-     * Simple test for updateFromNetwork()
-     * @param args
-     */
-    public static void main(String[] args) {
-        List<Actor> update = new java.util.ArrayList<Actor>();
-        update.add(new Asteroid());
-        update.add(new Asteroid());
-        update.add(new Asteroid());      
-
-        for (int i = 0; i < 3; i++) {
-            updateFromNetwork(update, null);
-        }
-    }
-
     public static int getActorCount() {
         synchronized(actors) {
             return actors.size();
@@ -167,8 +154,8 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     // Rotation
     protected Quaternion rotation, angularVelocity;
 
-   // protected int age; // Actor age in frames
-    protected int parentId;
+    // protected int age; // Actor age in frames
+    // protected int parentId;
 
     public Actor() {
         id = generateId();
@@ -225,7 +212,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Vector3 getPosition() {
         return position;
     }
-    
+
     public Actor setRotation(Quaternion rot){
         rotation = rot;
         return this;
@@ -303,18 +290,18 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         this.velocity = velocity;
         return this;
     }
-    
+
 
     public Vector3 getFarthestPointInDirection(Vector3 direction){
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
         //      so we can figure it out in model space
-        
+
         // CL - We need to do the sweeping further point so we need to see if we want where we
         // are or where we will be is better
-        
-            
-        
+
+
+
         Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
         // Scale the point by our actor's scale in world space
         max.x *= scale.x;
@@ -323,11 +310,15 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
         // Rotate and translate our point to world space
         max = max.times(getRotation()).plus(getPosition());
-        
+
         // If our velocity is in the same direction as the direction, then
         // we need to sweep the furthest point by our velocity
         if(velocity.sameDirection(direction))
             max.plusEquals(velocity);
+        // Do the same thing for angular velocity
+        //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
+        //   max = max.times(getAngularVelocity());
+
         return max;
     }
 
@@ -363,9 +354,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Quaternion getAngularVelocity() {
         return angularVelocity;
     }
-    
+
     protected long age;
-    
+
     /**
      * Sets the time when the Actor was born
      * Current uses System.currentTimeMillis, this might be problematic on different OS
@@ -373,9 +364,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      * 
      */
     protected void setTimeStamp() {
-       age = System.currentTimeMillis();       
+        age = System.currentTimeMillis();       
     }
-    
+
     protected long getAge() {
         return age;
     }
@@ -383,7 +374,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public void setModel(Model model) {
         this.model = model;
     }
-    
+
     public String getModelName(){
         return model.getName();
     }

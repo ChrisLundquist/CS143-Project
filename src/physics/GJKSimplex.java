@@ -177,7 +177,6 @@ public class GJKSimplex{
     }
 
     static public Vector3 findTetrahedronSimplex(List<Vector3> simplex){
-        Vector3 newDirection;
         //A is the point added last to the simplex 
         Vector3 a = simplex.get(3); 
         Vector3 b = simplex.get(2); 
@@ -188,14 +187,14 @@ public class GJKSimplex{
         Vector3 ab = b.minus(a); 
         Vector3 ac = c.minus(a); 
         Vector3 ad = d.minus(a); 
-        Vector3 abc = ab.cross(ac); 
+        //Vector3 abc = ab.cross(ac); 
         Vector3 acd = ac.cross(ad); 
         Vector3 adb = ad.cross(ab); 
 
         //the side (positive or negative) of B, C and D relative to the planes of ACD, ADB and ABC respectively 
         int BsideOnACD = acd.dotProduct(ab) > 0.0f ? 1 : 0; 
         int CsideOnADB = adb.dotProduct(ac) > 0.0f ? 1 : 0; 
-        int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
+        //int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
 
         //whether the origin is on the same side of ACD/ADB/ABC as B, C and D respectively 
         boolean ABsameAsOrigin = (acd.dotProduct(ao) > 0.0f ? 1 : 0) == BsideOnACD; 
@@ -205,21 +204,21 @@ public class GJKSimplex{
             //B is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(b); 
             //the new direction is on the other side of ACD, relative to B 
-            newDirection = acd.times(-BsideOnACD);
+            //newDirection = acd.times(-BsideOnACD);
         } 
         //if the origin is not on the side of C relative to ADB 
         else if (!ACsameAsOrigin) { 
             //C is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(c); 
             //the new direction is on the other side of ADB, relative to C 
-            newDirection = adb.times(-CsideOnADB); 
+            //newDirection = adb.times(-CsideOnADB); 
         } 
         //if the origin is not on the side of D relative to ABC 
         else //if (!ADsameAsOrigin) { 
             //D is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(d); 
         //the new direction is on the other side of ABC, relative to D 
-        newDirection = abc.times(-DsideOnABC); 
+        //newDirection = abc.times(-DsideOnABC); 
 
         //go on with the triangle case 
         //TODO: maybe we should restrict the depth of the recursion, just like we restricted the number of iterations in BodiesIntersect? 

@@ -10,7 +10,7 @@ public class CapitalShip extends ship.Ship {
 
     @Override
     public void handleCollision(Actor other) {
-        // TODO Auto-generated method stub
+        System.err.println("Collision Detected Between " + other + " and " + this);
     }
     public void update() {
         super.update();
