@@ -65,4 +65,47 @@ public class ActorSet implements Set<Actor> {
         }
         return null;
     }
+    
+    /**
+     * Update all the actors
+     * @author Dustin Lundquist <dustin@null-ptr.net>
+     * @param update a list of updates
+     * @param ship the players ship or similar actor that should not be updated
+     */
+    public static void updateFromNetwork(List<Actor> update, Actor ship) {
+        synchronized(actors) {
+            // This is n^2 - but I don't have a better way to do it
+            // Using ListEterators so we only need to make one pass adding and removing elements
+            for (ListIterator<Actor> actors_iter = actors.listIterator(); actors_iter.hasNext(); ) {
+                Actor a = actors_iter.next();
+                boolean found = false;
+
+                for (ListIterator<Actor> update_iter = update.listIterator(); update_iter.hasNext(); ) {
+                    Actor u = update_iter.next();
+
+                    if (a.id != u.id)
+                        continue;
+
+                    // Do not update the players ship position from the network
+                    if (ship != null && u.id == ship.id)
+                        continue;
+
+                    actors_iter.set(u);
+                    update_iter.remove();
+                    found = true;
+                    break;
+                }
+                // Skip the last step if running on the server
+                if (ship == null)
+                    continue;
+
+                // Remove actors that where not present in the update, except for the players ship
+                if (!found && a != ship)
+                    actors_iter.remove();
+            }
+            // Add the remaining
+            actors.addAll(update);
+        }
+
+    }
 }
