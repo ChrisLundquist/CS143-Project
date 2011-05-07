@@ -115,6 +115,8 @@ public class Material {
         Texture texture = getTexture();
         if(texture != null)
             texture.bind(gl);
+        else // We don't have a texture so don't use one
+            gl.glBindTexture(GL2.GL_TEXTURE_2D, 0); // Based of NeHe lesson 36 this is how you unbind a texture
     }
 
     public void setAmbientColor(float[] color) {
