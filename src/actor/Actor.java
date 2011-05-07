@@ -220,6 +220,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     public void setModel(Model model) {
+        this.modelName = model.name;
         this.model = model;
     }
 
