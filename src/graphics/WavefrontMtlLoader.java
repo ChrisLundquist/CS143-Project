@@ -66,28 +66,28 @@ public class WavefrontMtlLoader {
                     materials.put(current_material.getName(), current_material);
                     break;
                 case AMBIENT_COLOR:
-                    current_material.setAmbientColor(readColor(tokenizer));
+                    getCurrentMaterial().setAmbientColor(readColor(tokenizer));
                     break;
                 case DIFFUSE_COLOR:
-                    current_material.setDiffuseColor(readColor(tokenizer));
+                    getCurrentMaterial().setDiffuseColor(readColor(tokenizer));
                     break;
                 case SPECULAR_COLOR:
-                    current_material.setSpecularColor(readColor(tokenizer));
+                    getCurrentMaterial().setSpecularColor(readColor(tokenizer));
                     break;
                 case ALPHA_TRANSPARENCY:
-                    current_material.setTransparency(Float.parseFloat(tokenizer.nextToken()));
+                    getCurrentMaterial().setTransparency(Float.parseFloat(tokenizer.nextToken()));
                     break;
                 case ILLUMINATION_MODEL:
                     // ignore for now
                     return;
                 case SHININESS:
-                    current_material.setShininess(Float.parseFloat(tokenizer.nextToken()));
+                    getCurrentMaterial().setShininess(Float.parseFloat(tokenizer.nextToken()));
                     break;
                 case OPTICAL_DENSITY:
                     // ignore for now, this is the index of refraction and we need a refraction shader to use this
                     return;
                 case TEXTURE_MAP_FILENAME:
-                    current_material.setTexture( Texture.findOrCreateByName(tokenizer.nextToken()));
+                    getCurrentMaterial().setTexture( Texture.findOrCreateByName(tokenizer.nextToken()));
                     break;
                 default:
                     errors.add(new WavefrontLoaderError(file, "WavefrontMtlLoader: Unhandled Token: " + token + "\n" +"Line: " + line));
@@ -96,6 +96,11 @@ public class WavefrontMtlLoader {
         }
     }
 
+    private Material getCurrentMaterial(){
+        if(current_material == null)
+            throw new NullPointerException("current_material is null, potentially malformed material file missing material name declaration");
+        return current_material;
+    }
 
     private float[] readColor(StringTokenizer tokenizer) {
         float[] components = new float[5];
