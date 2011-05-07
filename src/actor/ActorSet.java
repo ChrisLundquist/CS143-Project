@@ -32,15 +32,16 @@ public class ActorSet implements Set<Actor> {
         return true;
     }
 
-
     @Override
     public  boolean addAll(Collection<? extends Actor> list) {
+        boolean changed = false;
+        
         for (Actor a: list)
-            add(a);
+            if (add(a))
+                changed = true;
 
-        return true;
+        return changed;
     }
-
 
     @Override
     public synchronized void clear() {
@@ -63,7 +64,6 @@ public class ActorSet implements Set<Actor> {
         for (Object o: list)
             if (contains(o) == false)
                 return false;
-
 
         return true;
     }
@@ -93,16 +93,20 @@ public class ActorSet implements Set<Actor> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> arg0) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean removeAll(Collection<?> list) {
+        boolean changed = false;
+        
+        for (Object o: list)
+            if (remove(o))
+                changed = true;
+
+        return changed;
     }
 
 
     @Override
     public boolean retainAll(Collection<?> arg0) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
 
@@ -113,16 +117,14 @@ public class ActorSet implements Set<Actor> {
 
 
     @Override
-    public Object[] toArray() {
-        // TODO Auto-generated method stub
-        return null;
+    public synchronized Object[] toArray() {
+        return actors.values().toArray();
     }
 
 
     @Override
-    public <T> T[] toArray(T[] arg0) {
-        // TODO Auto-generated method stub
-        return null;
+    public synchronized <T> T[] toArray(T[] a) {
+        return actors.values().toArray(a);
     }
 
     public synchronized Actor findById(ActorId id) {
