@@ -1,9 +1,8 @@
 package graphics;
 
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.Map;
+import java.util.List;
 import javax.media.opengl.GL2;
-
 import math.Vector3;
 
 public class Model implements math.Supportable{
@@ -13,16 +12,17 @@ public class Model implements math.Supportable{
     private static final String SKYBOX = "skybox.obj";
     private static final String BULLET = "bullet.obj";
     private static final String MISSILE = "missile.obj";
-    private static final String CAPITAL_SHIP = "cube_cube.obj";
+    private static final String CAPITAL_SHIP = "round_capital.obj";
 
 
     private static final int NO_LIST = -1;
     protected int id;
     int displayList;
-    Vector<Polygon> polygons;
-    protected static HashMap<String, Model> models = new HashMap<String, Model>();
+    List<Polygon> polygons;
+    protected String name;
+    protected static Map<String, Model> models = new java.util.HashMap<String, Model>();
 
-    public Model(Vector<Polygon> polygons){
+    public Model(List<Polygon> polygons){
         this.polygons = polygons;
         displayList = NO_LIST;
         //TODO load collision models from a manifest file
@@ -42,6 +42,7 @@ public class Model implements math.Supportable{
 
     public static Model createByName(String filePath){
         Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
+        model.name = filePath;
         models.put(filePath, model);
         return model;
     }
@@ -50,6 +51,10 @@ public class Model implements math.Supportable{
         Model.findOrCreateByName(ASTEROID);
         Model.findOrCreateByName(SKYBOX);
         Model.findOrCreateByName(PLAYER);
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+            System.err.println(err);
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
+            System.err.println(err);
     }
 
     /* 
@@ -116,7 +121,7 @@ public class Model implements math.Supportable{
 
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        Vector3 max = polygons.firstElement().verticies.firstElement().coord;
+        Vector3 max = polygons.get(0).verticies.get(0).coord;
         // Normalize our direction for good measure.
         direction.normalize();
         // Loop though all of our polygons
@@ -128,8 +133,11 @@ public class Model implements math.Supportable{
                 } 
             }
         }
-        return max;
+        // It is important we return a new vector and not a reference to one in our geometry
+        return new Vector3(max);
     }
 
-
+    public String getName() {
+        return name;
+    }
 }

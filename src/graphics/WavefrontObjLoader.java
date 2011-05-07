@@ -1,53 +1,70 @@
 package graphics;
 
 import java.io.*;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /*
  *  lass to load Wavefront .obj files
  */
 public class WavefrontObjLoader {
+    private static List<WavefrontLoaderError> errors = new java.util.ArrayList<WavefrontLoaderError>();
+
+
     public static Model load(String filepath){
         return load(new File(filepath));
     }
 
     public static Model load(File file) {
-        WavefrontObjLoader wol = new WavefrontObjLoader();
+        File transform_file = new File(file.getPath().replaceAll(".obj$", ".trfm"));
+        WavefrontObjLoader wol = new WavefrontObjLoader(file);
         BufferedReader in;
         String line;
 
+
         try {
+            if (transform_file.exists())
+                wol.loadTranform(transform_file);
+
             in = new BufferedReader(new FileReader(file));
 
             // While we have lines in our file
             while((line = in.readLine()) != null)
                 wol.readLine(line);
         } catch (IOException e) {
-            e.printStackTrace();
+            errors.add(new WavefrontLoaderError(file, "" + e.toString() + e.fillInStackTrace()));
             return null;
         }
 
         return wol.generateModel();
     }
 
-    private Vector<ObjVertex> geoVerticies;
-    private Vector<ObjVertex> textureverticies;
-    private Vector<ObjVertex> vertexNormals;
-    private Vector<Polygon> polygons;
+    private List<ObjVertex> geoVerticies;
+    private List<ObjVertex> textureverticies;
+    private List<ObjVertex> vertexNormals;
+    private List<Polygon> polygons;
+    // our default transform
+    private float[] transform = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+    };
     private Material currentMaterial;
     private String currentObject;
-    private java.util.List<String> currentGroups;
+    private List<String> currentGroups;
+    private File file;
 
 
-    private WavefrontObjLoader() {
-        geoVerticies = new Vector<ObjVertex>();
-        textureverticies = new Vector<ObjVertex>();
-        vertexNormals = new Vector<ObjVertex>();
-        polygons = new Vector<Polygon>();
+    private WavefrontObjLoader(File file) {
+        geoVerticies = new java.util.ArrayList<ObjVertex>();
+        textureverticies = new java.util.ArrayList<ObjVertex>();
+        vertexNormals = new java.util.ArrayList<ObjVertex>();
+        polygons = new java.util.ArrayList<Polygon>();
         currentMaterial = Material.DEFAULT_MATERIAL;
         currentObject = "";
-        currentGroups = new Vector<String>();
+        currentGroups = new java.util.ArrayList<String>();
+        this.file = file;
     }
 
     private void readLine(String line) {
@@ -69,10 +86,10 @@ public class WavefrontObjLoader {
                     setObject(tokenizer.nextToken());
                     return;
                 case GEOMETRIC_VERTEX:
-                    geoVerticies.add(readVertex(tokenizer));
+                    geoVerticies.add(readVertex(tokenizer).transform(transform));
                     break;
                 case VERTEX_NORMAL:
-                    vertexNormals.add(readVertex(tokenizer));
+                    vertexNormals.add(readVertex(tokenizer).transform(transform));
                     break;
                 case TEXTURE_COORDINATE:
                     textureverticies.add(readVertex(tokenizer));
@@ -93,10 +110,36 @@ public class WavefrontObjLoader {
                     polygons.add(readPolygon(tokenizer));
                     break;
                 default:
-                    System.out.println("WavefrontObjLoader: Unhandled Token: " + token + "\n" +"Line: " + line);
+                    errors.add(new WavefrontLoaderError(file, "WavefrontObjLoader: Unhandled Token: " + token + "\n" +"Line: " + line));
                     return;
             }
         }
+    }
+
+    private void loadTranform(File file) throws IOException {
+        String line;
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        float[] newTransform = new float[16];
+        int pos = 0;
+
+        try {
+            while (pos < newTransform.length && (line = in.readLine()) != null) {
+                StringTokenizer tokenizer = new StringTokenizer(line);
+
+                while (pos < newTransform.length && tokenizer.hasMoreTokens())
+                    newTransform[pos++] = Float.parseFloat(tokenizer.nextToken());
+            }
+        } catch (NumberFormatException e) {
+            errors.add(new WavefrontLoaderError(file, "Malformed tranform file"));
+            return;
+        }
+
+        // Check that we loaded a complete transform
+        if (pos != 16) {
+            errors.add(new WavefrontLoaderError(file, "Malformed tranform file"));
+            return;
+        }
+        transform = newTransform;
     }
 
     private void setObject(String nextToken) {
@@ -156,7 +199,7 @@ public class WavefrontObjLoader {
     }
 
     private Polygon readPolygon(StringTokenizer tokenizer) {
-        Vector<Vertex> verticies = new Vector<Vertex>();
+        List<Vertex> verticies = new java.util.ArrayList<Vertex>();
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             String vertex_tokens[] = token.split("/");
@@ -214,7 +257,6 @@ public class WavefrontObjLoader {
 
     private static class ObjVertex {
         int dim;
-        @SuppressWarnings("unused")
         float x, y, z, w;
 
         public ObjVertex() {
@@ -222,7 +264,24 @@ public class WavefrontObjLoader {
             this.x = 0.0f;
             this.y = 0.0f;
             this.z = 0.0f;
-            this.w = 0.0f;
+            this.w = 1.0f;
+        }
+
+        public ObjVertex(float x, float y, float z, float w) {
+            dim = 0;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        public ObjVertex transform(float[] transform) {
+            return new ObjVertex(
+                    x * transform[0]  + y * transform[1]  + z * transform[2]  + w * transform[3], 
+                    x * transform[4]  + y * transform[5]  + z * transform[6]  + w * transform[7], 
+                    x * transform[8]  + y * transform[9]  + z * transform[10] + w * transform[11], 
+                    x * transform[12] + y * transform[13] + z * transform[14] + w * transform[15]
+            );
         }
 
         void add(float v) {
@@ -247,5 +306,9 @@ public class WavefrontObjLoader {
                     throw new IllegalArgumentException();
             }
         }
+    }
+
+    public static List<WavefrontLoaderError> getErrors() {
+        return errors;
     }
 }

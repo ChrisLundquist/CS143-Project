@@ -6,19 +6,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JFileChooser;
+import java.io.File;
+
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import math.Quaternion;
 import math.Vector3;
- 
+
 import com.jogamp.opengl.util.Animator;
  
 public class ModelViewer implements GLEventListener, KeyListener {
@@ -96,6 +97,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
         
         
         ((Component) gLDrawable).addKeyListener(this);
+        /*
         try {
             shader.init(gl);
         } catch (IOException e) {
@@ -103,6 +105,8 @@ public class ModelViewer implements GLEventListener, KeyListener {
             e.printStackTrace();
         }
         shader.enable(gl);
+         
+         */
     }
  
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
@@ -191,6 +195,18 @@ public class ModelViewer implements GLEventListener, KeyListener {
     
     private static File guiPromptForFilename() {
         JFileChooser jfc = new JFileChooser(Model.MODEL_PATH);
+        
+        jfc.setFileFilter(new FileFilter(){
+            @Override
+            public boolean accept(File file) {               
+                return file.getName().toLowerCase().endsWith(".obj");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Wavefront 3d Object";
+            }
+        });
         
         if (jfc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
             System.err.println("User did not specify an input file.");

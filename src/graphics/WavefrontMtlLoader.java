@@ -5,18 +5,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class WavefrontMtlLoader {
     public static final String MATERIAL_DIR = "assets/materials/";
-    
+    private static List<WavefrontLoaderError> errors = new java.util.ArrayList<WavefrontLoaderError>();
+
     public static int load(String filepath){
         return load(new File(MATERIAL_DIR + filepath));
     }
-    
+
     public static int load(File file) {
-        WavefrontMtlLoader mtl = new WavefrontMtlLoader();
+        WavefrontMtlLoader mtl = new WavefrontMtlLoader(file);
         BufferedReader in;
         String line;
 
@@ -26,23 +28,25 @@ public class WavefrontMtlLoader {
             // While we have lines in our file
             while((line = in.readLine()) != null)
                 mtl.readLine(line);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {                     
+            errors.add(new WavefrontLoaderError(file, "" + e.toString() + e.fillInStackTrace()));
             return 0;
         }
 
-        HashMap<String, Material> newMaterials = mtl.getMaterials();
+        Map<String, Material> newMaterials = mtl.getMaterials();
         Material.materials.putAll(newMaterials);
-        
+
         return newMaterials.size();
     }
-    
+
     private Material current_material;
-    private HashMap<String, Material> materials;
+    private Map<String, Material> materials;
+    private File file;
 
 
-    private WavefrontMtlLoader() {
-        materials = new HashMap<String, Material>();
+    private WavefrontMtlLoader(File file) {
+        materials = new java.util.HashMap<String, Material>();
+        this.file = file;
     }
 
     private void readLine(String line) {
@@ -79,11 +83,14 @@ public class WavefrontMtlLoader {
                 case SHININESS:
                     current_material.setShininess(Float.parseFloat(tokenizer.nextToken()));
                     break;
+                case OPTICAL_DENSITY:
+                    // ignore for now, this is the index of refraction and we need a refraction shader to use this
+                    return;
                 case TEXTURE_MAP_FILENAME:
                     current_material.setTexture( Texture.findOrCreateByName(tokenizer.nextToken()));
                     break;
                 default:
-                    System.out.println("WavefrontMtlLoader: Unhandled Token: " + token + "\n" +"Line: " + line);
+                    errors.add(new WavefrontLoaderError(file, "WavefrontMtlLoader: Unhandled Token: " + token + "\n" +"Line: " + line));
                     return;
             }
         }
@@ -94,14 +101,14 @@ public class WavefrontMtlLoader {
         float[] components = new float[5];
         float[] result;
         int i = 0;
-    
+
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             try {
                 components[i] = Float.parseFloat(token);
                 i++;
             } catch (NumberFormatException e) {
-                System.err.println("Unexpected token " + token);
+                errors.add(new WavefrontLoaderError(file, "Unexpected token " + token));
             }
         }
         switch (i) {
@@ -120,7 +127,7 @@ public class WavefrontMtlLoader {
         return null;
     }
 
-    private HashMap<String, Material> getMaterials() {
+    private Map<String, Material> getMaterials() {
         return materials;
     }
 
@@ -141,6 +148,8 @@ public class WavefrontMtlLoader {
             return TokenType.ALPHA_TRANSPARENCY;
         if (token.equals("Ns"))
             return TokenType.SHININESS;
+        if (token.equals("Ni"))
+            return TokenType.OPTICAL_DENSITY;
         if (token.equals("illum"))
             return TokenType.ILLUMINATION_MODEL;
         if (token.equals("map_Ka"))
@@ -153,6 +162,10 @@ public class WavefrontMtlLoader {
     }
 
     private enum TokenType {
-        COMMENT, AMBIENT_COLOR, DIFFUSE_COLOR, SPECULAR_COLOR, ALPHA_TRANSPARENCY, UNKNOWN, SHININESS, ILLUMINATION_MODEL, TEXTURE_MAP_FILENAME, NEW_MATERIAL,
+        COMMENT, AMBIENT_COLOR, DIFFUSE_COLOR, SPECULAR_COLOR, ALPHA_TRANSPARENCY, UNKNOWN, SHININESS, ILLUMINATION_MODEL, TEXTURE_MAP_FILENAME, NEW_MATERIAL, OPTICAL_DENSITY,
+    }
+
+    public static List<WavefrontLoaderError> getErrors() {
+        return errors;
     }
 }

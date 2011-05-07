@@ -82,24 +82,7 @@ public class Vector3 implements Serializable {
                 x * rhs.y - y * rhs.x
         );
     }
-    
-    /**
-     * Finds the projection from the other vector onto this one
-     * @param other
-     * @return
-     */
-    public Vector3 projectionFrom(Vector3 other){
-        return (this.times(dotProduct(other) / other.magnitude()));
-    }
-    /**
-     * Projects this vector onto the other
-     * @param other
-     * @return
-     */
-    public Vector3 projectionTo(Vector3 other){
-        return new Vector3(other.projectionFrom(this));
-    }
-    
+     
     /**
      * Returns true if this and the input vector < 90 degrees apart
      * @param b
@@ -188,5 +171,14 @@ public class Vector3 implements Serializable {
                 gen.nextFloat() * 2 * max - max,
                 gen.nextFloat() * 2 * max - max,
                 gen.nextFloat() * 2 * max - max);
+    }
+
+    public Vector3 timesEquals(Quaternion rotation) {
+        // TODO OPTIMIZE Auto-generated method stub
+        Vector3 temp = this.times(rotation);
+        x = temp.x;
+        y = temp.y;
+        z = temp.z;
+        return this;
     }
 }

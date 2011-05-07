@@ -1,4 +1,5 @@
 package game;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Vector;
 
 import math.Vector3;
 import actor.Actor;
@@ -69,11 +69,11 @@ public class Map implements Serializable {
     public graphics.Skybox skybox;
     public List<Actor> actors;
     public List<Vector3> spawningPositions;
-    // TODO private Vector<Object> triggers;
+    // TODO private List<Object> triggers;
 
     public Map() {
-        this.spawningPositions = new Vector<Vector3>();
-        this.actors = new Vector<Actor>();
+        this.spawningPositions = new java.util.ArrayList<Vector3>();
+        this.actors = new java.util.ArrayList<Actor>();
     }
     
     public Map(String name) {

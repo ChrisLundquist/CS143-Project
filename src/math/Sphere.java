@@ -1,14 +1,16 @@
 package math;
 
 import actor.Positionable;
+import actor.Velocitable;
 
-public class Sphere implements Supportable, Positionable{
-    Vector3 position;
+public class Sphere implements Supportable, Positionable, Velocitable{
+    Vector3 position, velocity;
     float radius;
 
     public Sphere(Vector3 position, float radius){
         this.radius = radius;
         this.position = position;
+        velocity = new Vector3(Vector3.ZERO);
     }
 
     @Override
@@ -31,5 +33,16 @@ public class Sphere implements Supportable, Positionable{
 
     public String toString(){
         return new String("Position: " + getPosition() + "\nRadius: " + radius);
+    }
+
+    @Override
+    public Vector3 getVelocity() {
+        return velocity;
+    }
+
+    @Override
+    public Sphere setVelocity(Vector3 vel) {
+        velocity = vel;
+        return this;
     }
 }

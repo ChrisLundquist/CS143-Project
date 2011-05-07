@@ -70,10 +70,10 @@ public class GJKSimplex{
          * For the origin to be within the tetrahedron, it must be on the inside of all four faces.
          */
         return
-            (abc.dotProduct(ad) * abc.dotProduct(ao) > 0.0f) &&
-            (bcd.dotProduct(ba) * bcd.dotProduct(bo) > 0.0f) &&
-            (adb.dotProduct(ac) * adb.dotProduct(ao) > 0.0f) &&
-            (acd.dotProduct(ab) * acd.dotProduct(ao) > 0.0f);
+            (abc.dotProduct(ad) * abc.dotProduct(ao) >= 0.0f) &&
+            (bcd.dotProduct(ba) * bcd.dotProduct(bo) >= 0.0f) &&
+            (adb.dotProduct(ac) * adb.dotProduct(ao) >= 0.0f) &&
+            (acd.dotProduct(ab) * acd.dotProduct(ao) >= 0.0f);
     }
 
     /**
@@ -99,6 +99,7 @@ public class GJKSimplex{
         Vector3 ao = Vector3.ORIGIN.minus(a); 
 
         if (ab.sameDirection(ao)) { 
+            // The new direction is perpendicular to AB pointing to the origin
             newDirection = ab.cross(ao).cross(ab); 
         } else { 
             newDirection = ao; 
@@ -164,10 +165,10 @@ public class GJKSimplex{
                 } 
                 else { 
                     simplex.clear(); 
-                    simplex.add(a); 
+                    simplex.add(a);
                     simplex.add(c); 
                     simplex.add(b); 
-
+                    
                     newDirection = abc.negate(); 
                 } 
             } 
@@ -176,7 +177,6 @@ public class GJKSimplex{
     }
 
     static public Vector3 findTetrahedronSimplex(List<Vector3> simplex){
-        Vector3 newDirection;
         //A is the point added last to the simplex 
         Vector3 a = simplex.get(3); 
         Vector3 b = simplex.get(2); 
@@ -187,14 +187,14 @@ public class GJKSimplex{
         Vector3 ab = b.minus(a); 
         Vector3 ac = c.minus(a); 
         Vector3 ad = d.minus(a); 
-        Vector3 abc = ab.cross(ac); 
+        //Vector3 abc = ab.cross(ac); 
         Vector3 acd = ac.cross(ad); 
         Vector3 adb = ad.cross(ab); 
 
         //the side (positive or negative) of B, C and D relative to the planes of ACD, ADB and ABC respectively 
         int BsideOnACD = acd.dotProduct(ab) > 0.0f ? 1 : 0; 
         int CsideOnADB = adb.dotProduct(ac) > 0.0f ? 1 : 0; 
-        int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
+        //int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
 
         //whether the origin is on the same side of ACD/ADB/ABC as B, C and D respectively 
         boolean ABsameAsOrigin = (acd.dotProduct(ao) > 0.0f ? 1 : 0) == BsideOnACD; 
@@ -204,21 +204,21 @@ public class GJKSimplex{
             //B is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(b); 
             //the new direction is on the other side of ACD, relative to B 
-            newDirection = acd.times(-BsideOnACD);
+            //newDirection = acd.times(-BsideOnACD);
         } 
         //if the origin is not on the side of C relative to ADB 
         else if (!ACsameAsOrigin) { 
             //C is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(c); 
             //the new direction is on the other side of ADB, relative to C 
-            newDirection = adb.times(-CsideOnADB); 
+            //newDirection = adb.times(-CsideOnADB); 
         } 
         //if the origin is not on the side of D relative to ABC 
         else //if (!ADsameAsOrigin) { 
             //D is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(d); 
         //the new direction is on the other side of ABC, relative to D 
-        newDirection = abc.times(-DsideOnABC); 
+        //newDirection = abc.times(-DsideOnABC); 
 
         //go on with the triangle case 
         //TODO: maybe we should restrict the depth of the recursion, just like we restricted the number of iterations in BodiesIntersect? 
@@ -230,21 +230,26 @@ public class GJKSimplex{
     }
 
     static public boolean isColliding(math.Supportable lhs, math.Supportable rhs){
-        Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
         List<Vector3> simplex = new java.util.ArrayList<Vector3>();
+        Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
+        simplex.add(support);
         Vector3 direction = support.negate();
-        simplex.add(direction);
 
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
-        do{
+        while((support = getSupport(lhs,rhs,direction)).sameDirection(direction)){
             simplex.add(support);
-            direction = findSimplex(simplex);
             
             // If the simplex has enclosed the origin then the two objects are colliding
             if(containsOrigin(simplex))
                 return true;
-        }while((support = getSupport(lhs,rhs,direction)).dotProduct(direction) < 0);
+            
+            direction = findSimplex(simplex);
+            
+            // If our dot product gave us the zero vector, our vectors must be colinear and we contain the origin and further test will break
+            if (direction.equals(Vector3.ZERO))
+                return true;
+        }
         return false;
     }
 }

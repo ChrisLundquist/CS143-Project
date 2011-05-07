@@ -10,11 +10,13 @@ import java.util.Random;
 
 import javax.media.opengl.GL2;
 
+import physics.GJKSimplex;
+
 import math.Quaternion;
 import math.Supportable;
 import math.Vector3;
 
-public abstract class Actor implements Serializable, Supportable, Rotatable {
+public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable, Collidable {
     private static final long serialVersionUID = 744085604446096658L;
     /**
      * All the actors currently in play We use the fully qualified named space
@@ -60,36 +62,24 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
      */
     public static void updateActors(int frames) {
         synchronized(actors) {
-            checkCollisions();
             // Update each actor
             for (Actor a : actors) {
                 // Track down actors without ids.
                 if (a.getId() == 0)
                     System.err.println("DEBUG: " + a + " actor without ID set");
-
                 a.update();
             }
         }
     }
 
-    public static void checkCollisions(){
-        for(Actor a : actors) {
-            for(Actor b : actors){
-                if(a.isColliding(b)){
-                    a.handleCollision(b);
-                    b.handleCollision(a);
-                }
-            }
-        }
-    }
-
+    
     /**
      * Helper method to get rid of stupid syntax
      * @param other the other actor to test collision with
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        return false;
+        return GJKSimplex.isColliding(this, other);
     }
 
     /**
@@ -135,21 +125,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
 
     }
 
-    /**
-     * Simple test for updateFromNetwork()
-     * @param args
-     */
-    public static void main(String[] args) {
-        List<Actor> update = new java.util.ArrayList<Actor>();
-        update.add(new Asteroid());
-        update.add(new Asteroid());
-        update.add(new Asteroid());      
-
-        for (int i = 0; i < 3; i++) {
-            updateFromNetwork(update, null);
-        }
-    }
-
     public static int getActorCount() {
         synchronized(actors) {
             return actors.size();
@@ -157,16 +132,15 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     }
 
     private int id; // unique ID for each Actor
-    protected String modelName;
-    protected transient Model model; // CL - Used to store the model reference
+    private transient Model model; // CL - Used to store the model reference
     // after we look it up once
     protected Vector3 position, velocity, scale;
 
     // Rotation
     protected Quaternion rotation, angularVelocity;
 
-   // protected int age; // Actor age in frames
-    protected int parentId;
+    // protected int age; // Actor age in frames
+    // protected int parentId;
 
     public Actor() {
         id = generateId();
@@ -174,7 +148,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         angularVelocity = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
-        modelName = Model.getModelIdFor(this);
         scale = new Vector3(1.0f,1.0f,1.0f);
         age = 0;
         //sets the time of the actor's birth 
@@ -213,7 +186,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null)
-            model = Model.findOrCreateByName(modelName);
+            model = Model.findOrCreateByName(Model.getModelIdFor(this));
 
         return model;
     }
@@ -223,6 +196,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
      */
     public Vector3 getPosition() {
         return position;
+    }
+
+    public Actor setRotation(Quaternion rot){
+        rotation = rot;
+        return this;
     }
 
     public Quaternion getRotation() {
@@ -275,8 +253,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         gl.glPopMatrix();
     }
 
-    public void setPosition(Vector3 position) {
+    public Actor setPosition(Vector3 position) {
         this.position = position;
+        return this;
     }
 
     // Lets you reference chain
@@ -292,15 +271,40 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
         return this;
     }
 
-    public void setVelocity(Vector3 velocity) {
+    public Actor setVelocity(Vector3 velocity) {
         this.velocity = velocity;
+        return this;
     }
+
 
     public Vector3 getFarthestPointInDirection(Vector3 direction){
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
         //      so we can figure it out in model space
-        return getModel().getFarthestPointInDirection(direction.times(getRotation().inverse())).times(getRotation()).plus(getPosition());
+
+        // CL - We need to do the sweeping further point so we need to see if we want where we
+        // are or where we will be is better
+
+
+
+        Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
+        // Scale the point by our actor's scale in world space
+        max.x *= scale.x;
+        max.y *= scale.y;
+        max.z *= scale.z;
+
+        // Rotate and translate our point to world space
+        max = max.times(getRotation()).plus(getPosition());
+
+        // If our velocity is in the same direction as the direction, then
+        // we need to sweep the furthest point by our velocity
+        if(velocity.sameDirection(direction))
+            max.plusEquals(velocity);
+        // Do the same thing for angular velocity
+        //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
+        //   max = max.times(getAngularVelocity());
+
+        return max;
     }
 
     // CL - updates the state of the actor for the next frame
@@ -335,9 +339,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
     public Quaternion getAngularVelocity() {
         return angularVelocity;
     }
-    
+
     protected long age;
-    
+
     /**
      * Sets the time when the Actor was born
      * Current uses System.currentTimeMillis, this might be problematic on different OS
@@ -345,10 +349,18 @@ public abstract class Actor implements Serializable, Supportable, Rotatable {
      * 
      */
     protected void setTimeStamp() {
-       age = System.currentTimeMillis();       
+        age = System.currentTimeMillis();       
     }
-    
+
     protected long getAge() {
         return age;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    public String getModelName(){
+        return model.getName();
     }
 }

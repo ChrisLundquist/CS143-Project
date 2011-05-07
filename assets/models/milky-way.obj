@@ -1,6 +1,6 @@
 # Blender v2.57 (sub 0) OBJ File: 'milky-way_sktbox.blend'
 # www.blender.org
-mtllib assets/materials/milky-way.mtl
+mtllib milky-way.mtl
 o Cube
 v 0.987817 -0.988234 -0.979513
 v 0.987817 -0.988234 1.020487
