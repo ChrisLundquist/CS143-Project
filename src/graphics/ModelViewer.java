@@ -39,7 +39,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
     static Shader shader = new Shader("minimal.vert", "minimal.frag");
  
     public ModelViewer(File objFile) {
-        model = WavefrontObjLoader.load(objFile);
+        model = WavefrontObjLoader.load("foo", objFile);
     }
 
     public void display(GLAutoDrawable gLDrawable) {
@@ -158,7 +158,7 @@ public class ModelViewer implements GLEventListener, KeyListener {
     }
  
     private void loadModel() {
-        model = WavefrontObjLoader.load(guiPromptForFilename());
+        model = WavefrontObjLoader.load("foo", guiPromptForFilename());
     }
 
     public void keyReleased(KeyEvent e) {

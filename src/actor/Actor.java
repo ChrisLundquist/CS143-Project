@@ -148,6 +148,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     private int id; // unique ID for each Actor
+    protected String modelName;
     private transient Model model; // CL - Used to store the model reference
     // after we look it up once
     protected Vector3 position, velocity, scale;
@@ -202,7 +203,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null)
-            model = Model.findOrCreateByName(Model.getModelIdFor(this));
+            model = Model.findOrCreateByName(modelName);
 
         return model;
     }
@@ -382,6 +383,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     public String getModelName(){
-        return model.getName();
+        return modelName;
     }
 }

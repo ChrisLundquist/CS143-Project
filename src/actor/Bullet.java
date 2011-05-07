@@ -6,6 +6,8 @@ public class Bullet extends Actor {
     private static final long serialVersionUID = -3860927022451699968L;
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     private static final float BULLET_SPEED = 1.0f;
+    private static final String MODEL_NAME = "bullet";
+    
     
     public Bullet(Actor actor){
         super();
@@ -13,6 +15,7 @@ public class Bullet extends Actor {
         this.velocity = actor.velocity.plus(actor.getDirection().times(BULLET_SPEED));
         position = new Vector3(actor.getPosition());
         rotation = new Quaternion(actor.getRotation());
+        modelName = MODEL_NAME;
         setSize(.1f);
     }
     

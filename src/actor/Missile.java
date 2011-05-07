@@ -6,6 +6,7 @@ import math.Vector3;
 public class Missile extends Actor {
     private static final long serialVersionUID = -8381240274687476481L;
     private static final float MISSILE_SPEED = 0.5f;
+    private static final String MODEL_NAME = "missile";
 
     @Override
     public void handleCollision(Actor other) {
@@ -18,5 +19,6 @@ public class Missile extends Actor {
         this.velocity = actor.velocity.plus(actor.getDirection().times(MISSILE_SPEED));
         position = new math.Vector3(actor.getPosition());
         setSize(.1f);
+        modelName = MODEL_NAME;
     }
 }

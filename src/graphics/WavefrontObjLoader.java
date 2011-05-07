@@ -11,11 +11,11 @@ public class WavefrontObjLoader {
     private static List<WavefrontLoaderError> errors = new java.util.ArrayList<WavefrontLoaderError>();
 
 
-    public static Model load(String filepath){
-        return load(new File(filepath));
+    public static Model load(String name, String filepath){
+        return load(name, new File(filepath));
     }
 
-    public static Model load(File file) {
+    public static Model load(String name, File file) {
         File transform_file = new File(file.getPath().replaceAll(".obj$", ".trfm"));
         WavefrontObjLoader wol = new WavefrontObjLoader(file);
         BufferedReader in;
@@ -36,7 +36,7 @@ public class WavefrontObjLoader {
             return null;
         }
 
-        return wol.generateModel();
+        return wol.generateModel(name);
     }
 
     private List<ObjVertex> geoVerticies;
@@ -235,8 +235,8 @@ public class WavefrontObjLoader {
         return p;
     }
 
-    private Model generateModel() {
-        return new Model(polygons);
+    private Model generateModel(String name) {
+        return new Model(name, polygons);
     }
 
     private static enum TokenType {
