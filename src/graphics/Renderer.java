@@ -119,7 +119,7 @@ public class Renderer implements GLEventListener {
         }
         //shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
-        Light.initialize(gl, 8);
+        Light.initialize(gl, 2);
 
         System.gc(); // This is probably a good a idea
     }

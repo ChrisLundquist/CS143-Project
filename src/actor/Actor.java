@@ -47,6 +47,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public static void addActor(Actor actor) {
         synchronized(actors) {
             actors.add(actor);
+            System.out.println("There Are: " + actors.size() + " actors");
         }
     }
 
@@ -79,6 +80,10 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
+        // Don't collide with our children like lasers or bullets or missiles
+        if(parentId == other.id || other.parentId == id)
+            return false;
+            
         if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
             return GJKSimplex.isColliding(this, other);
         return false;
@@ -157,7 +162,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     protected Quaternion rotation, angularVelocity;
 
     // protected int age; // Actor age in frames
-    // protected int parentId;
+     protected int parentId;
 
     public Actor() {
         id = generateId();

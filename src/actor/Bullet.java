@@ -17,6 +17,7 @@ public class Bullet extends Actor {
         rotation = new Quaternion(actor.getRotation());
         modelName = MODEL_NAME;
         setSize(.1f);
+        parentId = actor.getId();
     }
     
     /**
