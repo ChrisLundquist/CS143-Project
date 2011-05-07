@@ -2,12 +2,9 @@ package game;
 
 import graphics.Camera;
 import input.InputRouter;
-
 import java.io.Serializable;
-
+import math.Vector3;
 import ship.PlayerShip;
-import ship.Ship;
-
 import actor.Actor;
 import actor.ActorId;
 import actor.ActorSet;
@@ -42,12 +39,14 @@ public class Player implements Serializable {
         return camera;
     }
 
-    public PlayerShip getShip() {        
+    public PlayerShip getShip() {       
         if (ship == null) {
-            Actor a = Game.getActors().findById(shipId);
-            if (a instanceof PlayerShip) {
-                ship = (PlayerShip) a;
+            if (shipId != null) {
+                Actor a = Game.getActors().findById(shipId);
+                if (a instanceof PlayerShip)
+                    return ship = (PlayerShip) a;
             }
+            ship = getNewShip();
         }
         return ship;
     }
@@ -97,20 +96,22 @@ public class Player implements Serializable {
         return (status == PlayerStatus.ALIVE);
     }
 
-    public PlayerShip respawn2(ActorSet actors) {
-        if (Game.getActors() != null) {
-            Actor a = Game.getActors().findById(shipId);
+    public void respawn(ActorSet actors, Vector3 position) {
+        if (shipId == null) {
+            ship = getShip();
+        } else {
+            Actor a = actors.findById(shipId);
             if (a instanceof PlayerShip) {
                 status = PlayerStatus.ALIVE;
-                return (PlayerShip) a;
+            } else {
+                ship = getShip();
             }
-
         }
 
-        ship = getNewShip();
+        ship.setPosition(position);
         setShipId(ship.getId());
         status = PlayerStatus.ALIVE;
-        return ship;
+        actors.add(ship);
     }
 
     // TODO create ship of players preference

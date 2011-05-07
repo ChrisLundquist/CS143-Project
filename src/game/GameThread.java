@@ -22,12 +22,12 @@ public class GameThread extends Thread {
         lastUpdate = 0;
         maxThreads = Runtime.getRuntime().availableProcessors() * CORE_SUBSCRIPTION_FACTOR;
         pool = java.util.concurrent.Executors.newFixedThreadPool(maxThreads);
-        //collisionThreads = new physics.CollisionSolverThread[maxThreads];
+        collisionThreads = new physics.CollisionSolverThread[maxThreads];
     }
 
     public void run() {
-        //for(int i = 0; i < collisionThreads.length; ++i)
-        //    collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
+        for(int i = 0; i < collisionThreads.length; ++i)
+            collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
         while (true) {
             int frames = waitForNextFrame();
 

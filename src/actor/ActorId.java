@@ -25,4 +25,8 @@ public class ActorId implements Serializable {
     public String toString() {
         return "#" + playerId + "." + id;
     }
+
+    public int getPlayerId() {
+        return playerId;
+    }
 }

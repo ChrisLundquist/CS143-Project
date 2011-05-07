@@ -54,11 +54,9 @@ public class Renderer implements GLEventListener {
         Light.update(gl);
         Game.getMap().getSkybox().render(gl);
 
-        // Render each actor       
-
+        // Render each actor
         for(Actor a: game.Game.getActors())
-            a.render(gl);
-
+            a.render(gl);        
 
         hud.drawStaticHud(gl);
         checkForGLErrors(gl);

@@ -35,11 +35,10 @@ public class Bullet extends Actor {
         System.err.println("Collision Detected Between " + other + " and " + this);
     }
 
-    public void update(){
+    public void update() {
         super.update();
-        if(age > MAX_AGE){
-            // FIXME this throws a concurrent access exception
-            //delete();
-        }
+        // This works now, but is too fast, bullets die before they show up on the screen
+        //if(age > MAX_AGE)
+        //    delete();   
     }
 }

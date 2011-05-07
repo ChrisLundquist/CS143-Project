@@ -20,7 +20,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     protected Quaternion rotation, angularVelocity;
     private transient Model model; // CL - Used to store the model reference, after we look it up once
     protected String modelName;
-    protected long age;
+    protected long age; // actor age in frames;
 
 
     public Actor() {
@@ -226,5 +226,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
     public String getModelName(){
         return modelName;
+    }
+    
+    public void delete() {
+        game.Game.getActors().remove(this);
     }
 }

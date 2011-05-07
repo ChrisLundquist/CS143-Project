@@ -2,12 +2,10 @@ package game;
 
 import input.KeyboardListener;
 import java.io.IOException;
-
 import settings.Settings;
-import ship.CapitalShip;
-import actor.Actor;
 import actor.ActorSet;
 import actor.Asteroid;
+
 
 public class Game {
     private static graphics.Renderer renderer;
@@ -30,10 +28,9 @@ public class Game {
         map = Map.load("example_1");
         player = new Player();
         actors = new ActorSet();
-        Actor ship = player.getNewShip();
-        ship.setPosition(map.getSpawnPosition());
-        actors.add(ship);
-        player.respawn2(actors);
+        actors.addAll(map.actors);
+        player.respawn(actors, map.getSpawnPosition());
+        
 
         renderer = new graphics.Renderer();
         input = new KeyboardListener();
