@@ -39,7 +39,7 @@ public class Game {
        // capitalShip.setSize(5f);
         capitalShip.setSize(new math.Vector3(5,4,8));
         capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
-        capitalShip.setVelocity(new math.Vector3(-.1f, 0f,-.2f));
+        //capitalShip.setVelocity(new math.Vector3(-.1f, 0f,-.2f));
         actor.Actor.addActor(capitalShip);
         
         new GameThread().start();

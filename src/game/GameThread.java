@@ -26,7 +26,7 @@ public class GameThread extends Thread {
             game.Game.getPlayer().updateCamera();
 
             for(int i = 0; i < maxCores; i++)
-                new physics.CollisionSolverThread(Actor.getActors(),i + 1).start();
+                new physics.CollisionSolverThread(Actor.getActors(),i, maxCores).start();
             // Update the actors
             actor.Actor.updateActors(frames);
         }

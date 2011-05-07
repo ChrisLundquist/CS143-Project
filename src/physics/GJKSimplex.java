@@ -6,6 +6,8 @@ import math.Supportable;
 
 // http://mollyrocket.com/forums/viewtopic.php?t=245
 public class GJKSimplex{
+    private static final int MAX_ITTERATIONS = 20;
+
     static boolean containsOrigin(List<Vector3> simplex) {
         // If we don't have 4 points, then we can't enclose the origin in R3
         if(simplex.size() < 4)
@@ -234,11 +236,14 @@ public class GJKSimplex{
         Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
         simplex.add(support);
         Vector3 direction = support.negate();
-
+        int loopCounter = 0;
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
         while((support = getSupport(lhs,rhs,direction)).sameDirection(direction)){
             simplex.add(support);
+            
+            if(loopCounter > MAX_ITTERATIONS)
+                break;
             
             // If the simplex has enclosed the origin then the two objects are colliding
             if(containsOrigin(simplex))
