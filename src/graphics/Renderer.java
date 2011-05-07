@@ -55,11 +55,10 @@ public class Renderer implements GLEventListener {
         Game.getMap().getSkybox().render(gl);
 
         // Render each actor       
-        List<Actor> actors = Actor.getActors();
-        synchronized(actors) {
-            for(Actor a: actors)
-                a.render(gl);
-        }
+
+        for(Actor a: game.Game.getActors())
+            a.render(gl);
+
 
         hud.drawStaticHud(gl);
         checkForGLErrors(gl);
@@ -95,7 +94,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
-        
+
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly

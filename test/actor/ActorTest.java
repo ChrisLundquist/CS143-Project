@@ -1,15 +1,9 @@
 package actor;
 
 import static org.junit.Assert.*;
-
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import actor.Actor;
-import actor.Asteroid;
 
 public class ActorTest {
 
@@ -51,22 +45,6 @@ public class ActorTest {
         fail("Not yet implemented");
     }
     
-    
-    /**
-     * Simple test for updateFromNetwork()
-     */
-    @Test
-    public void testUpdateFromNetwork() {
-        List<Actor> update = new java.util.ArrayList<Actor>();
-        update.add(new Asteroid());
-        update.add(new Asteroid());
-        update.add(new Asteroid());      
-
-        for (int i = 0; i < 3; i++) {
-            Actor.updateFromNetwork(update, null);
-        }    
-    }
-
     @Test
     public void testMain() {
         fail("Not yet implemented");

@@ -6,8 +6,11 @@ import input.InputRouter;
 import java.io.Serializable;
 
 import ship.PlayerShip;
+import ship.Ship;
 
 import actor.Actor;
+import actor.ActorId;
+import actor.ActorSet;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 8330574859953611636L;
@@ -16,18 +19,15 @@ public class Player implements Serializable {
     private PlayerStatus status;
     private transient final Camera camera;
     private transient PlayerShip ship;
-    private int shipId;
+    private ActorId shipId;
     // TODO ship preference - once we have ships
-    
+
     public Player() {
         setName("Pilot");
-        status = PlayerStatus.ALIVE;
+        status = PlayerStatus.OBSERVING;
         camera = new Camera();
-        ship = new PlayerShip();
-        setShipId(ship.getId());
-        Actor.addActor(ship);
     }
-    
+
     @Override
     public String toString() {
         String msg = name + " " + status;
@@ -37,27 +37,26 @@ public class Player implements Serializable {
         }
         return msg;
     }
-    
+
     public Camera getCamera() {
         return camera;
     }
 
-    public PlayerShip getShip() {
-        
+    public PlayerShip getShip() {        
         if (ship == null) {
-            Actor a = Actor.findById(shipId);
+            Actor a = Game.getActors().findById(shipId);
             if (a instanceof PlayerShip) {
                 ship = (PlayerShip) a;
             }
         }
         return ship;
     }
-    
+
     public void input(InputRouter.Interaction action) {
         if (getShip() == null) {
             return;
         }
-        
+
         switch(action) {
             case SHOOT:
                 ship.shoot();
@@ -98,17 +97,25 @@ public class Player implements Serializable {
         return (status == PlayerStatus.ALIVE);
     }
 
-    public void respawn() {
-        Actor a =  Actor.findById(getShipId());
-        if (a instanceof PlayerShip) {
-            ship = (PlayerShip)a;
-        } else {
-            // TODO create ship of players preference
-            ship = new PlayerShip();
-            setShipId(ship.getId());
-            Actor.addActor(ship);
+    public PlayerShip respawn2(ActorSet actors) {
+        if (Game.getActors() != null) {
+            Actor a = Game.getActors().findById(shipId);
+            if (a instanceof PlayerShip) {
+                status = PlayerStatus.ALIVE;
+                return (PlayerShip) a;
+            }
+
         }
+
+        ship = getNewShip();
+        setShipId(ship.getId());
         status = PlayerStatus.ALIVE;
+        return ship;
+    }
+
+    // TODO create ship of players preference
+    public PlayerShip getNewShip() {
+        return new PlayerShip();
     }
 
     public void setName(String name) {
@@ -119,11 +126,11 @@ public class Player implements Serializable {
         return name;
     }
 
-    public void setShipId(int shipId) {
+    public void setShipId(ActorId shipId) {
         this.shipId = shipId;
     }
 
-    public int getShipId() {
+    public ActorId getShipId() {
         return shipId;
     }
 
@@ -142,10 +149,10 @@ public class Player implements Serializable {
     public Camera updateCamera() {
         if (ship != null) {
             camera.updateFromActor(ship);
-            
-            
+
+
         }
-        
+
         return camera;
     }
 }

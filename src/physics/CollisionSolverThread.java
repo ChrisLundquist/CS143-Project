@@ -1,11 +1,12 @@
 package physics;
 
 import actor.Actor;
+import actor.ActorSet;
 
 public class CollisionSolverThread extends Thread {
-    java.util.List<Actor> actors;
+    ActorSet actors;
     protected final int stride, start;
-    public CollisionSolverThread(java.util.List<Actor> actors,int start, int stride){
+    public CollisionSolverThread(ActorSet actors,int start, int stride){
         if(stride <= 0 || start < 0)
             throw new IllegalArgumentException("CollisionSolverThread: Stride must be positive");
         this.actors = actors;

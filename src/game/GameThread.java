@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import actor.Actor;
+import actor.ActorSet;
 
 public class GameThread extends Thread {
     private static final long FRAME_RATE = 1000 / 60;
@@ -13,18 +14,20 @@ public class GameThread extends Thread {
     private int maxThreads;
     private physics.CollisionSolverThread[] collisionThreads;
     private ExecutorService pool;
+    private ActorSet actors;
 
 
-    public GameThread(){
+    public GameThread(ActorSet actors){
+        this.actors = actors;
         lastUpdate = 0;
         maxThreads = Runtime.getRuntime().availableProcessors() * CORE_SUBSCRIPTION_FACTOR;
         pool = java.util.concurrent.Executors.newFixedThreadPool(maxThreads);
-        collisionThreads = new physics.CollisionSolverThread[maxThreads];
+        //collisionThreads = new physics.CollisionSolverThread[maxThreads];
     }
 
     public void run() {
-        for(int i = 0; i < collisionThreads.length; ++i)
-            collisionThreads[i] = new physics.CollisionSolverThread(Actor.getActors(),i,collisionThreads.length);
+        //for(int i = 0; i < collisionThreads.length; ++i)
+        //    collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
         while (true) {
             int frames = waitForNextFrame();
 
@@ -52,7 +55,7 @@ public class GameThread extends Thread {
 
 
             // Update the actors
-            actor.Actor.updateActors(frames);
+            actors.update(frames);
         }
 
     }

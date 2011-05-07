@@ -1,6 +1,9 @@
 package actor;
 
 import static org.junit.Assert.*;
+
+import java.util.Set;
+
 import math.Vector3;
 
 import org.junit.After;
@@ -24,18 +27,23 @@ public class ActorSetTest {
     
     @Test
     public void testAdd() {
-        ActorSet as = new ActorSet();
+        ActorSet as = new ActorSet(1);
         as.add(new TestActor(Vector3.randomPosition(100)));
     }
 
     @Test
     public void testIterator() {
+        Set<ActorId> ids = new java.util.HashSet<ActorId>();
         ActorSet as = new ActorSet();
-        for (int i = 0; i < 100; i ++)
+        for (int i = 0; i < 1024; i ++)
             as.add(new TestActor(Vector3.randomPosition(100)));
+       
         
-        for (Actor a: as)
+        for (Actor a: as) {
             assertTrue(a instanceof TestActor);
+            assertTrue(ids.add(a.id));
+        }
+        assertEquals(1024, ids.size());
     }
 
     @Test
@@ -52,5 +60,13 @@ public class ActorSetTest {
 
             count ++;
         }
+    }
+    
+    @Test
+    public void testGetBounds() {
+        ActorSet as = new ActorSet();
+        for (int i = 0; i < 1024; i ++)
+            as.add(new TestActor(Vector3.randomPosition(100)));
+        fail();
     }
 }

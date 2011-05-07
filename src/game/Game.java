@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import settings.Settings;
 import ship.CapitalShip;
+import actor.Actor;
+import actor.ActorSet;
 import actor.Asteroid;
 
 public class Game {
@@ -13,6 +15,7 @@ public class Game {
     private static boolean paused;
     private static Player player;
     private static Map map;
+    private static ActorSet actors;
 
     //for HUD radar testing, will be removed later
     static actor.Asteroid a;
@@ -26,23 +29,19 @@ public class Game {
         }
         map = Map.load("example_1");
         player = new Player();
+        actors = new ActorSet();
+        Actor ship = player.getNewShip();
+        ship.setPosition(map.getSpawnPosition());
+        actors.add(ship);
+        player.respawn2(actors);
 
         renderer = new graphics.Renderer();
         input = new KeyboardListener();
         graphics.Model.loadModels();
 
-        a = new actor.Asteroid();
-        a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
-        actor.Actor.addActor(a);
+
         
-        CapitalShip capitalShip = new ship.CapitalShip();
-       // capitalShip.setSize(5f);
-        capitalShip.setSize(new math.Vector3(5,4,8));
-        capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
-        //capitalShip.setVelocity(new math.Vector3(-.1f, 0f,-.2f));
-        actor.Actor.addActor(capitalShip);
-        
-        new GameThread().start();
+        new GameThread(actors).start();
     }
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
@@ -59,11 +58,11 @@ public class Game {
         input = new KeyboardListener();
         graphics.Model.loadModels();
 
-        actor.Asteroid a = new actor.Asteroid();
-        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
-        actor.Actor.addActor(a);
         
-        new GameThread().start();
+        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        //actor.Actor.addActor(a);
+        
+        //new GameThread().start();
     }
 
     public static void start(){
@@ -110,5 +109,9 @@ public class Game {
 
     public static graphics.Renderer getRenderer() {
         return renderer;
+    }
+    
+    public static ActorSet getActors() {
+        return actors;
     }
 }

@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
+
+import ship.CapitalShip;
 
 import math.Vector3;
 import actor.Actor;
@@ -17,6 +20,7 @@ public class Map implements Serializable {
     private static final String MAP_DIR = "assets/maps/";
     private static final String MAP_EXTENSION = ".map";
     private static final long serialVersionUID = 4499508076059412730L;
+    private static Random rand = new Random();
 
     public static Map load(File file) {
         try {
@@ -43,6 +47,10 @@ public class Map implements Serializable {
         return load(new File(MAP_DIR + filename + MAP_EXTENSION));
     }
     
+    /**
+     * Recreates our test map
+     * @param args
+     */
     public static void main(String[] args) {
         Map map = new Map("Example 1");
         assert map.filepath().equals("assets/maps/example_1.map") : "File name sanitization";
@@ -55,7 +63,20 @@ public class Map implements Serializable {
         map.spawningPositions.add(new Vector3(0.0f, -20.0f, 0.0f));
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, 20.0f));
         map.spawningPositions.add(new Vector3(0.0f, 0.0f, -20.0f));
+        
+        
+        Actor a = new actor.Asteroid();
+        a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
+        map.actors.add(a);
+        
+        CapitalShip capitalShip = new ship.CapitalShip();
+        // capitalShip.setSize(5f);
+        capitalShip.setSize(new math.Vector3(5,4,8));
+        capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
+        //capitalShip.setVelocity(new math.Vector3(-.1f, 0f,-.2f));
+        map.actors.add(capitalShip);
 
+        
         map.skybox = new graphics.Skybox("skybox");
         map.write();
         
@@ -127,5 +148,9 @@ public class Map implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Vector3 getSpawnPosition() {
+        return spawningPositions.get(rand.nextInt(spawningPositions.size()));
     }
 }
