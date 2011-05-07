@@ -79,7 +79,23 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        return GJKSimplex.isColliding(this, other);
+        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
+            return GJKSimplex.isColliding(this, other);
+        return false;
+    }
+
+    /**
+     * Simple bounding sphere test
+     * @param other other actor to test collision with
+     * @return if a collision is possible
+     */
+    private boolean isPossiblyColliding(Actor other) {
+        Vector3 delta_p = other.position.minus(position);
+        float collisionRadius = other.velocity.minus(velocity).magnitude();
+        collisionRadius += getRadius();
+        collisionRadius += other.getRadius();
+                
+        return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
     }
 
     /**
@@ -334,6 +350,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
     public int getId() {
         return id;
+    }
+    
+    public float getRadius() {
+        // TODO optimize: either cache, or change scale to a float
+        return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
     }
 
     public Quaternion getAngularVelocity() {
