@@ -9,8 +9,6 @@ import org.junit.Test;
 
 public class ActorSetTest {
 
-public class ActorSetTest {
-
     @Before
     public void setUp() throws Exception {
     }
