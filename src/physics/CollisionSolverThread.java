@@ -12,9 +12,9 @@ public class CollisionSolverThread extends Thread {
         this.stride = stride;
         this.start = start;
     }
-    
-    
-    private void checkCollisions(){
+
+
+    public void checkCollisions(){
         // Check our guy we stride to against all the others
         for(int i = start; i < actors.size(); i += stride)
             for(int j = i + 1; j < actors.size(); ++j){
@@ -25,9 +25,14 @@ public class CollisionSolverThread extends Thread {
                     a.handleCollision(b);
                     b.handleCollision(a);
                 }
+                
+                if (Thread.interrupted()) {
+                    System.err.println("CollsionSolverThread: Thread " + this.getId() + " interrupted");
+                    return;
+                }
             }
     }
-    
+
     public void run(){
         checkCollisions();
     }

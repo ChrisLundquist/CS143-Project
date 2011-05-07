@@ -130,8 +130,7 @@ public class Model implements math.Supportable{
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
         Vector3 max = polygons.get(0).verticies.get(0).coord;
-        // Normalize our direction for good measure.
-        direction.normalize();
+
         // Loop though all of our polygons
         for(Polygon p : polygons){
             // And all of the vertices in each polygon

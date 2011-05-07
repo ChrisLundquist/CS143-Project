@@ -47,6 +47,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public static void addActor(Actor actor) {
         synchronized(actors) {
             actors.add(actor);
+            System.out.println("There Are: " + actors.size() + " actors");
         }
     }
 
