@@ -14,11 +14,13 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     private static final long serialVersionUID = 744085604446096658L;
     protected static Random gen = new Random(); // Common random number generator object
 
-    protected long age;
+
     protected ActorId id; // unique ID for each Actor
-    private transient Model model; // CL - Used to store the model reference, after we look it up once
     protected Vector3 position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
+    private transient Model model; // CL - Used to store the model reference, after we look it up once
+    protected String modelName;
+    protected long age;
 
 
     public Actor() {
@@ -54,7 +56,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null)
-            model = Model.findOrCreateByName(Model.getModelIdFor(this));
+            model = Model.findOrCreateByName(modelName);
 
         return model;
     }
@@ -193,6 +195,11 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public ActorId getId() {
         return id;
     }
+    
+    public float getRadius() {
+        // TODO optimize: either cache, or change scale to a float
+        return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
+    }
 
     public Quaternion getAngularVelocity() {
         return angularVelocity;
@@ -217,6 +224,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     public String getModelName(){
-        return model.getName();
+        return modelName;
     }
 }

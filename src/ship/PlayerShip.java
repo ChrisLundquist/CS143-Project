@@ -6,12 +6,15 @@ public class PlayerShip extends ship.Ship {
     private static final float TURN_SPEED = 0.01f;
     private static final float ROLL_DEGREE = 0.05f;
     private static final long serialVersionUID = 260627862699350716L;
+    private static final String MODEL_NAME = "cube_cube";
+    
     long lastShotTime, lastRollLeftTime;
     
     public PlayerShip(){
         super();
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
+        modelName = MODEL_NAME;
     }
     @Override
     public void handleCollision(Actor other) {

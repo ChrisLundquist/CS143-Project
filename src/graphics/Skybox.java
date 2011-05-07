@@ -15,7 +15,7 @@ public class Skybox implements Serializable{
     }
 
     private void init(GL2 gl){
-        model = WavefrontObjLoader.load(modelName);
+        model = Model.findOrCreateByName(modelName);
     }
 
     public void render(GL2 gl) {
