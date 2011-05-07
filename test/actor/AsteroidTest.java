@@ -24,7 +24,7 @@ public class AsteroidTest {
     @Test
     public final void testGetFarthestPointInDirection() {
         Actor a = new Asteroid();
-        a.setModel(Model.findOrCreateByName("cube_centered.obj")); // cube -1..1 on all three axies
+        a.setModel(Model.findOrCreateByName("cube_centered")); // cube -1..1 on all three axies
         a.angularVelocity = Quaternion.IDENTITY; // Don't spin for this test
         
         // Test basic stationary object case in all primary directions

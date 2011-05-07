@@ -29,7 +29,7 @@ public class WavefrontMtlLoader {
             while((line = in.readLine()) != null)
                 mtl.readLine(line);
         } catch (IOException e) {                     
-            errors.add(new WavefrontLoaderError(file, "" + e.toString() + e.fillInStackTrace()));
+            errors.add(new WavefrontLoaderError(file, e));
             return 0;
         }
 

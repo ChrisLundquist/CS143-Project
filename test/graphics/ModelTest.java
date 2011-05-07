@@ -8,7 +8,7 @@ import math.Vector3;
 import org.junit.Test;
 
 public class ModelTest {
-    public static final String TEST_MODEL = "cube_cube.obj";
+    public static final String TEST_MODEL = "cube_cube";
     private static final float EPSILON = 0.00001f;
 
     @Test

@@ -15,43 +15,9 @@ public class ActorTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void testRemoveActorId() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testAddActor() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testRemoveActor() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testUpdateActors() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testCheckCollisions() {
-        fail("Not yet implemented");
-    }
 
     @Test
     public void testIsColliding() {
-        fail("Not yet implemented");
-    }
-    
-    @Test
-    public void testMain() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testGetActorCount() {
         fail("Not yet implemented");
     }
 

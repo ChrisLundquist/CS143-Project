@@ -31,8 +31,8 @@ public class GJKSimplexTest {
             Asteroid a = new Asteroid();
             Asteroid b = new Asteroid();
             
-            a.setModel(Model.findOrCreateByName("cube_centered.obj")); // Cube 2x2x2
-            b.setModel(Model.findOrCreateByName("cube_centered.obj"));
+            a.setModel(Model.findOrCreateByName("cube_centered")); // Cube 2x2x2
+            b.setModel(Model.findOrCreateByName("cube_centered"));
             a.setSize(0.5f); // Scale to 1x1x1
             b.setSize(0.5f);
             

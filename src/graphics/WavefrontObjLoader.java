@@ -32,7 +32,7 @@ public class WavefrontObjLoader {
             while((line = in.readLine()) != null)
                 wol.readLine(line);
         } catch (IOException e) {
-            errors.add(new WavefrontLoaderError(file, "" + e.toString() + e.fillInStackTrace()));
+            errors.add(new WavefrontLoaderError(file, e));
             return null;
         }
 
