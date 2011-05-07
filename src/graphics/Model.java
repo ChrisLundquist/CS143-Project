@@ -13,20 +13,28 @@ public class Model implements math.Supportable{
     private static final String BULLET = "bullet.obj";
     private static final String MISSILE = "missile.obj";
     private static final String CAPITAL_SHIP = "round_capital.obj";
-
-
     private static final int NO_LIST = -1;
-    protected int id;
+    
+    protected static Map<String, Model> models = new java.util.HashMap<String, Model>();
+    
     int displayList;
     List<Polygon> polygons;
     protected String name;
-    protected static Map<String, Model> models = new java.util.HashMap<String, Model>();
-
+    public final float radius;
+    
     public Model(List<Polygon> polygons){
         this.polygons = polygons;
         displayList = NO_LIST;
-        //TODO load collision models from a manifest file
-        //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
+        radius = findRadius();
+    }
+
+    private float findRadius() {
+        float radius2 = 0.0f;
+        for (Polygon p: polygons)
+            for (Vertex v: p.verticies)
+                radius2 = Math.max(radius2, v.coord.magnitude2());
+        
+        return (float)Math.sqrt(radius2);
     }
 
     public static Model findOrCreateByName(String filePath) {
