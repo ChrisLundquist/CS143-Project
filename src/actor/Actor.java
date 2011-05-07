@@ -31,7 +31,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         scale = new Vector3(1.0f,1.0f,1.0f);
         age = 0;
         //sets the time of the actor's birth 
-        setTimeStamp();
+        //setTimeStamp();
     }
 
     public void changeYaw(float degrees) {
@@ -212,7 +212,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      * 
      */
     protected void setTimeStamp() {
-        age = System.currentTimeMillis();       
+        //age = System.currentTimeMillis();       
     }
 
     protected long getAge() {

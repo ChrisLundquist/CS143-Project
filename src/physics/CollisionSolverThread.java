@@ -19,6 +19,7 @@ public class CollisionSolverThread extends Thread {
 
 
     public void checkCollisions(){
+        // TODO it would be nice use a single list for all our threads
         List<Actor> actorsList = actors.getCopyList();
         // Check our guy we stride to against all the others
         for(int i = start; i < actorsList.size(); i += stride)

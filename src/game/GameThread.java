@@ -3,7 +3,6 @@ package game;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import actor.Actor;
 import actor.ActorSet;
 
 public class GameThread extends Thread {

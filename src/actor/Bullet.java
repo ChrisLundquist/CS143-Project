@@ -37,8 +37,8 @@ public class Bullet extends Actor {
 
     public void update() {
         super.update();
-        // This works now, but is too fast, bullets die before they show up on the screen
-        //if(age > MAX_AGE)
-        //    delete();   
+        
+        if (age > MAX_AGE)
+            delete();   
     }
 }
