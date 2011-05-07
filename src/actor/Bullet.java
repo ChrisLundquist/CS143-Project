@@ -14,6 +14,7 @@ public class Bullet extends Actor {
         position = new Vector3(actor.getPosition());
         rotation = new Quaternion(actor.getRotation());
         setSize(.1f);
+        parentId = actor.getId();
     }
     
     /**
