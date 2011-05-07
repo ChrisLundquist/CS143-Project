@@ -2,6 +2,11 @@ package actor;
 
 import java.io.Serializable;
 
+/**
+ * ActorId is used to identify each actor as we transmit them over the network
+ * ActorIds are never mutated once they have been created
+ * @author Dustin Lundquist <dustin@null-ptr.net>
+ */
 public class ActorId implements Serializable {
     private static final long serialVersionUID = -362157619097503904L;
     private static int lastId = 0;

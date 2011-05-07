@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * ActorSet provides a thread safe backing store for our actors
+ * @author Dustin Lundquist <dustin@null-ptr.net>
+ */
 public class ActorSet implements Set<Actor> {
 
     private Map<ActorId, Actor> actors;
@@ -21,6 +25,9 @@ public class ActorSet implements Set<Actor> {
     }
 
     @Override
+    /**
+     * Add an actor to the ActorSet, assigning it an ActorId if one isn't already set
+     */
     public synchronized boolean add(Actor a) {     
         if (a.id == null)
             a.id = new ActorId(playerId);
@@ -127,16 +134,30 @@ public class ActorSet implements Set<Actor> {
         return actors.values().toArray(a);
     }
 
+    /**
+     * Returns an Actor from the ActorSet with the provided ActorId if it exists
+     * @param id
+     * @return
+     */
     public synchronized Actor findById(ActorId id) {
         return actors.get(id);
     }
 
+    /**
+     * Update all the actors in the ActorSet
+     * @param frames the number of frame elapsed since the last update
+     */
     public void update(int frames) {
         for (Actor a: this) {
             a.update();
         }
     }
     
+    /**
+     * Returns a new instance of a List containing all
+     * the actors currently in the ActorSet
+     * @return
+     */
     public synchronized List<Actor> getCopyList() {
         return new CopyList();    
     }
