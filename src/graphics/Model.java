@@ -123,6 +123,15 @@ public class Model implements math.Supportable{
         return new Vector3(max);
     }
     
+    public Polygon getIntersectingPolygon(Vector3 origin, Vector3 direction) {
+        for(Polygon p : polygons) {
+            if (p.isIntersecting(origin, direction))
+                return p;
+        }
+        
+        return null;
+    }
+    
     /**
      * Finds the bounding sphere radius
      * @return the bounding sphere radius

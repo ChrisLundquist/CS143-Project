@@ -33,6 +33,9 @@ public class Bullet extends Actor {
     @Override
     public void handleCollision(Actor other) {
         System.err.println("Collision Detected Between " + other + " and " + this);
+        if (other instanceof ship.PlayerShip)
+            return;
+        bounce(other);
     }
 
     public void update() {

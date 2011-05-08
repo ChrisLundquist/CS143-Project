@@ -193,6 +193,24 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
         return max;
     }
+    
+    public void bounce(Actor other) {
+        // Transform our position and velocity into other's model space
+        Vector3 delta_p = position.minus(other.position);
+        Vector3 delta_v = velocity.minus(other.velocity);
+        delta_p.x /= other.scale.x; delta_p.z /= other.scale.z; delta_p.z /= other.scale.z;
+        delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
+        delta_p.timesEquals(other.rotation.inverse());
+        delta_v.timesEquals(other.rotation.inverse());
+        
+        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
+        
+        newVelocity.timesEquals(other.rotation);
+        newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
+        newVelocity.plusEquals(other.velocity);
+        
+        velocity = newVelocity;
+    }
 
     // CL - updates the state of the actor for the next frame
     public void update() {

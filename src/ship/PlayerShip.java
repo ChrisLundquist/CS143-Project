@@ -19,6 +19,10 @@ public class PlayerShip extends ship.Ship {
     @Override
     public void handleCollision(Actor other) {
         System.err.println("Collision Detected Between " + other + " and " + this);
+
+        if (other instanceof Ship) {
+            
+        }
     }
 
     public void forwardThrust() {
