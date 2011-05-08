@@ -123,6 +123,10 @@ public class Model implements math.Supportable{
         return new Vector3(max);
     }
     
+    /**
+     * Finds the bounding sphere radius
+     * @return the bounding sphere radius
+     */
     private float findRadius() {
         float radius2 = 0.0f;
         

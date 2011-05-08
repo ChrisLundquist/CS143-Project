@@ -67,14 +67,31 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Vector3 getPosition() {
         return position;
     }
-    
+
     /**
      * Helper method to get rid of stupid syntax
      * @param other the other actor to test collision with
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        return GJKSimplex.isColliding(this, other);
+        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
+            return GJKSimplex.isColliding(this, other);
+        return false;
+
+    }
+
+    /**
+     * Simple bounding sphere test for trivial collision rejection
+     * @param other other actor to test collision with
+     * @return if a collision is possible
+     */
+    private boolean isPossiblyColliding(Actor other) {
+        Vector3 delta_p = other.position.minus(position);
+        float collisionRadius = other.velocity.minus(velocity).magnitude();
+        collisionRadius += getRadius();
+        collisionRadius += other.getRadius();
+
+        return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
     }
 
     public Actor setRotation(Quaternion rot){
@@ -195,7 +212,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public ActorId getId() {
         return id;
     }
-    
+
     public float getRadius() {
         // TODO optimize: either cache, or change scale to a float
         return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
@@ -227,7 +244,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public String getModelName(){
         return modelName;
     }
-    
+
     public void delete() {
         game.Game.getActors().remove(this);
     }
