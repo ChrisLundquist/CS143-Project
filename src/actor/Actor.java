@@ -11,16 +11,16 @@ import math.Supportable;
 import math.Vector3;
 
 public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable, Collidable {
-    private static final long serialVersionUID = 744085604446096658L;
     protected static Random gen = new Random(); // Common random number generator object
+    private static final long serialVersionUID = 744085604446096658L;
 
 
-    protected ActorId id; // unique ID for each Actor
-    protected Vector3 position, velocity, scale;
-    protected Quaternion rotation, angularVelocity;
+    protected long age; // actor age in frames;
+    protected ActorId id, parentId; // unique ID for each Actor
     private transient Model model; // CL - Used to store the model reference, after we look it up once
     protected String modelName;
-    protected long age; // actor age in frames;
+    protected Vector3 position, velocity, scale;
+    protected Quaternion rotation, angularVelocity;
 
 
     public Actor() {
@@ -34,9 +34,22 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         //setTimeStamp();
     }
 
-    public void changeYaw(float degrees) {
-        angularVelocity = angularVelocity.times(new Quaternion(rotation
-                .yawAxis(), degrees));
+    public void bounce(Actor other) {
+        // Transform our position and velocity into other's model space
+        Vector3 delta_p = position.minus(other.position);
+        Vector3 delta_v = velocity.minus(other.velocity);
+        delta_p.x /= other.scale.x; delta_p.z /= other.scale.z; delta_p.z /= other.scale.z;
+        delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
+        delta_p.timesEquals(other.rotation.inverse());
+        delta_v.timesEquals(other.rotation.inverse());
+        
+        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
+        
+        newVelocity.timesEquals(other.rotation);
+        newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
+        newVelocity.plusEquals(other.velocity);
+        
+        velocity = newVelocity;
     }
 
     public void changePitch(float degrees) {
@@ -49,119 +62,29 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
                 .rollAxis(), degrees));
     }
 
+    public void changeYaw(float degrees) {
+        angularVelocity = angularVelocity.times(new Quaternion(rotation
+                .yawAxis(), degrees));
+    }
+
+    protected void dampenAngularVelocity() {
+        angularVelocity = angularVelocity.dampen(0.01f);
+    }
+
+    public void delete() {
+        game.Game.getActors().remove(this);
+    }
+
+    protected long getAge() {
+        return age;
+    }
+
+    public Quaternion getAngularVelocity() {
+        return angularVelocity;
+    }
+
     public Vector3 getDirection() {
         return rotation.rollAxis();
-    }
-
-    public Model getModel() {
-        // CL - If our reference is null, go look it up
-        if (model == null)
-            model = Model.findOrCreateByName(modelName);
-
-        return model;
-    }
-
-    /**
-     * @return the actors current position
-     */
-    public Vector3 getPosition() {
-        return position;
-    }
-
-    /**
-     * Helper method to get rid of stupid syntax
-     * @param other the other actor to test collision with
-     * @return true if colliding, else false
-     */
-    public boolean isColliding(Actor other){
-        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
-            return GJKSimplex.isColliding(this, other);
-        return false;
-
-    }
-
-    /**
-     * Simple bounding sphere test for trivial collision rejection
-     * @param other other actor to test collision with
-     * @return if a collision is possible
-     */
-    private boolean isPossiblyColliding(Actor other) {
-        Vector3 delta_p = other.position.minus(position);
-        float collisionRadius = other.velocity.minus(velocity).magnitude();
-        collisionRadius += getRadius();
-        collisionRadius += other.getRadius();
-
-        return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
-    }
-
-    public Actor setRotation(Quaternion rot){
-        rotation = rot;
-        return this;
-    }
-
-    public Quaternion getRotation() {
-        return rotation;
-    }
-
-    /**
-     * @return the actors size (for texture scaling and collision detection)
-     */
-    public Vector3 getSize() {
-        return scale;
-    }
-
-    /**
-     * 
-     * @return the actors current velocity
-     */
-    public Vector3 getVelocity() {
-        return velocity;
-    }
-
-    /**
-     * Call back upon collision detection for object to handle collision It
-     * could... Bounce off Explode into many smaller objects Just explode
-     * 
-     * @param other
-     *            the object this actor collided with
-     */
-    abstract public void handleCollision(Actor other);
-
-    public void render(GL2 gl) {
-        gl.glPushMatrix();
-        // Translate the actor to it's position
-        gl.glTranslatef(position.x, position.y, position.z);
-
-        // Rotate the actor
-        gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
-        // Scale the Actor
-        gl.glScalef(scale.x, scale.y, scale.z);
-        // CL - Render our model.
-        getModel().render(gl);
-        gl.glPopMatrix();
-    }
-
-    public Actor setPosition(Vector3 position) {
-        this.position = position;
-        return this;
-    }
-
-    // Lets you reference chain
-    public Actor setSize(float size) {
-        scale.x = size;
-        scale.y = size;
-        scale.z = size;
-        return this;
-    }
-
-    public Actor setSize(Vector3 size){
-        scale = size;
-        return this;
-    }
-
-    public Actor setVelocity(Vector3 velocity) {
-        this.velocity = velocity;
-        return this;
     }
 
     public Vector3 getFarthestPointInDirection(Vector3 direction){
@@ -193,42 +116,28 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
         return max;
     }
-    
-    public void bounce(Actor other) {
-        // Transform our position and velocity into other's model space
-        Vector3 delta_p = position.minus(other.position);
-        Vector3 delta_v = velocity.minus(other.velocity);
-        delta_p.x /= other.scale.x; delta_p.z /= other.scale.z; delta_p.z /= other.scale.z;
-        delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
-        delta_p.timesEquals(other.rotation.inverse());
-        delta_v.timesEquals(other.rotation.inverse());
-        
-        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
-        
-        newVelocity.timesEquals(other.rotation);
-        newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
-        newVelocity.plusEquals(other.velocity);
-        
-        velocity = newVelocity;
-    }
-
-    // CL - updates the state of the actor for the next frame
-    public void update() {
-        position.plusEquals(velocity);
-        rotation.normalize();
-
-        // This should also take into effect our maximum angular velocity --
-        // this may be an overridden in subclasses to provide different handling
-        rotation.timesEquals(angularVelocity);
-        age++;
-    }
-
-    protected void dampenAngularVelocity() {
-        angularVelocity = angularVelocity.dampen(0.01f);
-    }
 
     public ActorId getId() {
         return id;
+    }
+
+    public Model getModel() {
+        // CL - If our reference is null, go look it up
+        if (model == null)
+            model = Model.findOrCreateByName(modelName);
+
+        return model;
+    }
+
+    public String getModelName(){
+        return modelName;
+    }
+
+    /**
+     * @return the actors current position
+     */
+    public Vector3 getPosition() {
+        return position;
     }
 
     public float getRadius() {
@@ -236,8 +145,100 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
     }
 
-    public Quaternion getAngularVelocity() {
-        return angularVelocity;
+    public Quaternion getRotation() {
+        return rotation;
+    }
+
+    /**
+     * @return the actors size (for texture scaling and collision detection)
+     */
+    public Vector3 getSize() {
+        return scale;
+    }
+
+    /**
+     * 
+     * @return the actors current velocity
+     */
+    public Vector3 getVelocity() {
+        return velocity;
+    }
+
+    /**
+     * Call back upon collision detection for object to handle collision It
+     * could... Bounce off Explode into many smaller objects Just explode
+     * 
+     * @param other
+     *            the object this actor collided with
+     */
+    abstract public void handleCollision(Actor other);
+    
+    /**
+     * Helper method to get rid of stupid syntax
+     * @param other the other actor to test collision with
+     * @return true if colliding, else false
+     */
+    public boolean isColliding(Actor other){
+        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
+            return GJKSimplex.isColliding(this, other);
+        return false;
+
+    }
+
+    /**
+     * Simple bounding sphere test for trivial collision rejection
+     * @param other other actor to test collision with
+     * @return if a collision is possible
+     */
+    private boolean isPossiblyColliding(Actor other) {
+        Vector3 delta_p = other.position.minus(position);
+        float collisionRadius = other.velocity.minus(velocity).magnitude();
+        collisionRadius += getRadius();
+        collisionRadius += other.getRadius();
+
+        return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
+    }
+
+    public void render(GL2 gl) {
+        gl.glPushMatrix();
+        // Translate the actor to it's position
+        gl.glTranslatef(position.x, position.y, position.z);
+
+        // Rotate the actor
+        gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
+        // Scale the Actor
+        gl.glScalef(scale.x, scale.y, scale.z);
+        // CL - Render our model.
+        getModel().render(gl);
+        gl.glPopMatrix();
+    }
+
+    public void setModel(Model model) {
+        this.modelName = model.name;
+        this.model = model;
+    }
+
+    public Actor setPosition(Vector3 position) {
+        this.position = position;
+        return this;
+    }
+
+    public Actor setRotation(Quaternion rot){
+        rotation = rot;
+        return this;
+    }
+
+    // Lets you reference chain
+    public Actor setSize(float size) {
+        scale.x = size;
+        scale.y = size;
+        scale.z = size;
+        return this;
+    }
+
+    public Actor setSize(Vector3 size){
+        scale = size;
+        return this;
     }
 
     /**
@@ -250,20 +251,19 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         //age = System.currentTimeMillis();       
     }
 
-    protected long getAge() {
-        return age;
+    public Actor setVelocity(Vector3 velocity) {
+        this.velocity = velocity;
+        return this;
     }
 
-    public void setModel(Model model) {
-        this.modelName = model.name;
-        this.model = model;
-    }
+    // CL - updates the state of the actor for the next frame
+    public void update() {
+        position.plusEquals(velocity);
+        rotation.normalize();
 
-    public String getModelName(){
-        return modelName;
-    }
-
-    public void delete() {
-        game.Game.getActors().remove(this);
+        // This should also take into effect our maximum angular velocity --
+        // this may be an overridden in subclasses to provide different handling
+        rotation.timesEquals(angularVelocity);
+        age++;
     }
 }
