@@ -162,7 +162,7 @@ public class QuaternionTest {
         
     }
 
-    private static void assertQuaternionEquals(Quaternion a, Quaternion b) {
+    public static void assertQuaternionEquals(Quaternion a, Quaternion b) {
         assertQuaternionEquals(a, b, EPSILON);
     }
 

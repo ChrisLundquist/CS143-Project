@@ -23,6 +23,8 @@ public class ActorSetTest {
     @Test
     public void testActorSet() {
         ActorSet as = new ActorSet();
+        assertTrue(as instanceof ActorSet);
+        assertEquals(0, as.size());
     }
 
     @Test
@@ -105,9 +107,6 @@ public class ActorSetTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-
-
     }
 
     private class TestWorker extends Thread {
@@ -126,10 +125,9 @@ public class ActorSetTest {
                 a.id = new ActorId(id);
                 actorSetRef.add(a);
                 for (Actor it: actorSetRef)
-                    if (it.id.getPlayerId() != id && i % id == 0)
+                    if (it.id.getPlayerId() != id && (i & 15) == 12)
                         actorSetRef.remove(it);
             }
-            System.err.println("Thread " + id + " complete. ActorSet size: " + actorSetRef.size());
         }
     }
 }
