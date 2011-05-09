@@ -1,7 +1,6 @@
 package network;
 
 import game.Player;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -9,18 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import actor.Actor;
 
 public class ServerCli extends Thread {
     private InputStream in;
     private PrintStream out;
     private DedicatedServer server;
-
-    public ServerCli(DedicatedServer server, PrintStream out, InputStream in) {
-        this.server = server;
-        this.in = in;
-        this.out = out;
-    }
 
     /*
      * Constructor with an input and output stream so we can use over the network
@@ -29,21 +21,46 @@ public class ServerCli extends Thread {
         this(server, new PrintStream(out), in);
     }
 
-    public void run() {
-        /* Run our little CLI */
-        Scanner kbd = new Scanner(in);
+    public ServerCli(DedicatedServer server, PrintStream out, InputStream in) {
+        this.server = server;
+        this.in = in;
+        this.out = out;
+    }
 
-        out.println("Server started");
+    private void displayHelp(StringTokenizer tokenizer) {
+        out.println("Avaliable commands:\n" +
+                "\thelp\n" +
+                "\tstatus\n" +
+                "\tkick <player name>\n" +
+                "\tnew - restart map\n" +
+                "\tquit");
+    }
 
-        while (server.isRunning()) {
-            out.print("server# ");
-            try {
-                processCliCommand(kbd.nextLine());
-            } catch (Exception e) {
-                out.println("Exception: " + e);
-                e.printStackTrace(out);
-            }
+    private void displayList(StringTokenizer tokenizer) {
+        if (!tokenizer.hasMoreTokens()) {
+            out.println("usage: list players|actors");
+            return;
         }
+    }
+
+    private void displayStatus(StringTokenizer tokenizer) {
+        long totalMemory = Runtime.getRuntime().totalMemory() / (1024 * 1024);
+        long freeMemory = Runtime.getRuntime().freeMemory() / (1024 * 1024);
+        long usedMemory = totalMemory - freeMemory;
+        int processors = Runtime.getRuntime().availableProcessors();
+        List<Player> players = server.getPlayers();
+        int playerCount = players.size();
+
+        out.println(server.getActors().size() + " actors");
+        out.println(playerCount + " players");
+        for (Player p: players)
+            out.println("\t" + p);
+        out.println(processors + " processors");
+        out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB total");
+    }
+
+    private void kickPlayer(StringTokenizer tokenizer) {
+        // TODO
     }
 
     private void processCliCommand(String line) {
@@ -77,41 +94,21 @@ public class ServerCli extends Thread {
         }
     }
 
+    public void run() {
+        /* Run our little CLI */
+        Scanner kbd = new Scanner(in);
 
-    private void displayHelp(StringTokenizer tokenizer) {
-        out.println("Avaliable commands:\n" +
-                "\thelp\n" +
-                "\tstatus\n" +
-                "\tkick <player name>\n" +
-                "\tnew - restart map\n" +
-                "\tquit");
-    }
+        out.println("Server started");
 
-    private void displayStatus(StringTokenizer tokenizer) {
-        long totalMemory = Runtime.getRuntime().totalMemory() / (1024 * 1024);
-        long freeMemory = Runtime.getRuntime().freeMemory() / (1024 * 1024);
-        long usedMemory = totalMemory - freeMemory;
-        int processors = Runtime.getRuntime().availableProcessors();
-        List<Player> players = server.getPlayers();
-        int playerCount = players.size();
-
-        out.println(Actor.getActorCount() + " actors");
-        out.println(playerCount + " players");
-        for (Player p: players)
-            out.println("\t" + p);
-        out.println(processors + " processors");
-        out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB total");
-    }
-
-    private void displayList(StringTokenizer tokenizer) {
-        if (!tokenizer.hasMoreTokens()) {
-            out.println("usage: list players|actors");
-            return;
+        while (server.isRunning()) {
+            out.print("server# ");
+            try {
+                processCliCommand(kbd.nextLine());
+            } catch (Exception e) {
+                out.println("Exception: " + e);
+                e.printStackTrace(out);
+            }
         }
-    }
-
-    private void kickPlayer(StringTokenizer tokenizer) {
-        // TODO
     }
 
     private ServerCommand tokenType(String token) {
@@ -136,12 +133,12 @@ public class ServerCli extends Thread {
     }
 
     private enum ServerCommand {
-        UNKNOWN,
         HELP,
+        KICK,
+        LIST,
+        NEWMAP,
         QUIT,
         STATUS,
-        KICK,
-        NEWMAP,
-        LIST,
+        UNKNOWN,
     }
 }
