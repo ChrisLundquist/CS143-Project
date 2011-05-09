@@ -7,9 +7,9 @@ public class PlayerShip extends ship.Ship {
     private static final float ROLL_DEGREE = 0.05f;
     private static final long serialVersionUID = 260627862699350716L;
     private static final String MODEL_NAME = "cube_cube";
-    
+
     long lastShotTime, lastRollLeftTime;
-    
+
     public PlayerShip(){
         super();
         weapons.add(new weapon.TwinLinkedMachinegun());
@@ -20,8 +20,11 @@ public class PlayerShip extends ship.Ship {
     public void handleCollision(Actor other) {
         System.err.println("Collision Detected Between " + other + " and " + this);
 
-        if (other instanceof Ship) {
+        if(other instanceof actor.Projectile) {
             
+        }
+        else if (other instanceof Ship) {
+
         }
     }
 

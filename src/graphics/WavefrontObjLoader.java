@@ -81,10 +81,10 @@ public class WavefrontObjLoader {
                     return;
                 case GROUP:
                     setGroup(tokenizer);
-                    return;
+                    break;
                 case OBJECT_NAME:
                     setObject(tokenizer.nextToken());
-                    return;
+                    break;
                 case GEOMETRIC_VERTEX:
                     geoVerticies.add(readVertex(tokenizer).transform(transform));
                     break;
@@ -147,7 +147,9 @@ public class WavefrontObjLoader {
     }
 
     private void setGroup(StringTokenizer tokenizer) {
-        currentGroups.clear();
+        // We make a new one here since our polygons all have a shallow copy
+        // so we just let them have a shallow copy and make a new one here
+        currentGroups = new java.util.ArrayList<String>();
         while(tokenizer.hasMoreTokens())
             currentGroups.add(tokenizer.nextToken());
     }

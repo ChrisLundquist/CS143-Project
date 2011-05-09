@@ -1,8 +1,10 @@
 package graphics;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
+
 import javax.media.opengl.GL2;
+
 import math.Vector3;
 
 public class Model implements math.Supportable{
@@ -64,15 +66,32 @@ public class Model implements math.Supportable{
     
     
     int displayList;
-    List<Polygon> polygons;
+    public final List<Polygon> polygons;
+    public final Map<String, List<Polygon>> groups;
     public final String name;
     public final float radius;
     
     public Model(String name, List<Polygon> polygons){
         this.name = name;
         this.polygons = polygons;
+        groups = buildGroups();
         displayList = NO_LIST;
         radius = findRadius();
+    }
+
+    private Map<String, List<Polygon>> buildGroups() {
+        Map<String, List<Polygon>> groups = new java.util.HashMap<String, List<Polygon>>();
+        for( Polygon p : polygons){
+            for(String group : p.groups){
+                if(group.isEmpty())
+                    continue;
+                if(!groups.containsKey(group)){ // If it doesn't have the key, add it
+                    groups.put(group, new java.util.ArrayList<Polygon>());
+                }
+                groups.get(group).add(p); // Add this poly to the group
+            }
+        }
+        return groups;
     }
 
     /* 

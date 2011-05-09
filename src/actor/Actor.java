@@ -42,13 +42,13 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
         delta_p.timesEquals(other.rotation.inverse());
         delta_v.timesEquals(other.rotation.inverse());
-        
+
         Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
-        
+
         newVelocity.timesEquals(other.rotation);
         newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
         newVelocity.plusEquals(other.velocity);
-        
+
         velocity = newVelocity;
     }
 
@@ -172,7 +172,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      *            the object this actor collided with
      */
     abstract public void handleCollision(Actor other);
-    
+
     /**
      * Helper method to get rid of stupid syntax
      * @param other the other actor to test collision with
@@ -265,5 +265,9 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         // this may be an overridden in subclasses to provide different handling
         rotation.timesEquals(angularVelocity);
         age++;
+    }
+
+    public ActorId getParentId() {
+        return parentId;
     }
 }
