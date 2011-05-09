@@ -8,6 +8,10 @@ public class TestActor extends Actor {
         this.position = position;
     }
 
+    public TestActor() {
+        super();
+    }
+
     @Override
     public void handleCollision(Actor other) {
     }
