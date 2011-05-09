@@ -12,7 +12,7 @@ public class Model implements math.Supportable{
     static final String MODEL_EXTENSION = ".obj";
     private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "cube_cube"};
     private static final int NO_LIST = -1;
-    
+
     protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
 
     public static Model findOrCreateByName(String name) {
@@ -35,22 +35,22 @@ public class Model implements math.Supportable{
     public static void loadModels() {
         /* This was a little over ambitious for now, but if new models might be showing up it might be a good idea
         File dir = new File(MODEL_PATH);
-        
+
         // Loop through all models in models directory
         for(String file: dir.list())
             if (file.toLowerCase().endsWith(MODEL_EXTENSION))
                 Model.findOrCreateByName(file.replaceAll(".obj$", ""));
-        */
+         */
         for (String model: COMMON_MODELS)
             Model.findOrCreateByName(model);
-       
+
 
         for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
             System.err.println(err);
         for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
             System.err.println(err);
     }
-    
+
     /**
      * Initializes the models and needed textures
      * @param gl the current OpenGL Context
@@ -63,14 +63,14 @@ public class Model implements math.Supportable{
         }
     }
 
-    
-    
+
+
     int displayList;
     public final List<Polygon> polygons;
-    public final Map<String, List<Polygon>> groups;
+    public final Map<String, Model> groups;
     public final String name;
     public final float radius;
-    
+
     public Model(String name, List<Polygon> polygons){
         this.name = name;
         this.polygons = polygons;
@@ -79,18 +79,39 @@ public class Model implements math.Supportable{
         radius = findRadius();
     }
 
-    private Map<String, List<Polygon>> buildGroups() {
-        Map<String, List<Polygon>> groups = new java.util.HashMap<String, List<Polygon>>();
+    // CL - XXX Hack used for collision detection.
+    //      Might be worth making a ModelGroup class that extends Model
+    public static final String PRIVATE_GROUP_NAME = "Private Group";
+    private Model(List<Polygon> polygons){
+        name = PRIVATE_GROUP_NAME;
+        groups = null;
+        this.polygons = polygons;
+        displayList = NO_LIST;
+        radius = findRadius();
+    }
+
+    private Map<String, Model> buildGroups() {
+        // Sort our polygons into groups
+        Map<String, List<Polygon>> polyGroup = new java.util.HashMap<String, List<Polygon>>();
         for( Polygon p : polygons){
             for(String group : p.groups){
                 if(group.isEmpty())
                     continue;
-                if(!groups.containsKey(group)){ // If it doesn't have the key, add it
-                    groups.put(group, new java.util.ArrayList<Polygon>());
+                if(!polyGroup.containsKey(group)){ // If it doesn't have the key, add it
+                    polyGroup.put(group, new java.util.ArrayList<Polygon>());
                 }
-                groups.get(group).add(p); // Add this poly to the group
+                polyGroup.get(group).add(p); // Add this poly to the group
             }
         }
+        // Make each group a model so we can use all our collision code for models on each group
+
+        Map<String, Model> groups = new java.util.HashMap<String, Model>();
+
+        for(String groupName : polyGroup.keySet()){
+            groups.put(groupName, new Model( polyGroup.get(groupName)));
+        }
+
+
         return groups;
     }
 
@@ -141,27 +162,27 @@ public class Model implements math.Supportable{
         // It is important we return a new vector and not a reference to one in our geometry
         return new Vector3(max);
     }
-    
+
     public Polygon getIntersectingPolygon(Vector3 origin, Vector3 direction) {
         for(Polygon p : polygons) {
             if (p.isIntersecting(origin, direction))
                 return p;
         }
-        
+
         return null;
     }
-    
+
     /**
      * Finds the bounding sphere radius
      * @return the bounding sphere radius
      */
-    private float findRadius() {
+    protected float findRadius() {
         float radius2 = 0.0f;
-        
+
         for (Polygon p: polygons)
             for (Vertex v: p.verticies)
                 radius2 = Math.max(radius2, v.coord.magnitude2());
-        
+
         return (float)Math.sqrt(radius2);
     }
 }
