@@ -119,7 +119,6 @@ public class ActorSetTest {
         }
 
         public void run() {
-            System.err.println("Thread " + id + " starting");
             for (int i = 0; i < 4096; i ++) {
                 Actor a = new TestActor(Vector3.randomPosition(100));
                 a.id = new ActorId(id);

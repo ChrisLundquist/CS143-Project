@@ -26,7 +26,7 @@ public class SpatialTreeTest {
                 for (float z = LOWER_BOUND; z <= UPPER_BOUND; z += INCREMENT)
                     objects.add(new math.Sphere(new math.Vector3(x, y, z),
                             RADIUS));
-        System.out.println(objects.size());
+        //System.out.println(objects.size());
     }
 
     @After
@@ -81,7 +81,7 @@ public class SpatialTreeTest {
             assertTrue(it.next() instanceof SpatialTree<?>);
             count++;
         }
-        System.out.println(count);
+        //System.out.println(count);
 
         // fail("Not yet implemented");
     }
