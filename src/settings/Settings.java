@@ -21,6 +21,7 @@ public class Settings {
             public static int yawRight = -1;
 
             public static int shoot = -1;
+            public static int changeWeapon = -1;
         }
     }
 
@@ -34,6 +35,7 @@ public class Settings {
         System.out.println("yawLeft: "+Profile.Keys.yawLeft);
         System.out.println("yawRight: "+Profile.Keys.yawRight);
         System.out.println("shoot: "+Profile.Keys.shoot);
+        System.out.println("switchWeapons: "+Profile.Keys.shoot);
 
     }
 
@@ -83,7 +85,10 @@ public class Settings {
             }
             if(part[0].equalsIgnoreCase("shoot")){
                 Profile.Keys.shoot = stringToKey(part[1]);
-            }   
+            }
+            if(part[0].equalsIgnoreCase("change_weapon")){
+                Profile.Keys.shoot = stringToKey(part[1]);
+            }
         }
     }
 

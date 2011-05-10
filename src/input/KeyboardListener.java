@@ -35,42 +35,47 @@ public class KeyboardListener implements KeyListener {
     }
 
     public void update() {
-        for(int key:currentKeys){
-            //Directions
-            if(key==Settings.Profile.Keys.forward){
-                InputRouter.sendAction(InputRouter.Interaction.FORWARD);
-            }
-            if(key==Settings.Profile.Keys.backward){
-                InputRouter.sendAction(InputRouter.Interaction.BACK);
-            }
+        synchronized(currentKeys){
+            for(int key:currentKeys){
+                //Directions
+                if(key==Settings.Profile.Keys.forward){
+                    InputRouter.sendAction(InputRouter.Interaction.FORWARD);
+                }
+                if(key==Settings.Profile.Keys.backward){
+                    InputRouter.sendAction(InputRouter.Interaction.BACK);
+                }
 
-            //Pitch
-            if(key==Settings.Profile.Keys.pitchDown){
-                InputRouter.sendAction(InputRouter.Interaction.PITCH_DOWN);
-            }
-            if(key==Settings.Profile.Keys.pitchUp){
-                InputRouter.sendAction(InputRouter.Interaction.PITCH_UP);
-            }
+                //Pitch
+                if(key==Settings.Profile.Keys.pitchDown){
+                    InputRouter.sendAction(InputRouter.Interaction.PITCH_DOWN);
+                }
+                if(key==Settings.Profile.Keys.pitchUp){
+                    InputRouter.sendAction(InputRouter.Interaction.PITCH_UP);
+                }
 
-            //Roll
-            if(key==Settings.Profile.Keys.rollLeft){
-                InputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
-            }
-            if(key==Settings.Profile.Keys.rollRight){
-                InputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
-            }
+                //Roll
+                if(key==Settings.Profile.Keys.rollLeft){
+                    InputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
+                }
+                if(key==Settings.Profile.Keys.rollRight){
+                    InputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
+                }
 
-            //Yaw
-            if(key==Settings.Profile.Keys.yawLeft){
-                InputRouter.sendAction(InputRouter.Interaction.YAW_LEFT);
-            }
-            if(key==Settings.Profile.Keys.yawRight){
-                InputRouter.sendAction(InputRouter.Interaction.YAW_RIGHT);
-            }
+                //Yaw
+                if(key==Settings.Profile.Keys.yawLeft){
+                    InputRouter.sendAction(InputRouter.Interaction.YAW_LEFT);
+                }
+                if(key==Settings.Profile.Keys.yawRight){
+                    InputRouter.sendAction(InputRouter.Interaction.YAW_RIGHT);
+                }
 
-            //Shoot
-            if(key==Settings.Profile.Keys.shoot){
-                InputRouter.sendAction(InputRouter.Interaction.SHOOT);
+                //Shoot
+                if(key==Settings.Profile.Keys.shoot){
+                    InputRouter.sendAction(InputRouter.Interaction.SHOOT);
+                }
+                if(key==Settings.Profile.Keys.changeWeapon){
+                    InputRouter.sendAction(InputRouter.Interaction.CHANGE_WEAPON);
+                }
             }
         }
     }
