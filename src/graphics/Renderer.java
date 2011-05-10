@@ -27,7 +27,7 @@ public class Renderer implements GLEventListener {
     Shader shader;
     Hud hud;
     Camera camera;
-    ParticleSystem particle;
+    ParticleFire particle;
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
@@ -36,7 +36,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         this.camera = camera;
-        particle = new ParticleSystem();
+        particle = new ParticleFire(null);
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {

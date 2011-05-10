@@ -1,116 +1,121 @@
-
 package graphics.particles;
 
 import javax.media.opengl.*;
+import graphics.Texture;
 
-import math.Vector3;
-
-public class ParticleFire extends Particle implements actor.Velocitable, actor.Positionable {
-
-    public static final int X = 0;
-    public static final int Y = 1;
-    public static final int Z = 2;
-
-    private float lifetime = 100;
-    private float decay = 5f;
-
-    // private float size = 0.005f;
-    private float size = .01f;
-   // private float pos[] = {10.0f, 20.0f, -30f};
-    private float pos[] = {0.0f, 0.0f, 0f};
-    private float speed[] = {0.0f, 0.0f, 0.0f};
-
-    ParticleFire( float lifetime, float decay, float size )
-    {
-      
-        colorG = 1;
-        colorB = 1f;
-        colorA = 1f;
-
-        if( lifetime != 0) { this.lifetime = lifetime; }
-        if( decay != 0) { this.decay = decay; }
-        if( size != 0) { this.size = size; }
-
-        pos[X] = pos[Y] = pos[Z] = 0f;
-    }
-
-    protected void updateColor() {
-        colorR -= 0.015f;
-        colorG -= 0.05f;
-        colorB -= 0.2f;
-    }
-
-    public float getLifetime() { return lifetime; }
-
-    public float getPosX() { return pos[X]; }
-    public float getPosY() { return pos[Y]; }
-    public float getPosZ() { return pos[Z]; }
-
-    public float getSpeedX() { return speed[X]; }
-    public float getSpeedY() { return speed[Y]; }
-    public float getSpeedZ() { return speed[Z]; }
-
-    public void setSpeed( float sx, float sy, float sz ) 
-    { 
-        speed[X] = sx;
-        speed[Y] = sy;
-        speed[Z] = sz;
-    }
-
-    public void incSpeedX( float ds ) { speed[X] += ds; }
-    public void incSpeedY( float ds ) { speed[Y] += ds; }
-    public void incSpeedZ( float ds ) { speed[Z] += ds; }
-
-    public boolean isAlive() { return (lifetime > 0.0); }
-
-    public void evolve()
-    {
-
-        lifetime -= decay;
-        // Update locaton.
-        for(int i=0; i<3; i++)
-            pos[i] += speed[i];
-    }
-
-    public void draw( GL2 gl )
-    { 
-        final float halfSize = size / 2f;
-        final float x = pos[X]-halfSize;
-        final float y = pos[Y]-halfSize;
-        final float xs = pos[X]+halfSize;
-        final float ys = pos[Y]+halfSize;
-        // Particle as small rectangle.
- 
-        gl.glBegin(GL2.GL_QUADS); {
-          
-            gl.glTexCoord2f( 0f, 0f );
-            gl.glVertex3f( x, y, pos[Z] );
-            gl.glTexCoord2f( 1f, 0f );
-            gl.glVertex3f( xs, y, pos[Z] );
-            gl.glTexCoord2f( 1f, 1f );
-            gl.glVertex3f( xs, ys, pos[Z] );
-            gl.glTexCoord2f( 0f, 1f );
-            gl.glVertex3f( x, ys, pos[Z] );
-        } gl.glEnd();
-    }
-
-    @Override
-    public Vector3 getVelocity() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Vector3 getPosition() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Object setVelocity(Vector3 vel) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+/**
+ * Fire particle
+ * @author Tim Mikeladze
+ *
+ */
+public class ParticleFire {
+    
+    private final int MAX_PARTICLES = 250;    
+    private ParticleSystem p[] = new ParticleSystem[MAX_PARTICLES];
+    
+    Texture texture[] = new Texture[4];
+    
+    String RED = "assets/images/particles/redParticle.jpg";
+    String ORANGE = "assets/images/particles/orangeParticle.jpg";
+    String YELLOW ="assets/images/particles/yellowParticle.jpg";
+    String WHITE= "assets/images/particles/whiteParticle.jpg";
    
+    
+    float lifetime=500f; float decay=0f; float size=0f;
+    float x; float y; float z;
+    
+
+    public ParticleFire(float x, float y, float z, float lifetime, float decay, float size) {
+        this.x  = x;
+        this.y = y;
+        this.z = z;
+        this.lifetime = lifetime;
+        this.decay = decay;
+        this.size = size;
+        texture[0] = Texture.findOrCreateByName(YELLOW);
+        texture[1] = Texture.findOrCreateByName(ORANGE);
+        texture[2] = Texture.findOrCreateByName(RED);
+        texture[3] = Texture.findOrCreateByName(WHITE);
+    }
+    
+    public ParticleFire(float x, float y, float z) {
+        this.x  = x;
+        this.y = y;
+        this.z = z;
+        
+        texture[0] = Texture.findOrCreateByName(YELLOW);
+        texture[1] = Texture.findOrCreateByName(ORANGE);
+        texture[2] = Texture.findOrCreateByName(RED);
+        texture[3] = Texture.findOrCreateByName(WHITE);
+    }
+    
+    public ParticleFire(math.Vector3 Vector3) {
+        texture[0] = Texture.findOrCreateByName(YELLOW);
+        texture[1] = Texture.findOrCreateByName(ORANGE);
+        texture[2] = Texture.findOrCreateByName(RED);
+        texture[3] = Texture.findOrCreateByName(WHITE);
+    }
+    
+    public void init( GL2 gl)
+    {
+        // Particles are trasnparent.
+        gl.glEnable( GL.GL_BLEND );    
+        gl.glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE );
+        gl.glEnable( GL.GL_TEXTURE_2D );
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+    }
+    
+    private ParticleSystem createParticle()
+    {
+        ParticleSystem p = new ParticleSystem(x, y, z, lifetime, decay, size );
+        //ParticleSystem p = new ParticleSystem( 500f, 0f, 0f );
+        p.setSpeed( 
+                0.001f - (float)Math.random() / 500.0f,
+                0.008f - (float)Math.random() / 1000.0f,
+                0.001f - (float)Math.random() / 500.0f 
+        );
+        return p;
+    }
+    
+    public void draw( GL2 gl )
+    {
+        gl.glDepthMask( false );
+        // Loop over particles.
+        for( int i=0; i < MAX_PARTICLES; i++ )
+        {
+            // Create new particles for continuous effect.
+            if ( p[i] == null ) 
+            {
+                p[i] = createParticle();
+                break; // Create one particle per time step.
+            }
+
+            // Kill particle if it hits the ground or died.
+            if ( p[i].getPosY() < 0.0f || ! p[i].isAlive() ) 
+            {
+                p[i] = createParticle();
+            }
+
+            // Apply gravity.
+            p[i].incSpeedY( -0.00004f );
+            p[i].evolve();
+
+           // Select texture and draw.
+            if( p[i].getLifetime() > 200 ) {
+                gl.glEnable(GL2.GL_TEXTURE_2D);
+                texture[0].bind(gl);
+            } 
+            else if(p[i].getLifetime() > 50) {
+                gl.glEnable(GL2.GL_TEXTURE_2D);
+                texture[1].bind(gl);
+            }
+            else {
+                gl.glEnable(GL2.GL_TEXTURE_2D);
+                texture[2].bind(gl);
+            }
+            p[i].draw( gl );
+
+        }
+        gl.glDepthMask( true );
+    }
 }
