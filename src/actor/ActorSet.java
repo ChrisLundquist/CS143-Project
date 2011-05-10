@@ -34,6 +34,10 @@ public class ActorSet implements Set<Actor> {
 
         if (actors.containsKey(a.id))
             return false;
+        
+        // Set a back reference to this ActorSet for actor.add() and actor.delete()
+        a.actors = this;
+        
         actors.put(a.id, a);
 
         return true;

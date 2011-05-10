@@ -18,6 +18,17 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     protected long age; // actor age in frames;
     protected ActorId id, parentId; // unique ID for each Actor
     private transient Model model; // CL - Used to store the model reference, after we look it up once
+    
+    /*
+     * DL - a back reference to the actor set containing this actor
+     * This is so we can avoid Game.getActors() or similar and the same code can work
+     * in both the dedicated server and client contexts
+     * 
+     * I'm not sure if a back reference on each object is a greater evil than a global variable.
+     * Chris doesn't like it, if this ends up being an issue, we can put the ActorSet in a static
+     * variable somewhere. At this point it seem like this is a better way.
+     */
+    protected transient ActorSet actors; 
     protected String modelName;
     protected Vector3 position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
@@ -32,6 +43,10 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         age = 0;
         //sets the time of the actor's birth 
         //setTimeStamp();
+    }
+    
+    public void add(Actor actor) {
+        actors.add(actor);
     }
 
     public void bounce(Actor other) {
@@ -72,7 +87,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     public void delete() {
-        game.Game.getActors().remove(this);
+        actors.remove(this);
     }
 
     protected long getAge() {
