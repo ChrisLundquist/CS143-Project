@@ -10,7 +10,7 @@ import actor.Actor;
  * This thread runs as part of the server handling one player's connection
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
-public class ServerClientThread extends ConnectionThread {
+public class ServerClientThread extends AbstractConnectionThread {
     private DedicatedServer server;
     private Player player;
 
@@ -34,14 +34,14 @@ public class ServerClientThread extends ConnectionThread {
                 // Player died or respawned or something
                 
                 // Check if there new player ship id is in use by someone else
-                if (Actor.findById(playerUpdate.getShipId()) != null)
-                    throw new IllegalArgumentException("Duplicate Player Ship ID" + playerUpdate.getShipId());
+           //     if (Actor.findById(playerUpdate.getShipId()) != null)
+           //         throw new IllegalArgumentException("Duplicate Player Ship ID" + playerUpdate.getShipId());
                 
                 // Easiest way to resolve update
                 // TODO this doesn't notify the server process of the new player so we should probably do a member by member copy
                 player = playerUpdate;
             }
-            Actor.updateFromNetwork(update.getActors(), null);
+            //Actor.updateFromNetwork(update.getActors(), null);
         }
         return new UpdateMessage(server, player);
     }

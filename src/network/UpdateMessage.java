@@ -17,8 +17,7 @@ public class UpdateMessage extends Message {
      */
     public UpdateMessage(DedicatedServer server, Player p) {
         player = p;
-        actors = new java.util.ArrayList<Actor>();
-        actors.addAll(Actor.getActors());
+        actors = server.getActors().getCopyList();
         actors.remove(player.getShip());
     }
 

@@ -18,12 +18,12 @@ public class Skybox implements Serializable{
         model = Model.findOrCreateByName(modelName);
     }
 
-    public void render(GL2 gl) {
+    public void render(GL2 gl, Camera camera) {
         if(model == null) {
             init(gl);
         }
         gl.glPushMatrix();
-        math.Vector3 pos = game.Game.getPlayer().getCamera().position;
+        math.Vector3 pos = camera.position;
         gl.glTranslatef(-pos.x, -pos.y, -pos.z);
         gl.glScalef(SKYBOX_SIZE,SKYBOX_SIZE , SKYBOX_SIZE);
         model.render(gl);

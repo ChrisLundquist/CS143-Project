@@ -14,11 +14,10 @@ public class Camera {
     Vector3 position;
     Quaternion rotation;
     
-    public Camera(){
+    public Camera() {
         position = new Vector3();
         rotation = new Quaternion();
     }
-
 
     public void updateFromActor(Actor actor) {
         position = actor.getPosition().times(-1.0f);

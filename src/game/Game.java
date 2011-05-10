@@ -10,15 +10,15 @@ import actor.Asteroid;
 public class Game {
     private static graphics.Renderer renderer;
     private static input.KeyboardListener input;
-    private static boolean paused;
     private static Player player;
     private static Map map;
     private static ActorSet actors;
+    private static GameThread game;
 
     //for HUD radar testing, will be removed later
     static actor.Asteroid a;
 
-    public static void init(){
+    public static void init() {
         System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
         try {
             Settings.init();
@@ -32,13 +32,19 @@ public class Game {
         player.respawn(actors, map.getSpawnPosition());
         
 
-        renderer = new graphics.Renderer();
+        renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
 
-
-        
-        new GameThread(actors).start();
+        game = new GameThread(actors);
+        // CL - We need to get input even if the game is paused,
+        //      that way we can unpause the game.
+        game.addCallback(input);
+        game.addCallback(new Updateable() {
+            public void update() {
+                player.updateCamera();
+            }
+        });
     }
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
@@ -51,7 +57,7 @@ public class Game {
 
         network.ClientServerThread.joinServer(server, player);
 
-        renderer = new graphics.Renderer();
+        //renderer = new graphics.Renderer();
         input = new KeyboardListener();
         graphics.Model.loadModels();
 
@@ -62,7 +68,8 @@ public class Game {
         //new GameThread().start();
     }
 
-    public static void start(){
+    public static void start() {
+        game.start();
         renderer.start();
     }
 
@@ -75,16 +82,18 @@ public class Game {
     }
 
     public static boolean isPaused() {
-        return paused;
+        return game.getGameState() == GameThread.STATE_PAUSED;
     }
 
     public static void quitToMenu() {
-        // TODO Auto-generated method stub
-
+        game.setGameState(GameThread.STATE_STOPPED);
     }
 
     public static void togglePause() {
-        paused = !paused;
+        if (isPaused())
+            game.setGameState(GameThread.STATE_RUNNING);
+        else
+            game.setGameState(GameThread.STATE_PAUSED);
     }
 
     public static void exit() {
@@ -94,7 +103,7 @@ public class Game {
     public static Map getMap() {
         return map;
     }
-
+    
     public static void setMap(Map m) {
         map = m;
     }

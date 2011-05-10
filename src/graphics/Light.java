@@ -1,13 +1,9 @@
 package graphics;
 
-import game.Game;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javax.media.opengl.GL2;
-
 import math.Vector4;
 
 public class Light implements java.io.Serializable{
@@ -16,7 +12,7 @@ public class Light implements java.io.Serializable{
     public static List<Light> lights = new ArrayList<Light>();
     float constantAttenuation, linearAttenuation, quadraticAttenuation;
     math.Vector4 position, ambient, diffuse, specular;
-
+    
     public static Light newRandom(float rangeMax){
         Light light = new Light();
         light.setPosition(new Vector4(gen.nextFloat()* rangeMax,
@@ -139,8 +135,8 @@ public class Light implements java.io.Serializable{
     }
 
 
-    public static void update(GL2 gl){
-        math.Quaternion inverseRot = Game.getPlayer().getCamera().rotation.inverse();
+    public static void update(GL2 gl, Camera camera){
+        math.Quaternion inverseRot = camera.rotation.inverse();
         for(int i = 0; i < lights.size(); i++) {
             Light light = lights.get(i);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, light.ambient.toFloatArray(), 0);
