@@ -1,6 +1,7 @@
 package network;
 
-import game.Map;
+import java.util.List;
+
 
 /**
  * This message is sent by the server when the player initially connects
@@ -9,19 +10,15 @@ import game.Map;
 public class HelloMessage extends Message {
     private static final long serialVersionUID = -1554065217547323739L;
 
-    private int playerCount;
-    private Map map;
+    public final int playerCount;
+    public final int playerId;
+    public final game.Map map;
+    public final List<String> modelNames;
 
     public HelloMessage(DedicatedServer server) {
         playerCount = server.getPlayers().size();
+        playerId = server.getNewPlayerId();
         map = server.getCurrentMap();
-    }
-
-    public int getPlayerCount() {
-        return playerCount;
-    }
-    
-    public Map getMap() {
-        return map;
+        modelNames = server.getModelsInUse();
     }
 }

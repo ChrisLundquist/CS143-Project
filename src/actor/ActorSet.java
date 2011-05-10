@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -14,10 +15,12 @@ public class ActorSet implements Set<Actor> {
 
     private Map<ActorId, Actor> actors;
     private final int playerId;
+    private List<Queue<Actor>> addNotifyees;
 
     public ActorSet(int playerId) {
         this.playerId = playerId;
         actors = new java.util.concurrent.ConcurrentHashMap<ActorId, Actor>();
+        addNotifyees = java.util.Collections.synchronizedList(new java.util.ArrayList<Queue<Actor>>());
     }
 
     public ActorSet() {
@@ -39,6 +42,9 @@ public class ActorSet implements Set<Actor> {
         a.actors = this;
         
         actors.put(a.id, a);
+        
+        for(Queue<Actor> q: addNotifyees)
+            q.offer(a);
 
         return true;
     }
@@ -201,5 +207,14 @@ public class ActorSet implements Set<Actor> {
         public CopyList() {
             super(actors.values());
         }
+    }
+
+    /**
+     * Adds a queue to that should be offered each new actor added to this ActorSet
+     * Used for networking
+     * @param queue
+     */
+    public synchronized void addNewActorConsumer(Queue<Actor> queue) {
+        addNotifyees.add(queue);
     }
 }

@@ -8,10 +8,10 @@ import java.io.*;
  * manages the input and output stream creation and exception handling
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
-public abstract class ConnectionThread extends Thread {
+public abstract class AbstractConnectionThread extends Thread {
     private Socket socket;    
     
-    protected ConnectionThread(Socket socket) {
+    protected AbstractConnectionThread(Socket socket) {
         this.socket = socket;
     }
 
@@ -19,6 +19,7 @@ public abstract class ConnectionThread extends Thread {
      * This is the main body of the network connection thread
      */
     public void run() {
+        setName(this.getClass().toString() + " [" + socket.getRemoteSocketAddress() + "]");
         Message msg;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
@@ -84,7 +85,7 @@ public abstract class ConnectionThread extends Thread {
     }
 
     /**
-     * Provides a hook for sending an intial message
+     * Provides a hook for sending an initial message
      * Either the client or server should override this, not both
      * @return an message to send on connection establishment
      */
@@ -92,5 +93,5 @@ public abstract class ConnectionThread extends Thread {
         return null;
     }
 
-    protected abstract Message handleMessage(Message msg) throws IOException;
+    protected abstract Message handleMessage(Message msg) throws IOException, InterruptedException;
 }

@@ -53,7 +53,9 @@ public class DedicatedServer extends Thread {
     public void run() {
         startup();
         
-        new ServerCli(this, System.out, System.in).run();
+        while (running) {
+            Thread.yield();
+        }
         
         shutdown();
     }
@@ -63,7 +65,7 @@ public class DedicatedServer extends Thread {
     }
 
     private void shutdown() {
-        game.stop();
+        game.setGameState(GameThread.STATE_STOPPED);
         
         try {
             /* Close the socket so the listener thread will stop blocking */
@@ -85,14 +87,26 @@ public class DedicatedServer extends Thread {
         }
         
         currentMap = Map.load("example_1");
+        actors.addAll(currentMap.actors);
 
         game = new GameThread(actors);
         game.start();
         
         new ListenerThread(socket, this).start();
+        new ServerCli(this, System.out, System.in).run();
     }
 
     public ActorSet getActors() {
         return actors;
+    }
+
+    public int getNewPlayerId() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public List<String> getModelsInUse() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -27,7 +27,6 @@ public class ListenerThread extends Thread {
             if (e instanceof SocketException && e.getMessage().equals("Socket closed") && server.isRunning() == false) {
                 System.err.println("Server socket closed, shutting down.");
             }
-
             e.printStackTrace();
             return;
         }
