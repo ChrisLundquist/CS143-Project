@@ -36,7 +36,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         this.camera = camera;
-        particle = new ParticleFire(null);
+        particle = new ParticleFire(0,0,0);
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {

@@ -15,7 +15,7 @@ public class ParticleSystem extends Particle implements actor.Velocitable, actor
     private float decay = 5f;
 
     // private float size = 0.005f;
-    private float size = .01f;
+    private float size = 2f;
    // private float pos[] = {10.0f, 20.0f, -30f};
     private float pos[] = {0.0f, 0.0f, 0f};
     private float speed[] = {0.0f, 0.0f, 0.0f};
@@ -81,7 +81,6 @@ public class ParticleSystem extends Particle implements actor.Velocitable, actor
     public boolean isAlive() { return (lifetime > 0.0); }
     public void evolve()
     {
-
         lifetime -= decay;
         // Update locaton.
         for(int i=0; i<3; i++)
