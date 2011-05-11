@@ -8,6 +8,12 @@ import graphics.Texture;
 /**
  * Fire particle, to use call setParameters() with certain arguments, and then draw(gl), 
  * just calling draw(gl) will set parameters to default 
+ * 
+ * To create a nice fountain of particles set the parameters to  
+ * lifetime = 100f
+ *  decay = 1f
+ *  size = 0.4f;
+
  * @author Tim Mikeladze
  *
  */
@@ -27,7 +33,7 @@ public class ParticleFire {
    
     //default parameters just in case
     float lifetime=100; float decay=5f; float size=2f;
-    float x; float y; float z;
+    float x=0; float y=0; float z=0;
     
     /**
      * Loads the textures
