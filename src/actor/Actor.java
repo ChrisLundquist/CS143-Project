@@ -58,7 +58,12 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         delta_p.timesEquals(other.rotation.inverse());
         delta_v.timesEquals(other.rotation.inverse());
 
-        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
+        graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
+        // CL - Not sure if not handling the collision if we don't know how is best
+        // but its better than throwing excepions
+        if(intersection == null)
+            return; // We couldn't find the intersecting polygon so return so we don't throw an exception
+        Vector3 newVelocity = intersection.reflectDirection(delta_v);
 
         newVelocity.timesEquals(other.rotation);
         newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
