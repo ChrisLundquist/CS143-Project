@@ -231,6 +231,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         // CL - Render our model.
         getModel().render(gl);
         gl.glPopMatrix();
+        
     }
 
     public void setModel(Model model) {
@@ -259,16 +260,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Actor setSize(Vector3 size){
         scale = size;
         return this;
-    }
-
-    /**
-     * Sets the time when the Actor was born
-     * Current uses System.currentTimeMillis, this might be problematic on different OS
-     * Should be changed to deal with FPS from open gl
-     * 
-     */
-    protected void setTimeStamp() {
-        //age = System.currentTimeMillis();       
     }
 
     public Actor setVelocity(Vector3 velocity) {
