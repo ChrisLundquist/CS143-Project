@@ -1,7 +1,7 @@
 package graphics;
 
 import game.Game;
-
+import graphics.particles.*;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
@@ -27,7 +27,7 @@ public class Renderer implements GLEventListener {
     Shader shader;
     Hud hud;
     Camera camera;
-
+    ParticleFire particle;
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
@@ -36,6 +36,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         this.camera = camera;
+        particle = new ParticleFire();
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -54,10 +55,15 @@ public class Renderer implements GLEventListener {
 
         // Render each actor
         for(Actor a: game.Game.getActors())
-            a.render(gl);        
+            a.render(gl);
 
         hud.drawStaticHud(gl);
+        
         checkForGLErrors(gl);
+        
+        particle.setParameters(0, 0, 0);
+        particle.draw(gl);
+        
     }
     
     private static void checkForGLErrors(GL2 gl) {
