@@ -12,24 +12,37 @@ import graphics.Texture;
  */
 public class ParticleFire {
     
+    //Max amount of particles
     private final int MAX_PARTICLES = 250;    
     private ParticleSystem p[] = new ParticleSystem[MAX_PARTICLES];
     
     Texture texture[] = new Texture[4];
     
+    //paths to textures
     String RED = "assets/images/particles/redParticle.jpg";
     String ORANGE = "assets/images/particles/orangeParticle.jpg";
     String YELLOW ="assets/images/particles/yellowParticle.jpg";
     String WHITE= "assets/images/particles/whiteParticle.jpg";
    
-    //default parameters just in case 
-    float lifetime=500f; float decay=0f; float size=2f;
+    //default parameters just in case
+    float lifetime=100; float decay=5f; float size=2f;
     float x; float y; float z;
     
+    /**
+     * Sets particle's position relative to the actor's, lifetime, decay, size
+     * @param actor 
+     * @param lifetime
+     * @param decay
+     * @param size
+     */
     public ParticleFire(Actor actor, float lifetime, float decay, float size) {
-        this.x  = actor.getPosition().x;
+       /* this.x = actor.getPosition().x;
         this.y = actor.getPosition().y;
-        this.z = actor.getPosition().z;
+        this.z = actor.getPosition().z;*/
+        
+        this.x = actor.getFarthestPointInDirection(actor.getDirection().negate()).x;
+        this.y = actor.getFarthestPointInDirection(actor.getDirection().negate()).y;
+        this.z = actor.getFarthestPointInDirection(actor.getDirection().negate()).z;
       
         this.lifetime = lifetime;
         this.decay = decay;
@@ -39,7 +52,15 @@ public class ParticleFire {
         texture[2] = Texture.findOrCreateByName(RED);
         texture[3] = Texture.findOrCreateByName(WHITE);
     }
-    
+    /**
+     * Sets particle's x,y,z coordinates and lifetime,decay,size
+     * @param x
+     * @param y
+     * @param z
+     * @param lifetime
+     * @param decay
+     * @param size
+     */
     public ParticleFire(float x, float y, float z, float lifetime, float decay, float size) {
         this.x  = x;
         this.y = y;
@@ -52,7 +73,26 @@ public class ParticleFire {
         texture[2] = Texture.findOrCreateByName(RED);
         texture[3] = Texture.findOrCreateByName(WHITE);
     }
-    
+    /**
+     * Sets particle's position relative to the Actor, defaults the other parameters
+     * @param actor
+     */
+    public ParticleFire(Actor actor) {
+        this.x = actor.getFarthestPointInDirection(actor.getDirection().negate()).x;
+        this.y = actor.getFarthestPointInDirection(actor.getDirection().negate()).y;
+        this.z = actor.getFarthestPointInDirection(actor.getDirection().negate()).z;
+        
+        texture[0] = Texture.findOrCreateByName(YELLOW);
+        texture[1] = Texture.findOrCreateByName(ORANGE);
+        texture[2] = Texture.findOrCreateByName(RED);
+        texture[3] = Texture.findOrCreateByName(WHITE);
+    }
+    /**
+     * sets x,y,z position, defaults other parameters
+     * @param x
+     * @param y
+     * @param z
+     */
     public ParticleFire(float x, float y, float z) {
         this.x  = x;
         this.y = y;
@@ -63,8 +103,34 @@ public class ParticleFire {
         texture[2] = Texture.findOrCreateByName(RED);
         texture[3] = Texture.findOrCreateByName(WHITE);
     }
-    
+    /**
+     * Sets the position given by Vector3, defaults other parameters
+     * @param Vector3
+     */
     public ParticleFire(math.Vector3 Vector3) {
+        this.x = Vector3.x;
+        this.y = Vector3.y;
+        this.z = Vector3.z;
+        
+        texture[0] = Texture.findOrCreateByName(YELLOW);
+        texture[1] = Texture.findOrCreateByName(ORANGE);
+        texture[2] = Texture.findOrCreateByName(RED);
+        texture[3] = Texture.findOrCreateByName(WHITE);
+    }
+    /**
+     *  Sets the position given by Vector3, sets lifetime, decay, size
+     * @param Vector3
+     * @param lifetime
+     * @param decay
+     * @param size
+     */
+    public ParticleFire(math.Vector3 Vector3, float lifetime, float decay, float size) {
+        this.x  = Vector3.x;
+        this.y = Vector3.y;
+        this.z = Vector3.z;
+        this.lifetime = lifetime;
+        this.decay = decay;
+        this.size = size;
         texture[0] = Texture.findOrCreateByName(YELLOW);
         texture[1] = Texture.findOrCreateByName(ORANGE);
         texture[2] = Texture.findOrCreateByName(RED);
@@ -80,6 +146,10 @@ public class ParticleFire {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     }
     
+    /**
+     * Creates a new particle system with given parameters
+     * @return
+     */
     private ParticleSystem createParticle()
     {
         ParticleSystem p = new ParticleSystem(x, y, z, lifetime, decay, size);
@@ -92,6 +162,10 @@ public class ParticleFire {
         return p;
     }
     
+    /**
+     * Draws the particles
+     * @param gl
+     */
     public void draw( GL2 gl )
     {
         gl.glDepthMask( false );

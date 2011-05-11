@@ -4,18 +4,22 @@ package graphics.particles;
 import javax.media.opengl.*;
 
 import math.Vector3;
-
+/**
+ * Particle System for each particle
+ * @author Tim Mikeladze
+ *
+ */
 public class ParticleSystem extends Particle implements actor.Velocitable, actor.Positionable {
 
     public static final int X = 0;
     public static final int Y = 1;
     public static final int Z = 2;
 
-    private float lifetime = 100;
-    private float decay = 5f;
+    private float lifetime;// = 100;
+    private float decay;// = 5f;
 
     // private float size = 0.005f;
-    private float size = 2f;
+    private float size;// = 2f;
    // private float pos[] = {10.0f, 20.0f, -30f};
     private float pos[] = {0.0f, 0.0f, 0f};
     private float speed[] = {0.0f, 0.0f, 0.0f};

@@ -55,13 +55,14 @@ public class Renderer implements GLEventListener {
 
         // Render each actor
         for(Actor a: game.Game.getActors())
-            a.render(gl);        
+            a.render(gl);
 
         hud.drawStaticHud(gl);
         
         checkForGLErrors(gl);
         
         particle.draw(gl);
+        
     }
     
     private static void checkForGLErrors(GL2 gl) {
