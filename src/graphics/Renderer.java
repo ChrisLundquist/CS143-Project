@@ -39,7 +39,6 @@ public class Renderer implements GLEventListener {
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         this.camera = camera;
-       /* particle = new ParticleFire();*/
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -115,6 +114,8 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         Model.initialize(gl); /* calls Texture.initialize */
         ///hud.init(gLDrawable);
+        sound.Manager.initialize();
+        graphics.particles.ParticleSystem.initialize(gl);
 
         try {
             shader.init(gl);

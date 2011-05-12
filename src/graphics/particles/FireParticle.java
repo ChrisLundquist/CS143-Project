@@ -19,9 +19,8 @@ public class FireParticle extends Particle  {
      * @param decay
      * @param size
      */
-    public FireParticle(Vector3 position, float lifetime, float decay, float size) {
-        super();
-        this.position = position;
+    public FireParticle(actor.Actor actor,Vector3 direction) {
+        super(actor,direction);
     }
 
     protected void update() {

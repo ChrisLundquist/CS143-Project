@@ -10,7 +10,8 @@ public class Bullet extends Projectile {
     protected static final String MODEL_NAME = "bullet";
 
     public Bullet(Actor actor){
-        super(actor);  
+        super(actor);
+        graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         velocity.times(BULLET_SPEED);
     }
 

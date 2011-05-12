@@ -7,6 +7,7 @@ import math.Vector4;
 
 public abstract class Particle implements actor.Velocitable, actor.Positionable {
     protected final static int DEFAULT_LIFETIME = 120;
+    protected final static float SLOW_FACTOR = 0.1f;
     protected math.Vector4 color;
     protected int lifetime, age;
     protected math.Vector3 position, velocity;
@@ -19,6 +20,12 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         size = 1.0f;
         age = 0;
         lifetime = DEFAULT_LIFETIME;
+    }
+    
+    Particle(actor.Actor actor, Vector3 direction){
+        super();
+        velocity = actor.getVelocity().minus(direction.times(SLOW_FACTOR));
+        position = actor.getFarthestPointInDirection(direction);
     }
 
     public void draw( GL2 gl ){ 

@@ -31,7 +31,6 @@ public class Game {
         actors.addAll(map.actors);
         player.respawn(actors, map.getSpawnPosition());
         
-
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
