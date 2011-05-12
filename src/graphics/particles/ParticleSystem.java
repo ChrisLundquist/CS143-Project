@@ -25,24 +25,14 @@ public class ParticleSystem extends Particle implements actor.Velocitable, actor
     private float speed[] = {0.0f, 0.0f, 0.0f};
     
     /**
-     * Defaults position to 0,0,0
+     * Creates a new ParticleSystem with the given parameters. lifetime, decay, and size can not be 0
+     * @param x
+     * @param y
+     * @param z
      * @param lifetime
      * @param decay
      * @param size
      */
-    ParticleSystem(float lifetime, float decay, float size)
-    {
-        colorG = 1;
-        colorB = 1f;
-        colorA = 1f;
-        
-        if( lifetime != 0) { this.lifetime = lifetime; }
-        if( decay != 0) { this.decay = decay; }
-        if( size != 0) { this.size = size; }
-
-        pos[X] = pos[Y] = pos[Z] = 0f;
-    }
- 
     public ParticleSystem(float x, float y, float z, float lifetime, float decay, float size) {
         colorG = 1;
         colorB = 1f;
@@ -113,19 +103,17 @@ public class ParticleSystem extends Particle implements actor.Velocitable, actor
 
     @Override
     public Vector3 getVelocity() {
-        // TODO Auto-generated method stub
-        return null;
+        return new math.Vector3(getSpeedX(), getSpeedY(), getSpeedZ());
     }
 
     @Override
     public Vector3 getPosition() {
-        // TODO Auto-generated method stub
-        return null;
+        return new math.Vector3(getPosX(), getPosY(), getPosZ());
     }
 
     @Override
     public Object setVelocity(Vector3 vel) {
-        // TODO Auto-generated method stub
+        
         return null;
     }
 
