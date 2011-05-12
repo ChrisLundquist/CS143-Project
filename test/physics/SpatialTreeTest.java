@@ -15,7 +15,7 @@ public class SpatialTreeTest {
     private static final float UPPER_BOUND = 100.0f;
     private static final float INCREMENT = 5.0f;
     private static final float RADIUS = 0.5f;
-    
+
     private List<Sphere> objects;
 
     @Before
@@ -24,8 +24,9 @@ public class SpatialTreeTest {
         for (float x = LOWER_BOUND; x <= UPPER_BOUND; x += INCREMENT)
             for (float y = LOWER_BOUND; y <= UPPER_BOUND; y += INCREMENT)
                 for (float z = LOWER_BOUND; z <= UPPER_BOUND; z += INCREMENT)
-                    objects.add(new math.Sphere(new math.Vector3(x, y , z), RADIUS));
-        System.out.println(objects.size());
+                    objects.add(new math.Sphere(new math.Vector3(x, y, z),
+                            RADIUS));
+        //System.out.println(objects.size());
     }
 
     @After
@@ -41,42 +42,48 @@ public class SpatialTreeTest {
     @Test
     public final void testSpatialTreeCollectionOfEInt() {
         new SpatialTree<Sphere>(objects, 40);
-        
+
     }
 
     @Test
     public final void testAdd() {
-        //fail("Not yet implemented");
+        // fail("Not yet implemented");
     }
 
     @Test
     public final void testIterator() {
+        Iterator<SpatialTree<Sphere>> it;
         SpatialTree<Sphere> tree = new SpatialTree<Sphere>(objects);
         int count = 0;
 
-        
-        //fail("Not yet implemented");
+        it = tree.leafInterator();
+
+        while (it.hasNext()) {
+            for (Sphere s : it.next()) {
+                assertTrue(s instanceof Sphere);
+                count++;
+            }
+        }
+
+        assertEquals(objects.size(), count);
     }
 
     @Test
     public final void testLeafInterator() {
         int count = 0;
-        Iterator<SpatialTree<Sphere>> it;    
-        
+        Iterator<SpatialTree<Sphere>> it;
+
         SpatialTree<Sphere> tree = new SpatialTree<Sphere>(objects);
 
         it = tree.leafInterator();
-        
-        
+
         while (it.hasNext()) {
             assertTrue(it.next() instanceof SpatialTree<?>);
-            // TODO this breaks on the last node
-            // not sure how to fix hasNext() to test if remaining octants are empty
-            count ++;
+            count++;
         }
-        System.out.println(count);
-            
-        //fail("Not yet implemented");
+        //System.out.println(count);
+
+        // fail("Not yet implemented");
     }
 
 }

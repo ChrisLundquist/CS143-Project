@@ -1,13 +1,15 @@
 package input;
-import java.awt.event.KeyListener;
+import game.Updateable;
+
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import settings.Settings;
 
-public class KeyboardListener implements KeyListener {
+public class KeyboardListener implements KeyListener, Updateable {
 
 
     Set<Integer> currentKeys = Collections.synchronizedSet(new HashSet<Integer>());

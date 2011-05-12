@@ -371,7 +371,6 @@ Ns 134.8800
 newmtl china
 Kd 1.0000 1.0000 1.0000
 illum 0
-map_Kd china.tif
 
 
 newmtl dkred
@@ -502,7 +501,6 @@ Kd 1.0000 1.0000 1.0000
 Ks 0.0000 0.0000 0.0000
 illum 2
 Ns 60.0000
-map_Kd richmap.rgb
 
 
 newmtl faceimx
@@ -511,7 +509,6 @@ Kd 1.0000 0.7306 0.7429
 Ks 0.0000 0.0000 0.0000
 illum 2
 Ns 0.0000
-map_Kd richmap.rgb
 
 
 newmtl jetflame

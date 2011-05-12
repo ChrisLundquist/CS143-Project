@@ -33,7 +33,7 @@ public abstract class Weapon {
     public void shoot(actor.Actor ship) {
       //calculates time passed in milliseconds
         if((System.currentTimeMillis() - getLastShotTime()) > getShotCoolDown()) {
-            actor.Actor.addActor(newBullet(ship));
+            game.Game.getActors().add(newBullet(ship));
             setLastShotTime(System.currentTimeMillis());
         }
     }

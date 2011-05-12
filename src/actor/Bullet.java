@@ -2,20 +2,18 @@ package actor;
 
 import math.*;
 
-public class Bullet extends Actor {
+public class Bullet extends Projectile {
     private static final long serialVersionUID = -3860927022451699968L;
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
-    private static final float BULLET_SPEED = 1.0f;
-    
+    protected static final float BULLET_SPEED = 1.0f;
+    protected static final String MODEL_NAME = "bullet";
+
+
     public Bullet(Actor actor){
-        super();
-        angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
-        this.velocity = actor.velocity.plus(actor.getDirection().times(BULLET_SPEED));
-        position = new Vector3(actor.getPosition());
-        rotation = new Quaternion(actor.getRotation());
-        setSize(.1f);
+        super(actor);
+        velocity.times(BULLET_SPEED);
     }
-    
+
     /**
      * 
      * @param actor
@@ -26,17 +24,19 @@ public class Bullet extends Actor {
         this(actor);
         position.plusEquals(positionOffset);
     }
-    
+
     @Override
     public void handleCollision(Actor other) {
-        System.err.println("DEBUG: Collision Detected");
+        System.err.println("Collision Detected Between " + other + " and " + this);
+        if (other instanceof ship.PlayerShip)
+            return;
+        bounce(other);
     }
 
-    public void update(){
+    public void update() {
         super.update();
-        if(age > MAX_AGE){
-            // FIXME this throws a concurrent access exception
-            //delete();
-        }
+
+        if (age > MAX_AGE)
+            delete();   
     }
 }

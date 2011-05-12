@@ -6,17 +6,13 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
-
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
-
 import actor.Actor;
-
 import com.jogamp.opengl.util.FPSAnimator;
 
 /* @author Chris Lundquist
@@ -30,14 +26,16 @@ public class Renderer implements GLEventListener {
     FPSAnimator animator;
     Shader shader;
     Hud hud;
+    Camera camera;
 
-    public Renderer(){
+    public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
+        this.camera = camera;
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -50,20 +48,18 @@ public class Renderer implements GLEventListener {
         // update the camera position here so it doesn't fire on the dedicated server
         // Push the transformation for our player's Camera
 
-        Game.getPlayer().updateCamera().setPerspective(gl);
-        Light.update(gl);
-        Game.getMap().getSkybox().render(gl);
+        camera.setPerspective(gl);
+        Light.update(gl, camera);
+        Game.getMap().getSkybox().render(gl, camera);
 
-        // Render each actor       
-        List<Actor> actors = Actor.getActors();
-        synchronized(actors) {
-            for(Actor a: actors)
-                a.render(gl);
-        }
+        // Render each actor
+        for(Actor a: game.Game.getActors())
+            a.render(gl);        
 
         hud.drawStaticHud(gl);
         checkForGLErrors(gl);
     }
+    
     private static void checkForGLErrors(GL2 gl) {
 
         int errno = gl.glGetError();
@@ -95,7 +91,7 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
-        
+
         GL2 gl = getGL2();
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.setSwapInterval(1); // Enable V-Sync supposedly
@@ -119,7 +115,7 @@ public class Renderer implements GLEventListener {
         }
         //shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
-        Light.initialize(gl, 8);
+        Light.initialize(gl, 2);
 
         System.gc(); // This is probably a good a idea
     }
@@ -177,6 +173,7 @@ public class Renderer implements GLEventListener {
         }
         return gl;
     }
+    
     public Shader getShader() {
         return shader;
     }

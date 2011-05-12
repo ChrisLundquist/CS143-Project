@@ -11,6 +11,7 @@ public class Vector3 implements Serializable {
     public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
     public static final Vector3 ORIGIN = new Vector3(0.0f,0.0f,0.0f);
     public static final Vector3 ZERO = ORIGIN; // makes semantic differences in some if checks
+    private static java.util.Random gen = new java.util.Random();
 
     public float x,y,z;
 
@@ -159,5 +160,25 @@ public class Vector3 implements Serializable {
      */
     public Vector3 negate() {
         return this.times(-1.0f);
+    }
+
+    /**
+     * Generates a new random vector with each component between +max -max
+     * @param max
+     */
+    public static Vector3 randomPosition(float max) {
+        return new Vector3(
+                gen.nextFloat() * 2 * max - max,
+                gen.nextFloat() * 2 * max - max,
+                gen.nextFloat() * 2 * max - max);
+    }
+
+    public Vector3 timesEquals(Quaternion rotation) {
+        // TODO OPTIMIZE Auto-generated method stub
+        Vector3 temp = this.times(rotation);
+        x = temp.x;
+        y = temp.y;
+        z = temp.z;
+        return this;
     }
 }

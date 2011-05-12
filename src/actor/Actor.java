@@ -3,190 +3,68 @@ package actor;
 import graphics.Model;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
-
 import javax.media.opengl.GL2;
-
 import physics.GJKSimplex;
-
 import math.Quaternion;
 import math.Supportable;
 import math.Vector3;
 
-public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable {
+public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable, Collidable {
+    protected static Random gen = new Random(); // Common random number generator object
     private static final long serialVersionUID = 744085604446096658L;
-    /**
-     * All the actors currently in play We use the fully qualified named space
-     * for the Vector container so it doesn't clash with our name space. Vectors
-     * work like ArrayLists, but are synchronized.
-     */
-    private static List<Actor> actors = Collections.synchronizedList(new java.util.ArrayList<Actor>());
-    /**
-     * Common random number generator object
-     */
-    protected static Random gen = new Random();
-    private static int lastId = 0;
 
-    /**
-     * Thread safe way to remove actors
-     * @param idToRemove
-     */
-    public static void removeActorId(int idToRemove) {
-        synchronized(actors) {
-            for (ListIterator<Actor> it = actors.listIterator(); it.hasNext(); ) {
-                Actor a = it.next();
-                if (a.getId() == idToRemove)
-                    it.remove();
-            }
-        }
-    }
 
-    public static void addActor(Actor actor) {
-        synchronized(actors) {
-            actors.add(actor);
-        }
-    }
-
-    public static void removeActor(Actor actor) {
-        synchronized(actors) {
-            actors.remove(actor);
-        }
-    }
-
-    /**
+    protected long age; // actor age in frames;
+    protected ActorId id, parentId; // unique ID for each Actor
+    private transient Model model; // CL - Used to store the model reference, after we look it up once
+    
+    /*
+     * DL - a back reference to the actor set containing this actor
+     * This is so we can avoid Game.getActors() or similar and the same code can work
+     * in both the dedicated server and client contexts
      * 
-     * @param frames the number of frames since the last update
+     * I'm not sure if a back reference on each object is a greater evil than a global variable.
+     * Chris doesn't like it, if this ends up being an issue, we can put the ActorSet in a static
+     * variable somewhere. At this point it seem like this is a better way.
      */
-    public static void updateActors(int frames) {
-        synchronized(actors) {
-            // TODO this is slowing down the game using n^2 of noop calls
-            //checkCollisions();
-            // Update each actor
-            for (Actor a : actors) {
-                // Track down actors without ids.
-                if (a.getId() == 0)
-                    System.err.println("DEBUG: " + a + " actor without ID set");
-
-                a.update();
-            }
-        }
-    }
-
-    public static void checkCollisions(){
-        for(Actor a : actors) {
-            for(Actor b : actors){
-                if(a.isColliding(b)){
-                    a.handleCollision(b);
-                    b.handleCollision(a);
-                }
-            }
-        }
-    }
-
-    /**
-     * Helper method to get rid of stupid syntax
-     * @param other the other actor to test collision with
-     * @return true if colliding, else false
-     */
-    public boolean isColliding(Actor other){
-        return GJKSimplex.isColliding(this, other);
-    }
-
-    /**
-     * Update all the actors
-     * @author Dustin Lundquist <dustin@null-ptr.net>
-     * @param update a list of updates
-     * @param ship the players ship or similar actor that should not be updated
-     */
-    public static void updateFromNetwork(List<Actor> update, Actor ship) {
-        synchronized(actors) {
-            // This is n^2 - but I don't have a better way to do it
-            // Using ListEterators so we only need to make one pass adding and removing elements
-            for (ListIterator<Actor> actors_iter = actors.listIterator(); actors_iter.hasNext(); ) {
-                Actor a = actors_iter.next();
-                boolean found = false;
-
-                for (ListIterator<Actor> update_iter = update.listIterator(); update_iter.hasNext(); ) {
-                    Actor u = update_iter.next();
-
-                    if (a.id != u.id)
-                        continue;
-
-                    // Do not update the players ship position from the network
-                    if (ship != null && u.id == ship.id)
-                        continue;
-
-                    actors_iter.set(u);
-                    update_iter.remove();
-                    found = true;
-                    break;
-                }
-                // Skip the last step if running on the server
-                if (ship == null)
-                    continue;
-
-                // Remove actors that where not present in the update, except for the players ship
-                if (!found && a != ship)
-                    actors_iter.remove();
-            }
-            // Add the remaining
-            actors.addAll(update);
-        }
-
-    }
-
-    /**
-     * Simple test for updateFromNetwork()
-     * @param args
-     */
-    public static void main(String[] args) {
-        List<Actor> update = new java.util.ArrayList<Actor>();
-        update.add(new Asteroid());
-        update.add(new Asteroid());
-        update.add(new Asteroid());      
-
-        for (int i = 0; i < 3; i++) {
-            updateFromNetwork(update, null);
-        }
-    }
-
-    public static int getActorCount() {
-        synchronized(actors) {
-            return actors.size();
-        }
-    }
-
-    private int id; // unique ID for each Actor
+    protected transient ActorSet actors; 
     protected String modelName;
-    protected transient Model model; // CL - Used to store the model reference
-    // after we look it up once
     protected Vector3 position, velocity, scale;
-
-    // Rotation
     protected Quaternion rotation, angularVelocity;
 
-   // protected int age; // Actor age in frames
-    protected int parentId;
 
     public Actor() {
-        id = generateId();
         rotation = new Quaternion();
         angularVelocity = new Quaternion();
         position = new Vector3();
         velocity = new Vector3();
-        modelName = Model.getModelIdFor(this);
         scale = new Vector3(1.0f,1.0f,1.0f);
         age = 0;
         //sets the time of the actor's birth 
-        setTimeStamp();
+        //setTimeStamp();
+    }
+    
+    public void add(Actor actor) {
+        actors.add(actor);
     }
 
-    public void changeYaw(float degrees) {
-        angularVelocity = angularVelocity.times(new Quaternion(rotation
-                .yawAxis(), degrees));
+    public void bounce(Actor other) {
+        // Transform our position and velocity into other's model space
+        Vector3 delta_p = position.minus(other.position);
+        Vector3 delta_v = velocity.minus(other.velocity);
+        delta_p.x /= other.scale.x; delta_p.z /= other.scale.z; delta_p.z /= other.scale.z;
+        delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
+        delta_p.timesEquals(other.rotation.inverse());
+        delta_v.timesEquals(other.rotation.inverse());
+
+        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
+
+        newVelocity.timesEquals(other.rotation);
+        newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
+        newVelocity.plusEquals(other.velocity);
+
+        velocity = newVelocity;
     }
 
     public void changePitch(float degrees) {
@@ -199,18 +77,63 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
                 .rollAxis(), degrees));
     }
 
-    protected void delete() {
-        synchronized(actors) {
-            actors.remove(this);
-        }      
+    public void changeYaw(float degrees) {
+        angularVelocity = angularVelocity.times(new Quaternion(rotation
+                .yawAxis(), degrees));
     }
 
-    protected int generateId() {
-        return (lastId += gen.nextInt(1000) + 1); // Pseudo random increments
+    protected void dampenAngularVelocity() {
+        angularVelocity = angularVelocity.dampen(0.01f);
+    }
+
+    public void delete() {
+        actors.remove(this);
+    }
+
+    protected long getAge() {
+        return age;
+    }
+
+    public Quaternion getAngularVelocity() {
+        return angularVelocity;
     }
 
     public Vector3 getDirection() {
         return rotation.rollAxis();
+    }
+
+    public Vector3 getFarthestPointInDirection(Vector3 direction){
+        // CL - put it into world space by translating it and rotating it
+        // CL - NOTE we have to push the inverse of our transform of the direction
+        //      so we can figure it out in model space
+
+        // CL - We need to do the sweeping further point so we need to see if we want where we
+        // are or where we will be is better
+
+
+
+        Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
+        // Scale the point by our actor's scale in world space
+        max.x *= scale.x;
+        max.y *= scale.y;
+        max.z *= scale.z;
+
+        // Rotate and translate our point to world space
+        max = max.times(getRotation()).plus(getPosition());
+
+        // If our velocity is in the same direction as the direction, then
+        // we need to sweep the furthest point by our velocity
+        if(velocity.sameDirection(direction))
+            max.plusEquals(velocity);
+        // Do the same thing for angular velocity
+        //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
+        //   max = max.times(getAngularVelocity());
+
+        return max;
+    }
+
+    public ActorId getId() {
+        return id;
     }
 
     public Model getModel() {
@@ -221,16 +144,20 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         return model;
     }
 
+    public String getModelName(){
+        return modelName;
+    }
+
     /**
      * @return the actors current position
      */
     public Vector3 getPosition() {
         return position;
     }
-    
-    public Actor setRotation(Quaternion rot){
-        rotation = rot;
-        return this;
+
+    public float getRadius() {
+        // TODO optimize: either cache, or change scale to a float
+        return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
     }
 
     public Quaternion getRotation() {
@@ -253,14 +180,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     }
 
     /**
-     * Synchronize all access to the actors list
-     * @return
-     */
-    public static List<Actor> getActors() {
-        return actors;
-    }
-
-    /**
      * Call back upon collision detection for object to handle collision It
      * could... Bounce off Explode into many smaller objects Just explode
      * 
@@ -268,6 +187,32 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
      *            the object this actor collided with
      */
     abstract public void handleCollision(Actor other);
+
+    /**
+     * Helper method to get rid of stupid syntax
+     * @param other the other actor to test collision with
+     * @return true if colliding, else false
+     */
+    public boolean isColliding(Actor other){
+        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
+            return GJKSimplex.isColliding(this, other);
+        return false;
+
+    }
+
+    /**
+     * Simple bounding sphere test for trivial collision rejection
+     * @param other other actor to test collision with
+     * @return if a collision is possible
+     */
+    private boolean isPossiblyColliding(Actor other) {
+        Vector3 delta_p = other.position.minus(position);
+        float collisionRadius = other.velocity.minus(velocity).magnitude();
+        collisionRadius += getRadius();
+        collisionRadius += other.getRadius();
+
+        return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
+    }
 
     public void render(GL2 gl) {
         gl.glPushMatrix();
@@ -283,8 +228,18 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         gl.glPopMatrix();
     }
 
+    public void setModel(Model model) {
+        this.modelName = model.name;
+        this.model = model;
+    }
+
     public Actor setPosition(Vector3 position) {
         this.position = position;
+        return this;
+    }
+
+    public Actor setRotation(Quaternion rot){
+        rotation = rot;
         return this;
     }
 
@@ -301,25 +256,19 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         return this;
     }
 
+    /**
+     * Sets the time when the Actor was born
+     * Current uses System.currentTimeMillis, this might be problematic on different OS
+     * Should be changed to deal with FPS from open gl
+     * 
+     */
+    protected void setTimeStamp() {
+        //age = System.currentTimeMillis();       
+    }
+
     public Actor setVelocity(Vector3 velocity) {
         this.velocity = velocity;
         return this;
-    }
-    
-
-    public Vector3 getFarthestPointInDirection(Vector3 direction){
-        // CL - put it into world space by translating it and rotating it
-        // CL - NOTE we have to push the inverse of our transform of the direction
-        //      so we can figure it out in model space
-        Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
-        // Scale the point by our actor's scale in world space
-        max.x *= scale.x;
-        max.y *= scale.y;
-        max.z *= scale.z;
-
-        // Rotate and translate our point to world space
-        max = max.times(getRotation()).plus(getPosition());
-        return max;
     }
 
     // CL - updates the state of the actor for the next frame
@@ -333,41 +282,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         age++;
     }
 
-    protected void dampenAngularVelocity() {
-        angularVelocity = angularVelocity.dampen(0.01f);
-    }
-
-    // FIXME this is a linear time search
-    public static Actor findById(int id) {
-        synchronized(actors) {
-            for (Actor a: actors)
-                if (a.getId() == id)
-                    return a;
-        }
-        return null;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Quaternion getAngularVelocity() {
-        return angularVelocity;
-    }
-    
-    protected long age;
-    
-    /**
-     * Sets the time when the Actor was born
-     * Current uses System.currentTimeMillis, this might be problematic on different OS
-     * Should be changed to deal with FPS from open gl
-     * 
-     */
-    protected void setTimeStamp() {
-       age = System.currentTimeMillis();       
-    }
-    
-    protected long getAge() {
-        return age;
+    public ActorId getParentId() {
+        return parentId;
     }
 }

@@ -13,10 +13,10 @@ public abstract class TwinLinkedWeapon extends Weapon {
         //calculates time passed in milliseconds
           if((System.currentTimeMillis() - getLastShotTime()) > getShotCoolDown()) {
               // Left Shot
-              actor.Actor.addActor(new actor.Bullet(ship,Vector3.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
+              game.Game.getActors().add(new actor.Bullet(ship,Vector3.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
 
               // Right Shot
-              actor.Actor.addActor(new actor.Bullet(ship,Vector3.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
+              game.Game.getActors().add(new actor.Bullet(ship,Vector3.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
               setLastShotTime(System.currentTimeMillis());
           }
       }

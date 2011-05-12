@@ -1,55 +1,118 @@
 package graphics;
 
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
+
 import javax.media.opengl.GL2;
 
 import math.Vector3;
 
 public class Model implements math.Supportable{
     static final String MODEL_PATH = "assets/models/";
-    private static final String ASTEROID = "cube_cube.obj";
-    private static final String PLAYER = "cube_cube.obj";
-    private static final String SKYBOX = "skybox.obj";
-    private static final String BULLET = "bullet.obj";
-    private static final String MISSILE = "missile.obj";
-    private static final String CAPITAL_SHIP = "round_capital.obj";
-
-
+    static final String MODEL_EXTENSION = ".obj";
+    private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "cube_cube"};
     private static final int NO_LIST = -1;
-    protected int id;
-    int displayList;
-    Vector<Polygon> polygons;
-    protected static HashMap<String, Model> models = new HashMap<String, Model>();
 
-    public Model(Vector<Polygon> polygons){
-        this.polygons = polygons;
-        displayList = NO_LIST;
-        //TODO load collision models from a manifest file
-        //collisionModel = new math.Sphere(new math.Vector3(),2.0f);
-    }
+    protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
 
-    public static Model findOrCreateByName(String filePath) {
-        Model model = models.get(filePath);
+    public static Model findOrCreateByName(String name) {
+        Model model = models.get(name);
         if(model == null)
-            model = createByName(filePath);
+            model = createByName(name);
         return model;
     }
 
-    public static Model findByName(String filePath){
-        return models.get(filePath);
+    public static Model findByName(String name){
+        return models.get(name);
     }
 
-    public static Model createByName(String filePath){
-        Model model = WavefrontObjLoader.load(MODEL_PATH + filePath);
-        models.put(filePath, model);
+    public static Model createByName(String name){
+        Model model = WavefrontObjLoader.load(name, MODEL_PATH + name + MODEL_EXTENSION);
+        models.put(name, model);
         return model;
     }
 
     public static void loadModels() {
-        Model.findOrCreateByName(ASTEROID);
-        Model.findOrCreateByName(SKYBOX);
-        Model.findOrCreateByName(PLAYER);
+        /* This was a little over ambitious for now, but if new models might be showing up it might be a good idea
+        File dir = new File(MODEL_PATH);
+
+        // Loop through all models in models directory
+        for(String file: dir.list())
+            if (file.toLowerCase().endsWith(MODEL_EXTENSION))
+                Model.findOrCreateByName(file.replaceAll(".obj$", ""));
+         */
+        for (String model: COMMON_MODELS)
+            Model.findOrCreateByName(model);
+
+
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+            System.err.println(err);
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
+            System.err.println(err);
+    }
+
+    /**
+     * Initializes the models and needed textures
+     * @param gl the current OpenGL Context
+     */
+    public static void initialize(GL2 gl) {
+        Texture.initialize(gl);
+        loadModels();
+        for(Model model : models.values()){
+            model.init(gl);
+        }
+    }
+
+
+
+    int displayList;
+    public final List<Polygon> polygons;
+    public final Map<String, Model> groups;
+    public final String name;
+    public final float radius;
+
+    public Model(String name, List<Polygon> polygons){
+        this.name = name;
+        this.polygons = polygons;
+        groups = buildGroups();
+        displayList = NO_LIST;
+        radius = findRadius();
+    }
+
+    // CL - XXX Hack used for collision detection.
+    //      Might be worth making a ModelGroup class that extends Model
+    public static final String PRIVATE_GROUP_NAME = "Private Group";
+    private Model(List<Polygon> polygons){
+        name = PRIVATE_GROUP_NAME;
+        groups = null;
+        this.polygons = polygons;
+        displayList = NO_LIST;
+        radius = findRadius();
+    }
+
+    private Map<String, Model> buildGroups() {
+        // Sort our polygons into groups
+        Map<String, List<Polygon>> polyGroup = new java.util.HashMap<String, List<Polygon>>();
+        for( Polygon p : polygons){
+            for(String group : p.groups){
+                if(group.isEmpty())
+                    continue;
+                if(!polyGroup.containsKey(group)){ // If it doesn't have the key, add it
+                    polyGroup.put(group, new java.util.ArrayList<Polygon>());
+                }
+                polyGroup.get(group).add(p); // Add this poly to the group
+            }
+        }
+        // Make each group a model so we can use all our collision code for models on each group
+
+        Map<String, Model> groups = new java.util.HashMap<String, Model>();
+
+        for(String groupName : polyGroup.keySet()){
+            groups.put(groupName, new Model( polyGroup.get(groupName)));
+        }
+
+
+        return groups;
     }
 
     /* 
@@ -64,9 +127,8 @@ public class Model implements math.Supportable{
     }
 
     private void renderPolygons(GL2 gl){
-        for (Polygon p: polygons) {
+        for (Polygon p: polygons)
             p.render(gl);
-        }
     }
 
     public void render_slow(GL2 gl){
@@ -84,41 +146,10 @@ public class Model implements math.Supportable{
             gl.glCallList(displayList);
     }
 
-
-    public static String getModelIdFor(Object actor) {
-        if(actor instanceof actor.Asteroid){
-            return ASTEROID;
-        } else if (actor instanceof ship.PlayerShip) {
-            return PLAYER;
-        } else if (actor instanceof Skybox){
-            return SKYBOX;
-        }else if (actor instanceof ship.CapitalShip){
-            return CAPITAL_SHIP;
-        } else if(actor instanceof actor.Bullet){
-            return BULLET;
-        } else if ( actor instanceof actor.Missile){
-            return MISSILE;
-        }
-        return ASTEROID;
-    }
-
-    /**
-     * Initializes the models and needed textures
-     * @param gl the current OpenGL Context
-     */
-    public static void initialize(GL2 gl) {
-        Texture.initialize(gl);
-        loadModels();
-        for(Model model : models.values()){
-            model.init(gl);
-        }
-    }
-
     @Override
     public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        Vector3 max = polygons.firstElement().verticies.firstElement().coord;
-        // Normalize our direction for good measure.
-        direction.normalize();
+        Vector3 max = polygons.get(0).verticies.get(0).coord;
+
         // Loop though all of our polygons
         for(Polygon p : polygons){
             // And all of the vertices in each polygon
@@ -128,8 +159,30 @@ public class Model implements math.Supportable{
                 } 
             }
         }
-        return max;
+        // It is important we return a new vector and not a reference to one in our geometry
+        return new Vector3(max);
     }
 
+    public Polygon getIntersectingPolygon(Vector3 origin, Vector3 direction) {
+        for(Polygon p : polygons) {
+            if (p.isIntersecting(origin, direction))
+                return p;
+        }
 
+        return null;
+    }
+
+    /**
+     * Finds the bounding sphere radius
+     * @return the bounding sphere radius
+     */
+    protected float findRadius() {
+        float radius2 = 0.0f;
+
+        for (Polygon p: polygons)
+            for (Vertex v: p.verticies)
+                radius2 = Math.max(radius2, v.coord.magnitude2());
+
+        return (float)Math.sqrt(radius2);
+    }
 }
