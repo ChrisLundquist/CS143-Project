@@ -1,121 +1,74 @@
-
 package graphics.particles;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.media.opengl.*;
 
-import math.Vector3;
+import graphics.Texture;
+
 /**
- * Particle System for each particle
- * @author Tim Mikeladze
+ * Fire particle, to use call setParameters() with certain arguments, and then draw(gl), 
+ * just calling draw(gl) will set parameters to default 
+ * 
+ * To create a nice fountain of particles set the parameters to  
+ * lifetime = 100f
+ *  decay = 1f
+ *  size = 0.4f;
+
+ * @author Tim Mikeladze, Chris Lundquist
  *
  */
-public class ParticleSystem extends Particle implements actor.Velocitable, actor.Positionable {
+public class ParticleSystem {
+    //Max amount of particles
+    private static int MAX_PARTICLES = 250;    
+    private static List<Particle> particles = new LinkedList<Particle>();
 
-    public static final int X = 0;
-    public static final int Y = 1;
-    public static final int Z = 2;
+    //paths to textures
+    protected static final String TEXTURE_FOLDER = "assets/images/particles/";
+    protected static final String RED    = TEXTURE_FOLDER + "redParticle.jpg";
+    protected static final String ORANGE = TEXTURE_FOLDER + "orangeParticle.jpg";
+    protected static final String YELLOW = TEXTURE_FOLDER + "yellowParticle.jpg";
+    protected static final String WHITE  = TEXTURE_FOLDER + "whiteParticle.jpg";
 
-    private float lifetime;// = 100;
-    private float decay;// = 5f;
+    public static void initialize( GL2 gl){
+        // Particles are transparent.
+        gl.glEnable( GL.GL_BLEND );    
+        gl.glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE );
+        gl.glEnable( GL.GL_TEXTURE_2D );
+        Texture.findOrCreateByName(YELLOW);
+        Texture.findOrCreateByName(ORANGE);
+        Texture.findOrCreateByName(RED);
+        Texture.findOrCreateByName(WHITE);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+    }
 
-    // private float size = 0.005f;
-    private float size;// = 2f;
-   // private float pos[] = {10.0f, 20.0f, -30f};
-    private float pos[] = {0.0f, 0.0f, 0f};
-    private float speed[] = {0.0f, 0.0f, 0.0f};
-    
+    public static boolean addParticle(Particle particle){
+        // We can't add a particle if we have too many
+        if(particles.size() > MAX_PARTICLES)
+            return false;
+
+        particles.add(particle);
+        return true;
+    }
     /**
-     * Creates a new ParticleSystem with the given parameters. lifetime, decay, and size can not be 0
-     * @param x
-     * @param y
-     * @param z
-     * @param lifetime
-     * @param decay
-     * @param size
+     * Draws the particles
+     * @param gl
      */
-    public ParticleSystem(float x, float y, float z, float lifetime, float decay, float size) {
-        colorG = 1;
-        colorB = 1f;
-        colorA = 1f;
-        
-        if( lifetime != 0) { this.lifetime = lifetime; }
-        if( decay != 0) { this.decay = decay; }
-        if( size != 0) { this.size = size; }
-        
-        pos[X] = x;
-        pos[Y] = y;
-        pos[Z] = z;
+    public static void render( GL2 gl ){
+        gl.glDepthMask( false );
+        // Loop over particles.
+        Iterator<Particle> it = particles.iterator();
+        while(it.hasNext()){
+            Particle particle = it.next();
+            if ( ! particle.isAlive() ) {
+                it.remove();
+                break;
+            }
+            particle.update();
+            particle.draw( gl );
+        }
+        gl.glDepthMask( true );
     }
-
-    protected void updateColor() {
-        colorR -= 0.015f;
-        colorG -= 0.05f;
-        colorB -= 0.2f;
-    }
-
-    public float getLifetime() { return lifetime; }
-
-    public float getPosX() { return pos[X]; }
-    public float getPosY() { return pos[Y]; }
-    public float getPosZ() { return pos[Z]; }
-
-    public float getSpeedX() { return speed[X]; }
-    public float getSpeedY() { return speed[Y]; }
-    public float getSpeedZ() { return speed[Z]; }
-
-    public void setSpeed( float sx, float sy, float sz ) 
-    { 
-        speed[X] = sx;
-        speed[Y] = sy;
-        speed[Z] = sz;
-    }
-    public void incSpeedX( float ds ) { speed[X] += ds; }
-    public void incSpeedY( float ds ) { speed[Y] += ds; }
-    public void incSpeedZ( float ds ) { speed[Z] += ds; }
-    public boolean isAlive() { return (lifetime > 0.0); }
-    public void evolve()
-    {
-        lifetime -= decay;
-        // Update locaton.
-        for(int i=0; i<3; i++)
-            pos[i] += speed[i];
-    }
-
-    public void draw( GL2 gl )
-    { 
-        final float halfSize = size / 2f;
-        final float x = pos[X]-halfSize;
-        final float y = pos[Y]-halfSize;
-        final float xs = pos[X]+halfSize;
-        final float ys = pos[Y]+halfSize;
-        // Particle as small rectangle.
-        gl.glBegin(GL2.GL_QUADS); {
-            gl.glTexCoord2f( 0f, 0f );
-            gl.glVertex3f( x, y, pos[Z] );
-            gl.glTexCoord2f( 1f, 0f );
-            gl.glVertex3f( xs, y, pos[Z] );
-            gl.glTexCoord2f( 1f, 1f );
-            gl.glVertex3f( xs, ys, pos[Z] );
-            gl.glTexCoord2f( 0f, 1f );
-            gl.glVertex3f( x, ys, pos[Z] );
-        } gl.glEnd();
-    }
-
-    @Override
-    public Vector3 getVelocity() {
-        return new math.Vector3(getSpeedX(), getSpeedY(), getSpeedZ());
-    }
-
-    @Override
-    public Vector3 getPosition() {
-        return new math.Vector3(getPosX(), getPosY(), getPosZ());
-    }
-
-    @Override
-    public Object setVelocity(Vector3 vel) {
-        
-        return null;
-    }
-
-   
 }

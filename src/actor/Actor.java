@@ -238,7 +238,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         this.modelName = model.name;
         this.model = model;
     }
-
+    
     public Actor setPosition(Vector3 position) {
         this.position = position;
         return this;
