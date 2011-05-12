@@ -1,7 +1,11 @@
 package sound;
 import java.util.Map;
 
-
+/**
+ * 
+ * @author Durandal
+ * NOTE: You must use Mono (single channel) buffers if you want them to be spatialized by OpenAL
+ */
 public class Library {
     private static final String SOUND_PATH = "assets/audio/";
     protected static Map<String, Buffer> sounds = new java.util.HashMap<String, Buffer>();

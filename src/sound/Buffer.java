@@ -6,6 +6,12 @@ import java.nio.IntBuffer;
 import com.jogamp.openal.AL;
 import com.jogamp.openal.util.ALut;
 
+
+/**
+ * 
+ * @author Durandal
+ * NOTE: You must use Mono (single channel) buffers if you want them to be spatialized by OpenAL
+ */
 public class Buffer {
     private static final int NO_SOUND = -1;
     private transient int[] alSound;

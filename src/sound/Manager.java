@@ -8,6 +8,11 @@ import com.jogamp.openal.AL;
 import com.jogamp.openal.ALFactory;
 import com.jogamp.openal.util.ALut;
 
+/**
+ * 
+ * @author Durandal
+ * NOTE: You must use Mono (single channel) buffers if you want them to be spatialized by OpenAL
+ */
 public class Manager {
     private static AL al;
     private static List<Event> events;

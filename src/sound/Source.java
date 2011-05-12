@@ -3,7 +3,11 @@ package sound;
 import java.nio.IntBuffer;
 
 import com.jogamp.openal.AL;
-
+/**
+ * 
+ * @author Durandal
+ * NOTE: You must use Mono (single channel) buffers if you want them to be spatialized by OpenAL
+ */
 public class Source {
     transient int sourceId[];
     float pitch, gain;

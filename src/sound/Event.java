@@ -1,5 +1,10 @@
 package sound;
 
+/**
+ * 
+ * @author Durandal
+ *
+ */
 public class Event {
     float[] position, velocity;
     Buffer sound;
