@@ -52,11 +52,21 @@ public class PlayerShip extends ship.Ship {
     public void rollRight() {
         changeRoll(-ROLL_DEGREE);
     }
-    public void changeWeapon() {
+    public void nextWeapon() {
         System.err.println("Changing Weapon");
         // Get the next weapon in the list
         selectedWeapon = selectedWeapon + 1 % weapons.size();
     }
+    public void previousWeapon() {
+        System.err.println("Changing Weapon");
+        // Get the next weapon in the list
+        selectedWeapon = selectedWeapon - 1 % weapons.size();
+    }
+    
+    public void setWeapon(int weaponNumber){
+        selectedWeapon = weaponNumber % weapons.size();
+    }
+    
     public void update(){
         super.update();
         dampenAngularVelocity();

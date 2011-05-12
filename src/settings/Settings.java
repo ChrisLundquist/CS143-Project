@@ -21,7 +21,8 @@ public class Settings {
             public static int yawRight = -1;
 
             public static int shoot = -1;
-            public static int changeWeapon = -1;
+            public static int previousWeapon = -1;
+            public static int nextWeapon = -1;
         }
     }
 
@@ -35,8 +36,8 @@ public class Settings {
         System.out.println("yawLeft: "+Profile.Keys.yawLeft);
         System.out.println("yawRight: "+Profile.Keys.yawRight);
         System.out.println("shoot: "+Profile.Keys.shoot);
-        System.out.println("switchWeapons: "+Profile.Keys.shoot);
-
+        System.out.println("nextWeapon: "+Profile.Keys.nextWeapon);
+        System.out.println("previousWeapon: "+Profile.Keys.previousWeapon);
     }
 
     public static void init() throws IOException{
@@ -79,32 +80,35 @@ public class Settings {
             if(part[0].equalsIgnoreCase("forward")){
                 Profile.Keys.forward = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("backward")){
+            else if(part[0].equalsIgnoreCase("backward")){
                 Profile.Keys.backward = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("pitch_up")){
+            else if(part[0].equalsIgnoreCase("pitch_up")){
                 Profile.Keys.pitchUp = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("pitch_down")){
+            else if(part[0].equalsIgnoreCase("pitch_down")){
                 Profile.Keys.pitchDown = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("roll_left")){
+            else if(part[0].equalsIgnoreCase("roll_left")){
                 Profile.Keys.rollLeft = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("roll_right")){
+            else if(part[0].equalsIgnoreCase("roll_right")){
                 Profile.Keys.rollRight = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("yaw_left")){
+            else if(part[0].equalsIgnoreCase("yaw_left")){
                 Profile.Keys.yawLeft = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("yaw_right")){
+            else if(part[0].equalsIgnoreCase("yaw_right")){
                 Profile.Keys.yawRight = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("shoot")){
+            else if(part[0].equalsIgnoreCase("shoot")){
                 Profile.Keys.shoot = stringToKey(part[1]);
             }
-            if(part[0].equalsIgnoreCase("change_weapon")){
-                Profile.Keys.shoot = stringToKey(part[1]);
+            else if(part[0].equalsIgnoreCase("nextWeapon")){
+                Profile.Keys.nextWeapon  = stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("previousWeapon")){
+                Profile.Keys.previousWeapon  = stringToKey(part[1]);
             }
         }
     }

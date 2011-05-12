@@ -74,10 +74,13 @@ public class KeyboardListener implements KeyListener, Updateable {
                 //Shoot
                 if(key==Settings.Profile.Keys.shoot){
                     InputRouter.sendAction(InputRouter.Interaction.SHOOT);
-                    System.out.println("SHOOTING");
+                    System.err.println("SHOOTING");
                 }
-                if(key==Settings.Profile.Keys.changeWeapon){
-                    InputRouter.sendAction(InputRouter.Interaction.CHANGE_WEAPON);
+                if(key==Settings.Profile.Keys.nextWeapon){
+                    InputRouter.sendAction(InputRouter.Interaction.NEXT_WEAPON);
+                }
+                if(key==Settings.Profile.Keys.nextWeapon){
+                    InputRouter.sendAction(InputRouter.Interaction.PREVIOUS_WEAPON);
                 }
             }
         }

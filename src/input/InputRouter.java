@@ -15,7 +15,7 @@ public class InputRouter{
         YAW_RIGHT,
         ROLL_LEFT,
         ROLL_RIGHT,
-        CHANGE_WEAPON,
+        CHANGE_WEAPON, NEXT_WEAPON, PREVIOUS_WEAPON,
     }
 
     public static void sendAction(Interaction i) {
