@@ -48,6 +48,11 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
     public Vector3 getPosition() {
         return position;
     }
+    
+    public Particle setPosition(Vector3 newPosition){
+        position = newPosition;
+        return this;
+    }
 
     @Override
     public Vector3 getVelocity() {

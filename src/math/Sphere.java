@@ -22,6 +22,11 @@ public class Sphere implements Supportable, Positionable, Velocitable{
     public Vector3 getPosition() {
         return position;
     }
+    
+    public Sphere setPosition(Vector3 newPosition){
+        position = newPosition;
+        return this;
+    }
 
     public boolean isColliding(Sphere other){
         return distance(other) < (radius + other.radius);
