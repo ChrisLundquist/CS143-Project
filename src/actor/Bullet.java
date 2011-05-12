@@ -1,9 +1,5 @@
 package actor;
 
-import graphics.particles.ParticleFire;
-
-import javax.media.opengl.GL2;
-
 import math.*;
 
 public class Bullet extends Projectile {
@@ -12,11 +8,9 @@ public class Bullet extends Projectile {
     protected static final float BULLET_SPEED = 1.0f;
     
     protected static final String MODEL_NAME = "bullet";
-    ParticleFire particle;
 
     public Bullet(Actor actor){
         super(actor);  
-        particle = new ParticleFire();
         velocity.times(BULLET_SPEED);
     }
 
@@ -28,19 +22,7 @@ public class Bullet extends Projectile {
      */
     public Bullet(Actor actor, Vector3 positionOffset){
         this(actor);
-        particle = new ParticleFire();
         position.plusEquals(positionOffset);
-
-    }
-
-    public void render(GL2 gl) {
-        super.render(gl);
-        addParticles(gl);
-    }
-
-    public void addParticles(GL2 gl) {
-        particle.setParameters(this,100f, 5f, .1f);
-        particle.draw(gl);
     }
 
     @Override
