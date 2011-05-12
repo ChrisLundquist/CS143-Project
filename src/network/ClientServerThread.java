@@ -51,7 +51,7 @@ public class ClientServerThread extends AbstractConnectionThread {
             
             return new JoinMessage(player);
         } if (msg instanceof UpdateMessage) {
-            UpdateMessage update = (UpdateMessage) msg;
+            //UpdateMessage update = (UpdateMessage) msg;
             status = CONNECTED;
             //Actor.updateFromNetwork(update.getActors(), player.getShip());
         }

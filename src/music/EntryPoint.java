@@ -8,6 +8,7 @@ public class EntryPoint {
     
     public static final String A_ASSETS = "assets/audio/";
 
+    @SuppressWarnings("deprecation")
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
         Piece p1 = new Piece(A_ASSETS+"200-0.5.wav","first");
         Piece p2 = new Piece(A_ASSETS+"100-0.5.wav","second");

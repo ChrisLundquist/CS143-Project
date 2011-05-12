@@ -1,7 +1,6 @@
 package music;
 
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * The main class that deals with the mixing of music.  
@@ -22,11 +21,11 @@ public class Mixer extends Thread {
     private Recycler<Piece> songList = new Recycler<Piece>();
     //Theoretically stops the music.  TODO: test this
     private boolean stop = false;
-    
+
     public Mixer(Map<ThemeEnum,Theme> map){
         this.map = map;
     }
-    
+
     /**
      * Starts playing on the mix.
      */
@@ -36,7 +35,7 @@ public class Mixer extends Thread {
             songList.grab().play();
         }
     }
-    
+
     /**
      * Changes the theme based on what ThemeKey is passed
      * @param themeKey The theme that you want to switch to 
@@ -46,19 +45,19 @@ public class Mixer extends Thread {
         Theme theme = this.map.get(themeKey);
         songList.clear();
         //songList.add(theme.getTransition());
-        
+
         for(Piece p:theme.getPieces()){
             songList.add(p);
         }
     }
-    
+
     /**
      * Overridden for the thread
      */
     public void run() {
         play();
     }
-    
+
     /**
      * Stops the music.
      */
