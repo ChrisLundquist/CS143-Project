@@ -8,15 +8,8 @@ import javax.media.opengl.*;
 
 import graphics.Texture;
 
-/**
- * Fire particle, to use call setParameters() with certain arguments, and then draw(gl), 
- * just calling draw(gl) will set parameters to default 
- * 
- * To create a nice fountain of particles set the parameters to  
- * lifetime = 100f
- *  decay = 1f
- *  size = 0.4f;
 
+/**
  * @author Tim Mikeladze, Chris Lundquist
  *
  */
