@@ -21,6 +21,13 @@ public class Vector4 extends Vector3 {
         t = 0.0f;
     }
     
+    public Vector4(Vector4 other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        t = other.t;
+    }
+
     /**
      * This version ignores the 4th vector component
      */

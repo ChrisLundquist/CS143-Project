@@ -58,7 +58,12 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         delta_p.timesEquals(other.rotation.inverse());
         delta_v.timesEquals(other.rotation.inverse());
 
-        Vector3 newVelocity = other.model.getIntersectingPolygon(delta_p, delta_v).reflectDirection(delta_v);
+        graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
+        // CL - Not sure if not handling the collision if we don't know how is best
+        // but its better than throwing excepions
+        if(intersection == null)
+            return; // We couldn't find the intersecting polygon so return so we don't throw an exception
+        Vector3 newVelocity = intersection.reflectDirection(delta_v);
 
         newVelocity.timesEquals(other.rotation);
         newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
@@ -226,6 +231,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
         // CL - Render our model.
         getModel().render(gl);
         gl.glPopMatrix();
+        
     }
 
     public void setModel(Model model) {
@@ -254,16 +260,6 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
     public Actor setSize(Vector3 size){
         scale = size;
         return this;
-    }
-
-    /**
-     * Sets the time when the Actor was born
-     * Current uses System.currentTimeMillis, this might be problematic on different OS
-     * Should be changed to deal with FPS from open gl
-     * 
-     */
-    protected void setTimeStamp() {
-        //age = System.currentTimeMillis();       
     }
 
     public Actor setVelocity(Vector3 velocity) {

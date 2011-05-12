@@ -6,13 +6,16 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
+
 import actor.Actor;
+
 import com.jogamp.opengl.util.FPSAnimator;
 
 /* @author Chris Lundquist
@@ -27,7 +30,7 @@ public class Renderer implements GLEventListener {
     Shader shader;
     Hud hud;
     Camera camera;
-
+    //ParticleFire particle;
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
@@ -36,6 +39,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader("lambert.vert","lambert.frag");
         hud = new Hud();
         this.camera = camera;
+       /* particle = new ParticleFire();*/
     }
     // Display is our main game loop since the animator calls it
     public void display(GLAutoDrawable glDrawable) {
@@ -54,10 +58,15 @@ public class Renderer implements GLEventListener {
 
         // Render each actor
         for(Actor a: game.Game.getActors())
-            a.render(gl);        
+            a.render(gl);
 
         hud.drawStaticHud(gl);
+        
         checkForGLErrors(gl);
+        
+       /* particle.setParameters(0, 0, 0);
+        particle.draw(gl);*/
+        
     }
     
     private static void checkForGLErrors(GL2 gl) {

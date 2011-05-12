@@ -4,20 +4,11 @@ import java.awt.EventQueue;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import java.awt.BorderLayout;
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.ListModel;
 import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
-import javax.swing.JRadioButton;
 import java.awt.Component;
 import javax.swing.Box;
 

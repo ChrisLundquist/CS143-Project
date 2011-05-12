@@ -4,8 +4,6 @@ import game.Player;
 import java.io.IOException;
 import java.net.Socket;
 
-import actor.Actor;
-
 /**
  * This thread runs as part of the server handling one player's connection
  * @author Dustin Lundquist <dustin@null-ptr.net>

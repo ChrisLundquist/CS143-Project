@@ -10,10 +10,7 @@ import java.util.Scanner;
 public class LastFM {
     //gets OS
     private String os = System.getProperty("os.name").toLowerCase();
-    private Runtime rt = Runtime.getRuntime();
     Process p;
-    private boolean isPlaying = false;
-    
     /**
      * Constructor is only for debugging
      */
@@ -24,31 +21,24 @@ public class LastFM {
 
     public void playArtist(String artist) {
         openURL("http://www.last.fm/listen/artist/"+artist);
-        isPlaying = true;
     }
     public void playSong(String song) {
         openURL("http://www.last.fm/listen/artist/"+song);
-        isPlaying = true;
     }
     public void playGenre(String genre) {
         openURL("http://www.last.fm/listen/genre/"+genre);
-        isPlaying = true;
     }
     public void playLibrary(String username) {
         openURL("http://www.last.fm/listen/user/"+username+"/personal");
-        isPlaying = true;
     }
     public void playMix(String username) {
         openURL("http://www.last.fm/listen/user/"+username+"/mix");
-        isPlaying = true;
     }
     public void playRecommended(String username) {
         openURL("http://www.last.fm/listen/user/"+username+"/recommended");
-        isPlaying = true;
     }
     public void playMultiTag(String tag1, String tag2, String tag3) {
         openURL("http://www.last.fm/listen#station=%2Flisten%2Ftag%2F"+tag1+"*"+tag2+"*"+tag3);
-        isPlaying = true;
     }
     /**
      * Stops playback
@@ -63,7 +53,6 @@ public class LastFM {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        isPlaying = false;
        
     }
     /**
@@ -77,7 +66,7 @@ public class LastFM {
         System.out.println(process.getClass().getName());
         if (process.getClass().getName().equals("java.lang.UNIXProcess"))
         {
-            Class cl = process.getClass();
+            Class<? extends Process> cl = process.getClass();
             Field field = cl.getDeclaredField("pid");
             field.setAccessible(true);
             Object pidObject = field.get(process);

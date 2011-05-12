@@ -5,15 +5,6 @@ package music;
 public class SoundEffect {
     static private boolean enabled;
 
-    // TODO make this sexy. This looks like copy pasta.
-    private static final String BULLET_SHOT_FILE = "laser_effect.mp3";
-    private static final String BULLET_HIT_FILE = "explode.mp3";
-    private static final String LARGE_ASTEROID_DEATH_FILE = "large_asteroid_explosion.mp3";
-    private static final String SMALL_ASTEROID_DEATH_FILE = "small_asteroid_explosion.mp3";
-    private static final String PLAYER_DEATH_FILE = "explode.mp3";
-    private static final String POWER_UP_EFFECT_FILE = "powerup_effect.mp3";
-
-
     // We only want to make one copy of each sound effect and play the
     // same sound multiple times. So we have them as static members/fields
     private static boolean loaded;
