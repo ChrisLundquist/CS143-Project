@@ -25,7 +25,7 @@ public class Settings {
         }
     }
 
-    public static void debug(){
+    public static void debugKeys(){
         System.out.println("forward: "+Profile.Keys.forward);
         System.out.println("backward: "+Profile.Keys.backward);
         System.out.println("pitchUp: "+Profile.Keys.pitchUp);
@@ -51,6 +51,23 @@ public class Settings {
 
             if(part[0].equalsIgnoreCase("conf")){
                 configFile = new File("config/"+part[1]);
+            }
+            if(part[0].equalsIgnoreCase("debug")){
+                if(part[1].equalsIgnoreCase("on")){
+                    Debug.debugConsole();
+                }
+                else if (part[1].equalsIgnoreCase("off")){
+                    Debug.debugOff();
+                }
+                else{
+                    try{
+                        Debug.debugFile(new File(part[1]));
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                        Debug.debugOff();
+                    }
+                }
             }
         }
 
@@ -291,6 +308,6 @@ public class Settings {
 
     public static void main(String[] args) throws IOException{
         init();
-        Settings.debug();
+        Settings.debugKeys();
     }
 }
