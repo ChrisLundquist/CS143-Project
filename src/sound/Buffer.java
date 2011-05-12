@@ -4,12 +4,12 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import com.jogamp.openal.AL;
-import com.jogamp.openal.util.ALut;
 
 
 /**
  * 
  * @author Durandal
+ * Buffer represents an OpenAL sound buffer and handles buffer resources
  * NOTE: You must use Mono (single channel) buffers if you want them to be spatialized by OpenAL
  */
 public class Buffer {
@@ -19,6 +19,7 @@ public class Buffer {
     protected int[] format, size, freq, loop;
     protected ByteBuffer[] data;
 
+    // New Buffers should only be created by Loader
     Buffer(String filePath){
         name = filePath;
         format = new int[1];
@@ -33,15 +34,7 @@ public class Buffer {
         // Load wav data into a buffer.
         al.alGenBuffers(1, IntBuffer.wrap(alSound));
         Manager.checkForALErrorsWithMessage("Unable to generate buffer for " + filePath);
-
-        ALut.alutLoadWAVFile(
-                filePath,
-                format,
-                data,
-                size,
-                freq,
-                loop);
-        al.alBufferData(alSound[0], format[0], data[0], size[0], freq[0]);
+        // Loader takes care of opening Wav or Ogg and populates these fields
     }
 
     public String getName(){
