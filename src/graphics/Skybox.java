@@ -2,8 +2,6 @@ package graphics;
 
 import java.io.Serializable;
 
-import javax.media.opengl.GL2;
-
 public class Skybox implements Serializable{
     private static final long serialVersionUID = 1229301019236369376L;
     public static final float SKYBOX_SIZE = -128.0f;
@@ -14,19 +12,9 @@ public class Skybox implements Serializable{
         modelName = waveFrontObjectFilepath;
     }
 
-    private void init(GL2 gl){
-        model = Model.findOrCreateByName(modelName);
-    }
-
-    public void render(GL2 gl, Camera camera) {
-        if(model == null) {
-            init(gl);
-        }
-        gl.glPushMatrix();
-        math.Vector3 pos = camera.position;
-        gl.glTranslatef(-pos.x, -pos.y, -pos.z);
-        gl.glScalef(SKYBOX_SIZE,SKYBOX_SIZE , SKYBOX_SIZE);
-        model.render(gl);
-        gl.glPopMatrix();
+    public Model getModel() {
+        if (model == null)
+            model = Model.findOrCreateByName(modelName);
+        return model;
     }
 }

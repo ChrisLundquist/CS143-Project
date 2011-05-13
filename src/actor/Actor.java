@@ -1,10 +1,8 @@
 package actor;
 
 import graphics.Model;
-
 import java.io.Serializable;
 import java.util.Random;
-import javax.media.opengl.GL2;
 import physics.GJKSimplex;
 import math.Quaternion;
 import math.Supportable;
@@ -218,22 +216,7 @@ public abstract class Actor implements Serializable, Supportable, Rotatable, Vel
 
         return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
     }
-
-    public void render(GL2 gl) {
-        gl.glPushMatrix();
-        // Translate the actor to it's position
-        gl.glTranslatef(position.x, position.y, position.z);
-
-        // Rotate the actor
-        gl.glMultMatrixf(getRotation().toGlMatrix(), 0);
-        // Scale the Actor
-        gl.glScalef(scale.x, scale.y, scale.z);
-        // CL - Render our model.
-        getModel().render(gl);
-        gl.glPopMatrix();
-        
-    }
-
+    
     public void setModel(Model model) {
         this.modelName = model.name;
         this.model = model;

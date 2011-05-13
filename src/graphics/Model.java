@@ -1,10 +1,8 @@
 package graphics;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import javax.media.opengl.GL2;
-
 import math.Vector3;
 
 public class Model implements math.Supportable{
@@ -50,19 +48,10 @@ public class Model implements math.Supportable{
         for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
             System.err.println(err);
     }
-
-    /**
-     * Initializes the models and needed textures
-     * @param gl the current OpenGL Context
-     */
-    public static void initialize(GL2 gl) {
-        Texture.initialize(gl);
-        loadModels();
-        for(Model model : models.values()){
-            model.init(gl);
-        }
+    
+    public static Collection<Model> loaded_models() {
+        return models.values();
     }
-
 
 
     int displayList;
@@ -113,37 +102,6 @@ public class Model implements math.Supportable{
 
 
         return groups;
-    }
-
-    /* 
-     * Build a display list for this model
-     */
-    public void init(GL2 gl) {
-        displayList = gl.glGenLists(1);
-        gl.glNewList(displayList, GL2.GL_COMPILE);
-        renderPolygons(gl);
-        gl.glEndList();
-        // CL -We don't free our geometry so we can keep it for collision detection
-    }
-
-    private void renderPolygons(GL2 gl){
-        for (Polygon p: polygons)
-            p.render(gl);
-    }
-
-    public void render_slow(GL2 gl){
-        renderPolygons(gl);
-    }
-
-    public void render(GL2 gl) {
-        // CL - The scaling, rotating, translating is handled per actor
-        //      The display list should have already been "adjusted" if it
-        //      wasn't at the center of mass or correct world orientation
-        //      when it was loaded.
-        if(gl.glIsList(displayList) == false)
-            init(gl);
-        else
-            gl.glCallList(displayList);
     }
 
     @Override
