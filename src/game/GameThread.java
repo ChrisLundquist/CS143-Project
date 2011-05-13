@@ -42,10 +42,6 @@ public class GameThread extends Thread {
             // Don't update the game state if we are paused
             if(gameState == STATE_PAUSED)
                 continue;
-            ship.Ship player = Game.getPlayer().getShip();
-            sound.Manager.setListenerOrientation(player.getDirection().toFloatArray());
-            sound.Manager.setListenerPosition(player.getPosition().toFloatArray());
-            sound.Manager.setListenerVelocity(player.getVelocity().toFloatArray());
             sound.Manager.processEvents();
             for(int i = 0; i < collisionThreads.length; ++i)
                 pool.execute(collisionThreads[i]);

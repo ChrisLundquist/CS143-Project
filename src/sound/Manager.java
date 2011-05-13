@@ -18,12 +18,14 @@ public class Manager {
     private static List<Event> events;
     private static final int MAX_SOURCES = 32;
     private static List<Source> sources;
+    private static actor.Movable listener;
 
     static public void addEvent(Event event){
         events.add(event);
     }
 
     static public void processEvents(){
+        updateListener();
         ListIterator<Event> it = events.listIterator();
         while(it.hasNext()){
             Event event = it.next();
@@ -74,19 +76,34 @@ public class Manager {
         return al;
     }
     
-    static public void setListenerPosition(float[] listenerPos ){
-            getAL().alListenerfv(AL.AL_POSITION, listenerPos, 0);
+    static private void setListenerPosition(math.Vector3 listenerPos ){
+            getAL().alListenerfv(AL.AL_POSITION, listenerPos.toFloatArray(), 0);
     }
     
-    static public void setListenerVelocity(float[] listenerVel){
-        getAL().alListenerfv(AL.AL_VELOCITY, listenerVel, 0);
+    static private void setListenerVelocity(math.Vector3 listenerVel){
+        getAL().alListenerfv(AL.AL_VELOCITY, listenerVel.toFloatArray(), 0);
     }
     
-    static public void setListenerOrientation(float[] listenerOri){
-        getAL().alListenerfv(AL.AL_ORIENTATION, listenerOri, 0);
+    static private void setListenerOrientation(math.Vector3 listenerOri, math.Vector3 listenerUp){
+        float[] orientation = new float[6];
+        orientation[0] = listenerOri.x;
+        orientation[1] = listenerOri.y;
+        orientation[2] = listenerOri.z;
+        orientation[3] = listenerUp.x;
+        orientation[4] = listenerUp.y;
+        orientation[5] = listenerUp.z;
+
+        getAL().alListenerfv(AL.AL_ORIENTATION, orientation, 0);
     }
     
-    static public void initialize(){
+    static public void updateListener(){
+        sound.Manager.setListenerOrientation(listener.getRotation().rollAxis(), listener.getRotation().yawAxis());
+        sound.Manager.setListenerPosition(listener.getPosition());
+        sound.Manager.setListenerVelocity(listener.getVelocity());
+    }
+
+    static public void initialize(actor.Movable newListener){
+        listener = newListener;
         al = ALFactory.getAL();
         ALut.alutInit();
         checkForALErrorsWithMessage("Failed to initialize OpenAl");

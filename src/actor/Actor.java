@@ -8,7 +8,7 @@ import math.Quaternion;
 import math.Supportable;
 import math.Vector3;
 
-public abstract class Actor implements Serializable, Supportable, Rotatable, Velocitable, Positionable, Collidable {
+public abstract class Actor implements Serializable, Supportable, Movable, Collidable {
     protected static Random gen = new Random(); // Common random number generator object
     private static final long serialVersionUID = 744085604446096658L;
 

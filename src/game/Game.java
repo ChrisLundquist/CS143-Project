@@ -34,7 +34,7 @@ public class Game {
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
-        sound.Manager.initialize();
+        sound.Manager.initialize(player.getCamera());
 
         game = new GameThread(actors);
         // CL - We need to get input even if the game is paused,
