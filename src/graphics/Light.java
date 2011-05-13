@@ -12,7 +12,7 @@ public class Light implements java.io.Serializable{
     public static List<Light> lights = new ArrayList<Light>();
     float constantAttenuation, linearAttenuation, quadraticAttenuation;
     math.Vector4 position, ambient, diffuse, specular;
-    
+
     public static Light newRandom(float rangeMax){
         Light light = new Light();
         light.setPosition(new Vector4(gen.nextFloat()* rangeMax,
@@ -134,7 +134,15 @@ public class Light implements java.io.Serializable{
         // shader.setUniform1i(gl, "numLights", numLights);
     }
 
-
+    /* From the Orange book
+     * OpenGL implementations often choose to do lighting
+     * calculations in eye space; therefore, the incoming surface normals have to
+     * be transformed into eye space as well. You accomplish this by transforming
+     * surface normals by the inverse transpose of the upper leftmost 3x3 matrix
+     * taken from the modelview matrix. At that point, you can apply the per vertex
+     * lighting formulas defined by OpenGL to determine the lit color at
+     * each vertex
+     */
     public static void update(GL2 gl, Camera camera){
         math.Quaternion inverseRot = camera.rotation.inverse();
         for(int i = 0; i < lights.size(); i++) {
