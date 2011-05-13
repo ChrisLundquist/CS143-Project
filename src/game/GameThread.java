@@ -13,11 +13,10 @@ public class GameThread extends Thread {
     public static final int STATE_PAUSED = 1002;
     public static final int STATE_STOPPED = 1003;
     private long lastUpdate ;
-    private int maxThreads;
+    private int maxThreads, gameState;
     private physics.CollisionSolverThread[] collisionThreads;
     private ExecutorService pool;
     private ActorSet actors;
-    private int gameState;
     private List<Updateable> callbacks;
 
 
@@ -44,6 +43,7 @@ public class GameThread extends Thread {
             if(gameState == STATE_PAUSED)
                 continue;
 
+            sound.Manager.processEvents();
             for(int i = 0; i < collisionThreads.length; ++i)
                 pool.execute(collisionThreads[i]);
             

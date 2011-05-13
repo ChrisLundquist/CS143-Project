@@ -8,15 +8,16 @@ public class Bullet extends Projectile {
     protected static final float BULLET_SPEED = 1.0f;
     
     protected static final String MODEL_NAME = "bullet";
+    private static final String SOUND_EFFECT = "Gun1.wav";
 
     public Bullet(Actor actor){
         super(actor);
         graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
+        sound.Manager.addEvent(new sound.Event(actor.getPosition().toFloatArray(), actor.getVelocity().toFloatArray(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.times(BULLET_SPEED);
     }
 
     /**
-     * 
      * @param actor
      * @param positionOffset the offset relative to the actor
      * @param direction

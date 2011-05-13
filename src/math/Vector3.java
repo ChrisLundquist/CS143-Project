@@ -36,6 +36,14 @@ public class Vector3 implements Serializable {
     public String toString() {
         return String.format("<%g, %g, %g>", x, y, z);
     }
+    
+    public float[] toFloatArray(){
+        float[] array = new float[3];
+        array[0] = x;
+        array[1] = y;
+        array[2] = z;
+        return array;
+    }
 
     public Vector3 times(float scalar){
         return new Vector3( x * scalar, y * scalar, z * scalar);
@@ -53,14 +61,12 @@ public class Vector3 implements Serializable {
         return this;
     }
 
-
     public Vector3 normalize(){
-        float magnitude = magnitude();
-        if(magnitude == 0.0) // prevent division by 0
-            return this;
-        x /= magnitude;
-        y /= magnitude;
-        z /= magnitude;
+        float invserseMagnitude = 1.0f / magnitude();
+
+        x *= invserseMagnitude;
+        y *= invserseMagnitude;
+        z *= invserseMagnitude;
         return this;
     }
     /*
@@ -174,7 +180,7 @@ public class Vector3 implements Serializable {
     }
 
     public Vector3 timesEquals(Quaternion rotation) {
-        // TODO OPTIMIZE Auto-generated method stub
+        // TODO OPTIMIZE
         Vector3 temp = this.times(rotation);
         x = temp.x;
         y = temp.y;

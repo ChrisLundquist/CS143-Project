@@ -69,7 +69,6 @@ public class Renderer implements GLEventListener {
     }
     
     private static void checkForGLErrors(GL2 gl) {
-
         int errno = gl.glGetError();
         switch (errno) {
             case GL2.GL_INVALID_ENUM:
@@ -114,7 +113,6 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
         Model.initialize(gl); /* calls Texture.initialize */
         ///hud.init(gLDrawable);
-        sound.Manager.initialize();
         graphics.particles.ParticleSystem.initialize(gl);
 
         try {
