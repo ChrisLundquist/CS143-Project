@@ -18,7 +18,7 @@ public class Source {
         //queuedSounds = new LinkedList<Buffer>();
         sourceId = new int[1];
         pitch = 1.0f;
-        gain = 1.0f;
+        gain = 0.5f;
 
         AL al = Manager.getAL();
         // Bind buffer with a source.
