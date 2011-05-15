@@ -24,17 +24,6 @@ public abstract class Shield {
     }
 
     protected boolean getStatus() {
-        if(power > 0 ) {
-            return true;
-        }
-
-        else {
-            return false;
-        }
-
+        return power > 0;
     }
-
-
-
-
 }
