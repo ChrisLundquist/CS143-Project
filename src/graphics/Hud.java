@@ -25,7 +25,7 @@ public class Hud {
      */
     public void drawStaticHud(GL2 gl) {
         start2D(gl);
-
+/*
         if(healthbackdrop != null) {
             healthbackdrop.bind(gl);
         }
@@ -37,7 +37,7 @@ public class Hud {
         gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d( -40.0f, 40.0f );
         gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d( -40.0f, 90.0f );
         
-        gl.glEnd();
+        gl.glEnd();*/
         
         if(crosshair != null) {
             crosshair.bind(gl);

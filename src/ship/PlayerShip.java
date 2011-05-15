@@ -14,6 +14,7 @@ public class PlayerShip extends ship.Ship {
         super();
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
+        shields.add(new shield.PlayerShield());
         modelName = MODEL_NAME;
     }
     @Override
@@ -21,7 +22,9 @@ public class PlayerShip extends ship.Ship {
         System.err.println("Collision Detected Between " + other + " and " + this);
 
         if(other instanceof actor.Projectile) {
-            
+            //shield testing code
+            shields.get(0).takeDamage(weapons.get(selectedWeapon).getDamage());
+            System.out.println(shields.get(0).getPower());
         }
         else if (other instanceof Ship) {
 
