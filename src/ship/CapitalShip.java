@@ -8,12 +8,13 @@ public class CapitalShip extends ship.Ship {
     
     public CapitalShip() {
         super();
+        shields.add(new shield.CapitalShipShield());
         modelName = MODEL_NAME;
     }
 
     @Override
     public void handleCollision(Actor other) {
-        System.err.println("Collision Detected Between " + other + " and " + this);
+        System.err.println("Collision Detected Between " + other + " and " + this);  
     }
     public void update() {
         super.update();
