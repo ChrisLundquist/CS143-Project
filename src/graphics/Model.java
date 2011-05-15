@@ -3,20 +3,22 @@ package graphics;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import math.Vector3;
 
 public class Model implements math.Supportable{
     static final String MODEL_PATH = "assets/models/";
     static final String MODEL_EXTENSION = ".obj";
-    private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "cube_cube"};
+    private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "ship_test"};
     private static final int NO_LIST = -1;
 
     protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
 
     public static Model findOrCreateByName(String name) {
         Model model = models.get(name);
-        if(model == null)
+        if(model == null) {
             model = createByName(name);
+        }
         return model;
     }
 
@@ -39,14 +41,17 @@ public class Model implements math.Supportable{
             if (file.toLowerCase().endsWith(MODEL_EXTENSION))
                 Model.findOrCreateByName(file.replaceAll(".obj$", ""));
          */
-        for (String model: COMMON_MODELS)
+        for (String model: COMMON_MODELS) {
             Model.findOrCreateByName(model);
+        }
 
 
-        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors()) {
             System.err.println(err);
-        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors())
+        }
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) {
             System.err.println(err);
+        }
     }
     
     public static Collection<Model> loaded_models() {
@@ -84,8 +89,9 @@ public class Model implements math.Supportable{
         Map<String, List<Polygon>> polyGroup = new java.util.HashMap<String, List<Polygon>>();
         for( Polygon p : polygons){
             for(String group : p.groups){
-                if(group.isEmpty())
+                if(group.isEmpty()) {
                     continue;
+                }
                 if(!polyGroup.containsKey(group)){ // If it doesn't have the key, add it
                     polyGroup.put(group, new java.util.ArrayList<Polygon>());
                 }
@@ -112,9 +118,9 @@ public class Model implements math.Supportable{
         for(Polygon p : polygons){
             // And all of the vertices in each polygon
             for(Vertex v : p.verticies){
-                if (max.dotProduct(direction) < v.coord.dotProduct(direction)) { 
-                    max = v.coord; 
-                } 
+                if (max.dotProduct(direction) < v.coord.dotProduct(direction)) {
+                    max = v.coord;
+                }
             }
         }
         // It is important we return a new vector and not a reference to one in our geometry
@@ -123,8 +129,9 @@ public class Model implements math.Supportable{
 
     public Polygon getIntersectingPolygon(Vector3 origin, Vector3 direction) {
         for(Polygon p : polygons) {
-            if (p.isIntersecting(origin, direction))
+            if (p.isIntersecting(origin, direction)) {
                 return p;
+            }
         }
 
         return null;
@@ -137,9 +144,11 @@ public class Model implements math.Supportable{
     protected float findRadius() {
         float radius2 = 0.0f;
 
-        for (Polygon p: polygons)
-            for (Vertex v: p.verticies)
+        for (Polygon p: polygons) {
+            for (Vertex v: p.verticies) {
                 radius2 = Math.max(radius2, v.coord.magnitude2());
+            }
+        }
 
         return (float)Math.sqrt(radius2);
     }

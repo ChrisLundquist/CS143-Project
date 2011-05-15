@@ -1,6 +1,6 @@
 # Blender MTL File: 'ship_test.blend'
-# Material Count: 1
-newmtl Material
+# Material Count: 3
+newmtl body_mtl
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
@@ -8,5 +8,26 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd assets/images/ship_test/body.png
+
+
+newmtl tail_mtl
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd assets/images/ship_test/tail.png
+
+
+newmtl wings_mtl
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd assets/images/ship_test/wings.png 
 
 

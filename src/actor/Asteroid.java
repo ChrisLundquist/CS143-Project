@@ -1,10 +1,11 @@
 package actor;
 
-import math.*;
+import math.Quaternion;
+import math.Vector3;
 
 public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
-    private static final String MODEL_NAME = "cube_cube";
+    private static final String MODEL_NAME = "ship_test";
 
     public Asteroid(){
         super();

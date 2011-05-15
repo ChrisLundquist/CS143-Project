@@ -6,7 +6,7 @@ public class PlayerShip extends ship.Ship {
     private static final float TURN_SPEED = 0.01f;
     private static final float ROLL_DEGREE = 0.05f;
     private static final long serialVersionUID = 260627862699350716L;
-    private static final String MODEL_NAME = "cube_cube";
+    private static final String MODEL_NAME = "ship_test";
 
     long lastShotTime, lastRollLeftTime;
 
@@ -67,6 +67,7 @@ public class PlayerShip extends ship.Ship {
         selectedWeapon = weaponNumber % weapons.size();
     }
     
+    @Override
     public void update(){
         super.update();
         dampenAngularVelocity();
