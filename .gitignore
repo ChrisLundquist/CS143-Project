@@ -1,5 +1,7 @@
 *.class
 *.DS_Store
 
-config/*.*
+config/
+*.conf
+*.ini
 .*.swp
