@@ -2,7 +2,9 @@ package game;
 
 import graphics.Camera;
 import input.InputRouter;
+
 import java.io.Serializable;
+
 import math.Vector3;
 import ship.PlayerShip;
 import actor.Actor;
@@ -39,12 +41,13 @@ public class Player implements Serializable {
         return camera;
     }
 
-    public PlayerShip getShip() {       
+    public PlayerShip getShip() {
         if (ship == null) {
             if (shipId != null) {
                 Actor a = Game.getActors().findById(shipId);
-                if (a instanceof PlayerShip)
+                if (a instanceof PlayerShip) {
                     return ship = (PlayerShip) a;
+                }
             }
             ship = getNewShip();
         }
@@ -84,7 +87,7 @@ public class Player implements Serializable {
             case ROLL_RIGHT:
                 ship.rollRight();
                 break;
-            case CHANGE_WEAPON:
+            case NEXT_WEAPON:
                 ship.nextWeapon();
                 break;
             default:

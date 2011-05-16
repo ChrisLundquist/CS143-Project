@@ -104,10 +104,10 @@ public class Settings {
             else if(part[0].equalsIgnoreCase("shoot")){
                 Profile.Keys.shoot = stringToKey(part[1]);
             }
-            else if(part[0].equalsIgnoreCase("nextWeapon")){
+            else if(part[0].equalsIgnoreCase("next_weapon")){
                 Profile.Keys.nextWeapon  = stringToKey(part[1]);
             }
-            else if(part[0].equalsIgnoreCase("previousWeapon")){
+            else if(part[0].equalsIgnoreCase("previous_weapon")){
                 Profile.Keys.previousWeapon  = stringToKey(part[1]);
             }
         }
