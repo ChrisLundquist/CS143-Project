@@ -1,14 +1,10 @@
 package ship;
 
-import actor.Actor;
-
 public class PlayerShip extends ship.Ship {
     private static final float TURN_SPEED = 0.01f;
     private static final float ROLL_DEGREE = 0.05f;
     private static final long serialVersionUID = 260627862699350716L;
     private static final String MODEL_NAME = "ship_test";
-
-    long lastShotTime, lastRollLeftTime;
 
     public PlayerShip(){
         super();
@@ -16,20 +12,6 @@ public class PlayerShip extends ship.Ship {
         weapons.add(new weapon.Machinegun());
         shields.add(new shield.PlayerShield());
         modelName = MODEL_NAME;
-    }
-    @Override
-    public void handleCollision(Actor other) {
-        System.err.println("Collision Detected Between " + other + " and " + this);
-
-        if(other instanceof actor.Projectile) {
-            //shield testing code
-            actor.Projectile projectile = (actor.Projectile) other;
-            shields.get(0).takeDamage(projectile.getDamage());
-            System.out.println(shields.get(0).getPower());
-        }
-        else if (other instanceof Ship) {
-
-        }
     }
 
     public void forwardThrust() {
@@ -77,5 +59,4 @@ public class PlayerShip extends ship.Ship {
         dampenAngularVelocity();
         velocity = velocity.times(0.95f);
     }
-
 }

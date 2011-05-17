@@ -1,10 +1,10 @@
 package ship;
 
-public abstract class Shield {
-    int power;
-    public Shield() {
+import java.io.Serializable;
 
-    }
+public abstract class Shield implements Serializable{
+    private static final long serialVersionUID = -464289746987986899L;
+    int power;
 
     protected int getPower() {
         return power;
@@ -15,12 +15,7 @@ public abstract class Shield {
     }
 
     protected void takeDamage(int damage) {
-        if(getStatus()) {
-            power = power -  damage;  
-        }
-        else {
-            //TODO remove the ship
-        }
+        power -= damage;
     }
 
     protected boolean getStatus() {
