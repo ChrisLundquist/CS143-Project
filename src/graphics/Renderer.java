@@ -170,10 +170,8 @@ public class Renderer implements GLEventListener {
                 gl.glTexCoord2f(c.u, c.v); 
                 gl.glVertex3f(c.getX(), c.getY(), c.getZ());
             }
-
         }
         gl.glEnd();
-
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
