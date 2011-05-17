@@ -1,4 +1,4 @@
-package ship;
+package weapon;
 
 import actor.Bullet;
 
@@ -32,7 +32,7 @@ public abstract class Weapon {
         lastShot = time;
     }
     
-    protected double getDamage() {
+    public double getDamage() {
         return damage;
     }
     

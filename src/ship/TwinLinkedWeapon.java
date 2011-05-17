@@ -1,5 +1,6 @@
 package ship;
 
+import weapon.Weapon;
 import math.Vector3;
 
 public abstract class TwinLinkedWeapon extends Weapon {

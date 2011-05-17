@@ -1,16 +1,16 @@
 package weapon;
 
-
-public class Machinegun extends ship.Weapon {
+public class Machinegun extends weapon.Weapon {
     
     final double damage = 5.0;
     
-    protected
-    long getShotCoolDown() {
+    @Override
+    public long getShotCoolDown() {
         return 100;
     }
     
-    protected double getDamage() {
+    @Override
+    public double getDamage() {
         return damage;
     }
 }
