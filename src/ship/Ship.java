@@ -2,6 +2,9 @@ package ship;
 
 import java.util.List;
 
+import weapon.Weapon;
+
+
 import actor.Actor;
 
 public abstract class Ship extends Actor {
@@ -19,6 +22,7 @@ public abstract class Ship extends Actor {
     }
     
     public void shoot(){
+        System.out.println(selectedWeapon);
         weapons.get(selectedWeapon).shoot(this);
     }
 

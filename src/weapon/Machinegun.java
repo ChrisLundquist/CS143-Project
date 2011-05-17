@@ -1,23 +1,21 @@
 package weapon;
 
-import actor.Actor;
-import actor.Projectile;
-
-
-public class Machinegun extends ship.Weapon {
+public class Machinegun extends weapon.Weapon {
+    
     final double damage = 5.0;
-
-    protected
-    long getShotCoolDown() {
+    
+    @Override
+    public long getShotCoolDown() {
         return 100;
     }
-
-    protected double getDamage() {
+    
+    @Override
+    public double getDamage() {
         return damage;
     }
 
     @Override
-    protected Projectile newProjectile(Actor ship) {
+    protected actor.Projectile newProjectile(actor.Actor ship) {
         return new actor.Bullet(ship);
     }
 }

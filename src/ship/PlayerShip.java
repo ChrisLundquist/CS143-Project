@@ -58,12 +58,12 @@ public class PlayerShip extends ship.Ship {
     public void nextWeapon() {
         System.err.println("Changing Weapon");
         // Get the next weapon in the list
-        selectedWeapon = selectedWeapon + 1 % weapons.size();
+        selectedWeapon = (selectedWeapon + 1) % weapons.size();
     }
     public void previousWeapon() {
         System.err.println("Changing Weapon");
         // Get the next weapon in the list
-        selectedWeapon = selectedWeapon - 1 % weapons.size();
+        selectedWeapon = (selectedWeapon - 1) % weapons.size();
     }
     
     public void setWeapon(int weaponNumber){
