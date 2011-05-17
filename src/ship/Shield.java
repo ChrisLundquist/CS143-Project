@@ -1,20 +1,20 @@
 package ship;
 
 public abstract class Shield {
-    double power;
+    int power;
     public Shield() {
 
     }
 
-    protected double getPower() {
+    protected int getPower() {
         return power;
     }
 
-    protected void setPower(double power) {
+    protected void setPower(int power) {
         this.power = power;
     }
 
-    protected void takeDamage(double damage) {
+    protected void takeDamage(int damage) {
         if(getStatus()) {
             power = power -  damage;  
         }

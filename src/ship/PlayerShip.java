@@ -23,7 +23,8 @@ public class PlayerShip extends ship.Ship {
 
         if(other instanceof actor.Projectile) {
             //shield testing code
-            shields.get(0).takeDamage(weapons.get(selectedWeapon).getDamage());
+            actor.Projectile projectile = (actor.Projectile) other;
+            shields.get(0).takeDamage(projectile.getDamage());
             System.out.println(shields.get(0).getPower());
         }
         else if (other instanceof Ship) {
