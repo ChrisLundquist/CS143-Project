@@ -62,6 +62,9 @@ public class Vector3 implements Serializable {
     }
 
     public Vector3 normalize(){
+        float magnitude = magnitude();
+        if(magnitude == 0.0f)
+            return this;
         float invserseMagnitude = 1.0f / magnitude();
 
         x *= invserseMagnitude;
