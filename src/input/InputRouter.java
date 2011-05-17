@@ -4,7 +4,7 @@ import game.Game;
 import game.Player;
 
 public class InputRouter{
-
+    
     public enum Interaction {
         SHOOT,
         FORWARD,
