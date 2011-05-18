@@ -11,7 +11,7 @@ public class Hud {
     private static final String CROSSHAIR = "assets/images/hud/crosshair.png";
 
     /**
-     * Constructor loads all the textures
+     * Constructor loads all the textures   
      */
     public Hud() {   
         healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
@@ -25,19 +25,15 @@ public class Hud {
      */
     public void drawStaticHud(GL2 gl) {
         start2D(gl);
-/*
+
         if(healthbackdrop != null) {
             healthbackdrop.bind(gl);
         }
 
         gl.glBegin(GL2.GL_QUADS );
-
-        gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d( -90.0f, 90.0f );
-        gl.glTexCoord2d(0.0, 1.0); gl.glVertex2d( -90.0f, 40.0f );
-        gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d( -40.0f, 40.0f );
-        gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d( -40.0f, 90.0f );
-        
-        gl.glEnd();*/
+        draw(-18,20,100,100,gl);
+        gl.glEnd();
+      
         
         if(crosshair != null) {
             crosshair.bind(gl);
@@ -45,7 +41,7 @@ public class Hud {
         
         gl.glBegin(GL2.GL_QUADS );
         
-        draw(-18 ,20,36,36,gl);
+        draw(-18,20,36,36,gl);
         
         gl.glEnd();
         
@@ -62,10 +58,10 @@ public class Hud {
      * @param gl
      */
     private void draw(float x, float y, float width, float height, GL2 gl) {
-        gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d(x,y);
-        gl.glTexCoord2d(0.0, 1.0); gl.glVertex2d(x,y-height);
-        gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d(x+width,y-height); 
-        gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d(x+width, y);
+        gl.glTexCoord2d(0.0, 1.0); gl.glVertex2d(x,y);
+        gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d(x,y-height);
+        gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d(x+width,y-height); 
+        gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d(x+width, y);
     }
     
     /**
@@ -81,6 +77,9 @@ public class Hud {
         gl.glMatrixMode(GL2.GL_PROJECTION );
         gl.glPushMatrix();   // projection matrix 
         gl.glLoadIdentity();
+        
+        //So I don't forget -Tim
+        //glOrtho(  GLdouble    left,GLdouble    righ,GLdouble    bottom,GLdouble    top, GLdouble    nearVal,GLdouble    farVal)
         gl.glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
 
         gl.glMatrixMode(GL2.GL_MODELVIEW );
