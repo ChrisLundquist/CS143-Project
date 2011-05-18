@@ -1,5 +1,7 @@
 package graphics;
 
+import java.awt.Toolkit;
+
 import javax.media.opengl.GL2;
 
 public class Hud {
@@ -9,7 +11,8 @@ public class Hud {
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
     private static final String CROSSHAIR = "assets/images/hud/crosshair.png";
-
+    private final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
     /**
      * Constructor loads all the textures   
      */
@@ -31,7 +34,26 @@ public class Hud {
         }
 
         gl.glBegin(GL2.GL_QUADS );
-        draw(-18,20,100,100,gl);
+        draw(0,0,WIDTH,HEIGHT,gl);
+        gl.glEnd();
+        
+        
+        if(healthbar != null) {
+            healthbar.bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_QUADS );
+        draw(0,0,WIDTH,HEIGHT,gl);
+        gl.glEnd();
+       
+        
+
+        if(healthcross != null) {
+            healthcross.bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_QUADS );
+        draw(0,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
       
         
@@ -41,7 +63,7 @@ public class Hud {
         
         gl.glBegin(GL2.GL_QUADS );
         
-        draw(-18,20,36,36,gl);
+      //  draw(-18,20,36,36,gl);
         
         gl.glEnd();
         
@@ -79,9 +101,10 @@ public class Hud {
         gl.glLoadIdentity();
         
         //So I don't forget -Tim
-        //glOrtho(  GLdouble    left,GLdouble    righ,GLdouble    bottom,GLdouble    top, GLdouble    nearVal,GLdouble    farVal)
-        gl.glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
-
+        //glOrtho(left,right,bottom,top,nearVal,farVal)
+       // gl.glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f );
+        gl.glOrtho(-WIDTH, WIDTH, -HEIGHT, HEIGHT,-100f,100f );
+        
         gl.glMatrixMode(GL2.GL_MODELVIEW );
         gl.glPushMatrix(); // save our model matrix 
         gl.glLoadIdentity();
