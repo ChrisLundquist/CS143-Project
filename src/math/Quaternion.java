@@ -167,6 +167,20 @@ public class Quaternion implements Serializable {
 
         return matrix;
     }
+    
+    public Matrix3f toMatrix3f(){
+        return new Matrix3f(1.0f - 2.0f * ( y_ * y_ + z_ * z_ ),
+                2.0f * ( x_ * y_ - z_ * w_ ),
+                2.0f * ( x_ * z_ + y_ * w_ ),
+                
+                2.0f * (x_ * y_ + z_ * w_),
+                1.0f - 2.0f * ( x_ * x_ + z_ * z_ ),
+                2.0f * ( y_ * z_ - x_ * w_ ),
+                
+                2.0f * (x_ * z_ - y_ * w_),
+                2.0f * (z_ * y_ + x_ * w_ ),
+                1.0f - 2.0f * ( x_ * x_ + y_ * y_ ));
+    }
 
     public Vector3 pitchAxis() {
         return new Vector3(

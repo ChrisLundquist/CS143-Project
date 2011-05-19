@@ -8,7 +8,7 @@ import math.Vector4;
 
 public class Light implements java.io.Serializable{
     private static final long serialVersionUID = -7133937204421075824L;
-    protected static Random gen = new Random();
+    protected static Random gen = new Random(42);
     public static List<Light> lights = new ArrayList<Light>();
     float constantAttenuation, linearAttenuation, quadraticAttenuation;
     math.Vector4 position, ambient, diffuse, specular;
@@ -18,7 +18,7 @@ public class Light implements java.io.Serializable{
         light.setPosition(new Vector4(gen.nextFloat()* rangeMax,
                 gen.nextFloat() * rangeMax,
                 gen.nextFloat() * rangeMax,
-                gen.nextFloat() * rangeMax));
+                0.0f));
         light.setAmbient(new Vector4(gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat(),
