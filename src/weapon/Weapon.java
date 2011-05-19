@@ -29,11 +29,5 @@ public abstract class Weapon {
         lastShot = time;
     }
 
-    public void shoot(actor.Actor ship) {
-        //calculates time passed in milliseconds
-        if((System.currentTimeMillis() - getLastShotTime()) > getShotCoolDown()) {
-            game.Game.getActors().add(newProjectile(ship));
-            setLastShotTime(System.currentTimeMillis());
-        }
-    }
+    public abstract void shoot(actor.Actor ship);
 }
