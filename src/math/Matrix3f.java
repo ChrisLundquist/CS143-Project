@@ -65,19 +65,36 @@ public class Matrix3f {
     }
 
     public Matrix3f times(Matrix3f other){
-        float m0 = entries[0] * other.entries[0] + entries[1] * other.entries[3] + entries[2] * other.entries[6];
-        float m1 = entries[0] * other.entries[1] + entries[1] * other.entries[4] + entries[2] * other.entries[7];
-        float m2 = entries[0] * other.entries[2] + entries[1] * other.entries[5] + entries[2] * other.entries[8];
+        float[] result = new float[entries.length];
+        result[0] = entries[0] * other.entries[0] + entries[1] * other.entries[3] + entries[2] * other.entries[6];
+        result[1] = entries[0] * other.entries[1] + entries[1] * other.entries[4] + entries[2] * other.entries[7];
+        result[2] = entries[0] * other.entries[2] + entries[1] * other.entries[5] + entries[2] * other.entries[8];
 
-        float m3 = entries[3] * other.entries[0] + entries[4] * other.entries[3] + entries[5] * other.entries[6];
-        float m4 = entries[3] * other.entries[1] + entries[4] * other.entries[4] + entries[5] * other.entries[7];
-        float m5 = entries[3] * other.entries[2] + entries[4] * other.entries[5] + entries[5] * other.entries[8];
+        result[3] = entries[3] * other.entries[0] + entries[4] * other.entries[3] + entries[5] * other.entries[6];
+        result[4] = entries[3] * other.entries[1] + entries[4] * other.entries[4] + entries[5] * other.entries[7];
+        result[5] = entries[3] * other.entries[2] + entries[4] * other.entries[5] + entries[5] * other.entries[8];
 
-        float m6 = entries[6] * other.entries[0] + entries[7] * other.entries[3] + entries[8] * other.entries[6];
-        float m7 = entries[6] * other.entries[1] + entries[7] * other.entries[4] + entries[8] * other.entries[7];
-        float m8 = entries[6] * other.entries[2] + entries[7] * other.entries[5] + entries[8] * other.entries[8];
+        result[6] = entries[6] * other.entries[0] + entries[7] * other.entries[3] + entries[8] * other.entries[6];
+        result[7] = entries[6] * other.entries[1] + entries[7] * other.entries[4] + entries[8] * other.entries[7];
+        result[8] = entries[6] * other.entries[2] + entries[7] * other.entries[5] + entries[8] * other.entries[8];
+        return new Matrix3f(result);
+    }
 
-        return new Matrix3f(m0, m1, m2, m3, m4, m5, m6, m7, m8);
+    public Matrix3f timesEquals(Matrix3f other){
+        float[] result = new float[entries.length];
+        result[0] = entries[0] * other.entries[0] + entries[1] * other.entries[3] + entries[2] * other.entries[6];
+        result[1] = entries[0] * other.entries[1] + entries[1] * other.entries[4] + entries[2] * other.entries[7];
+        result[2] = entries[0] * other.entries[2] + entries[1] * other.entries[5] + entries[2] * other.entries[8];
+
+        result[3] = entries[3] * other.entries[0] + entries[4] * other.entries[3] + entries[5] * other.entries[6];
+        result[4] = entries[3] * other.entries[1] + entries[4] * other.entries[4] + entries[5] * other.entries[7];
+        result[5] = entries[3] * other.entries[2] + entries[4] * other.entries[5] + entries[5] * other.entries[8];
+
+        result[6] = entries[6] * other.entries[0] + entries[7] * other.entries[3] + entries[8] * other.entries[6];
+        result[7] = entries[6] * other.entries[1] + entries[7] * other.entries[4] + entries[8] * other.entries[7];
+        result[8] = entries[6] * other.entries[2] + entries[7] * other.entries[5] + entries[8] * other.entries[8];
+        entries = result;
+        return this;
     }
 
     public Vector3 times(Vector3 vec){
@@ -88,9 +105,11 @@ public class Matrix3f {
     }
 
     public Matrix3f times(float scalar){
-        return new Matrix3f(entries[0] * scalar, entries[1] * scalar, entries[2] * scalar,
-                entries[3] * scalar, entries[4] * scalar, entries[5] * scalar,
-                entries[6] * scalar, entries[7] * scalar, entries[8] * scalar);
+        float[] result = new float[entries.length];
+        for(int i = 0; i < result.length; i++)
+            result[i] =  entries[i] * scalar;
+
+        return new Matrix3f(result);
     }
 
     public Matrix3f transpose(){
