@@ -1,16 +1,19 @@
 package weapon;
 
 import actor.Actor;
+import actor.Projectile;
 
-public class Machinegun extends weapon.Weapon {
+public class Sniper extends weapon.Weapon {
     @Override
     public long getShotCoolDown() {
-        return 100;
+        return 1000;
     }
 
     @Override
     protected actor.Projectile newProjectile(actor.Actor ship) {
-        return new actor.Bullet(ship,1.0f);
+        Projectile bullet = new actor.Bullet(ship,50.0f);
+        System.out.println("velocity: "+bullet.getVelocity());
+        return bullet;
     }
 
     @Override
@@ -24,6 +27,6 @@ public class Machinegun extends weapon.Weapon {
 
     @Override
     public String getWeaponName() {
-        return "Machine Gun";
+        return "Sniper";
     }
 }

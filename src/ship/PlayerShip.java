@@ -10,6 +10,7 @@ public class PlayerShip extends ship.Ship {
         super();
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
+        weapons.add(new weapon.Sniper());
         shields.add(new shield.PlayerShield());
         modelName = MODEL_NAME;
     }
@@ -39,9 +40,10 @@ public class PlayerShip extends ship.Ship {
         changeRoll(-ROLL_DEGREE);
     }
     public void nextWeapon() {
-        System.err.println("Changing Weapon");
         // Get the next weapon in the list
         selectedWeapon = (selectedWeapon + 1) % weapons.size();
+
+        System.out.println("Switching to "+weapons.get(selectedWeapon).getWeaponName());
     }
     public void previousWeapon() {
         System.err.println("Changing Weapon");
