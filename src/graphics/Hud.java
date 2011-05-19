@@ -5,14 +5,22 @@ import java.awt.Toolkit;
 import javax.media.opengl.GL2;
 
 public class Hud {
-    Texture healthbackdrop, healthbar, healthcross, crosshair;
+    Texture healthbackdrop, healthbar, healthcross, healthcrossflash, crosshair, gunbar, gunbackdrop,
+    gunammosingle, gunammodouble, gunammomissile;
 
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
+    private static final String HEALTHCROSSFLASH = "assets/images/hud/health_cross_red.png";
     private static final String CROSSHAIR = "assets/images/hud/crosshair.png";
+    private static final String GUNBAR = "assets/images/hud/gun_bar.png";
+    private static final String GUNBACKDROP = "assets/images/hud/gun_backdrop.png";
+    private static final String GUNAMMOSINGLE = "assets/images/hud/gun_ammo_single.png";
+    private static final String GUNAMMODOUBLE = "assets/images/hud/gun_ammo_double.png";
+    private static final String GUNAMMOMISSILE = "assets/images/hud/gun_ammo_missile.png";
     private final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
     private final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+    
     /**
      * Constructor loads all the textures   
      */
@@ -20,7 +28,27 @@ public class Hud {
         healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
         healthbar = Texture.findOrCreateByName(HEALTHBAR);
         healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
-        crosshair =  Texture.findOrCreateByName(CROSSHAIR);
+        healthcrossflash =  Texture.findOrCreateByName(HEALTHCROSSFLASH);
+        gunbar = Texture.findOrCreateByName(GUNBAR);
+        gunbackdrop = Texture.findOrCreateByName(GUNBACKDROP);
+        gunammosingle = Texture.findOrCreateByName(GUNAMMOSINGLE);
+        gunammodouble = Texture.findOrCreateByName(GUNAMMODOUBLE);
+        gunammomissile = Texture.findOrCreateByName(GUNAMMOMISSILE);
+    }
+    
+    public void flashHealthCross(GL2 gl) {
+        start2D(gl);
+        
+       
+        if(healthcrossflash != null) {
+            healthcrossflash.bind(gl);
+        }
+        gl.glBegin(GL2.GL_QUADS);
+        draw(0,0,WIDTH,HEIGHT,gl);
+       
+        gl.glEnd();
+        gl.glFlush();
+        stop2D(gl);
     }
     /**
      * Draws the static elements of the HUD
@@ -46,8 +74,6 @@ public class Hud {
         draw(0,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
        
-        
-
         if(healthcross != null) {
             healthcross.bind(gl);
         }
@@ -55,16 +81,40 @@ public class Hud {
         gl.glBegin(GL2.GL_QUADS );
         draw(0,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
-      
+     
+        if(gunbackdrop != null) {
+            gunbackdrop.bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_QUADS );
+        draw(-500,0,WIDTH,HEIGHT,gl);
+        gl.glEnd();
+        
+        if(gunbar != null) {
+            gunbar.bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_QUADS );
+        draw(-500,0,WIDTH,HEIGHT,gl);
+        gl.glEnd();
+           
+        if(gunammosingle != null) {
+            gunammosingle.bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_QUADS );
+        draw(-500,0,WIDTH,HEIGHT,gl);
+        gl.glEnd();
+     
+        
+        
+        
         
         if(crosshair != null) {
             crosshair.bind(gl);
         }
-        
         gl.glBegin(GL2.GL_QUADS );
-        
-      //  draw(-18,20,36,36,gl);
-        
+        //draw(-18,20,36,36,gl);
         gl.glEnd();
         
         gl.glFlush();

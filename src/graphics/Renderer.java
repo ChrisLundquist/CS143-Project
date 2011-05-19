@@ -61,6 +61,7 @@ public class Renderer implements GLEventListener {
             render(a);
 
         hud.drawStaticHud(gl);
+       // hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
 
