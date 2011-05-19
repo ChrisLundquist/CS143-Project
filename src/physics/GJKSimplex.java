@@ -1,32 +1,32 @@
 package physics;
 
 import java.util.List;
-import math.Vector3;
+import math.Vector3f;
 import math.Supportable;
 
 // http://mollyrocket.com/forums/viewtopic.php?t=245
 public class GJKSimplex{
     private static final int MAX_ITTERATIONS = 20;
 
-    static boolean containsOrigin(List<Vector3> simplex) {
+    static boolean containsOrigin(List<Vector3f> simplex) {
         // If we don't have 4 points, then we can't enclose the origin in R3
         if(simplex.size() < 4)
             return false;
         
-        Vector3 a = simplex.get(3); 
-        Vector3 b = simplex.get(2); 
-        Vector3 c = simplex.get(1); 
-        Vector3 d = simplex.get(0); 
+        Vector3f a = simplex.get(3); 
+        Vector3f b = simplex.get(2); 
+        Vector3f c = simplex.get(1); 
+        Vector3f d = simplex.get(0); 
 
         // Compute all the edges we will use first, to avoid computing the same edge twice.
-        Vector3 ac = c.minus(a);
-        Vector3 ab = b.minus(a);
-        Vector3 bc = c.minus(b);
-        Vector3 bd = d.minus(b);
-        Vector3 ad = d.minus(a);
-        Vector3 ba = ab.negate();
-        Vector3 ao = a.negate();
-        Vector3 bo = b.negate();
+        Vector3f ac = c.minus(a);
+        Vector3f ab = b.minus(a);
+        Vector3f bc = c.minus(b);
+        Vector3f bd = d.minus(b);
+        Vector3f ad = d.minus(a);
+        Vector3f ba = ab.negate();
+        Vector3f ao = a.negate();
+        Vector3f bo = b.negate();
 
         
         /* We need to find the normals of all the faces
@@ -53,10 +53,10 @@ public class GJKSimplex{
          *                  \ /
          *                   A
          */
-        Vector3 abc = ac.cross(ab);
-        Vector3 bcd = bc.cross(bd);
-        Vector3 adb = ab.cross(ad);
-        Vector3 acd = ad.cross(ac);
+        Vector3f abc = ac.cross(ab);
+        Vector3f bcd = bc.cross(bd);
+        Vector3f adb = ab.cross(ad);
+        Vector3f acd = ad.cross(ac);
 
         /*
          * We don't know which way our sides are described, so we could have an inside out
@@ -81,7 +81,7 @@ public class GJKSimplex{
     /**
      *  update the simplex and the new direction
      */
-    static public Vector3 findSimplex(List<Vector3> simplex){
+    static public Vector3f findSimplex(List<Vector3f> simplex){
         switch(simplex.size()){
             case 2:
                 return findLineSimplex(simplex);
@@ -92,13 +92,13 @@ public class GJKSimplex{
         }
     }
 
-    static public Vector3 findLineSimplex(List<Vector3> simplex){
-        Vector3 newDirection;
+    static public Vector3f findLineSimplex(List<Vector3f> simplex){
+        Vector3f newDirection;
         //A is the point added last to the simplex 
-        Vector3 a = simplex.get(1); 
-        Vector3 b = simplex.get(0); 
-        Vector3 ab = b.minus(a); 
-        Vector3 ao = Vector3.ORIGIN.minus(a); 
+        Vector3f a = simplex.get(1); 
+        Vector3f b = simplex.get(0); 
+        Vector3f ab = b.minus(a); 
+        Vector3f ao = Vector3f.ORIGIN.minus(a); 
 
         if (ab.sameDirection(ao)) { 
             // The new direction is perpendicular to AB pointing to the origin
@@ -109,20 +109,20 @@ public class GJKSimplex{
         return newDirection;
     }
 
-    static public Vector3 findTriangleSimplex(List<Vector3> simplex){
-        Vector3 newDirection;
+    static public Vector3f findTriangleSimplex(List<Vector3f> simplex){
+        Vector3f newDirection;
         //A is the point added last to the simplex 
-        Vector3 a = simplex.get(2); 
-        Vector3 b = simplex.get(1); 
-        Vector3 c = simplex.get(0); 
-        Vector3 ao = Vector3.ORIGIN.minus(a); 
+        Vector3f a = simplex.get(2); 
+        Vector3f b = simplex.get(1); 
+        Vector3f c = simplex.get(0); 
+        Vector3f ao = Vector3f.ORIGIN.minus(a); 
 
         // The AB edge
-        Vector3 ab = b.minus(a); 
+        Vector3f ab = b.minus(a); 
         // the AC edge
-        Vector3 ac = c.minus(a); 
+        Vector3f ac = c.minus(a); 
         // The normal to the triangle
-        Vector3 abc = ab.cross(ac); 
+        Vector3f abc = ab.cross(ac); 
 
         if (abc.cross(ac).sameDirection(ao)) {
             // The origin is above
@@ -178,25 +178,23 @@ public class GJKSimplex{
         return newDirection;
     }
 
-    static public Vector3 findTetrahedronSimplex(List<Vector3> simplex){
+    static public Vector3f findTetrahedronSimplex(List<Vector3f> simplex){
         //A is the point added last to the simplex 
-        Vector3 a = simplex.get(3); 
-        Vector3 b = simplex.get(2); 
-        Vector3 c = simplex.get(1); 
-        Vector3 d = simplex.get(0); 
+        Vector3f a = simplex.get(3); 
+        Vector3f b = simplex.get(2); 
+        Vector3f c = simplex.get(1); 
+        Vector3f d = simplex.get(0); 
 
-        Vector3 ao = a.negate(); 
-        Vector3 ab = b.minus(a); 
-        Vector3 ac = c.minus(a); 
-        Vector3 ad = d.minus(a); 
-        //Vector3 abc = ab.cross(ac); 
-        Vector3 acd = ac.cross(ad); 
-        Vector3 adb = ad.cross(ab); 
+        Vector3f ao = a.negate(); 
+        Vector3f ab = b.minus(a); 
+        Vector3f ac = c.minus(a); 
+        Vector3f ad = d.minus(a); 
+        Vector3f acd = ac.cross(ad); 
+        Vector3f adb = ad.cross(ab); 
 
         //the side (positive or negative) of B, C and D relative to the planes of ACD, ADB and ABC respectively 
         int BsideOnACD = acd.dotProduct(ab) > 0.0f ? 1 : 0; 
         int CsideOnADB = adb.dotProduct(ac) > 0.0f ? 1 : 0; 
-        //int DsideOnABC = abc.dotProduct(ad) > 0.0f ? 1 : 0; 
 
         //whether the origin is on the same side of ACD/ADB/ABC as B, C and D respectively 
         boolean ABsameAsOrigin = (acd.dotProduct(ao) > 0.0f ? 1 : 0) == BsideOnACD; 
@@ -206,36 +204,33 @@ public class GJKSimplex{
             //B is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(b); 
             //the new direction is on the other side of ACD, relative to B 
-            //newDirection = acd.times(-BsideOnACD);
         } 
         //if the origin is not on the side of C relative to ADB 
         else if (!ACsameAsOrigin) { 
             //C is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(c); 
             //the new direction is on the other side of ADB, relative to C 
-            //newDirection = adb.times(-CsideOnADB); 
         } 
         //if the origin is not on the side of D relative to ABC 
         else //if (!ADsameAsOrigin) { 
             //D is farthest from the origin among all of the tetrahedron's points, so remove it from the list and go on with the triangle case 
             simplex.remove(d); 
         //the new direction is on the other side of ABC, relative to D 
-        //newDirection = abc.times(-DsideOnABC); 
 
         //go on with the triangle case 
         //TODO: maybe we should restrict the depth of the recursion, just like we restricted the number of iterations in BodiesIntersect? 
         return findTriangleSimplex(simplex);
     }
 
-    static Vector3 getSupport(Supportable lhs, Supportable rhs, Vector3 direction) {
+    static Vector3f getSupport(Supportable lhs, Supportable rhs, Vector3f direction) {
         return lhs.getFarthestPointInDirection(direction).minus(rhs.getFarthestPointInDirection(direction.negate()));
     }
 
     static public boolean isColliding(math.Supportable lhs, math.Supportable rhs){
-        List<Vector3> simplex = new java.util.ArrayList<Vector3>();
-        Vector3 support = getSupport(lhs,rhs,Vector3.UNIT_X);
+        List<Vector3f> simplex = new java.util.ArrayList<Vector3f>();
+        Vector3f support = getSupport(lhs,rhs,Vector3f.UNIT_X);
         simplex.add(support);
-        Vector3 direction = support.negate();
+        Vector3f direction = support.negate();
         int loopCounter = 0;
         // If A is in the same direction as we were heading, then we haven't crossed the origin,
         // so that means we can't get to the origin
@@ -252,7 +247,7 @@ public class GJKSimplex{
             direction = findSimplex(simplex);
             
             // If our dot product gave us the zero vector, our vectors must be colinear and we contain the origin and further test will break
-            if (direction.equals(Vector3.ZERO))
+            if (direction.equals(Vector3f.ZERO))
                 return true;
         }
         return false;

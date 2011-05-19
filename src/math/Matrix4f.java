@@ -13,7 +13,7 @@ public class Matrix4f {
     public static final Matrix4f IDENTITY = new Matrix4f();
     float[] entries;
 
-    public static Matrix4f newFromScale(Vector3 scale){
+    public static Matrix4f newFromScale(Vector3f scale){
         float[] entries = {scale.x,0,0,0,
                 0,scale.y,0,0,
                 0,0,scale.z,0,
@@ -110,16 +110,16 @@ public class Matrix4f {
         return this;
     }
 
-    public Vector3 times(Vector3 vec){
-        return new Vector3(
+    public Vector3f times(Vector3f vec){
+        return new Vector3f(
                 entries[0] * vec.x + entries[4] * vec.y + entries[8] * vec.z,
                 entries[1] * vec.x + entries[5] * vec.y + entries[9] * vec.z,
                 entries[2] * vec.x + entries[6] * vec.y + entries[10] * vec.z
         );
     }
     
-    public Vector4 times(Vector4 vec){
-        return new Vector4(
+    public Vector4f times(Vector4f vec){
+        return new Vector4f(
                 entries[0] * vec.x + entries[4] * vec.y + entries[8] * vec.z + entries[12] * vec.t,
                 entries[1] * vec.x + entries[5] * vec.y + entries[9] * vec.z + entries[13] * vec.t,
                 entries[2] * vec.x + entries[6] * vec.y + entries[10] * vec.z + entries[14] * vec.t,
@@ -194,5 +194,20 @@ public class Matrix4f {
 
     public float[] toFloatArray(){
         return entries;
+    }
+
+    public Matrix4f setTranslation(Vector3f position) {
+        entries[12] = position.x;
+        entries[13] = position.y;
+        entries[14] = position.z;
+        return this;
+    }
+    
+    public Matrix4f setTranslation(Vector4f position){
+        entries[12] = position.x;
+        entries[13] = position.y;
+        entries[14] = position.z;
+        entries[15] = position.t;
+        return this;
     }
 }

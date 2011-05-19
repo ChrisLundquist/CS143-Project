@@ -1,27 +1,27 @@
 package math;
 
-public class Vector4 extends Vector3 {
+public class Vector4f extends Vector3f {
     private static final long serialVersionUID = 6357784296699011970L;
     float t;
-    public Vector4(float x, float y, float z, float t){
+    public Vector4f(float x, float y, float z, float t){
         super(x,y,z);
         this.t = t;
     }
     
-    public Vector4(float x, float y, float z){
+    public Vector4f(float x, float y, float z){
         t = 1.0f;
     }
     
-    public Vector4(Vector3 xyz,float t){
+    public Vector4f(Vector3f xyz,float t){
         super(xyz);
         this.t = t;
     }
-    public Vector4() {
+    public Vector4f() {
         super();
         t = 0.0f;
     }
     
-    public Vector4(Vector4 other) {
+    public Vector4f(Vector4f other) {
         x = other.x;
         y = other.y;
         z = other.z;
@@ -31,12 +31,12 @@ public class Vector4 extends Vector3 {
     /**
      * This version ignores the 4th vector component
      */
-    public Vector4 times(Quaternion q){
+    public Vector4f times(Quaternion q){
         super.times(q);
         return this;
     }
     
-    public boolean equals(Vector4 other){
+    public boolean equals(Vector4f other){
        return super.equals(other) && t == other.t;
     }
 

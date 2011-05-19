@@ -68,16 +68,16 @@ public class Matrix3fTest {
 
     @Test
     public void testNewFromScale(){
-        assertEquals(Matrix3f.IDENTITY, Matrix3f.newFromScale(new Vector3(1,1,1)));
-        assertEquals(scale2, Matrix3f.newFromScale(new Vector3(2,2,2)));
-        assertEquals(scale3, Matrix3f.newFromScale(new Vector3(3,3,3)));
+        assertEquals(Matrix3f.IDENTITY, Matrix3f.newFromScale(new Vector3f(1,1,1)));
+        assertEquals(scale2, Matrix3f.newFromScale(new Vector3f(2,2,2)));
+        assertEquals(scale3, Matrix3f.newFromScale(new Vector3f(3,3,3)));
 
     }
     @Test
     public void testTimesVector3() {
-        Vector3 v = new Vector3(1,2,3);
-        assertEquals(scale2.times(v),new Vector3(2,4,6));
-        assertEquals(scale3.times(v),new Vector3(3,6,9));
+        Vector3f v = new Vector3f(1,2,3);
+        assertEquals(scale2.times(v),new Vector3f(2,4,6));
+        assertEquals(scale3.times(v),new Vector3f(3,6,9));
     }
 
     

@@ -1,7 +1,7 @@
 package actor;
 
 import math.Quaternion;
-import math.Vector3;
+import math.Vector3f;
 
 public abstract class Projectile extends Actor{
     private static final long serialVersionUID = 8097256529802244313L;
@@ -14,7 +14,7 @@ public abstract class Projectile extends Actor{
     public Projectile(Actor actor){
         super();
         this.velocity = actor.velocity.plus(actor.getDirection().times(DEFAULT_SPEED));
-        position = new Vector3(actor.getPosition());
+        position = new Vector3f(actor.getPosition());
         rotation = new Quaternion(actor.getRotation());
         parentId = actor.id;
         setSize(DEFAULT_SIZE);

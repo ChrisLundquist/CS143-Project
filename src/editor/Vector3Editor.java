@@ -10,13 +10,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-import math.Vector3;
+import math.Vector3f;
 
 public class Vector3Editor extends AbstractCellEditor implements TableCellEditor, ActionListener {
     private static final long serialVersionUID = 1026524672232357031L;
     protected static final String EDIT = "edit";
 
-    Vector3 vector3;
+    Vector3f vector3;
     JButton button;
 
     public Vector3Editor() {
@@ -43,7 +43,7 @@ public class Vector3Editor extends AbstractCellEditor implements TableCellEditor
             Float y = new Float(y_string);
             Float z = new Float(z_string);
 
-            vector3 = new Vector3();
+            vector3 = new Vector3f();
             vector3.x = x;
             vector3.y = y;
             vector3.z = z;
@@ -69,7 +69,7 @@ public class Vector3Editor extends AbstractCellEditor implements TableCellEditor
             int row,
             int column) {
 
-        vector3 = (Vector3)value;
+        vector3 = (Vector3f)value;
         button.setText(vector3.toString());
         return button;
     }

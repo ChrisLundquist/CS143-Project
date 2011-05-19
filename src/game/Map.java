@@ -13,7 +13,7 @@ import java.util.Random;
 
 import ship.CapitalShip;
 
-import math.Vector3;
+import math.Vector3f;
 import actor.Actor;
 
 public class Map implements Serializable {
@@ -57,22 +57,22 @@ public class Map implements Serializable {
         assert map.actors != null : "Actors was not initialized";
         assert map.spawningPositions != null : "Spawning positions was not initialized";
 
-        map.spawningPositions.add(new Vector3(20.0f, 0.0f, 0.0f));
-        map.spawningPositions.add(new Vector3(-20.0f, 0.0f, 0.0f));
-        map.spawningPositions.add(new Vector3(0.0f, 20.0f, 0.0f));
-        map.spawningPositions.add(new Vector3(0.0f, -20.0f, 0.0f));
-        map.spawningPositions.add(new Vector3(0.0f, 0.0f, 20.0f));
-        map.spawningPositions.add(new Vector3(0.0f, 0.0f, -20.0f));
+        map.spawningPositions.add(new Vector3f(20.0f, 0.0f, 0.0f));
+        map.spawningPositions.add(new Vector3f(-20.0f, 0.0f, 0.0f));
+        map.spawningPositions.add(new Vector3f(0.0f, 20.0f, 0.0f));
+        map.spawningPositions.add(new Vector3f(0.0f, -20.0f, 0.0f));
+        map.spawningPositions.add(new Vector3f(0.0f, 0.0f, 20.0f));
+        map.spawningPositions.add(new Vector3f(0.0f, 0.0f, -20.0f));
         
         
         Actor a = new actor.Asteroid();
-        a.setPosition(new math.Vector3(-20.0f,0.0f,-30.0f));
+        a.setPosition(new math.Vector3f(-20.0f,0.0f,-30.0f));
         map.actors.add(a);
         
         CapitalShip capitalShip = new ship.CapitalShip();
         // capitalShip.setSize(5f);
-        capitalShip.setSize(new math.Vector3(5,4,8));
-        capitalShip.setPosition(new math.Vector3(60f,0.0f,-40.0f));
+        capitalShip.setSize(new math.Vector3f(5,4,8));
+        capitalShip.setPosition(new math.Vector3f(60f,0.0f,-40.0f));
         //capitalShip.setVelocity(new math.Vector3(-.1f, 0f,-.2f));
         map.actors.add(capitalShip);
 
@@ -89,11 +89,11 @@ public class Map implements Serializable {
     public String name;
     public graphics.Skybox skybox;
     public List<Actor> actors;
-    public List<Vector3> spawningPositions;
+    public List<Vector3f> spawningPositions;
     // TODO private List<Object> triggers;
 
     public Map() {
-        this.spawningPositions = new java.util.ArrayList<Vector3>();
+        this.spawningPositions = new java.util.ArrayList<Vector3f>();
         this.actors = new java.util.ArrayList<Actor>();
     }
     
@@ -150,7 +150,7 @@ public class Map implements Serializable {
         }
     }
 
-    public Vector3 getSpawnPosition() {
+    public Vector3f getSpawnPosition() {
         return spawningPositions.get(rand.nextInt(spawningPositions.size()));
     }
 }

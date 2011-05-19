@@ -5,7 +5,7 @@ import graphics.Texture;
 
 import javax.media.opengl.GL2;
 
-import math.Vector3;
+import math.Vector3f;
 /**
  * Particle System for each particle
  * @author Tim Mikeladze, Chris Lundquist
@@ -19,7 +19,7 @@ public class FireParticle extends Particle  {
      * @param decay
      * @param size
      */
-    public FireParticle(actor.Actor actor,Vector3 direction) {
+    public FireParticle(actor.Actor actor,Vector3f direction) {
         super(actor,direction);
     }
 

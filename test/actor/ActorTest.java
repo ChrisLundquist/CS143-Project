@@ -3,7 +3,7 @@ package actor;
 import static org.junit.Assert.*;
 import math.Quaternion;
 import math.QuaternionTest;
-import math.Vector3;
+import math.Vector3f;
 import math.Vector3Test;
 
 import org.junit.After;
@@ -23,11 +23,11 @@ public class ActorTest {
     @Test
     public void testActor() {
         Actor a = new TestActor();
-        Vector3Test.assertVector3Equals(Vector3.ZERO, a.position);
-        Vector3Test.assertVector3Equals(Vector3.ZERO, a.velocity);
+        Vector3Test.assertVector3Equals(Vector3f.ZERO, a.position);
+        Vector3Test.assertVector3Equals(Vector3f.ZERO, a.velocity);
         QuaternionTest.assertQuaternionEquals(Quaternion.IDENTITY, a.rotation);
         QuaternionTest.assertQuaternionEquals(Quaternion.IDENTITY, a.angularVelocity);
-        Vector3Test.assertVector3Equals(new Vector3(1, 1, 1), a.scale);
+        Vector3Test.assertVector3Equals(new Vector3f(1, 1, 1), a.scale);
         assertEquals(0, a.age);
     }
 }

@@ -24,7 +24,7 @@ public class Bullet extends Projectile {
      * @param positionOffset the offset relative to the actor
      * @param direction
      */
-    public Bullet(Actor actor, Vector3 positionOffset){
+    public Bullet(Actor actor, Vector3f positionOffset){
         this(actor);
         position.plusEquals(positionOffset);
     }

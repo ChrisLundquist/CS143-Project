@@ -4,26 +4,26 @@ import actor.Positionable;
 import actor.Velocitable;
 
 public class Sphere implements Supportable, Positionable, Velocitable{
-    Vector3 position, velocity;
+    Vector3f position, velocity;
     float radius;
 
-    public Sphere(Vector3 position, float radius){
+    public Sphere(Vector3f position, float radius){
         this.radius = radius;
         this.position = position;
-        velocity = new Vector3(Vector3.ZERO);
+        velocity = new Vector3f(Vector3f.ZERO);
     }
 
     @Override
-    public Vector3 getFarthestPointInDirection(Vector3 direction) {
+    public Vector3f getFarthestPointInDirection(Vector3f direction) {
         return getPosition().plus(direction.normalize().times(radius));
     }
 
     @Override
-    public Vector3 getPosition() {
+    public Vector3f getPosition() {
         return position;
     }
     
-    public Sphere setPosition(Vector3 newPosition){
+    public Sphere setPosition(Vector3f newPosition){
         position = newPosition;
         return this;
     }
@@ -41,12 +41,12 @@ public class Sphere implements Supportable, Positionable, Velocitable{
     }
 
     @Override
-    public Vector3 getVelocity() {
+    public Vector3f getVelocity() {
         return velocity;
     }
 
     @Override
-    public Sphere setVelocity(Vector3 vel) {
+    public Sphere setVelocity(Vector3f vel) {
         velocity = vel;
         return this;
     }

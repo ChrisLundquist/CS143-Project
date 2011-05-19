@@ -1,8 +1,8 @@
 package actor;
 
-import math.Vector3;
+import math.Vector3f;
 
 public interface Positionable {
-    public Vector3 getPosition();
-    public Object setPosition(Vector3 newPosition);
+    public Vector3f getPosition();
+    public Object setPosition(Vector3f newPosition);
 }

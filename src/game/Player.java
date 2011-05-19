@@ -5,7 +5,7 @@ import input.InputRouter;
 
 import java.io.Serializable;
 
-import math.Vector3;
+import math.Vector3f;
 import ship.PlayerShip;
 import actor.Actor;
 import actor.ActorId;
@@ -99,7 +99,7 @@ public class Player implements Serializable {
         return (status == PlayerStatus.ALIVE);
     }
 
-    public void respawn(ActorSet actors, Vector3 position) {
+    public void respawn(ActorSet actors, Vector3f position) {
         if (shipId == null) {
             ship = getShip();
         } else {

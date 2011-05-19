@@ -14,7 +14,7 @@ public class Matrix3f {
     public static final Matrix3f IDENTITY = new Matrix3f();
     float[] entries;
 
-    public static Matrix3f newFromScale(Vector3 scale){
+    public static Matrix3f newFromScale(Vector3f scale){
         return new Matrix3f(scale.x,0,0,
                 0,scale.y,0,
                 0,0,scale.z);
@@ -97,8 +97,8 @@ public class Matrix3f {
         return this;
     }
 
-    public Vector3 times(Vector3 vec){
-        return new Vector3(entries[0] * vec.x + entries[3] * vec.y + entries[6] * vec.z,
+    public Vector3f times(Vector3f vec){
+        return new Vector3f(entries[0] * vec.x + entries[3] * vec.y + entries[6] * vec.z,
                 entries[1] * vec.x + entries[4] * vec.y + entries[7] * vec.z,
                 entries[2] * vec.x + entries[5] * vec.y + entries[8] * vec.z
         );
