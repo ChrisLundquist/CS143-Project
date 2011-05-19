@@ -1,8 +1,8 @@
 package actor;
 
-import math.Vector3;;
+import math.Vector3f;;
 
 public interface Velocitable{
-    public Vector3 getVelocity();
-    public Object setVelocity( Vector3 vel);
+    public Vector3f getVelocity();
+    public Object setVelocity( Vector3f vel);
 }

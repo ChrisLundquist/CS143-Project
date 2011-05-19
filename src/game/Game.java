@@ -67,7 +67,7 @@ public class Game {
         graphics.Model.loadModels();
 
         
-        a.setPosition(new math.Vector3(0.0f,0.0f,-10.0f));
+        a.setPosition(new math.Vector3f(0.0f,0.0f,-10.0f));
         //actor.Actor.addActor(a);
         
         //new GameThread().start();

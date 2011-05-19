@@ -38,46 +38,46 @@ public class QuaternionTest {
                 "| 00.000 00.000 01.000 00.000 |\n" +
                 "| 00.000 -1.000 00.000 00.000 |\n" +
                 "| 00.000 00.000 00.000 01.000 |",
-                new Quaternion(Vector3.UNIT_X, 90).toMatrixString());
+                new Quaternion(Vector3f.UNIT_X, 90).toMatrixString());
     }
     
     @Test
     public void testRollPitchAndYawAxies() {
         // Start with a fairly random rotation
-        Quaternion r = new Quaternion(Vector3.UNIT_X, 15); 
-        r.timesEquals(new Quaternion(Vector3.UNIT_Y, 7));
-        r.timesEquals(new Quaternion(Vector3.UNIT_Z, -328));
+        Quaternion r = new Quaternion(Vector3f.UNIT_X, 15); 
+        r.timesEquals(new Quaternion(Vector3f.UNIT_Y, 7));
+        r.timesEquals(new Quaternion(Vector3f.UNIT_Z, -328));
 
-        Vector3Test.assertVector3Equals(Vector3.UNIT_X.negate().times(r), r.pitchAxis());
-        Vector3Test.assertVector3Equals(Vector3.UNIT_Y.negate().times(r), r.yawAxis());
-        Vector3Test.assertVector3Equals(Vector3.UNIT_Z.negate().times(r), r.rollAxis());
+        Vector3Test.assertVector3Equals(Vector3f.UNIT_X.negate().times(r), r.pitchAxis());
+        Vector3Test.assertVector3Equals(Vector3f.UNIT_Y.negate().times(r), r.yawAxis());
+        Vector3Test.assertVector3Equals(Vector3f.UNIT_Z.negate().times(r), r.rollAxis());
     }
    
 
     @Test
     public void testGimbleLock() {
         Quaternion rotation = new Quaternion();
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, -90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, -90));
         
         // There should be a better way to compare within epsilon
         assertQuaternionEquals(Quaternion.IDENTITY, rotation);
         
         // Test that rotating through 360 degrees on all axies brings us back to normal
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 90));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 90));
         
         // Here we get a negative real component by the transformation matrix is the same
         assertQuaternionEquals(Quaternion.IDENTITY, rotation);        
@@ -104,10 +104,10 @@ public class QuaternionTest {
         
         for( int i = 0; i < (4 * 4096); i++){
             // Rotate a lot to denormalize our vector
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, i));
-            rotation.timesEquals(new Quaternion(Vector3.UNIT_X, i));
+            rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, i));
+            rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, i));
+            rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, i));
+            rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, i));
         }
         rotation.normalize();
     }
@@ -117,9 +117,9 @@ public class QuaternionTest {
         // Test the inverse works as expected
         // Sometimes the inverse isn't quite accurate, but every near due to floating point
         Quaternion rotation = new Quaternion();
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_X, 40));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 40));
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Z, 40));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 40));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 40));
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 40));
         assertQuaternionEquals(Quaternion.IDENTITY, rotation.times(rotation.inverse()));
 
     }
@@ -127,8 +127,8 @@ public class QuaternionTest {
     @Test
     public void testInversePerformance() {
         // This was showing up in TPTP as a slow spot
-        Quaternion original = new Quaternion(Vector3.UNIT_Z, 30);
-        original.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        Quaternion original = new Quaternion(Vector3f.UNIT_Z, 30);
+        original.timesEquals(new Quaternion(Vector3f.UNIT_Y, 237));
         
         Quaternion rotation = new Quaternion(original);
         
@@ -141,10 +141,10 @@ public class QuaternionTest {
     @Test
     public void testRotationPreformance() {
         // This was showing up in TPTP as a slow spot
-        Quaternion rotation = new Quaternion(Vector3.UNIT_Z, 30);
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        Quaternion rotation = new Quaternion(Vector3f.UNIT_Z, 30);
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 237));
         
-        Quaternion rotationDelta = new Quaternion(Vector3.UNIT_X, 0.1f);
+        Quaternion rotationDelta = new Quaternion(Vector3f.UNIT_X, 0.1f);
         
         for (int i = 0; i < 16 * 1024; i++)
             rotation.timesEquals(rotationDelta);
@@ -154,8 +154,8 @@ public class QuaternionTest {
     @Test
     public void testToGlMatrixPreformance() {
         // This was showing up in TPTP as a slow spot
-        Quaternion rotation = new Quaternion(Vector3.UNIT_Z, 30);
-        rotation.timesEquals(new Quaternion(Vector3.UNIT_Y, 237));
+        Quaternion rotation = new Quaternion(Vector3f.UNIT_Z, 30);
+        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 237));
         
         for (int i = 0; i < 16 * 1024; i++)
             rotation.toGlMatrix();

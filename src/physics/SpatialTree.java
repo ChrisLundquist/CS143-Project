@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 import actor.Positionable;
-import math.Vector3;
+import math.Vector3f;
 
 /**
  * Implements a spatial OctTree 
@@ -139,7 +139,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
      * @param position
      * @return
      */
-    private SpatialTree<E> octant(Vector3 position) {
+    private SpatialTree<E> octant(Vector3f position) {
         if (position.x > division_x) {
             if (position.y > division_y) {
                 if (position.z > division_z)
@@ -210,7 +210,7 @@ public class SpatialTree<E extends Object & Positionable> implements Iterable<E>
      */
     private void find_bounds(Collection<E> objects) {   
         for (E obj: objects) {
-            Vector3 pos = obj.getPosition();
+            Vector3f pos = obj.getPosition();
             max_x = Math.max(max_x, pos.x);
             min_x = Math.min(min_x, pos.x);
             max_y = Math.max(max_y, pos.y);

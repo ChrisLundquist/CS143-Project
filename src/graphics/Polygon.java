@@ -4,7 +4,7 @@
 package graphics;
 
 import java.util.List;
-import math.Vector3;
+import math.Vector3f;
 
 public class Polygon {
     private transient Material material;
@@ -12,14 +12,14 @@ public class Polygon {
     List<String> groups;
     private String materialName;
     public String object;
-    public final Vector3 normal;
+    public final Vector3f normal;
 
     public Polygon(String materialName, java.util.Collection<Vertex> verticies) {
         this.materialName = materialName;
         this.verticies = new java.util.ArrayList<Vertex>(verticies);
         this.groups = new java.util.ArrayList<String>();
         
-        Vector3 a, b, c;
+        Vector3f a, b, c;
         a = this.verticies.get(0).coord;
         b = this.verticies.get(1).coord;
         c = this.verticies.get(2).coord;
@@ -41,16 +41,16 @@ public class Polygon {
         return material;
     }
     
-    public Vector3 reflectDirection(Vector3 a) {
+    public Vector3f reflectDirection(Vector3f a) {
         return a.minus(normal.times(2 * a.dotProduct(normal)));
     }
     
-    public Vector3 parallelDirection(Vector3 a) {
+    public Vector3f parallelDirection(Vector3f a) {
         return a.minus(normal.times(a.dotProduct(normal)));
     }
     
-    public boolean isIntersecting(Vector3 origin, Vector3 direction) {
-        Vector3 delta = verticies.get(0).coord.minus(origin);
+    public boolean isIntersecting(Vector3f origin, Vector3f direction) {
+        Vector3f delta = verticies.get(0).coord.minus(origin);
                
         // Find the time when they intersect
         float t = normal.dotProduct(direction);
@@ -61,10 +61,10 @@ public class Polygon {
         if (t < 0) // We intersected the polygon in the past
             return false;
         
-        Vector3 intersection = origin.plus(direction.times(t));
+        Vector3f intersection = origin.plus(direction.times(t));
         
         // Walk around the polygon checking the intersection is on the inside of all the edges
-        Vector3 last = verticies.get(verticies.size() - 1).coord;
+        Vector3f last = verticies.get(verticies.size() - 1).coord;
         for (Vertex v: verticies) {
             if (intersection.minus(v.coord).cross(last.minus(v.coord)).dotProduct(normal) < 0)
                 return false;

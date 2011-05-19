@@ -24,7 +24,7 @@ public class SpatialTreeTest {
         for (float x = LOWER_BOUND; x <= UPPER_BOUND; x += INCREMENT)
             for (float y = LOWER_BOUND; y <= UPPER_BOUND; y += INCREMENT)
                 for (float z = LOWER_BOUND; z <= UPPER_BOUND; z += INCREMENT)
-                    objects.add(new math.Sphere(new math.Vector3(x, y, z),
+                    objects.add(new math.Sphere(new math.Vector3f(x, y, z),
                             RADIUS));
         //System.out.println(objects.size());
     }

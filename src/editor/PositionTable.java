@@ -2,14 +2,14 @@ package editor;
 
 import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
-import math.Vector3;
+import math.Vector3f;
 
 public class PositionTable extends AbstractTableModel {
     private static final long serialVersionUID = 3522933175518718194L;
     private static final String[] COLUMN_NAMES = {"id", "x", "y", "z"};
-    private Vector<Vector3> positions;
+    private Vector<Vector3f> positions;
     
-    public PositionTable(Vector<Vector3> positions) {
+    public PositionTable(Vector<Vector3f> positions) {
         this.positions = positions;
     }
 
@@ -30,7 +30,7 @@ public class PositionTable extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Vector3 p = positions.get(rowIndex);
+        Vector3f p = positions.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return rowIndex;
@@ -68,7 +68,7 @@ public class PositionTable extends AbstractTableModel {
          else
             return;
         
-        Vector3 p = positions.get(rowIndex);
+        Vector3f p = positions.get(rowIndex);
         switch (columnIndex) {
             case 1:
                 p.x = value;

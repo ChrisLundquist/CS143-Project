@@ -4,9 +4,10 @@ import graphics.Model;
 import java.io.Serializable;
 import java.util.Random;
 import physics.GJKSimplex;
+import math.Matrix4f;
 import math.Quaternion;
 import math.Supportable;
-import math.Vector3;
+import math.Vector3f;
 
 public abstract class Actor implements Serializable, Supportable, Movable, Collidable {
     protected static Random gen = new Random(); // Common random number generator object
@@ -28,16 +29,16 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      */
     protected transient ActorSet actors; 
     protected String modelName;
-    protected Vector3 position, velocity, scale;
+    protected Vector3f position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
 
 
     public Actor() {
         rotation = new Quaternion();
         angularVelocity = new Quaternion();
-        position = new Vector3();
-        velocity = new Vector3();
-        scale = new Vector3(1.0f,1.0f,1.0f);
+        position = new Vector3f();
+        velocity = new Vector3f();
+        scale = new Vector3f(1.0f,1.0f,1.0f);
         age = 0;
         //sets the time of the actor's birth 
         //setTimeStamp();
@@ -49,8 +50,8 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     public void bounce(Actor other) {
         // Transform our position and velocity into other's model space
-        Vector3 delta_p = position.minus(other.position);
-        Vector3 delta_v = velocity.minus(other.velocity);
+        Vector3f delta_p = position.minus(other.position);
+        Vector3f delta_v = velocity.minus(other.velocity);
         delta_p.x /= other.scale.x; delta_p.z /= other.scale.z; delta_p.z /= other.scale.z;
         delta_v.x /= other.scale.x; delta_v.z /= other.scale.z; delta_v.z /= other.scale.z;
         delta_p.timesEquals(other.rotation.inverse());
@@ -61,7 +62,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         // but its better than throwing excepions
         if(intersection == null)
             return; // We couldn't find the intersecting polygon so return so we don't throw an exception
-        Vector3 newVelocity = intersection.reflectDirection(delta_v);
+        Vector3f newVelocity = intersection.reflectDirection(delta_v);
 
         newVelocity.timesEquals(other.rotation);
         newVelocity.x *= other.scale.x; newVelocity.z *= other.scale.z; newVelocity.z *= other.scale.z;
@@ -101,11 +102,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         return angularVelocity;
     }
 
-    public Vector3 getDirection() {
+    public Vector3f getDirection() {
         return rotation.rollAxis();
     }
 
-    public Vector3 getFarthestPointInDirection(Vector3 direction){
+    public Vector3f getFarthestPointInDirection(Vector3f direction){
         // CL - put it into world space by translating it and rotating it
         // CL - NOTE we have to push the inverse of our transform of the direction
         //      so we can figure it out in model space
@@ -115,7 +116,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
 
 
-        Vector3 max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
+        Vector3f max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
         // Scale the point by our actor's scale in world space
         max.x *= scale.x;
         max.y *= scale.y;
@@ -154,7 +155,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     /**
      * @return the actors current position
      */
-    public Vector3 getPosition() {
+    public Vector3f getPosition() {
         return position;
     }
 
@@ -170,15 +171,22 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     /**
      * @return the actors size (for texture scaling and collision detection)
      */
-    public Vector3 getSize() {
+    public Vector3f getSize() {
         return scale;
     }
 
+    public Matrix4f getTransform(){
+        return Matrix4f.newFromScale(scale).times(getRotation().toMatrix4f()).setTranslation(getPosition());
+    }
+    
+    public Matrix4f getTransformInverse(){
+        return Matrix4f.newFromScale(new Vector3f(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z)).times(getRotation().inverse().toMatrix4f()).setTranslation(position.negate());
+    }
     /**
      * 
      * @return the actors current velocity
      */
-    public Vector3 getVelocity() {
+    public Vector3f getVelocity() {
         return velocity;
     }
 
@@ -209,7 +217,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      * @return if a collision is possible
      */
     private boolean isPossiblyColliding(Actor other) {
-        Vector3 delta_p = other.position.minus(position);
+        Vector3f delta_p = other.position.minus(position);
         float collisionRadius = other.velocity.minus(velocity).magnitude();
         collisionRadius += getRadius();
         collisionRadius += other.getRadius();
@@ -223,7 +231,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     }
     
     @Override
-    public Actor setPosition(Vector3 position) {
+    public Actor setPosition(Vector3f position) {
         this.position = position;
         return this;
     }
@@ -241,12 +249,12 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         return this;
     }
 
-    public Actor setSize(Vector3 size){
+    public Actor setSize(Vector3f size){
         scale = size;
         return this;
     }
 
-    public Actor setVelocity(Vector3 velocity) {
+    public Actor setVelocity(Vector3f velocity) {
         this.velocity = velocity;
         return this;
     }

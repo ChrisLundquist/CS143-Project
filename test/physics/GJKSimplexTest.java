@@ -36,36 +36,36 @@ public class GJKSimplexTest {
             a.setSize(0.5f); // Scale to 1x1x1
             b.setSize(0.5f);
             
-            a.setPosition(new Vector3(-2, 0, 0));
-            b.setPosition(new Vector3(2, 0, 0));
+            a.setPosition(new Vector3f(-2, 0, 0));
+            b.setPosition(new Vector3f(2, 0, 0));
 
             // They are not moving, so they shouldn't be colliding
             assertFalse(GJKSimplex.isColliding(a, b));
 
-            a.setVelocity(new Vector3(2, 0, 0));
-            b.setVelocity(new Vector3(-2, 0, 0));
+            a.setVelocity(new Vector3f(2, 0, 0));
+            b.setVelocity(new Vector3f(-2, 0, 0));
 
             // The two cubes should pass through each other
             assertTrue(GJKSimplex.isColliding(a, b));
             
             
             // Check case where they are moving perpendicular to each other
-            a.setPosition(new Vector3(0, 2, 0));
-            b.setPosition(new Vector3(2, 0, 0));
+            a.setPosition(new Vector3f(0, 2, 0));
+            b.setPosition(new Vector3f(2, 0, 0));
             
-            a.setVelocity(new Vector3(4, 0, 0));
-            b.setVelocity(new Vector3(0, 4, 0));
+            a.setVelocity(new Vector3f(4, 0, 0));
+            b.setVelocity(new Vector3f(0, 4, 0));
             assertTrue(GJKSimplex.isColliding(a, b));
             
             // Check case where one is approaching the other from behind
-            a.setPosition(new Vector3(0, 0, 0));
-            b.setPosition(new Vector3(4, 0, 0));
+            a.setPosition(new Vector3f(0, 0, 0));
+            b.setPosition(new Vector3f(4, 0, 0));
             
-            a.setVelocity(new Vector3(3, 0, 0));
-            b.setVelocity(new Vector3(2, 0, 0));
+            a.setVelocity(new Vector3f(3, 0, 0));
+            b.setVelocity(new Vector3f(2, 0, 0));
             assertFalse(GJKSimplex.isColliding(a, b)); // not fast enough
             
-            a.setVelocity(new Vector3(10, 0, 0));
+            a.setVelocity(new Vector3f(10, 0, 0));
             assertTrue(GJKSimplex.isColliding(a, b));
         }
 
@@ -81,7 +81,7 @@ public class GJKSimplexTest {
             actor.Asteroid cubeA = new actor.Asteroid();
 
             actor.Asteroid cubeB = new actor.Asteroid();
-            cubeB.setPosition(new Vector3(4,0,0));
+            cubeB.setPosition(new Vector3f(4,0,0));
 
             // They should be Colliding right now
             assertTrue(GJKSimplex.isColliding(cubeA, cubeB));
@@ -96,20 +96,20 @@ public class GJKSimplexTest {
 
     @Test
         public void testGetSupport() {
-            assertEquals(Vector3.UNIT_X.times(2),
-                    GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, Vector3.UNIT_X));
-            Sphere a = new Sphere(new Vector3(4, 0, 0), 1);
-            Sphere b = new Sphere(new Vector3(0, 0, 0), 1);
+            assertEquals(Vector3f.UNIT_X.times(2),
+                    GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, Vector3f.UNIT_X));
+            Sphere a = new Sphere(new Vector3f(4, 0, 0), 1);
+            Sphere b = new Sphere(new Vector3f(0, 0, 0), 1);
 
             // Test two no intersecting spheres considering the simple case where they are all on the x axis
-            assertEquals(new Vector3(6, 0, 0),
-                    GJKSimplex.getSupport(a, b, Vector3.UNIT_X));
-            assertEquals(new Vector3(2, 0, 0),
-                    GJKSimplex.getSupport(a, b, Vector3.UNIT_X.negate()));
+            assertEquals(new Vector3f(6, 0, 0),
+                    GJKSimplex.getSupport(a, b, Vector3f.UNIT_X));
+            assertEquals(new Vector3f(2, 0, 0),
+                    GJKSimplex.getSupport(a, b, Vector3f.UNIT_X.negate()));
 
             // Test two spheres of radius one on top of each other, support should be 2 in all directions
             for (int i = 0; i < 4096; i++) {
-                Vector3 direction = Vector3Test.getRandom(100);
+                Vector3f direction = Vector3Test.getRandom(100);
                 assertEquals(2, GJKSimplex.getSupport(SphereTest.UNIT_SPHERE, SphereTest.UNIT_SPHERE, direction).magnitude(), EPSILON); 
             }
 
@@ -118,87 +118,87 @@ public class GJKSimplexTest {
 
     @Test
         public void testContainsOrigin() {
-            java.util.List<Vector3> simplex = new java.util.ArrayList<Vector3>();
+            java.util.List<Vector3f> simplex = new java.util.ArrayList<Vector3f>();
 
             // An empty simplex should not contain the origin
             assertFalse(GJKSimplex.containsOrigin(simplex));
 
-            simplex.add(new Vector3(0f,    0f,    1f));
-            simplex.add(new Vector3(1f,    0f,    -0.5f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  -0.5f));
-            simplex.add(new Vector3(-0.5f, -0.5f, -0.5f));
+            simplex.add(new Vector3f(0f,    0f,    1f));
+            simplex.add(new Vector3f(1f,    0f,    -0.5f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  -0.5f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, -0.5f));
             assertTrue(GJKSimplex.containsOrigin(simplex));
 
             // A tetrahedron above the origin should not contain the origin.
             simplex.clear();
-            simplex.add(new Vector3(0f,    0f,    2f));
-            simplex.add(new Vector3(1f,    0f,    0.5f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
+            simplex.add(new Vector3f(0f,    0f,    2f));
+            simplex.add(new Vector3f(1f,    0f,    0.5f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  0.5f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 0.5f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
 
             // Try each permutation of this tetrahedren to test logic on all faces
             simplex.clear();
-            simplex.add(new Vector3(1f,    0f,    0.5f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
-            simplex.add(new Vector3(0f,    0f,    2f));
+            simplex.add(new Vector3f(1f,    0f,    0.5f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  0.5f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 0.5f));
+            simplex.add(new Vector3f(0f,    0f,    2f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
             simplex.clear();
-            simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
-            simplex.add(new Vector3(0f,    0f,    2f));
-            simplex.add(new Vector3(1f,    0f,    0.5f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  0.5f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 0.5f));
+            simplex.add(new Vector3f(0f,    0f,    2f));
+            simplex.add(new Vector3f(1f,    0f,    0.5f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
             simplex.clear();
-            simplex.add(new Vector3(-0.5f, -0.5f, 0.5f));
-            simplex.add(new Vector3(0f,    0f,    2f));
-            simplex.add(new Vector3(1f,    0f,    0.5f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  0.5f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 0.5f));
+            simplex.add(new Vector3f(0f,    0f,    2f));
+            simplex.add(new Vector3f(1f,    0f,    0.5f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  0.5f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
 
             // Now try the same tetrahedren inverted: vertex pointing at the origin
             simplex.clear();
-            simplex.add(new Vector3(0f,    0f,    0.5f));
-            simplex.add(new Vector3(1f,    0f,    2f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 2f));
+            simplex.add(new Vector3f(0f,    0f,    0.5f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 2f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
             simplex.clear();
-            simplex.add(new Vector3(1f,    0f,    2f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 2f));
-            simplex.add(new Vector3(0f,    0f,    0.5f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 2f));
+            simplex.add(new Vector3f(0f,    0f,    0.5f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
             simplex.clear();
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
-            simplex.add(new Vector3(-0.5f, -0.5f, 2f));
-            simplex.add(new Vector3(0f,    0f,    0.5f));
-            simplex.add(new Vector3(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 2f));
+            simplex.add(new Vector3f(0f,    0f,    0.5f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
             simplex.clear();
-            simplex.add(new Vector3(-0.5f, -0.5f, 2f));
-            simplex.add(new Vector3(0f,    0f,    0.5f));
-            simplex.add(new Vector3(1f,    0f,    2f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(-0.5f, -0.5f, 2f));
+            simplex.add(new Vector3f(0f,    0f,    0.5f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
             assertFalse(GJKSimplex.containsOrigin(simplex));
 
 
             // Test corner case
             simplex.clear();
-            simplex.add(new Vector3(0f,    0f,    0f));
-            simplex.add(new Vector3(0f,    0f,    0.5f));
-            simplex.add(new Vector3(1f,    0f,    2f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(0f,    0f,    0f));
+            simplex.add(new Vector3f(0f,    0f,    0.5f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
             assertTrue(GJKSimplex.containsOrigin(simplex));
 
             // and edge case
             // Test corner case
             simplex.clear();
-            simplex.add(new Vector3(-1f,   0f,    0f));
-            simplex.add(new Vector3(1f,    0f,    0f));
-            simplex.add(new Vector3(1f,    0f,    2f));
-            simplex.add(new Vector3(-0.5f, 0.5f,  2f));
+            simplex.add(new Vector3f(-1f,   0f,    0f));
+            simplex.add(new Vector3f(1f,    0f,    0f));
+            simplex.add(new Vector3f(1f,    0f,    2f));
+            simplex.add(new Vector3f(-0.5f, 0.5f,  2f));
             assertTrue(GJKSimplex.containsOrigin(simplex));
         }
 
@@ -207,10 +207,10 @@ public class GJKSimplexTest {
             actor.Asteroid cube1 = new actor.Asteroid();
 
             actor.Asteroid cube2 = new actor.Asteroid();
-            cube2.setPosition(new Vector3(16.0f,16.0f,16.0f));
+            cube2.setPosition(new Vector3f(16.0f,16.0f,16.0f));
 
             actor.Asteroid cube3 = new actor.Asteroid();
-            cube3.setPosition(new Vector3(16.0f,16.0f,15.0f));
+            cube3.setPosition(new Vector3f(16.0f,16.0f,15.0f));
 
             assertTrue(GJKSimplex.isColliding(cube1, cube1));
             assertFalse(GJKSimplex.isColliding(cube1, cube2));
@@ -238,11 +238,11 @@ public class GJKSimplexTest {
     @Test
         public void testSphereColliding(){
             // spheres at an arbitrary location and is obviously not colliding
-            Sphere s4441 = new Sphere(new Vector3(4.0f,4.0f,4.0f),1.0f);
-            Sphere s8881 = new Sphere(new Vector3(8.0f,8.0f,8.0f),1.0f);
-            Sphere s0004 = new Sphere(new Vector3(),4.0f);
-            Sphere s0505051 = new Sphere(new Vector3(0.5f,0.5f,0.5f),1.0f);
-            Sphere s050501 = new Sphere(new Vector3(0.5f,0.5f,0.0f),1.0f);
+            Sphere s4441 = new Sphere(new Vector3f(4.0f,4.0f,4.0f),1.0f);
+            Sphere s8881 = new Sphere(new Vector3f(8.0f,8.0f,8.0f),1.0f);
+            Sphere s0004 = new Sphere(new Vector3f(),4.0f);
+            Sphere s0505051 = new Sphere(new Vector3f(0.5f,0.5f,0.5f),1.0f);
+            Sphere s050501 = new Sphere(new Vector3f(0.5f,0.5f,0.0f),1.0f);
 
             assertFalse(GJKSimplex.isColliding(s4441, SphereTest.UNIT_SPHERE));
             // Order shouldn't matter for detection

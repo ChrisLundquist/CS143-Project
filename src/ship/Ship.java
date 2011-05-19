@@ -2,6 +2,9 @@ package ship;
 
 import java.util.List;
 
+import weapon.Weapon;
+
+
 import actor.Actor;
 
 public abstract class Ship extends Actor {
@@ -21,5 +24,22 @@ public abstract class Ship extends Actor {
     public void shoot(){
         weapons.get(selectedWeapon).shoot(this);
     }
+    
+    @Override
+    public void handleCollision(Actor other) {
+        System.err.println("Collision Detected Between " + other + " and " + this);
 
+        if(other instanceof actor.Projectile) {
+            //shield testing code
+            actor.Projectile projectile = (actor.Projectile) other;
+            shields.get(0).takeDamage(projectile.getDamage());
+            if(shields.get(0).getStatus() == false){
+                //delete();
+            }
+            System.out.println(shields.get(0).getPower());
+        }
+        else if (other instanceof Ship) {
+
+        }
+    }
 }

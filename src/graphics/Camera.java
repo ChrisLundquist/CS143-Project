@@ -4,19 +4,19 @@ import javax.media.opengl.GL2;
 
 import actor.Actor;
 import math.Quaternion;
-import math.Vector3;
+import math.Vector3f;
 
 /*
  * A camera is kind of like an actor in that it has a position and rotation
  * but it's position and rotation are opposite of the actors.
  */
 public class Camera implements actor.Movable{
-    Vector3 position, velocity;
+    Vector3f position, velocity;
     Quaternion rotation;
     
     public Camera() {
-        position = new Vector3();
-        velocity = new Vector3();
+        position = new Vector3f();
+        velocity = new Vector3f();
         rotation = new Quaternion();
     }
 
@@ -38,23 +38,23 @@ public class Camera implements actor.Movable{
     }
 
     @Override
-    public Vector3 getPosition() {
+    public Vector3f getPosition() {
         return position;
     }
 
     @Override
-    public Camera setPosition(Vector3 newPosition) {
+    public Camera setPosition(Vector3f newPosition) {
         position = newPosition;
         return this;
     }
 
     @Override
-    public Vector3 getVelocity() {
+    public Vector3f getVelocity() {
         return velocity;
     }
 
     @Override
-    public Camera setVelocity(Vector3 vel) {
+    public Camera setVelocity(Vector3f vel) {
         velocity = vel;
         return this;
     }

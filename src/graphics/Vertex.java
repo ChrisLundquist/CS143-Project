@@ -2,25 +2,25 @@
  * 
  */
 package graphics;
-import math.Vector3;
+import math.Vector3f;
 public class Vertex {
-    Vector3 coord; // Model space coordinates
+    Vector3f coord; // Model space coordinates
     float u; // Texture coordinates
     float v;
 
     public Vertex(float x, float y, float z, float u, float v) {
-        this(new Vector3(x,y,z));
+        this(new Vector3f(x,y,z));
         this.u = u;
         this.v = v;
     }
 
     public Vertex(float x, float y, float z) {
-        this(new Vector3(x,y,z));
+        this(new Vector3f(x,y,z));
         this.u = 0.0f;
         this.v = 0.0f; 
     }
 
-    public Vertex(Vector3 coord){
+    public Vertex(Vector3f coord){
         this.coord = coord;
         u = 0.0f;
         v = 0.0f;

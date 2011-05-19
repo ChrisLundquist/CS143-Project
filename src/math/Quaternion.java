@@ -6,6 +6,11 @@ public class Quaternion implements Serializable {
     private static final long serialVersionUID = 5284423308557214091L;
     public static final Quaternion IDENTITY = new Quaternion();
 
+    float w_; // real
+    float x_; // i
+    float y_; // j
+    float z_; // k
+
     public Quaternion() {
         w_ = 1.0f; // real
         x_ = 0.0f; // i
@@ -25,7 +30,7 @@ public class Quaternion implements Serializable {
      * @param axis the vector about which to rotate
      * @param degress the angle to rotate through
      */
-    public Quaternion(Vector3 axis, float degrees) {
+    public Quaternion(Vector3f axis, float degrees) {
         float radians = degrees / 180.0f * (float)Math.PI;
 
         float angle = (float)Math.sin(radians / 2.0f);
@@ -148,17 +153,17 @@ public class Quaternion implements Serializable {
                 2.0f * ( x_ * y_ - z_ * w_ ),
                 2.0f * ( x_ * z_ + y_ * w_ ),
                 0.0f,
-                
+
                 2.0f * (x_ * y_ + z_ * w_),
                 1.0f - 2.0f * ( x_ * x_ + z_ * z_ ),
                 2.0f * ( y_ * z_ - x_ * w_ ),
                 0.0f,
-                
+
                 2.0f * (x_ * z_ - y_ * w_),
                 2.0f * (z_ * y_ + x_ * w_ ),
                 1.0f - 2.0f * ( x_ * x_ + y_ * y_ ),
                 0.0f,
-                
+
                 0.0f,
                 0.0f,
                 0.0f,
@@ -168,24 +173,32 @@ public class Quaternion implements Serializable {
         return matrix;
     }
 
-    public Vector3 pitchAxis() {
-        return new Vector3(
+    public Matrix3f toMatrix3f(){
+        return Matrix3f.newFromQuaternion(this);
+    }
+
+    public Matrix4f toMatrix4f() {
+        return Matrix4f.newFromQuaternion(this);
+    }
+
+    public Vector3f pitchAxis() {
+        return new Vector3f(
                 -1.0f + 2.0f * ( y_ * y_ + z_ * z_ ),
                 -2.0f * ( x_ * y_ - z_ * w_ ),
                 -2.0f * ( x_ * z_ + y_ * w_ )
         );
     }
 
-    public Vector3 yawAxis() {
-        return new Vector3(
+    public Vector3f yawAxis() {
+        return new Vector3f(
                 -2.0f * (x_ * y_ + z_ * w_),
                 -1.0f + 2.0f * ( x_ * x_ + z_ * z_ ),
                 -2.0f * ( y_ * z_ - x_ * w_ )
         );
     }
 
-    public Vector3 rollAxis() {
-        return new Vector3 (
+    public Vector3f rollAxis() {
+        return new Vector3f (
                 -2.0f * (x_ * z_ - y_ * w_),
                 -2.0f * (z_ * y_ + x_ * w_ ),
                 -1.0f + 2.0f * ( x_ * x_ + y_ * y_ )
@@ -203,9 +216,4 @@ public class Quaternion implements Serializable {
     float getRoll() {
         return (float) ((float) Math.atan2(2*(x_*y_ + w_*z_), w_*w_ + x_*x_ - y_*y_ - z_*z_) * 180.0 / Math.PI);
     }
-
-    float w_; // real
-    float x_; // i
-    float y_; // j
-    float z_; // k
 }

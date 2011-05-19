@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
-import math.Vector3;
+import math.Vector3f;
 import actor.Actor;
 import ship.PlayerShip;
 
@@ -52,12 +52,12 @@ public class GridTester {
         Map<Actor,Color> actormap = new HashMap<Actor,Color>();
         
         Actor ship = new PlayerShip();
-        ship.setPosition(new Vector3(50,20,-20));
+        ship.setPosition(new Vector3f(50,20,-20));
         ship.setSize(10);
         actormap.put(ship,Color.RED);
         
         Actor ship2 = new PlayerShip();
-        ship2.setPosition(new Vector3(10,-5,20));
+        ship2.setPosition(new Vector3f(10,-5,20));
         ship2.setSize(10);
         actormap.put(ship2,Color.BLUE);
         
