@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import math.Vector3;
+import math.Vector3f;
 
 public class Model implements math.Supportable{
     static final String MODEL_PATH = "assets/models/";
@@ -111,8 +111,8 @@ public class Model implements math.Supportable{
     }
 
     @Override
-    public Vector3 getFarthestPointInDirection(Vector3 direction) {
-        Vector3 max = polygons.get(0).verticies.get(0).coord;
+    public Vector3f getFarthestPointInDirection(Vector3f direction) {
+        Vector3f max = polygons.get(0).verticies.get(0).coord;
 
         // Loop though all of our polygons
         for(Polygon p : polygons){
@@ -124,10 +124,10 @@ public class Model implements math.Supportable{
             }
         }
         // It is important we return a new vector and not a reference to one in our geometry
-        return new Vector3(max);
+        return new Vector3f(max);
     }
 
-    public Polygon getIntersectingPolygon(Vector3 origin, Vector3 direction) {
+    public Polygon getIntersectingPolygon(Vector3f origin, Vector3f direction) {
         for(Polygon p : polygons) {
             if (p.isIntersecting(origin, direction)) {
                 return p;

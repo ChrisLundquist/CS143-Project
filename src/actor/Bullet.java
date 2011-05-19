@@ -6,6 +6,7 @@ public class Bullet extends Projectile {
     private static final long serialVersionUID = -3860927022451699968L;
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     protected static final float BULLET_SPEED = 1.0f;
+    protected static final int BULLET_DAMAGE = 5;
     
     protected static final String MODEL_NAME = "bullet";
     private static final String SOUND_EFFECT = "Gun1.wav";
@@ -15,6 +16,7 @@ public class Bullet extends Projectile {
         graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         sound.Manager.addEvent(new sound.Event(actor.getPosition().toFloatArray(), actor.getVelocity().toFloatArray(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.times(BULLET_SPEED);
+        damage = BULLET_DAMAGE;
     }
 
     /**
@@ -22,7 +24,7 @@ public class Bullet extends Projectile {
      * @param positionOffset the offset relative to the actor
      * @param direction
      */
-    public Bullet(Actor actor, Vector3 positionOffset){
+    public Bullet(Actor actor, Vector3f positionOffset){
         this(actor);
         position.plusEquals(positionOffset);
     }

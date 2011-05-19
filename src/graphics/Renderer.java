@@ -25,13 +25,12 @@ public class Renderer implements GLEventListener {
     GLU glu;
     GLCanvas canvas;
     Frame frame;
-    //Animator animator;
     FPSAnimator animator;
     Shader shader;
     Hud hud;
     Camera camera;
-    private GL2 gl;
-    //ParticleFire particle;
+    private GL2 gl; // Must be recached each frame
+    
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
@@ -170,10 +169,8 @@ public class Renderer implements GLEventListener {
                 gl.glTexCoord2f(c.u, c.v); 
                 gl.glVertex3f(c.getX(), c.getY(), c.getZ());
             }
-
         }
         gl.glEnd();
-
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
@@ -241,7 +238,7 @@ public class Renderer implements GLEventListener {
     
     private void render(Skybox skybox) {
         gl.glPushMatrix();
-        math.Vector3 pos = camera.position;
+        math.Vector3f pos = camera.position;
         gl.glTranslatef(-pos.x, -pos.y, -pos.z);
         gl.glScalef(Skybox.SKYBOX_SIZE, Skybox.SKYBOX_SIZE , Skybox.SKYBOX_SIZE);
         render(skybox.getModel());

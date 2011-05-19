@@ -76,15 +76,15 @@ public class Manager {
         return al;
     }
     
-    static private void setListenerPosition(math.Vector3 listenerPos ){
+    static private void setListenerPosition(math.Vector3f listenerPos ){
             getAL().alListenerfv(AL.AL_POSITION, listenerPos.toFloatArray(), 0);
     }
     
-    static private void setListenerVelocity(math.Vector3 listenerVel){
+    static private void setListenerVelocity(math.Vector3f listenerVel){
         getAL().alListenerfv(AL.AL_VELOCITY, listenerVel.toFloatArray(), 0);
     }
     
-    static private void setListenerOrientation(math.Vector3 listenerOri, math.Vector3 listenerUp){
+    static private void setListenerOrientation(math.Vector3f listenerOri, math.Vector3f listenerUp){
         float[] orientation = new float[6];
         orientation[0] = listenerOri.x;
         orientation[1] = listenerOri.y;

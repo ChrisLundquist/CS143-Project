@@ -1,7 +1,7 @@
 package actor;
 
 import math.Quaternion;
-import math.Vector3;
+import math.Vector3f;
 
 public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
@@ -9,7 +9,7 @@ public class Asteroid extends Actor {
 
     public Asteroid(){
         super();
-        angularVelocity = new Quaternion(Vector3.UNIT_Y, 1);
+        angularVelocity = new Quaternion(Vector3f.UNIT_Y, 1);
         modelName = MODEL_NAME;
     }
 

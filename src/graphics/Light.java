@@ -4,30 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.media.opengl.GL2;
-import math.Vector4;
+import math.Vector4f;
 
 public class Light implements java.io.Serializable{
     private static final long serialVersionUID = -7133937204421075824L;
-    protected static Random gen = new Random();
+    protected static Random gen = new Random(42);
     public static List<Light> lights = new ArrayList<Light>();
     float constantAttenuation, linearAttenuation, quadraticAttenuation;
-    math.Vector4 position, ambient, diffuse, specular;
+    math.Vector4f position, ambient, diffuse, specular;
 
     public static Light newRandom(float rangeMax){
         Light light = new Light();
-        light.setPosition(new Vector4(gen.nextFloat()* rangeMax,
+        light.setPosition(new Vector4f(gen.nextFloat()* rangeMax,
                 gen.nextFloat() * rangeMax,
                 gen.nextFloat() * rangeMax,
-                gen.nextFloat() * rangeMax));
-        light.setAmbient(new Vector4(gen.nextFloat(),
+                0.0f));
+        light.setAmbient(new Vector4f(gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat()));
-        light.setDiffuse(new Vector4(gen.nextFloat(),
+        light.setDiffuse(new Vector4f(gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat()));
-        light.setSpecular(new Vector4(gen.nextFloat(),
+        light.setSpecular(new Vector4f(gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat(),
                 gen.nextFloat()));
@@ -35,16 +35,16 @@ public class Light implements java.io.Serializable{
         return light;
     }
     public Light(){
-        position = new Vector4();
-        ambient = new Vector4();
-        diffuse = new Vector4();
-        specular = new Vector4();
+        position = new Vector4f();
+        ambient = new Vector4f();
+        diffuse = new Vector4f();
+        specular = new Vector4f();
         constantAttenuation = 100.0f;
         linearAttenuation = 500.0f;
         quadraticAttenuation = 10.0f;
     }
 
-    public math.Vector4 getAmbient() {
+    public math.Vector4f getAmbient() {
         return ambient;
     }
 
@@ -52,7 +52,7 @@ public class Light implements java.io.Serializable{
         return constantAttenuation;
     }
 
-    public math.Vector4 getDiffuse() {
+    public math.Vector4f getDiffuse() {
         return diffuse;
     }
 
@@ -60,7 +60,7 @@ public class Light implements java.io.Serializable{
         return linearAttenuation;
     }
 
-    public math.Vector4 getPosition() {
+    public math.Vector4f getPosition() {
         return position;
     }
 
@@ -68,11 +68,11 @@ public class Light implements java.io.Serializable{
         return quadraticAttenuation;
     }
 
-    public math.Vector4 getSpecular() {
+    public math.Vector4f getSpecular() {
         return specular;
     }
 
-    public Light setAmbient(math.Vector4 ambient) {
+    public Light setAmbient(math.Vector4f ambient) {
         this.ambient = ambient;
         return this;
     }
@@ -82,7 +82,7 @@ public class Light implements java.io.Serializable{
         return this;
     }
 
-    public Light setDiffuse(math.Vector4 diffuse) {
+    public Light setDiffuse(math.Vector4f diffuse) {
         this.diffuse = diffuse;
         return this;
     }
@@ -92,7 +92,7 @@ public class Light implements java.io.Serializable{
         return this;
     }
 
-    public Light setPosition(math.Vector4 position) {
+    public Light setPosition(math.Vector4f position) {
         this.position = position;
         return this;
     }
@@ -102,7 +102,7 @@ public class Light implements java.io.Serializable{
         return this;
     }
 
-    public Light setSpecular(math.Vector4 specular) {
+    public Light setSpecular(math.Vector4f specular) {
         this.specular = specular;
         return this;
     }

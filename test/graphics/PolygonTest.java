@@ -2,7 +2,7 @@ package graphics;
 
 import static org.junit.Assert.*;
 import java.util.List;
-import math.Vector3;
+import math.Vector3f;
 import math.Vector3Test;
 import org.junit.After;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class PolygonTest {
         Polygon p = new Polygon(verticies);
         
         assertEquals(4, p.verticies.size());
-        Vector3Test.assertVector3Equals(Vector3.UNIT_Z, p.normal);
+        Vector3Test.assertVector3Equals(Vector3f.UNIT_Z, p.normal);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class PolygonTest {
         
         Polygon p = new Polygon(verticies);
         
-        Vector3Test.assertVector3Equals(Vector3.UNIT_Z.negate(), p.reflectDirection(Vector3.UNIT_Z));
+        Vector3Test.assertVector3Equals(Vector3f.UNIT_Z.negate(), p.reflectDirection(Vector3f.UNIT_Z));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class PolygonTest {
         
         Polygon p = new Polygon(verticies);
         
-        Vector3Test.assertVector3Equals(Vector3.ZERO, p.parallelDirection(Vector3.UNIT_Z));
+        Vector3Test.assertVector3Equals(Vector3f.ZERO, p.parallelDirection(Vector3f.UNIT_Z));
     }
 
     @Test
@@ -72,20 +72,20 @@ public class PolygonTest {
         
         Polygon p = new Polygon(verticies);
         
-        assertTrue(p.isIntersecting(Vector3.ORIGIN, Vector3.UNIT_Z)); 
-        assertFalse(p.isIntersecting(Vector3.ORIGIN, Vector3.UNIT_Y));
-        assertFalse(p.isIntersecting(Vector3.ORIGIN, Vector3.UNIT_X));
-        assertTrue(p.isIntersecting(Vector3.ORIGIN, new Vector3(0.099f, 0.099f, 1)));
-        assertFalse(p.isIntersecting(Vector3.ORIGIN, new Vector3(0.11f, 0.11f, 1)));
-        assertFalse(p.isIntersecting(new Vector3(2, 0, 0), Vector3.UNIT_Z));
-        assertFalse(p.isIntersecting(new Vector3(0, 2, 0), Vector3.UNIT_Z));
-        assertFalse(p.isIntersecting(new Vector3(-2, 0, 0), Vector3.UNIT_Z));
-        assertFalse(p.isIntersecting(new Vector3(0, -2, 0), Vector3.UNIT_Z));
-        assertTrue(p.isIntersecting(new Vector3(1, 0, 0), Vector3.UNIT_Z));
-        assertTrue(p.isIntersecting(new Vector3(0, 1, 0), Vector3.UNIT_Z));
-        assertTrue(p.isIntersecting(new Vector3(-1, 0, 0), Vector3.UNIT_Z));
-        assertTrue(p.isIntersecting(new Vector3(0, -1, 0), Vector3.UNIT_Z));
-        assertFalse(p.isIntersecting(new Vector3(0, 0, 20), Vector3.UNIT_Z));
+        assertTrue(p.isIntersecting(Vector3f.ORIGIN, Vector3f.UNIT_Z)); 
+        assertFalse(p.isIntersecting(Vector3f.ORIGIN, Vector3f.UNIT_Y));
+        assertFalse(p.isIntersecting(Vector3f.ORIGIN, Vector3f.UNIT_X));
+        assertTrue(p.isIntersecting(Vector3f.ORIGIN, new Vector3f(0.099f, 0.099f, 1)));
+        assertFalse(p.isIntersecting(Vector3f.ORIGIN, new Vector3f(0.11f, 0.11f, 1)));
+        assertFalse(p.isIntersecting(new Vector3f(2, 0, 0), Vector3f.UNIT_Z));
+        assertFalse(p.isIntersecting(new Vector3f(0, 2, 0), Vector3f.UNIT_Z));
+        assertFalse(p.isIntersecting(new Vector3f(-2, 0, 0), Vector3f.UNIT_Z));
+        assertFalse(p.isIntersecting(new Vector3f(0, -2, 0), Vector3f.UNIT_Z));
+        assertTrue(p.isIntersecting(new Vector3f(1, 0, 0), Vector3f.UNIT_Z));
+        assertTrue(p.isIntersecting(new Vector3f(0, 1, 0), Vector3f.UNIT_Z));
+        assertTrue(p.isIntersecting(new Vector3f(-1, 0, 0), Vector3f.UNIT_Z));
+        assertTrue(p.isIntersecting(new Vector3f(0, -1, 0), Vector3f.UNIT_Z));
+        assertFalse(p.isIntersecting(new Vector3f(0, 0, 20), Vector3f.UNIT_Z));
     }
 
 }

@@ -1,31 +1,17 @@
 package ship;
 
-import actor.Actor;
-
 public class PlayerShip extends ship.Ship {
     private static final float TURN_SPEED = 0.01f;
     private static final float ROLL_DEGREE = 0.05f;
     private static final long serialVersionUID = 260627862699350716L;
     private static final String MODEL_NAME = "ship_test";
 
-    long lastShotTime, lastRollLeftTime;
-
     public PlayerShip(){
         super();
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
+        shields.add(new shield.PlayerShield());
         modelName = MODEL_NAME;
-    }
-    @Override
-    public void handleCollision(Actor other) {
-        System.err.println("Collision Detected Between " + other + " and " + this);
-
-        if(other instanceof actor.Projectile) {
-            
-        }
-        else if (other instanceof Ship) {
-
-        }
     }
 
     public void forwardThrust() {
@@ -55,12 +41,12 @@ public class PlayerShip extends ship.Ship {
     public void nextWeapon() {
         System.err.println("Changing Weapon");
         // Get the next weapon in the list
-        selectedWeapon = selectedWeapon + 1 % weapons.size();
+        selectedWeapon = (selectedWeapon + 1) % weapons.size();
     }
     public void previousWeapon() {
         System.err.println("Changing Weapon");
         // Get the next weapon in the list
-        selectedWeapon = selectedWeapon - 1 % weapons.size();
+        selectedWeapon = (selectedWeapon - 1) % weapons.size();
     }
     
     public void setWeapon(int weaponNumber){
@@ -73,5 +59,4 @@ public class PlayerShip extends ship.Ship {
         dampenAngularVelocity();
         velocity = velocity.times(0.95f);
     }
-
 }
