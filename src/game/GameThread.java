@@ -33,6 +33,7 @@ public class GameThread extends Thread {
     public void run() {
         for(int i = 0; i < collisionThreads.length; ++i)
             collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
+
         while (gameState != STATE_STOPPED) {
             int frames = waitForNextFrame();
             
@@ -42,7 +43,7 @@ public class GameThread extends Thread {
             // Don't update the game state if we are paused
             if(gameState == STATE_PAUSED)
                 continue;
-            sound.Manager.processEvents();
+
             for(int i = 0; i < collisionThreads.length; ++i)
                 pool.execute(collisionThreads[i]);
             

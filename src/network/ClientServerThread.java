@@ -51,14 +51,14 @@ public class ClientServerThread extends AbstractConnectionThread {
             
             return new JoinMessage(player);
         } if (msg instanceof UpdateMessage) {
-            //UpdateMessage update = (UpdateMessage) msg;
+            UpdateMessage update = (UpdateMessage) msg;
             status = CONNECTED;
-            //Actor.updateFromNetwork(update.getActors(), player.getShip());
+            update.applyTo(actors);
         }
 
         rate_limit();
 
-        return new UpdateMessage(game.Game.getPlayer());
+        return new UpdateMessage(player, newActors);
     }
     
     public int getStatus() {

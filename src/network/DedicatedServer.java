@@ -47,15 +47,14 @@ public class DedicatedServer extends Thread {
 
     public void removePlayer(Player player) {
         players.remove(player);
-        //Actor.removeActor(player.getShip());
+        actors.remove(player.getShip());
     }
 
     public void run() {
         startup();
         
-        while (running) {
-            Thread.yield();
-        }
+        // Calling .run() instead of .start() so we don't start a new thread and we keep blocking until the server shuts down
+        new ServerCli(this, System.out, System.in).run();
         
         shutdown();
     }
@@ -93,7 +92,6 @@ public class DedicatedServer extends Thread {
         game.start();
         
         new ListenerThread(socket, this).start();
-        new ServerCli(this, System.out, System.in).run();
     }
 
     public ActorSet getActors() {

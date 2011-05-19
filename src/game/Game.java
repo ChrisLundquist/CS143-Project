@@ -45,6 +45,11 @@ public class Game {
                 player.updateCamera();
             }
         });
+        game.addCallback(new Updateable() {
+            public void update() {
+                sound.Manager.processEvents();
+            }
+        });
     }
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
