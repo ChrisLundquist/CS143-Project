@@ -3,7 +3,10 @@ package network;
 import game.Player;
 
 import java.util.List;
+import java.util.Queue;
+
 import actor.Actor;
+import actor.ActorSet;
 
 public class UpdateMessage extends Message {
     private static final long serialVersionUID = 6956652733302442322L;
@@ -25,18 +28,26 @@ public class UpdateMessage extends Message {
      * Constructor for client updates (from client to server)
      * @param player
      */
-    public UpdateMessage(Player p) {
-        player = p;
+    public UpdateMessage(Player player, Queue<Actor> newActors) {
         actors = new java.util.ArrayList<Actor>();
+        this.player = player;
         actors.add(player.getShip());
-        // TODO iterate through actors looking for Actors with a parentId of the players ship.
+        
+        Actor a;
+        while((a = newActors.poll()) != null)
+            actors.add(a);
     }
-    
+
     public Player getPlayer() {
         return player;
     }
     
     public List<Actor> getActors() {
         return actors;
+    }
+
+    public void applyTo(ActorSet actors) {
+        for (Actor a: this.actors)
+            actors.addOrReplace(a);
     }
 }

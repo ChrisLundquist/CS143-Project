@@ -48,6 +48,20 @@ public class ActorSet implements Set<Actor> {
 
         return true;
     }
+    
+
+    /**
+     * Adds an actor to the ActorSet, replacing the an actor with the same id if it
+     * already exists. Used for network updates
+     * @param a the actor to add
+     */
+    public synchronized void addOrReplace(Actor a) {
+        if (a.id == null)
+            return;
+        
+        a.actors = this;
+        actors.put(a.id, a);        
+    }
 
     @Override
     public  boolean addAll(Collection<? extends Actor> list) {
