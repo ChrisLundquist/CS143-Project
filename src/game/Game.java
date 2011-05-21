@@ -34,7 +34,8 @@ public class Game {
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
-        sound.Manager.initialize(player.getCamera());
+        // FIXME: When we pass player.getCamera() the sound doesn't match the player position for some reason?
+        sound.Manager.initialize(player.getShip());
 
         game = new GameThread(actors);
         // CL - We need to get input even if the game is paused,
