@@ -19,10 +19,11 @@ public class Fighter extends PlayerShip {
     public Fighter() {
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
-        
         shields.add(new shield.PlayerShield());
+        
+        
     }
-
+    
     @Override
     protected String getLocalModelName() {
         return "ship_test";

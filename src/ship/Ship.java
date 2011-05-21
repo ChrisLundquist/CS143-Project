@@ -11,14 +11,17 @@ public abstract class Ship extends Actor {
     protected List<Weapon> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon;
-    
+   
     public Ship(){
         super();
         selectedWeapon = 0;
         weapons = new java.util.ArrayList<Weapon>();
         shields = new java.util.ArrayList<Shield>();
+        
     }
     
+   
+
     public void shoot(){
         weapons.get(selectedWeapon).shoot(this);
     }
@@ -34,7 +37,7 @@ public abstract class Ship extends Actor {
             if(shields.get(0).getStatus() == false){
                 //delete();
             }
-            System.out.println(shields.get(0).getPower());
+            System.out.println(shields.get(0).getStrength());
         }
         else if (other instanceof Ship) {
 
