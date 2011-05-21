@@ -22,8 +22,6 @@ public abstract class Ship extends Actor {
         
     }
     
-   
-
     public void shoot(){
         weapons.get(selectedWeapon).shoot(this);
     }

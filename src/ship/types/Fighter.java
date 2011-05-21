@@ -21,7 +21,6 @@ public class Fighter extends PlayerShip {
         weapons.add(new ship.weapon.Machinegun());
         shields.add(new ship.shield.PlayerShield());
         
-        
     }
     
     @Override
