@@ -3,11 +3,10 @@ package ship;
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
 
-    private final float ROLL_DEGREE;
     
-    protected abstract float getRollDegree();
-    protected abstract float getPitchDegree();
-    protected abstract float getYawDegree();
+    protected abstract float getRollRate();
+    protected abstract float getPitchRate();
+    protected abstract float getYawRate();
     
     protected abstract float getDefaultSpeed();
     protected abstract float getAdditiveSpeed();
@@ -29,22 +28,22 @@ public abstract class PlayerShip extends Ship {
         velocity.minusEquals(getDirection().times(this.getNegativeSpeed()));
     }
     public void pitchUp(){
-        changePitch(this.getPitchDegree());
+        changePitch(this.getPitchRate());
     }
     public void pitchDown(){
-        changePitch(-this.getPitchDegree());
+        changePitch(-this.getPitchRate());
     }
     public void yawLeft() {
-        changeYaw(this.getYawDegree());
+        changeYaw(this.getYawRate());
     }
     public void yawRight() {
-        changeYaw(-this.getYawDegree());
+        changeYaw(-this.getYawRate());
     }
     public void rollLeft() {
-        changeRoll(this.getRollDegree());
+        changeRoll(this.getRollRate());
     }
     public void rollRight() {
-        changeRoll(-this.getRollDegree());
+        changeRoll(-this.getRollRate());
     }
     public void nextWeapon() {
         // Get the next weapon in the list

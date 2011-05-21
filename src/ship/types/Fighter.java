@@ -5,6 +5,17 @@ import ship.PlayerShip;
 public class Fighter extends PlayerShip {
     private static final long serialVersionUID = -2035608530335353067L;
     
+    private final float PITCH_RATE = 0.55f;
+    private final float ROLL_RATE = 0.1f;
+    private final float YAW_RATE = 0.02f;
+    
+    private final float DEFAULT_SPEED = 0.01f;
+    private final float ADDITIVE_SPEED = 0.01f;
+    private final float NEGATIVE_SPEED = 0.005f;
+    
+    private final float ANGULAR_DAMPENING = 0.035f;
+    private final float VELOCITY_DAMPENING = 0.95f;
+    
     public Fighter() {
         weapons.add(new weapon.TwinLinkedMachinegun());
         weapons.add(new weapon.Machinegun());
@@ -18,41 +29,43 @@ public class Fighter extends PlayerShip {
     }
 
     @Override
-    protected float getPitchDegree() {
-        return 0.055f;
+    protected float getPitchRate() {
+        return PITCH_RATE;
     }
 
     @Override
-    protected float getRollDegree() {
-        return 0.1f;
+    protected float getRollRate() {
+        return ROLL_RATE;
     }
 
     @Override
-    protected float getYawDegree() {
-        return 0.02f;
+    protected float getYawRate() {
+        return YAW_RATE;
     }
     
     @Override
     protected float getDefaultSpeed() {
-        return 0.01f;
+        return DEFAULT_SPEED;
     }
     
+    @Override
     protected float getAdditiveSpeed() {
-        return 0.01f;
+        return ADDITIVE_SPEED;
     }
     
+    @Override
     protected float getNegativeSpeed() {
-        return 0.005f;
+        return NEGATIVE_SPEED;
     }
     
     @Override
     protected float getAngularDampening() {
-        return 0.035f;
+        return ANGULAR_DAMPENING;
     }
 
     @Override
     protected float getVelocityDampening() {
-        return 0.95f;
+        return VELOCITY_DAMPENING;
     }
     
     @Override
