@@ -130,8 +130,6 @@ public class Light implements java.io.Serializable{
             Light.add(Light.newRandom(256));
             gl.glEnable(GL2.GL_LIGHT0 + i);
         }
-        // FIXME the shader should query this
-        // shader.setUniform1i(gl, "numLights", numLights);
     }
 
     /* From the Orange book

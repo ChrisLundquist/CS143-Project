@@ -5,7 +5,7 @@ import ship.PlayerShip;
 public class Fighter extends PlayerShip {
     private static final long serialVersionUID = -2035608530335353067L;
     
-    private final float PITCH_RATE = 0.55f;
+    private final float PITCH_RATE = 0.055f;
     private final float ROLL_RATE = 0.1f;
     private final float YAW_RATE = 0.02f;
     
@@ -72,6 +72,6 @@ public class Fighter extends PlayerShip {
     @Override
     public void update(){
         super.update();
-        velocity.plusEquals(getDirection().times(this.getDefaultSpeed()));
+        //velocity.plusEquals(getDirection().times(this.getDefaultSpeed()));
     }
 }

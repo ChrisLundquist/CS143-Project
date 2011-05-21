@@ -22,6 +22,7 @@ import com.jogamp.opengl.util.FPSAnimator;
  *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
  */
 public class Renderer implements GLEventListener {
+    private static final int NUM_LIGHTS = 2;
     GLU glu;
     GLCanvas canvas;
     Frame frame;
@@ -131,7 +132,8 @@ public class Renderer implements GLEventListener {
         }
         //shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
-        Light.initialize(gl, 2);
+        Light.initialize(gl, NUM_LIGHTS);
+        //shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
 
         System.gc(); // This is probably a good a idea
     }
@@ -151,6 +153,7 @@ public class Renderer implements GLEventListener {
         gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
+        gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
         if (p.verticies.size() == 3) {
             for (Vertex v: p.verticies){
                 gl.glTexCoord2f(v.u, v.v); 
