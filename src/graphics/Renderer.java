@@ -60,7 +60,7 @@ public class Renderer implements GLEventListener {
         for(Actor a: game.Game.getActors())
             render(a);
 
-        hud.drawStaticHud(gl);
+       // hud.drawStaticHud(gl);
        // hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
