@@ -34,6 +34,7 @@ public class Hud {
         gunammosingle = Texture.findOrCreateByName(GUNAMMOSINGLE);
         gunammodouble = Texture.findOrCreateByName(GUNAMMODOUBLE);
         gunammomissile = Texture.findOrCreateByName(GUNAMMOMISSILE);
+        crosshair = Texture.findOrCreateByName(CROSSHAIR);
     }
     
     public void flashHealthCross(GL2 gl) {

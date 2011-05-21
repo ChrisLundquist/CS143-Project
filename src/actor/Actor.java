@@ -1,13 +1,15 @@
 package actor;
 
 import graphics.Model;
+
 import java.io.Serializable;
 import java.util.Random;
-import physics.GJKSimplex;
+
 import math.Matrix4f;
 import math.Quaternion;
 import math.Supportable;
 import math.Vector3f;
+import physics.GJKSimplex;
 
 public abstract class Actor implements Serializable, Supportable, Movable, Collidable {
     protected static Random gen = new Random(); // Common random number generator object
@@ -27,7 +29,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      * Chris doesn't like it, if this ends up being an issue, we can put the ActorSet in a static
      * variable somewhere. At this point it seem like this is a better way.
      */
-    protected transient ActorSet actors; 
+    protected transient ActorSet actors;
     protected String modelName;
     protected Vector3f position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
@@ -40,7 +42,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         velocity = new Vector3f();
         scale = new Vector3f(1.0f,1.0f,1.0f);
         age = 0;
-        //sets the time of the actor's birth 
+        //sets the time of the actor's birth
         //setTimeStamp();
     }
     
@@ -60,8 +62,9 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
         // CL - Not sure if not handling the collision if we don't know how is best
         // but its better than throwing excepions
-        if(intersection == null)
+        if(intersection == null) {
             return; // We couldn't find the intersecting polygon so return so we don't throw an exception
+        }
         Vector3f newVelocity = intersection.reflectDirection(delta_v);
 
         newVelocity.timesEquals(other.rotation);
@@ -88,6 +91,10 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     protected void dampenAngularVelocity() {
         angularVelocity = angularVelocity.dampen(0.01f);
+    }
+    
+    protected void dampenAngularVelocity(float amount) {
+        angularVelocity = angularVelocity.dampen(amount);
     }
 
     public void delete() {
@@ -127,11 +134,12 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
         // If our velocity is in the same direction as the direction, then
         // we need to sweep the furthest point by our velocity
-        if(velocity.sameDirection(direction))
+        if(velocity.sameDirection(direction)) {
             max.plusEquals(velocity);
         // Do the same thing for angular velocity
         //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
         //   max = max.times(getAngularVelocity());
+        }
 
         return max;
     }
@@ -142,8 +150,9 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     public Model getModel() {
         // CL - If our reference is null, go look it up
-        if (model == null)
+        if (model == null) {
             model = Model.findOrCreateByName(modelName);
+        }
 
         return model;
     }
@@ -205,8 +214,9 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      * @return true if colliding, else false
      */
     public boolean isColliding(Actor other){
-        if (isPossiblyColliding(other)) // do a cheap bounding sphere test before resorting to GJK
+        if (isPossiblyColliding(other)) {
             return GJKSimplex.isColliding(this, other);
+        }
         return false;
 
     }
