@@ -1,4 +1,4 @@
-package weapon;
+package ship.weapon;
 
 import actor.Projectile;
 

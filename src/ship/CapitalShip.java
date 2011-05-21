@@ -6,7 +6,7 @@ public class CapitalShip extends ship.Ship {
     
     public CapitalShip() {
         super();
-        shields.add(new shield.CapitalShipShield());
+        shields.add(new ship.shield.CapitalShipShield());
         modelName = MODEL_NAME;
     }
 

@@ -1,4 +1,4 @@
-package shield;
+package ship.shield;
 
 public class PlayerShield extends ship.Shield {
     private static final long serialVersionUID = -7318768199047822441L;

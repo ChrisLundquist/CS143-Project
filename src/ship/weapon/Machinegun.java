@@ -1,21 +1,17 @@
-package weapon;
+package ship.weapon;
 
 import actor.Actor;
-import actor.Projectile;
 
-public class Sniper extends weapon.Weapon {
+public class Machinegun extends ship.weapon.Weapon {
     @Override
     public long getShotCoolDown() {
-        return 1000;
+        return 100;
     }
 
     @Override
     protected actor.Projectile newProjectile(actor.Actor ship) {
-        Projectile bullet = new actor.Bullet(ship,50.0f);
-        System.out.println("velocity: "+bullet.getVelocity());
-        return bullet;
+        return new actor.Bullet(ship,1.0f);
     }
-
     @Override
     public void shoot(Actor ship) {
         //calculates time passed in milliseconds
@@ -27,6 +23,6 @@ public class Sniper extends weapon.Weapon {
 
     @Override
     public String getWeaponName() {
-        return "Sniper";
+        return "Machine Gun";
     }
 }
