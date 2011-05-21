@@ -64,16 +64,16 @@ public class Player implements Serializable {
                 ship.shoot();
                 break;
             case YAW_LEFT:
-                ship.turnLeft();
+                ship.yawLeft();
                 break;
             case YAW_RIGHT:
-                ship.turnRight();
+                ship.yawRight();
                 break;
             case PITCH_UP:
-                ship.turnUp();
+                ship.pitchUp();
                 break;
             case PITCH_DOWN:
-                ship.turnDown();
+                ship.pitchDown();
                 break;
             case FORWARD:
                 ship.forwardThrust();
@@ -119,7 +119,7 @@ public class Player implements Serializable {
 
     // TODO create ship of players preference
     public PlayerShip getNewShip() {
-        return new PlayerShip();
+        return new ship.types.Fighter();
     }
 
     public void setName(String name) {

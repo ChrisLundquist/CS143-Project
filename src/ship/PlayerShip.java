@@ -1,18 +1,16 @@
 package ship;
 
-public class PlayerShip extends ship.Ship {
-    private static final float TURN_SPEED = 0.01f;
-    private static final float ROLL_DEGREE = 0.05f;
-    private static final long serialVersionUID = 260627862699350716L;
-    private static final String MODEL_NAME = "ship_test";
+public abstract class PlayerShip extends Ship {
+    private static final long serialVersionUID = 1L;
+
+    protected abstract float getRollDegree();
+    protected abstract float getPitchDegree();
+    protected abstract float getYawDegree();
+    protected abstract String getLocalModelName();
 
     public PlayerShip(){
         super();
-        weapons.add(new weapon.TwinLinkedMachinegun());
-        weapons.add(new weapon.Machinegun());
-        weapons.add(new weapon.Sniper());
-        shields.add(new shield.PlayerShield());
-        modelName = MODEL_NAME;
+        modelName = this.getLocalModelName();
     }
 
     public void forwardThrust() {
@@ -21,23 +19,23 @@ public class PlayerShip extends ship.Ship {
     public void reverseThrust() {
         velocity.minusEquals(getDirection().times(0.01f));
     }
-    public void turnUp(){
-        changePitch(TURN_SPEED);
+    public void pitchUp(){
+        changePitch(this.getPitchDegree());
     }
-    public void turnDown(){
-        changePitch(-TURN_SPEED);
+    public void pitchDown(){
+        changePitch(-this.getPitchDegree());
     }
-    public void turnLeft() {
-        changeYaw(TURN_SPEED);
+    public void yawLeft() {
+        changeYaw(this.getYawDegree());
     }
-    public void turnRight() {
-        changeYaw(-TURN_SPEED);
+    public void yawRight() {
+        changeYaw(-this.getYawDegree());
     }
     public void rollLeft() {
-        changeRoll(ROLL_DEGREE);
+        changeRoll(this.getRollDegree());
     }
     public void rollRight() {
-        changeRoll(-ROLL_DEGREE);
+        changeRoll(-this.getRollDegree());
     }
     public void nextWeapon() {
         // Get the next weapon in the list
