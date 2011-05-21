@@ -2,6 +2,7 @@ package ship;
 
 import java.util.List;
 
+import ship.shield.Shield;
 import ship.weapon.Weapon;
 
 import actor.Actor;

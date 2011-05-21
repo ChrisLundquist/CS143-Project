@@ -1,4 +1,4 @@
-package ship;
+package ship.shield;
 
 import java.io.Serializable;
 
@@ -6,19 +6,19 @@ public abstract class Shield implements Serializable{
     private static final long serialVersionUID = -464289746987986899L;
     int strength;
 
-    protected int getStrength() {
+    public int getStrength() {
         return strength;
     }
 
-    protected void setStrength(int strength) {
+    public void setStrength(int strength) {
         this.strength = strength;
     }
 
-    protected void takeDamage(int damage) {
+    public void takeDamage(int damage) {
         strength -= damage;
     }
 
-    protected boolean getStatus() {
+    public boolean getStatus() {
         return strength > 0;
     }
 }

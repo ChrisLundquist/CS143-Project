@@ -1,6 +1,6 @@
 package ship.shield;
 
-public class CapitalShipShield extends ship.Shield {
+public class CapitalShipShield extends ship.shield.Shield {
     private static final long serialVersionUID = 7903890271618282339L;
     private int POWER = 5000;
 
