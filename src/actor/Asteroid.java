@@ -1,5 +1,6 @@
 package actor;
 
+import graphics.Model;
 import math.Quaternion;
 import math.Vector3f;
 
@@ -8,9 +9,8 @@ public class Asteroid extends Actor {
     private static final String MODEL_NAME = "ship_test";
 
     public Asteroid(){
-        super();
+        super(Model.Model_Enum.ASTEROID);
         angularVelocity = new Quaternion(Vector3f.UNIT_Y, 1);
-        modelName = MODEL_NAME;
     }
 
     @Override

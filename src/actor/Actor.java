@@ -1,6 +1,7 @@
 package actor;
 
 import graphics.Model;
+import graphics.Model.Model_Enum;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -18,7 +19,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     protected long age; // actor age in frames;
     protected ActorId id, parentId; // unique ID for each Actor
-    private transient Model model; // CL - Used to store the model reference, after we look it up once
+    private Model.Model_Enum model; // CL - Used to store the model reference, after we look it up once
     
     /*
      * DL - a back reference to the actor set containing this actor
@@ -30,18 +31,18 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      * variable somewhere. At this point it seem like this is a better way.
      */
     protected transient ActorSet actors;
-    protected String modelName;
     protected Vector3f position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
 
 
-    public Actor() {
+    public Actor(Model_Enum model) {
         rotation = new Quaternion();
         angularVelocity = new Quaternion();
         position = new Vector3f();
         velocity = new Vector3f();
         scale = new Vector3f(1.0f,1.0f,1.0f);
         age = 0;
+        this.model=model;
         //sets the time of the actor's birth
         //setTimeStamp();
     }
@@ -59,7 +60,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         delta_p.timesEquals(other.rotation.inverse());
         delta_v.timesEquals(other.rotation.inverse());
 
-        graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
+        graphics.Polygon intersection = other.model.m.getIntersectingPolygon(delta_p, delta_v);
         // CL - Not sure if not handling the collision if we don't know how is best
         // but its better than throwing excepions
         if(intersection == null) {
@@ -123,7 +124,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
 
 
-        Vector3f max = getModel().getFarthestPointInDirection(direction.times(getRotation().inverse()));
+        Vector3f max = getModel().m.getFarthestPointInDirection(direction.times(getRotation().inverse()));
         // Scale the point by our actor's scale in world space
         max.x *= scale.x;
         max.y *= scale.y;
@@ -148,17 +149,8 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         return id;
     }
 
-    public Model getModel() {
-        // CL - If our reference is null, go look it up
-        if (model == null) {
-            model = Model.findOrCreateByName(modelName);
-        }
-
+    public Model_Enum getModel() {
         return model;
-    }
-
-    public String getModelName(){
-        return modelName;
     }
 
     /**
@@ -170,7 +162,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     public float getRadius() {
         // TODO optimize: either cache, or change scale to a float
-        return getModel().radius * Math.max(scale.x, Math.max(scale.y, scale.z));
+        return getModel().m.radius * Math.max(scale.x, Math.max(scale.y, scale.z));
     }
 
     public Quaternion getRotation() {
@@ -235,8 +227,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
     }
     
-    public void setModel(Model model) {
-        this.modelName = model.name;
+    public void setModel(Model_Enum model) {
         this.model = model;
     }
     

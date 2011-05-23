@@ -7,6 +7,21 @@ import java.util.Map;
 import math.Vector3f;
 
 public class Model implements math.Supportable{
+    public enum Model_Enum{
+        ASTEROID("ship_test"),
+        ROUND_CAPITAL_SHIP("round_capital"),
+        BULLET("bullet"),
+        MISSILE("missile"),
+        SHIP_TEST("ship_test"),
+        FIGHTER("figheter");
+        
+        
+        public final Model m;
+        Model_Enum(String name){
+            m=Model.findOrCreateByName(name);
+        }
+    }
+    
     static final String MODEL_PATH = "assets/models/";
     static final String MODEL_EXTENSION = ".obj";
     private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "ship_test"};

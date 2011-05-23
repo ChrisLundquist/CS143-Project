@@ -58,8 +58,9 @@ public class Renderer implements GLEventListener {
         render(Game.getMap().getSkybox());
 
         // Render each actor
-        for(Actor a: game.Game.getActors())
+        for(Actor a: game.Game.getActors()) {
             render(a);
+        }
 
        // hud.drawStaticHud(gl);
        // hud.flashHealthCross(gl);
@@ -118,8 +119,9 @@ public class Renderer implements GLEventListener {
         Model.loadModels();
         Texture.initialize(gl);
 
-        for(Model model: Model.loaded_models())
+        for(Model model: Model.loaded_models()) {
             build_display_list(model);
+        }
 
         ///hud.init(gLDrawable);
         graphics.particles.ParticleSystem.initialize(gl);
@@ -141,14 +143,16 @@ public class Renderer implements GLEventListener {
     private void build_display_list(Model model) {
         model.displayList = gl.glGenLists(1);
         gl.glNewList(model.displayList, GL2.GL_COMPILE);
-        for (Polygon p: model.polygons)
+        for (Polygon p: model.polygons) {
             render(p);
-        gl.glEndList();   
+        }
+        gl.glEndList();
     }
 
     private void render(Polygon p) {
-        if (p.verticies.size() < 2)
+        if (p.verticies.size() < 2) {
             return;
+        }
 
         gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         p.getMaterial().prepare(gl);
@@ -156,7 +160,7 @@ public class Renderer implements GLEventListener {
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
         if (p.verticies.size() == 3) {
             for (Vertex v: p.verticies){
-                gl.glTexCoord2f(v.u, v.v); 
+                gl.glTexCoord2f(v.u, v.v);
                 gl.glVertex3f(v.getX(), v.getY(), v.getZ());
             }
         } else {
@@ -166,11 +170,11 @@ public class Renderer implements GLEventListener {
                 Vertex b = p.verticies.get(i - 1);
                 Vertex c = p.verticies.get(i);
 
-                gl.glTexCoord2f(a.u, a.v); 
+                gl.glTexCoord2f(a.u, a.v);
                 gl.glVertex3f(a.getX(), a.getY(), a.getZ());
-                gl.glTexCoord2f(b.u, b.v); 
+                gl.glTexCoord2f(b.u, b.v);
                 gl.glVertex3f(b.getX(), b.getY(), b.getZ());
-                gl.glTexCoord2f(c.u, c.v); 
+                gl.glTexCoord2f(c.u, c.v);
                 gl.glVertex3f(c.getX(), c.getY(), c.getZ());
             }
         }
@@ -179,8 +183,9 @@ public class Renderer implements GLEventListener {
 
     public void reshape(GLAutoDrawable gLDrawable, int x, int y, int width, int height) {
         getGL2();
-        if (height <= 0)
+        if (height <= 0) {
             height = 1;
+        }
         
         float h = (float) width / (float) height;
         gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
@@ -203,6 +208,7 @@ public class Renderer implements GLEventListener {
         frame.setUndecorated(true);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 Game.exit();
             }
@@ -213,7 +219,7 @@ public class Renderer implements GLEventListener {
     }
 
     // CL - Private method that handles the exception code that would otherwise
-    // be copy pasted. It seems that if other people use this method getGL() 
+    // be copy pasted. It seems that if other people use this method getGL()
     // usually returns null and crashes the program
     private void getGL2(){
         try {
@@ -236,7 +242,7 @@ public class Renderer implements GLEventListener {
         // Scale the Actor
         gl.glScalef(actor.getSize().x, actor.getSize().y, actor.getSize().z);
         // CL - Render our model.
-        render(actor.getModel());
+        render(actor.getModel().m);
         gl.glPopMatrix();
     }
     
@@ -246,7 +252,7 @@ public class Renderer implements GLEventListener {
         gl.glTranslatef(-pos.x, -pos.y, -pos.z);
         gl.glScalef(Skybox.SKYBOX_SIZE, Skybox.SKYBOX_SIZE , Skybox.SKYBOX_SIZE);
         render(skybox.getModel());
-        gl.glPopMatrix(); 
+        gl.glPopMatrix();
     }
 
     private void render(Model model) {
@@ -254,10 +260,11 @@ public class Renderer implements GLEventListener {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
-        if(gl.glIsList(model.displayList) == false)
+        if(gl.glIsList(model.displayList) == false) {
             build_display_list(model);
-        else
+        } else {
             gl.glCallList(model.displayList);
+        }
     }
 
 

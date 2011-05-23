@@ -1,5 +1,6 @@
 package ship.types;
 
+import graphics.Model;
 import ship.PlayerShip;
 
 public class Fighter extends PlayerShip {
@@ -17,6 +18,7 @@ public class Fighter extends PlayerShip {
     private final float VELOCITY_DAMPENING = 0.95f;
     
     public Fighter() {
+        super(Model.Model_Enum.FIGHTER);
         weapons.add(new ship.weapon.TwinLinkedMachinegun());
         weapons.add(new ship.weapon.Machinegun());
         shields.add(new ship.shield.PlayerShield());

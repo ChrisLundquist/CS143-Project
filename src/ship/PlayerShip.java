@@ -1,5 +1,7 @@
 package ship;
 
+import graphics.Model.Model_Enum;
+
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
 
@@ -17,10 +19,9 @@ public abstract class PlayerShip extends Ship {
     protected abstract String getLocalModelName();
     protected Energy energy;
     
-    public PlayerShip(){
-        super();
+    public PlayerShip(Model_Enum model){
+        super(model);
         energy = new Energy();
-        modelName = this.getLocalModelName();
     }
    
     public void forwardThrust() {

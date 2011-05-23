@@ -12,7 +12,6 @@ public class Missile extends Projectile {
     
     public Missile(Actor actor){
         super(actor);
-        modelName = MODEL_NAME;
         velocity.times(MISSILE_SPEED);
     }
 }

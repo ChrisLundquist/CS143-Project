@@ -1,6 +1,6 @@
 package actor;
 
-import math.*;
+import math.Vector3f;
 
 public class Bullet extends Projectile {
     private static final long serialVersionUID = -3860927022451699968L;
@@ -34,15 +34,21 @@ public class Bullet extends Projectile {
     public void handleCollision(Actor other) {
         System.err.println("Collision Detected Between " + other + " and " + this);
 
-        if (other instanceof ship.PlayerShip)
+        if (other instanceof ship.PlayerShip) {
             return;
+        }
+        if (other instanceof Bullet) {
+            return;
+        }
         bounce(other);
     }
 
+    @Override
     public void update() {
         super.update();
 
-        if (age > MAX_AGE)
-            delete();   
+        if (age > MAX_AGE) {
+            delete();
+        }
     }
 }

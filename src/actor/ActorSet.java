@@ -13,9 +13,12 @@ import java.util.Set;
  */
 public class ActorSet implements Set<Actor> {
 
-    private Map<ActorId, Actor> actors;
+    
+    
+
+    private final Map<ActorId, Actor> actors;
     private final int playerId;
-    private List<Queue<Actor>> addNotifyees;
+    private final List<Queue<Actor>> addNotifyees;
 
     public ActorSet(int playerId) {
         this.playerId = playerId;
@@ -31,20 +34,23 @@ public class ActorSet implements Set<Actor> {
     /**
      * Add an actor to the ActorSet, assigning it an ActorId if one isn't already set
      */
-    public synchronized boolean add(Actor a) {     
-        if (a.id == null)
+    public synchronized boolean add(Actor a) {
+        if (a.id == null) {
             a.id = new ActorId(playerId);
+        }
 
-        if (actors.containsKey(a.id))
+        if (actors.containsKey(a.id)) {
             return false;
+        }
         
         // Set a back reference to this ActorSet for actor.add() and actor.delete()
         a.actors = this;
         
         actors.put(a.id, a);
         
-        for(Queue<Actor> q: addNotifyees)
+        for(Queue<Actor> q: addNotifyees) {
             q.offer(a);
+        }
 
         return true;
     }
@@ -56,20 +62,23 @@ public class ActorSet implements Set<Actor> {
      * @param a the actor to add
      */
     public synchronized void addOrReplace(Actor a) {
-        if (a.id == null)
+        if (a.id == null) {
             return;
+        }
         
         a.actors = this;
-        actors.put(a.id, a);        
+        actors.put(a.id, a);
     }
 
     @Override
     public  boolean addAll(Collection<? extends Actor> list) {
         boolean changed = false;
         
-        for (Actor a: list)
-            if (add(a))
+        for (Actor a: list) {
+            if (add(a)) {
                 changed = true;
+            }
+        }
 
         return changed;
     }
@@ -85,16 +94,19 @@ public class ActorSet implements Set<Actor> {
     }
 
     public synchronized boolean contains(Actor a) {
-        if (a.id == null)
+        if (a.id == null) {
             return false;
+        }
         return actors.containsKey(a.id);
     }
 
     @Override
     public boolean containsAll(Collection<?> list) {
-        for (Object o: list)
-            if (contains(o) == false)
+        for (Object o: list) {
+            if (contains(o) == false) {
                 return false;
+            }
+        }
 
         return true;
     }
@@ -117,8 +129,9 @@ public class ActorSet implements Set<Actor> {
     }
 
     public synchronized boolean remove(Actor a) {
-        if (a.id == null)
+        if (a.id == null) {
             return false;
+        }
 
         return actors.remove(a.id) != null;
     }
@@ -127,9 +140,11 @@ public class ActorSet implements Set<Actor> {
     public boolean removeAll(Collection<?> list) {
         boolean changed = false;
         
-        for (Object o: list)
-            if (remove(o))
+        for (Object o: list) {
+            if (remove(o)) {
                 changed = true;
+            }
+        }
 
         return changed;
     }
@@ -183,7 +198,7 @@ public class ActorSet implements Set<Actor> {
      * @return
      */
     public synchronized List<Actor> getCopyList() {
-        return new CopyList();    
+        return new CopyList();
     }
 
     /**
