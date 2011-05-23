@@ -1,0 +1,10 @@
+# Blender MTL File: 'fighter.blend'
+# Material Count: 1
+newmtl Material_#1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.574118 0.574118 0.574118
+Ks 0.449020 0.449020 0.449020
+Ni 1.000000
+d 1.000000
+illum 2
