@@ -15,7 +15,7 @@ public class Bullet extends Projectile {
         super(actor);
         this.BULLET_SPEED = speed;
         graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
-        sound.Manager.addEvent(new sound.Event(actor.getPosition().toFloatArray(), actor.getVelocity().toFloatArray(),sound.Library.findByName(SOUND_EFFECT)));
+        sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.times(BULLET_SPEED);
         damage = BULLET_DAMAGE;
     }

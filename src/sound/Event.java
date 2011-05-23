@@ -13,6 +13,13 @@ public class Event {
         this.velocity = velocity;
         this.sound = sound;
     }
+    
+    public Event(math.Vector3f pos, math.Vector3f vel, Buffer sound){
+        position = pos.toFloatArray();
+        velocity = vel.toFloatArray();
+        this.sound = sound;
+    }
+    
     public Buffer getBuffer() {
         return sound;
     }
