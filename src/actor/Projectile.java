@@ -20,7 +20,6 @@ public abstract class Projectile extends Actor{
         setSize(DEFAULT_SIZE);
         modelName = MODEL_NAME;
     }
-
     public int getDamage() {
         return damage;
     }
