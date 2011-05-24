@@ -32,4 +32,5 @@ public abstract class Weapon {
     public abstract void shoot(actor.Actor ship);
     
     public abstract String getWeaponName();
+
 }
