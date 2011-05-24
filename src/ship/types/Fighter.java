@@ -71,6 +71,6 @@ public class Fighter extends PlayerShip {
     @Override
     public void update(){
         super.update();
-        //velocity.plusEquals(getDirection().times(this.getDefaultSpeed()));
+        velocity.plusEquals(getDirection().times(this.getDefaultSpeed()));
     }
 }
