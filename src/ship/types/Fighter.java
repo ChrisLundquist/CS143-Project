@@ -25,7 +25,7 @@ public class Fighter extends PlayerShip {
     
     @Override
     protected String getLocalModelName() {
-        return "ship_test";
+        return "fighter";
     }
 
     @Override
