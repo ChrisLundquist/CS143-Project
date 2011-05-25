@@ -150,7 +150,7 @@ public class Renderer implements GLEventListener {
         if (p.verticies.size() < 2)
             return;
 
-        gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
+        //gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
@@ -228,13 +228,7 @@ public class Renderer implements GLEventListener {
 
     private void render(Actor actor) {
         gl.glPushMatrix();
-        // Translate the actor to it's position
-        gl.glTranslatef(actor.getPosition().x, actor.getPosition().y, actor.getPosition().z);
-
-        // Rotate the actor
-        gl.glMultMatrixf(actor.getRotation().toGlMatrix(), 0);
-        // Scale the Actor
-        gl.glScalef(actor.getSize().x, actor.getSize().y, actor.getSize().z);
+        gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
         // CL - Render our model.
         render(actor.getModel());
         gl.glPopMatrix();
