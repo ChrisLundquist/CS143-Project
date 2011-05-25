@@ -26,10 +26,6 @@ public class ParticleSystem {
     protected static final String WHITE  = TEXTURE_FOLDER + "whiteParticle.jpg";
 
     public static void initialize( GL2 gl){
-        // Particles are transparent.
-        gl.glEnable( GL.GL_BLEND );    
-        gl.glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE );
-        gl.glEnable( GL.GL_TEXTURE_2D );
         Texture.findOrCreateByName(YELLOW);
         Texture.findOrCreateByName(ORANGE);
         Texture.findOrCreateByName(RED);
@@ -50,6 +46,10 @@ public class ParticleSystem {
      * @param gl
      */
     public static void render( GL2 gl ){
+        // Particles are transparent.
+        gl.glEnable( GL2.GL_BLEND );    
+        gl.glBlendFunc( GL2.GL_SRC_ALPHA, GL2.GL_ONE );
+        gl.glEnable( GL2.GL_TEXTURE_2D );
         gl.glDepthMask( false );
         // Loop over particles.
         Iterator<Particle> it = particles.iterator();
@@ -63,5 +63,6 @@ public class ParticleSystem {
             particle.draw( gl );
         }
         gl.glDepthMask( true );
+        gl.glDisable(GL2.GL_BLEND);
     }
 }
