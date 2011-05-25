@@ -31,7 +31,7 @@ public class Sniper extends ship.weapon.Weapon {
         return multiplier;
     }
     public void setMultiplier(int multiplier) {
-        multiplier = multiplier;
+        Sniper.multiplier = multiplier;
     }
    
 }

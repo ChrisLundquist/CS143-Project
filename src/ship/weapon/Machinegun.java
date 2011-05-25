@@ -29,7 +29,7 @@ public class Machinegun extends ship.weapon.Weapon {
     public static int getMulitplier() {
         return multiplier;
     }
-    public void setMultiplier(int multiplier) {
-        this.multiplier = multiplier;
+    public static void setMultiplier(int multiplier) {
+        Machinegun.multiplier = multiplier;
     }
 }
