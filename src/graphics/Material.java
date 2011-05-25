@@ -6,6 +6,7 @@ import javax.media.opengl.GL2;
 public class Material {
     public static class Color {
         public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
+        public static final Color GRAY = new Color(0.7f,0.7f, 0.7f);
 
         public float r, g, b;
 
@@ -81,9 +82,9 @@ public class Material {
 
     private Material(String name) {
         this.name = name;
-        ambient = Color.WHITE;
-        specular = Color.WHITE;
-        diffuse = Color.WHITE;
+        ambient = Color.GRAY;
+        specular = Color.GRAY;
+        diffuse = Color.GRAY;
         alpha = 1.0f;
         shininess = new float[1];
     }
