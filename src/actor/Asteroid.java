@@ -1,5 +1,7 @@
 package actor;
 
+import graphics.particles.FireParticle;
+import graphics.particles.ParticleSystem;
 import math.Quaternion;
 import math.Vector3f;
 
@@ -38,7 +40,10 @@ public class Asteroid extends Actor {
     public void die(){
         if(field != null)
             field.asteroidDied();
-        // TODO make particles
+        if(ParticleSystem.isEnabled())
+            for(int i = 0; i < 16; i++){
+                ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
+            }
         delete();
     }
 

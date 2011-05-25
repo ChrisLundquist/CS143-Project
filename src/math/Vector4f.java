@@ -2,7 +2,7 @@ package math;
 
 public class Vector4f extends Vector3f {
     private static final long serialVersionUID = 6357784296699011970L;
-    float t;
+    public float t;
     public Vector4f(float x, float y, float z, float t){
         super(x,y,z);
         this.t = t;

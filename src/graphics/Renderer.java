@@ -1,6 +1,7 @@
 package graphics;
 
 import game.Game;
+import graphics.particles.ParticleSystem;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -61,13 +62,12 @@ public class Renderer implements GLEventListener {
         for(Actor a: game.Game.getActors())
             render(a);
 
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.render(gl);
        // hud.drawStaticHud(gl);
        // hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
-
-        /* particle.setParameters(0, 0, 0);
-        particle.draw(gl);*/
 
     }
 
@@ -117,12 +117,12 @@ public class Renderer implements GLEventListener {
 
         Model.loadModels();
         Texture.initialize(gl);
-
+        // Turning particles on breaks the game
+        //ParticleSystem.enabled = true;
         for(Model model: Model.loaded_models())
             build_display_list(model);
 
         ///hud.init(gLDrawable);
-        graphics.particles.ParticleSystem.initialize(gl);
 
         try {
             shader.init(gl);
@@ -134,7 +134,7 @@ public class Renderer implements GLEventListener {
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
         //shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
-
+        
         System.gc(); // This is probably a good a idea
     }
 
