@@ -42,6 +42,9 @@ public class Bullet extends Projectile {
 
         if (other instanceof ship.PlayerShip)
             return;
+        else if(other instanceof Asteroid){
+            die();
+        }
         bounce(other);
     }
 

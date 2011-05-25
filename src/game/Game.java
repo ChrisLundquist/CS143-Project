@@ -51,6 +51,8 @@ public class Game {
                 sound.Manager.processEvents();
             }
         });
+        
+        game.addCallback(new AsteroidField());
     }
     //for HUD radar testing, will be removed later
     public static Asteroid getAsteroid() {
