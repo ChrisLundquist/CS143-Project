@@ -1,10 +1,13 @@
 package game;
 
+import java.io.Serializable;
+
 import math.Vector3f;
 import actor.Actor;
 import actor.Asteroid;
 
-public class AsteroidField implements Updateable{
+public class AsteroidField implements Updateable, Serializable{
+    private static final long serialVersionUID = 7105712880129225225L;
     public static final int DEFAULT_ASTEROID_LIMIT = 50;
     protected int asteroidCount, asteroidMax;
     
@@ -18,6 +21,7 @@ public class AsteroidField implements Updateable{
         while(asteroidCount < asteroidMax){
             Vector3f pos = Vector3f.randomPosition(graphics.Skybox.SKYBOX_SIZE);
             Asteroid asteroid = new Asteroid(pos,pos.negate().times(0.001f));
+            asteroid.setAsteroidField(this);
             // Test collision of the new Asteroid before actually spawning it
             for(Actor actor : game.Game.getActors().getCopyList()){
                 if(asteroid.isColliding(actor))
@@ -29,4 +33,7 @@ public class AsteroidField implements Updateable{
         
     }
     
+    public void asteroidDied(){
+        asteroidCount--;
+    }
 }

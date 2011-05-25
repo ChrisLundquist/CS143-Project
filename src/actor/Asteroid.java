@@ -7,6 +7,7 @@ public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
     private static final String MODEL_NAME = "asteroid";
     protected int hitPoints;
+    protected game.AsteroidField field;
 
     public Asteroid(){
         super();
@@ -15,7 +16,7 @@ public class Asteroid extends Actor {
         hitPoints = (int) scale.magnitude2(); 
         modelName = MODEL_NAME;
     }
-    
+
     public Asteroid(Vector3f position, Vector3f velocity){
         this();
         setPosition(position);
@@ -32,10 +33,18 @@ public class Asteroid extends Actor {
         }
         bounce(other);
     }
-    
+
     @Override
     public void die(){
+        if(field != null)
+            field.asteroidDied();
         // TODO make particles
         delete();
+    }
+
+    public void setAsteroidField(game.AsteroidField asteroidField) {
+        // Don't let it change if it points somewhere
+        if(field == null)
+            field = asteroidField;
     }
 }
