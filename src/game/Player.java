@@ -60,7 +60,7 @@ public class Player implements Serializable {
         }
 
         switch(action) {
-            case SHOOT:
+            case SHOOT_PRIMARY:
                 ship.shoot();
                 break;
             case YAW_LEFT:

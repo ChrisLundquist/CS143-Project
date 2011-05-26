@@ -6,7 +6,8 @@ import game.Player;
 public class InputRouter{
     
     public enum Interaction {
-        SHOOT,
+        SHOOT_PRIMARY,
+        SHOOT_SECONDARY,
         FORWARD,
         BACK,
         PITCH_UP,

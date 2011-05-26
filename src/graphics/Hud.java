@@ -1,3 +1,4 @@
+
 package graphics;
 
 import java.awt.Toolkit;
@@ -40,7 +41,6 @@ public class Hud {
     public void flashHealthCross(GL2 gl) {
         start2D(gl);
         
-       
         if(healthcrossflash != null) {
             healthcrossflash.bind(gl);
         }
@@ -83,12 +83,13 @@ public class Hud {
         draw(0,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
      
+        //
         if(gunbackdrop != null) {
             gunbackdrop.bind(gl);
         }
 
         gl.glBegin(GL2.GL_QUADS );
-        draw(-500,0,WIDTH,HEIGHT,gl);
+        draw(-WIDTH,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
         
         if(gunbar != null) {
@@ -96,7 +97,7 @@ public class Hud {
         }
 
         gl.glBegin(GL2.GL_QUADS );
-        draw(-500,0,WIDTH,HEIGHT,gl);
+        draw(-WIDTH,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
            
         if(gunammosingle != null) {
@@ -104,13 +105,9 @@ public class Hud {
         }
 
         gl.glBegin(GL2.GL_QUADS );
-        draw(-500,0,WIDTH,HEIGHT,gl);
+        draw(-WIDTH,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
-     
-        
-        
-        
-        
+     //
         if(crosshair != null) {
             crosshair.bind(gl);
         }
@@ -176,4 +173,3 @@ public class Hud {
         gl.glDisable(GL2.GL_BLEND);
     }
 }
-
