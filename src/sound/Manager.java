@@ -19,9 +19,12 @@ public class Manager {
     private static final int MAX_SOURCES = 32;
     private static List<Source> sources;
     private static actor.Movable listener;
+    private static boolean enabled=true;
 
     static public void addEvent(Event event){
-        events.add(event);
+        if(enabled){
+            events.add(event);
+        }
     }
 
     static public void processEvents(){
@@ -55,35 +58,35 @@ public class Manager {
 
     static public String ALErrorCodeToString(int code){
         switch(code){
-        case AL.AL_NO_ERROR:
-            return "No Error";
-        case AL.AL_INVALID_NAME:
-            return "Invalid Name";
-        case AL.AL_INVALID_ENUM:
-            return "Invalid Enum";
-        case AL.AL_INVALID_VALUE:
-            return "Invalid Value";
-        case AL.AL_INVALID_OPERATION:
-            return "Invalid operation";
-        case AL.AL_OUT_OF_MEMORY:
-            return "Out Of Memory";
-        default:
-            return "Unknown";
+            case AL.AL_NO_ERROR:
+                return "No Error";
+            case AL.AL_INVALID_NAME:
+                return "Invalid Name";
+            case AL.AL_INVALID_ENUM:
+                return "Invalid Enum";
+            case AL.AL_INVALID_VALUE:
+                return "Invalid Value";
+            case AL.AL_INVALID_OPERATION:
+                return "Invalid operation";
+            case AL.AL_OUT_OF_MEMORY:
+                return "Out Of Memory";
+            default:
+                return "Unknown";
         }
 
     }
     static public AL getAL(){
         return al;
     }
-    
+
     static private void setListenerPosition(math.Vector3f listenerPos ){
-            getAL().alListenerfv(AL.AL_POSITION, listenerPos.toFloatArray(), 0);
+        getAL().alListenerfv(AL.AL_POSITION, listenerPos.toFloatArray(), 0);
     }
-    
+
     static private void setListenerVelocity(math.Vector3f listenerVel){
         getAL().alListenerfv(AL.AL_VELOCITY, listenerVel.toFloatArray(), 0);
     }
-    
+
     static private void setListenerOrientation(math.Vector3f listenerOri, math.Vector3f listenerUp){
         float[] orientation = new float[6];
         orientation[0] = listenerOri.x;
@@ -95,7 +98,7 @@ public class Manager {
 
         getAL().alListenerfv(AL.AL_ORIENTATION, orientation, 0);
     }
-    
+
     static public void updateListener(){
         sound.Manager.setListenerOrientation(listener.getRotation().rollAxis(), listener.getRotation().yawAxis());
         sound.Manager.setListenerPosition(listener.getPosition());
@@ -103,21 +106,23 @@ public class Manager {
     }
 
     static public void initialize(actor.Movable newListener){
-        listener = newListener;
-        al = ALFactory.getAL();
-        ALut.alutInit();
-        checkForALErrorsWithMessage("Failed to initialize OpenAl");
-        sources = new LinkedList<Source>();
-        events = new LinkedList<Event>();
-        Library.initialize();
+        if(enabled){
+            listener = newListener;
+            al = ALFactory.getAL();
+            ALut.alutInit();
+            checkForALErrorsWithMessage("Failed to initialize OpenAl");
+            sources = new LinkedList<Source>();
+            events = new LinkedList<Event>();
+            Library.initialize();
 
-        for(int i = 0; i < MAX_SOURCES; i++)
-            try{
-                sources.add(new Source());
-            } catch( RuntimeException e) {
-                System.err.println(e.toString());
-                System.err.println("Error when generating OpenAL Sources. Successfully generated " + i + " sources of " + MAX_SOURCES);
-                break;
-            }
+            for(int i = 0; i < MAX_SOURCES; i++)
+                try{
+                    sources.add(new Source());
+                } catch( RuntimeException e) {
+                    System.err.println(e.toString());
+                    System.err.println("Error when generating OpenAL Sources. Successfully generated " + i + " sources of " + MAX_SOURCES);
+                    break;
+                }
+        }
     }
 }

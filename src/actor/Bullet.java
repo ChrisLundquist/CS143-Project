@@ -60,8 +60,9 @@ public class Bullet extends Projectile {
     public void update() {
         super.update();
 
-        if (age > MAX_AGE)
+        if (age > MAX_AGE){
             die();   
+        }
     }
 
     public void die(){

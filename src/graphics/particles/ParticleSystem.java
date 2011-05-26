@@ -17,7 +17,7 @@ public class ParticleSystem {
     private static int MAX_PARTICLES = 2500;
     private static List<Particle> particles = new LinkedList<Particle>();
     private static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>(); 
-    public static boolean enabled = false;
+    public static boolean enabled = true;
 
     public static boolean addParticle(Particle particle){
         // We can't add a particle if we have too many

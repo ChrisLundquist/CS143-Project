@@ -1,5 +1,7 @@
 package settings;
 
+import graphics.particles.ParticleSystem;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +26,8 @@ public class Settings {
             public static int previousWeapon = -1;
             public static int nextWeapon = -1;
         }
+        public static boolean particlesOn = false;
+        public static boolean soundOn = true;
     }
 
     public static void debugKeys(){
@@ -52,6 +56,21 @@ public class Settings {
 
             if(part[0].equalsIgnoreCase("conf")){
                 configFile = new File("config/"+part[1]);
+            }
+            if(part[0].equalsIgnoreCase("particles")){
+                if(part[1].equalsIgnoreCase("on")){
+                    Profile.particlesOn=true;
+                    ParticleSystem.enabled=true;
+                }
+                else{
+                    Profile.particlesOn=false;
+                    ParticleSystem.enabled=false;
+                }
+            }
+            if(part[0].equalsIgnoreCase("sound")){
+                if(part[1].equalsIgnoreCase("off")){
+                    Profile.soundOn=false;
+                }
             }
             if(part[0].equalsIgnoreCase("debug")){
                 if(part[1].equalsIgnoreCase("on")){

@@ -117,8 +117,7 @@ public class Renderer implements GLEventListener {
 
         Model.loadModels();
         Texture.initialize(gl);
-        // Turning particles on breaks the game
-        ParticleSystem.enabled = true;
+        
         for(Model model: Model.loaded_models())
             build_display_list(model);
 
