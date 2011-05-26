@@ -49,6 +49,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     public void add(Actor actor) {
         actors.add(actor);
     }
+    
+    public void die(){
+        // Callbacks before deletion
+        delete();
+    }
 
     public void bounce(Actor other) {
         // Transform our position and velocity into other's model space
@@ -97,7 +102,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         angularVelocity = angularVelocity.dampen(amount);
     }
 
-    public void delete() {
+    protected void delete() {
         actors.remove(this);
     }
 

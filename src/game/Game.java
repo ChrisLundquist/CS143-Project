@@ -4,8 +4,6 @@ import input.KeyboardListener;
 import java.io.IOException;
 import settings.Settings;
 import actor.ActorSet;
-import actor.Asteroid;
-
 
 public class Game {
     private static graphics.Renderer renderer;
@@ -14,9 +12,6 @@ public class Game {
     private static Map map;
     private static ActorSet actors;
     private static GameThread game;
-
-    //for HUD radar testing, will be removed later
-    static actor.Asteroid a;
 
     public static void init() {
         System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
@@ -30,11 +25,11 @@ public class Game {
         actors = new ActorSet();
         actors.addAll(map.actors);
         player.respawn(actors, map.getSpawnPosition());
-        
+
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
-        // FIXME: When we pass player.getCamera() the sound doesn't match the player position for some reason?
+        // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getShip());
 
         game = new GameThread(actors);
@@ -51,10 +46,8 @@ public class Game {
                 sound.Manager.processEvents();
             }
         });
-    }
-    //for HUD radar testing, will be removed later
-    public static Asteroid getAsteroid() {
-        return a;
+
+        game.addCallback(new AsteroidField());
     }
 
     public static void joinServer(String server) {
@@ -67,10 +60,6 @@ public class Game {
         input = new KeyboardListener();
         graphics.Model.loadModels();
 
-        
-        a.setPosition(new math.Vector3f(0.0f,0.0f,-10.0f));
-        //actor.Actor.addActor(a);
-        
         //new GameThread().start();
     }
 
@@ -109,7 +98,7 @@ public class Game {
     public static Map getMap() {
         return map;
     }
-    
+
     public static void setMap(Map m) {
         map = m;
     }
@@ -122,7 +111,7 @@ public class Game {
     public static graphics.Renderer getRenderer() {
         return renderer;
     }
-    
+
     public static ActorSet getActors() {
         return actors;
     }

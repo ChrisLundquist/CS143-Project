@@ -1,6 +1,7 @@
 package graphics;
 
 import game.Game;
+import graphics.particles.ParticleSystem;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -37,7 +38,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("textured.vert","textured.frag");
+        shader = new Shader("texture.vert","texture.frag");
         hud = new Hud();
         this.camera = camera;
     }
@@ -61,13 +62,12 @@ public class Renderer implements GLEventListener {
         for(Actor a: game.Game.getActors())
             render(a);
 
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.render(gl);
        // hud.drawStaticHud(gl);
        // hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
-
-        /* particle.setParameters(0, 0, 0);
-        particle.draw(gl);*/
 
     }
 
@@ -117,12 +117,12 @@ public class Renderer implements GLEventListener {
 
         Model.loadModels();
         Texture.initialize(gl);
-
+        // Turning particles on breaks the game
+        //ParticleSystem.enabled = true;
         for(Model model: Model.loaded_models())
             build_display_list(model);
 
         ///hud.init(gLDrawable);
-        graphics.particles.ParticleSystem.initialize(gl);
 
         try {
             shader.init(gl);
@@ -134,7 +134,6 @@ public class Renderer implements GLEventListener {
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
         shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
-
         System.gc(); // This is probably a good a idea
     }
 
@@ -150,7 +149,7 @@ public class Renderer implements GLEventListener {
         if (p.verticies.size() < 2)
             return;
 
-        gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
+        //gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
@@ -228,13 +227,7 @@ public class Renderer implements GLEventListener {
 
     private void render(Actor actor) {
         gl.glPushMatrix();
-        // Translate the actor to it's position
-        gl.glTranslatef(actor.getPosition().x, actor.getPosition().y, actor.getPosition().z);
-
-        // Rotate the actor
-        gl.glMultMatrixf(actor.getRotation().toGlMatrix(), 0);
-        // Scale the Actor
-        gl.glScalef(actor.getSize().x, actor.getSize().y, actor.getSize().z);
+        gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
         // CL - Render our model.
         render(actor.getModel());
         gl.glPopMatrix();

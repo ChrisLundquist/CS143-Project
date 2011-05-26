@@ -1,10 +1,6 @@
 
 package graphics.particles;
 
-import graphics.Texture;
-
-import javax.media.opengl.GL2;
-
 import math.Vector3f;
 /**
  * Particle System for each particle
@@ -24,24 +20,10 @@ public class FireParticle extends Particle  {
     }
 
     protected void update() {
-        age++;
+        super.update();
 
         color.x -= 0.015f;
         color.y -= 0.05f;
         color.z -= 0.2f;
-    }
-    public void draw( GL2 gl ){ 
-        // Select texture and draw.
-        gl.glEnable(GL2.GL_TEXTURE_2D);
-        if( getLifetime() > 200 ) {
-            Texture.findByName(ParticleSystem.RED).bind(gl);
-        } 
-        else if(getLifetime() > 50) {
-            Texture.findByName(ParticleSystem.ORANGE).bind(gl);   
-        }
-        else {
-            Texture.findByName(ParticleSystem.YELLOW).bind(gl);
-        }
-        super.draw(gl);
     }
 }

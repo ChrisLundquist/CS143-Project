@@ -21,30 +21,20 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         age = 0;
         lifetime = DEFAULT_LIFETIME;
     }
-    
+
     Particle(actor.Actor actor, Vector3f direction){
-        super();
+        this();
         velocity = actor.getVelocity().minus(direction.times(SLOW_FACTOR));
         position = actor.getFarthestPointInDirection(direction);
     }
 
-    public void draw( GL2 gl ){ 
-        final float halfSize = size / 2f;
-        final float x = getPosition().x - halfSize;
-        final float y = getPosition().x - halfSize;
-        final float xs = getPosition().x + halfSize;
-        final float ys = getPosition().y + halfSize;
-        // Particle as small rectangle.
-        gl.glBegin(GL2.GL_QUADS); {
-            gl.glTexCoord2f( 0f, 0f );
-            gl.glVertex3f( x, y, getPosition().z );
-            gl.glTexCoord2f( 1f, 0f );
-            gl.glVertex3f( xs, y, getPosition().z );
-            gl.glTexCoord2f( 1f, 1f );
-            gl.glVertex3f( xs, ys, getPosition().z );
-            gl.glTexCoord2f( 0f, 1f );
-            gl.glVertex3f( x, ys, getPosition().z );
-        } gl.glEnd();
+    public void draw( GL2 gl ){
+        gl.glEnable(GL2.GL_POINT_SMOOTH);
+        //gl.glPointSize(size);
+        gl.glBegin(GL2.GL_POINTS);
+        gl.glColor4f(color.x, color.y, color.z, color.t);
+        gl.glVertex3f(position.x,position.y,position.z);
+        gl.glEnd();
     }
 
     public float getLifetime() {
@@ -55,7 +45,7 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
     public Vector3f getPosition() {
         return position;
     }
-    
+
     public Particle setPosition(Vector3f newPosition){
         position = newPosition;
         return this;
@@ -76,5 +66,8 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         return this;
     }
 
-    abstract protected void update();
+    protected void update(){
+        age++;
+        position.plusEquals(velocity);
+    }
 }

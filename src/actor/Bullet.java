@@ -1,6 +1,8 @@
 package actor;
 
 import graphics.Model;
+import graphics.particles.FireParticle;
+import graphics.particles.ParticleSystem;
 import math.*;
 
 public class Bullet extends Projectile {
@@ -15,17 +17,17 @@ public class Bullet extends Projectile {
     public Bullet(Actor actor,float speed,int multiplier){
         super(actor);
         this.BULLET_SPEED = speed;
-        
+
         if(multiplier != 0) {
             BULLET_DAMAGE = BULLET_DAMAGE * multiplier;
         }
         damage = BULLET_DAMAGE;
-        
+
         graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.timesEquals(BULLET_SPEED);
     }
-    
+
 
     /**
      * @param actor
@@ -43,6 +45,9 @@ public class Bullet extends Projectile {
 
         if (other instanceof ship.PlayerShip)
             return;
+        else if(other instanceof Asteroid){
+            die();
+        }
         bounce(other);
     }
 
@@ -50,6 +55,14 @@ public class Bullet extends Projectile {
         super.update();
 
         if (age > MAX_AGE)
-            delete();   
+            die();   
+    }
+
+    public void die(){
+        if(ParticleSystem.isEnabled())
+            for(int i = 0; i < 16; i++){
+                ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
+            }
+        delete();
     }
 }

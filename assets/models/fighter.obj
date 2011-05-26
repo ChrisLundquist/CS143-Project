@@ -1,6 +1,6 @@
 # Blender v2.57 (sub 0) OBJ File: 'fighter_export.blend'
 # www.blender.org
-mtllib fighter_export.mtl
+mtllib fighter.mtl
 o Cube_Cube.011
 v 6.971662 24.316223 -65.235222
 v 6.971661 24.316227 29.274616
