@@ -1,10 +1,7 @@
 package game.types;
 
 
-import game.Game;
 import game.GameType;
-
-import java.io.Serializable;
 
 import math.Vector3f;
 import actor.Actor;

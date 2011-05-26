@@ -1,6 +1,5 @@
 package actor;
 
-import game.types.AsteroidField;
 import graphics.Model;
 import graphics.particles.FireParticle;
 import graphics.particles.ParticleSystem;
