@@ -205,7 +205,6 @@ public class WavefrontObjLoader {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             String vertex_tokens[] = token.split("/");
-            @SuppressWarnings("unused")
             ObjVertex geo, tex, norm;
 
             switch(vertex_tokens.length) {
@@ -225,7 +224,8 @@ public class WavefrontObjLoader {
                     geo = geoVerticies.get(Integer.parseInt(vertex_tokens[0]) - 1);
                     tex = textureverticies.get(Integer.parseInt(vertex_tokens[1]) - 1);
                     norm = vertexNormals.get(Integer.parseInt(vertex_tokens[2]) - 1);
-                    verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y));
+                    // TODO do something with vertex normals
+                    verticies.add(new Vertex(geo.x, geo.y, geo.z, tex.x, tex.y, norm.x, norm.y, norm.z));
                     break;
                 default:
                     throw new IllegalArgumentException("Malformed vertex token: " + token);

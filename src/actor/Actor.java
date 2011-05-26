@@ -46,6 +46,20 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         //setTimeStamp();
     }
     
+    public Actor(Actor a) {
+        rotation = new Quaternion(a.rotation);
+        angularVelocity = new Quaternion(a.angularVelocity);
+        position = new Vector3f(a.position);
+        velocity = new Vector3f(a.velocity);
+        scale = new Vector3f(a.scale);
+        modelName = new String(a.modelName);
+        model = a.model;
+        parentId = a.parentId;
+        id= a.id;
+        actors = a.actors;
+        age = a.age;
+    }
+    
     public void add(Actor actor) {
         actors.add(actor);
     }
@@ -66,9 +80,19 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
         graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
         // CL - Not sure if not handling the collision if we don't know how is best
-        // but its better than throwing excepions
+        // but its better than throwing exceptions
         if(intersection == null) {
-            return; // We couldn't find the intersecting polygon so return so we don't throw an exception
+            return;
+            /*
+            // Then we will make our best guess and use the line between the two actors as the normal
+            
+            Vector3f a = delta_p.times(0.5f); // half way between the objects
+            Vector3f perpendicular = a.perpendicular();
+            Vector3f b = a.plus(perpendicular);
+            Vector3f c = a.plus(a.cross(perpendicular));
+            
+            intersection = Polygon.newFrom(a, b, c);
+            */
         }
         Vector3f newVelocity = intersection.reflectDirection(delta_v);
 

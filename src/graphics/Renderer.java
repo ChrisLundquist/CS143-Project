@@ -32,13 +32,13 @@ public class Renderer implements GLEventListener {
     Hud hud;
     Camera camera;
     private GL2 gl; // Must be recached each frame
-    
+
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
         frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("texture.vert","texture.frag");
+        shader = new Shader("lighting.vert","lighting.frag");
         hud = new Hud();
         this.camera = camera;
     }
@@ -64,8 +64,8 @@ public class Renderer implements GLEventListener {
 
         if(ParticleSystem.isEnabled())
             ParticleSystem.render(gl);
-       // hud.drawStaticHud(gl);
-       // hud.flashHealthCross(gl);
+        // hud.drawStaticHud(gl);
+        // hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
 
@@ -118,11 +118,9 @@ public class Renderer implements GLEventListener {
         Model.loadModels();
         Texture.initialize(gl);
         // Turning particles on breaks the game
-        //ParticleSystem.enabled = true;
+        ParticleSystem.enabled = true;
         for(Model model: Model.loaded_models())
             build_display_list(model);
-
-        ///hud.init(gLDrawable);
 
         try {
             shader.init(gl);
@@ -149,12 +147,13 @@ public class Renderer implements GLEventListener {
         if (p.verticies.size() < 2)
             return;
 
-        //gl.glColor4f(1.0f, 1.0f, 1.0f,1.0f);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
         if (p.verticies.size() == 3) {
             for (Vertex v: p.verticies){
+                if(p.normal != null)
+                    gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
                 gl.glTexCoord2f(v.u, v.v); 
                 gl.glVertex3f(v.getX(), v.getY(), v.getZ());
             }
@@ -164,11 +163,19 @@ public class Renderer implements GLEventListener {
             for (int i = 2; i < p.verticies.size(); i++) {
                 Vertex b = p.verticies.get(i - 1);
                 Vertex c = p.verticies.get(i);
-
+                
+                if(a.normal != null)
+                    gl.glNormal3f(a.normal.x, a.normal.y, a.normal.z);
                 gl.glTexCoord2f(a.u, a.v); 
                 gl.glVertex3f(a.getX(), a.getY(), a.getZ());
+                
+                if(b.normal != null)
+                    gl.glNormal3f(b.normal.x, b.normal.y, b.normal.z);
                 gl.glTexCoord2f(b.u, b.v); 
                 gl.glVertex3f(b.getX(), b.getY(), b.getZ());
+                
+                if(c.normal != null)
+                    gl.glNormal3f(c.normal.x, c.normal.y, c.normal.z);
                 gl.glTexCoord2f(c.u, c.v); 
                 gl.glVertex3f(c.getX(), c.getY(), c.getZ());
             }
@@ -180,7 +187,7 @@ public class Renderer implements GLEventListener {
         getGL2();
         if (height <= 0)
             height = 1;
-        
+
         float h = (float) width / (float) height;
         gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -232,7 +239,7 @@ public class Renderer implements GLEventListener {
         render(actor.getModel());
         gl.glPopMatrix();
     }
-    
+
     private void render(Skybox skybox) {
         gl.glPushMatrix();
         math.Vector3f pos = camera.position;

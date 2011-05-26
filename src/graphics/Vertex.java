@@ -4,7 +4,7 @@
 package graphics;
 import math.Vector3f;
 public class Vertex {
-    Vector3f coord; // Model space coordinates
+    Vector3f coord,normal; // Model space coordinates
     float u; // Texture coordinates
     float v;
 
@@ -30,6 +30,15 @@ public class Vertex {
         this.coord = other.coord;
         this.u = other.u;
         this.v = other.v;
+    }
+
+    /*
+     * @param position z,y,z, texture coord, u,v, normal x,y,z
+     */
+    public Vertex(float x, float y, float z, float u, float v, float nx,
+            float ny, float nz) {
+        this(x,y,z,u,v);
+        normal = new Vector3f(nx,ny,nz);
     }
 
     public String toString() {

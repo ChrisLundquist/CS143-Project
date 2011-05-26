@@ -9,7 +9,7 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
     protected final static int DEFAULT_LIFETIME = 120;
     protected final static float SLOW_FACTOR = 0.1f;
     protected math.Vector4f color;
-    protected int lifetime, age;
+    protected int age;
     protected math.Vector3f position, velocity;
     protected float size;
 
@@ -19,7 +19,6 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         velocity = new Vector3f();
         size = 1.0f;
         age = 0;
-        lifetime = DEFAULT_LIFETIME;
     }
 
     Particle(actor.Actor actor, Vector3f direction){
@@ -29,16 +28,12 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
     }
 
     public void draw( GL2 gl ){
-        gl.glEnable(GL2.GL_POINT_SMOOTH);
-        //gl.glPointSize(size);
-        gl.glBegin(GL2.GL_POINTS);
         gl.glColor4f(color.x, color.y, color.z, color.t);
         gl.glVertex3f(position.x,position.y,position.z);
-        gl.glEnd();
     }
 
     public float getLifetime() {
-        return lifetime; 
+        return DEFAULT_LIFETIME - age; 
     }
 
     @Override
@@ -57,7 +52,7 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
     }
 
     public boolean isAlive() {
-        return (lifetime > 0.0);
+        return (age < DEFAULT_LIFETIME);
     }
 
     @Override

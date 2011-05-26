@@ -42,7 +42,7 @@ public class Asteroid extends Actor {
         if(field != null)
             field.asteroidDied();
         if(ParticleSystem.isEnabled())
-            for(int i = 0; i < 16; i++){
+            for(int i = 0; i < 160; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
             }
         delete();
