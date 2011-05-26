@@ -3,7 +3,7 @@ package ship.weapon;
 import actor.Actor;
 import actor.Projectile;
 
-public class TwinLinkedMachinegun extends ship.weapon.TwinLinkedWeapon {    
+public class TwinLinkedMachinegun extends ship.weapon.TwinLinkedWeapon {
     private final float BULLET_SPEED = 1.0f;
     @Override
     public long getShotCoolDown() {

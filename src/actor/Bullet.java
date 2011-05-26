@@ -23,7 +23,6 @@ public class Bullet extends Projectile {
         }
         damage = BULLET_DAMAGE;
 
-        graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.timesEquals(BULLET_SPEED);
     }
@@ -45,7 +44,7 @@ public class Bullet extends Projectile {
 
         if (other instanceof ship.PlayerShip)
             return;
-        else if(other instanceof Asteroid){
+        else{
             die();
         }
         
