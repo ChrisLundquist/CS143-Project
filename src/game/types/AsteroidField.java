@@ -23,7 +23,7 @@ public class AsteroidField implements GameType{
     public void update() {
         while(asteroidCount < asteroidMax){
             Vector3f pos = Vector3f.randomPosition(FIELD_SIZE);
-            Asteroid asteroid = new Asteroid(pos,pos.negate().times(0.001f));
+            Asteroid asteroid = new Asteroid(pos,Vector3f.randomPosition(FIELD_SIZE).times(0.001f));
             asteroid.setAsteroidField(this);
             // Test collision of the new Asteroid before actually spawning it
             for(Actor actor : game.Game.getActors().getCopyList()){

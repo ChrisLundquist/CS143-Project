@@ -8,7 +8,7 @@ import math.Vector3f;
 
 public class Model implements math.Supportable{
     public static class Models{
-        public static final String ROUND_CAPITAL_SHIP = "ship3";
+        public static final String ROUND_CAPITAL_SHIP = "fighter";//"ship3";
         public static final String SHIP_TEST = "ship_test";
         public static final String BULLET = "bullet";
         public static final String MISSILE = "missile";
@@ -17,12 +17,12 @@ public class Model implements math.Supportable{
         
         public static final String[] TOTAL = {ROUND_CAPITAL_SHIP,SHIP_TEST,BULLET,MISSILE,FIGHTER,ASTEROID};
     }
-    
+        
     static final String MODEL_PATH = "assets/models/";
     static final String MODEL_EXTENSION = ".obj";
     private static final int NO_LIST = -1;
-
     protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
+
 
     public static Model findOrCreateByName(String name) {
         Model model = models.get(name);

@@ -9,21 +9,34 @@ import math.Vector3f;
 public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
     private static final String MODEL_NAME = Model.Models.ASTEROID;
+    private static final int MAX_GEN = 2;
+    private static final int NUM_BREAK=1;
+    private static final float DEFAULT_SCALE=4f;
+    
+    private int generation;
     protected int hitPoints;
     protected game.types.AsteroidField field;
 
     public Asteroid(){
         super();
-        angularVelocity = new Quaternion(Vector3f.randomPosition(1), 1);
-        scale = new Vector3f(2,2,2).plus(Vector3f.randomPosition(1));
-        hitPoints = (int) scale.magnitude2(); 
-        modelName = MODEL_NAME;
+        this.angularVelocity = new Quaternion(Vector3f.randomPosition(1), 1);
+        this.scale = new Vector3f(DEFAULT_SCALE,DEFAULT_SCALE,DEFAULT_SCALE).plus(Vector3f.randomPosition(1));
+        this.hitPoints = (int) scale.magnitude2(); 
+        this.modelName = MODEL_NAME;
+        this.generation=1;
     }
 
     public Asteroid(Vector3f position, Vector3f velocity){
         this();
-        setPosition(position);
-        setVelocity(velocity);
+        this.setPosition(position);
+        this.setVelocity(velocity);
+        this.modelName=MODEL_NAME;
+    }
+    
+    public Asteroid(Asteroid old){
+        this(old.getPosition(),Vector3f.randomPosition(0.1f));
+        this.generation=old.generation+1;
+        this.scale = old.scale.timesEquals(0.5f);
     }
 
     @Override
@@ -45,6 +58,13 @@ public class Asteroid extends Actor {
             for(int i = 0; i < 160; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
             }
+       
+        if(this.generation<MAX_GEN){
+            for(int i=0;i<NUM_BREAK;i++){
+                game.Game.getActors().add(new Asteroid(this));
+            }
+        }
+        
         delete();
     }
 

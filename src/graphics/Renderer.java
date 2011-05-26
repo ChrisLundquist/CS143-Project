@@ -38,7 +38,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 projectx");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader("lighting.vert","lighting.frag");
+        shader = new Shader("texture.vert","texture.frag");
         hud = new Hud();
         this.camera = camera;
     }
@@ -163,17 +163,17 @@ public class Renderer implements GLEventListener {
             for (int i = 2; i < p.verticies.size(); i++) {
                 Vertex b = p.verticies.get(i - 1);
                 Vertex c = p.verticies.get(i);
-                
+
                 if(a.normal != null)
                     gl.glNormal3f(a.normal.x, a.normal.y, a.normal.z);
                 gl.glTexCoord2f(a.u, a.v); 
                 gl.glVertex3f(a.getX(), a.getY(), a.getZ());
-                
+
                 if(b.normal != null)
                     gl.glNormal3f(b.normal.x, b.normal.y, b.normal.z);
                 gl.glTexCoord2f(b.u, b.v); 
                 gl.glVertex3f(b.getX(), b.getY(), b.getZ());
-                
+
                 if(c.normal != null)
                     gl.glNormal3f(c.normal.x, c.normal.y, c.normal.z);
                 gl.glTexCoord2f(c.u, c.v); 
@@ -233,11 +233,14 @@ public class Renderer implements GLEventListener {
     }
 
     private void render(Actor actor) {
-        gl.glPushMatrix();
-        gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
-        // CL - Render our model.
-        render(actor.getModel());
-        gl.glPopMatrix();
+        //Don't render the players ship
+        if(actor!=Game.getPlayer().getShip()){
+            gl.glPushMatrix();
+            gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
+            // CL - Render our model.
+            render(actor.getModel());
+            gl.glPopMatrix();
+        }
     }
 
     private void render(Skybox skybox) {
