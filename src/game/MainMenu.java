@@ -28,9 +28,14 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
-    //buttons
-    JButton playButton, joinGameButton, settingsButton, quitButton;
 
+
+    //buttons
+    JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
+    JCheckBox enableController, enableSound, enableParticles;
+    public boolean controllerEnabled = false;
+    public boolean soundEnabled = true;
+    public boolean particlesEnabled = true;
     public boolean menuVisible;
 
     public MainMenu() throws IOException {        
@@ -96,10 +101,32 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
 
+        enableController = new JCheckBox("Enable Xbox 360 Controller", controllerEnabled);
+        enableController.setVisible(false);
+        enableController.addActionListener(this);
+
+        enableSound = new JCheckBox("Enable Sound", soundEnabled);
+        enableSound.setVisible(false);
+        enableSound.addActionListener(this);
+
+        enableParticles = new JCheckBox("Enable Particles", particlesEnabled);
+        enableParticles.setVisible(false);
+        enableParticles.addActionListener(this);
+
+        backButton = new JButton("Back");
+        backButton.addActionListener(this);
+        backButton.setVisible(false);
+
         add(playButton);
         add(joinGameButton);
         add(settingsButton);
+        add(enableController);
+        add(enableSound);
+        add(enableParticles);
         add(quitButton);
+        add(backButton);
+
+
 
     }
     /**
@@ -157,7 +184,59 @@ public class MainMenu extends JPanel implements ActionListener {
             Game.start(); 
         }
         if(e.getSource() == settingsButton) {
-            JOptionPane.showMessageDialog(this, "Doesn't do anything yet");
+            playButton.setVisible(false);
+            settingsButton.setVisible(false);
+            quitButton.setVisible(false);
+            joinGameButton.setVisible(false);
+            enableController.setVisible(true);
+            enableSound.setVisible(true);
+            enableParticles.setVisible(true);
+            backButton.setVisible(true);
+
+        }
+        if(e.getSource() == enableController) {
+            if(controllerEnabled == true) {
+                controllerEnabled = false;
+                enableController.setEnabled(controllerEnabled);
+            }
+            if(controllerEnabled == false) {
+                controllerEnabled = true;
+                enableController.setEnabled(controllerEnabled);
+            }
+           
+        }
+        if(e.getSource() == enableSound) {
+            if(soundEnabled == true) {
+                soundEnabled = false;
+                enableSound.setEnabled(soundEnabled);
+            }
+            if(soundEnabled == false) {
+                soundEnabled = true;
+                enableSound.setEnabled(soundEnabled);
+            }
+           
+
+        }
+        if(e.getSource() == enableParticles) {
+            if(particlesEnabled == true) {
+                particlesEnabled = false;
+                enableParticles.setEnabled(particlesEnabled);
+            }
+            if(particlesEnabled == false) {
+                particlesEnabled = true;
+                enableParticles.setEnabled(particlesEnabled);
+            }
+
+        }
+        if(e.getSource() == backButton) {
+            playButton.setVisible(true);
+            settingsButton.setVisible(true);
+            quitButton.setVisible(true);
+            joinGameButton.setVisible(true);
+            enableController.setVisible(false);
+            enableSound.setVisible(false);
+            enableParticles.setVisible(false);
+            backButton.setVisible(false);
         }
         if(e.getSource() == quitButton) {
             System.exit(0);
