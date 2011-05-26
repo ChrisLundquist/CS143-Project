@@ -1,5 +1,6 @@
 package actor;
 
+import graphics.Model;
 import math.*;
 
 public class Bullet extends Projectile {
@@ -8,7 +9,7 @@ public class Bullet extends Projectile {
     protected final float BULLET_SPEED;
     protected int BULLET_DAMAGE = 5;
     
-    protected static final String MODEL_NAME = "bullet";
+    protected static final String MODEL_NAME = Model.Models.BULLET;
     private static final String SOUND_EFFECT = "Gun1.wav";
 
     public Bullet(Actor actor,float speed,int multiplier){
@@ -22,7 +23,7 @@ public class Bullet extends Projectile {
         
         graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
-        velocity.times(BULLET_SPEED);
+        velocity.timesEquals(BULLET_SPEED);
     }
     
 

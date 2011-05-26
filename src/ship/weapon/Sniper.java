@@ -11,7 +11,7 @@ public class Sniper extends ship.weapon.Weapon {
     }
     @Override
     protected actor.Projectile newProjectile(actor.Actor ship) {
-        Projectile bullet = new actor.Bullet(ship,50.0f,multiplier);
+        Projectile bullet = new actor.Bullet(ship,3.0f,multiplier);
         System.out.println("velocity: "+bullet.getVelocity());
         return bullet;
     }
@@ -31,7 +31,7 @@ public class Sniper extends ship.weapon.Weapon {
         return multiplier;
     }
     public void setMultiplier(int multiplier) {
-        multiplier = multiplier;
+        this.multiplier = multiplier;
     }
    
 }

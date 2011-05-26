@@ -1,5 +1,6 @@
 package ship.types;
 
+import graphics.Model;
 import ship.PlayerShip;
 
 public class Fighter extends PlayerShip {
@@ -25,7 +26,7 @@ public class Fighter extends PlayerShip {
     
     @Override
     protected String getLocalModelName() {
-        return "fighter";
+        return Model.Models.FIGHTER;
     }
 
     @Override

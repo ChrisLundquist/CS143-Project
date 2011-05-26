@@ -13,6 +13,7 @@ import java.nio.ByteOrder;
 
 public class Texture {
     private static final int NO_TEXTURE = -1;
+    private static final String PATH_TO_TEXTURES = "assets/images/";
     protected static Map<String, Texture> textures = new java.util.HashMap<String, Texture>();
     
     public static Texture findByName(String name) {
@@ -58,13 +59,18 @@ public class Texture {
 
     private void init(GL2 gl){
         BufferedImage image;
-        File textureFile = new File(name);
-        try {
-            image = ImageIO.read(textureFile);
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            throw new RuntimeException("unable to open " + textureFile.getAbsolutePath());
+        try{
+            image = ImageIO.read(new File(PATH_TO_TEXTURES+name));
         }
+        catch(IOException ie){
+            try {
+                image = ImageIO.read(new File(name));
+            } catch (IOException ie2) {
+                ie.printStackTrace();
+                throw new RuntimeException("unable to open " + name);
+            }
+        }
+        
         // Java really wanted to modify an array pointer
         int[] texture_ids = new int[1];
         gl.glGenTextures(1, texture_ids, 0); // not sure what the third argument is.

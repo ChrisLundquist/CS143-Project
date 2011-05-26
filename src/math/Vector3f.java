@@ -190,4 +190,11 @@ public class Vector3f implements Serializable {
         z = temp.z;
         return this;
     }
+    
+    public Vector3f timesEquals(float scalar){
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return this;
+    }
 }

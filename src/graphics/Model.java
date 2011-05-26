@@ -7,9 +7,19 @@ import java.util.Map;
 import math.Vector3f;
 
 public class Model implements math.Supportable{
+    public static class Models{
+        public static final String ROUND_CAPITAL_SHIP = "round_capital";
+        public static final String SHIP_TEST = "ship_test";
+        public static final String BULLET = "bullet";
+        public static final String MISSILE = "missile";
+        public static final String FIGHTER = "fighter";
+        public static final String ASTEROID = "asteroid";
+        
+        public static final String[] TOTAL = {ROUND_CAPITAL_SHIP,SHIP_TEST,BULLET,MISSILE,FIGHTER,ASTEROID};
+    }
+    
     static final String MODEL_PATH = "assets/models/";
     static final String MODEL_EXTENSION = ".obj";
-    private static String[] COMMON_MODELS = {"round_capital", "bullet", "missile", "ship_test"};
     private static final int NO_LIST = -1;
 
     protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
@@ -41,7 +51,7 @@ public class Model implements math.Supportable{
             if (file.toLowerCase().endsWith(MODEL_EXTENSION))
                 Model.findOrCreateByName(file.replaceAll(".obj$", ""));
          */
-        for (String model: COMMON_MODELS) {
+        for (String model: Models.TOTAL) {
             Model.findOrCreateByName(model);
         }
 

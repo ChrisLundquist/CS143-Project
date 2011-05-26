@@ -1,5 +1,6 @@
 package ship.types;
 
+import graphics.Model;
 import ship.PlayerShip;
 
 public class Scout extends PlayerShip  {
@@ -40,7 +41,7 @@ public class Scout extends PlayerShip  {
 
     @Override
     protected String getLocalModelName() {
-        return "ship_test";
+        return Model.Models.SHIP_TEST;
     }
 
     @Override
