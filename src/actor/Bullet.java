@@ -10,7 +10,7 @@ public class Bullet extends Projectile {
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     protected final float BULLET_SPEED;
     protected int BULLET_DAMAGE = 5;
-    
+
     protected static final String MODEL_NAME = Model.Models.BULLET;
     private static final String SOUND_EFFECT = "Gun1.wav";
 
@@ -23,7 +23,6 @@ public class Bullet extends Projectile {
         }
         damage = BULLET_DAMAGE;
 
-        graphics.particles.ParticleSystem.addParticle(new graphics.particles.FireParticle(this,velocity.negate()));
         sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
         velocity.timesEquals(BULLET_SPEED);
     }
@@ -45,10 +44,8 @@ public class Bullet extends Projectile {
 
         if (other instanceof ship.PlayerShip)
             return;
-        else if(other instanceof Asteroid){
+        else
             die();
-        }
-        bounce(other);
     }
 
     public void update() {
