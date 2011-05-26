@@ -23,7 +23,7 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
 
     Particle(actor.Actor actor, Vector3f direction){
         this();
-        velocity = actor.getVelocity().minus(direction.times(SLOW_FACTOR));
+        velocity = actor.getVelocity().plus(direction.times(SLOW_FACTOR));
         position = actor.getFarthestPointInDirection(direction);
     }
 

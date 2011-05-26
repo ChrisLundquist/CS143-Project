@@ -25,5 +25,6 @@ public class FireParticle extends Particle  {
         color.x -= 0.015f;
         color.y -= 0.05f;
         color.z -= 0.2f;
+        color.t -= 0.1f;
     }
 }

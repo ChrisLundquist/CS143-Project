@@ -11,7 +11,8 @@ public class Asteroid extends Actor {
     private static final String MODEL_NAME = Model.Models.ASTEROID;
     private static final int MAX_GEN = 2;
     private static final int NUM_BREAK=1;
-    private static final float DEFAULT_SCALE=4f;
+    private static final float DEFAULT_SCALE=10f;
+    private static final float HEALTH_MODIFYER=1/2;
     
     private int generation;
     protected int hitPoints;
@@ -21,11 +22,12 @@ public class Asteroid extends Actor {
         super();
         this.angularVelocity = new Quaternion(Vector3f.randomPosition(1), 1);
         this.scale = new Vector3f(DEFAULT_SCALE,DEFAULT_SCALE,DEFAULT_SCALE).plus(Vector3f.randomPosition(1));
-        this.hitPoints = (int) scale.magnitude2(); 
+        this.hitPoints = (int) (scale.magnitude2()*HEALTH_MODIFYER); 
         this.modelName = MODEL_NAME;
         this.generation=1;
     }
 
+    
     public Asteroid(Vector3f position, Vector3f velocity){
         this();
         this.setPosition(position);
@@ -34,7 +36,7 @@ public class Asteroid extends Actor {
     }
     
     public Asteroid(Asteroid old){
-        this(old.getPosition(),Vector3f.randomPosition(0.1f));
+        this(old.getPosition(),Vector3f.randomPosition(0.1f).plus(old.velocity));
         this.generation=old.generation+1;
         this.scale = old.scale.timesEquals(0.5f);
     }

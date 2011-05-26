@@ -10,7 +10,7 @@ public class Bullet extends Projectile {
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     protected final float BULLET_SPEED;
     protected int BULLET_DAMAGE = 5;
-    
+
     protected static final String MODEL_NAME = Model.Models.BULLET;
     private static final String SOUND_EFFECT = "Gun1.wav";
 
@@ -48,6 +48,13 @@ public class Bullet extends Projectile {
         else if(other instanceof Asteroid){
             die();
         }
+        
+        if(ParticleSystem.isEnabled()){
+            for(int i = 0; i < 50; i++){
+                ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
+            }
+        }
+        
         bounce(other);
     }
 
@@ -59,10 +66,6 @@ public class Bullet extends Projectile {
     }
 
     public void die(){
-        if(ParticleSystem.isEnabled())
-            for(int i = 0; i < 16; i++){
-                ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
-            }
         delete();
     }
 }

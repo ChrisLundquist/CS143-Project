@@ -64,8 +64,8 @@ public class Renderer implements GLEventListener {
 
         if(ParticleSystem.isEnabled())
             ParticleSystem.render(gl);
-        // hud.drawStaticHud(gl);
-        // hud.flashHealthCross(gl);
+         hud.drawStaticHud(gl);
+         hud.flashHealthCross(gl);
 
         checkForGLErrors(gl);
 
