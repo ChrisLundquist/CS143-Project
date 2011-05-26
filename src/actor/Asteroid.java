@@ -1,5 +1,6 @@
 package actor;
 
+import game.types.AsteroidField;
 import graphics.Model;
 import graphics.particles.FireParticle;
 import graphics.particles.ParticleSystem;
@@ -10,7 +11,7 @@ public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
     private static final String MODEL_NAME = Model.Models.ASTEROID;
     protected int hitPoints;
-    protected game.AsteroidField field;
+    protected game.types.AsteroidField field;
 
     public Asteroid(){
         super();
@@ -48,9 +49,15 @@ public class Asteroid extends Actor {
         delete();
     }
 
-    public void setAsteroidField(game.AsteroidField asteroidField) {
+    public void setAsteroidField(game.types.AsteroidField asteroidField) {
         // Don't let it change if it points somewhere
-        if(field == null)
+        if(field == null){
             field = asteroidField;
+        }
+    }
+
+    public void update(){
+        super.update();
+        //TODO: Write code that detects if it is out of the skybox. (or some other boundry).
     }
 }

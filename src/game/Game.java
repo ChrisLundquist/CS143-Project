@@ -1,5 +1,6 @@
 package game;
 
+import game.types.AsteroidField;
 import input.KeyboardListener;
 import java.io.IOException;
 import settings.Settings;
@@ -12,6 +13,7 @@ public class Game {
     private static Map map;
     private static ActorSet actors;
     private static GameThread game;
+    private static GameType gameType = new AsteroidField();
 
     public static void init() {
         System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
@@ -47,7 +49,7 @@ public class Game {
             }
         });
 
-        game.addCallback(new AsteroidField());
+        game.addCallback(gameType);
     }
 
     public static void joinServer(String server) {
