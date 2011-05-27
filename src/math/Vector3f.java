@@ -176,7 +176,7 @@ public class Vector3f implements Serializable {
      * Generates a new random vector with each component between +max -max
      * @param max
      */
-    public static Vector3f randomPosition(float max) {
+    public static Vector3f newRandom(float max) {
         return new Vector3f(
                 gen.nextFloat() * 2 * max - max,
                 gen.nextFloat() * 2 * max - max,

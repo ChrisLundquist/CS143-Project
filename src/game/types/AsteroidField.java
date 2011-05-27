@@ -22,8 +22,8 @@ public class AsteroidField implements GameType{
     @Override
     public void update() {
         while(asteroidCount < asteroidMax){
-            Vector3f pos = Vector3f.randomPosition(FIELD_SIZE);
-            Asteroid asteroid = new Asteroid(pos,Vector3f.randomPosition(FIELD_SIZE).times(0.001f));
+            Vector3f pos = Vector3f.newRandom(FIELD_SIZE);
+            Asteroid asteroid = new Asteroid(pos,Vector3f.newRandom(FIELD_SIZE).times(0.001f));
             asteroid.setAsteroidField(this);
             // Test collision of the new Asteroid before actually spawning it
             for(Actor actor : game.Game.getActors().getCopyList()){

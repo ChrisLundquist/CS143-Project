@@ -51,7 +51,7 @@ public class Bullet extends Projectile {
 
         if(ParticleSystem.isEnabled()){
             for(int i = 0; i < 50; i++){
-                ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
+                ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
         }
 

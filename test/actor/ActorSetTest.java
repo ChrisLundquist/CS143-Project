@@ -30,7 +30,7 @@ public class ActorSetTest {
     @Test
     public void testAdd() {
         ActorSet as = new ActorSet(1);
-        as.add(new TestActor(Vector3f.randomPosition(100)));
+        as.add(new TestActor(Vector3f.newRandom(100)));
         assertEquals(1, as.size());
     }
 
@@ -39,7 +39,7 @@ public class ActorSetTest {
         Set<ActorId> ids = new java.util.HashSet<ActorId>();
         ActorSet as = new ActorSet();
         for (int i = 0; i < 1024; i ++)
-            as.add(new TestActor(Vector3f.randomPosition(100)));
+            as.add(new TestActor(Vector3f.newRandom(100)));
 
 
         for (Actor a: as) {
@@ -50,7 +50,7 @@ public class ActorSetTest {
         assertEquals(1024, as.size());
 
         for (int i = 0; i < 1024; i ++)
-            as.add(new TestActor(Vector3f.randomPosition(100)));
+            as.add(new TestActor(Vector3f.newRandom(100)));
         assertEquals(2048, as.size());
 
         int count = 0;
@@ -68,7 +68,7 @@ public class ActorSetTest {
         // Test that we can remove an actor while iterating over the set
         ActorSet as = new ActorSet();
         for (int i = 0; i < 100; i ++)
-            as.add(new TestActor(Vector3f.randomPosition(100)));
+            as.add(new TestActor(Vector3f.newRandom(100)));
 
         int count = 0;
         for (Actor a: as) {
@@ -84,7 +84,7 @@ public class ActorSetTest {
     public void testGetBounds() {
         ActorSet as = new ActorSet();
         for (int i = 0; i < 1024; i ++)
-            as.add(new TestActor(Vector3f.randomPosition(100)));
+            as.add(new TestActor(Vector3f.newRandom(100)));
         //fail();
     }
 
@@ -120,7 +120,7 @@ public class ActorSetTest {
 
         public void run() {
             for (int i = 0; i < 4096; i ++) {
-                Actor a = new TestActor(Vector3f.randomPosition(100));
+                Actor a = new TestActor(Vector3f.newRandom(100));
                 a.id = new ActorId(id);
                 actorSetRef.add(a);
                 for (Actor it: actorSetRef)
