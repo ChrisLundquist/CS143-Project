@@ -17,14 +17,15 @@ public class FireParticle extends Particle  {
      */
     public FireParticle(actor.Actor actor,Vector3f direction) {
         super(actor,direction);
+        color = new math.Vector4f(1,0,0,0);
     }
 
     protected void update() {
         super.update();
 
-        color.x -= 0.015f;
-        color.y -= 0.05f;
-        color.z -= 0.2f;
-        color.t -= 0.1f;
+        color.x -= 0.0015f;
+        color.y -= 0.005f;
+        color.z -= 0.02f;
+        color.t -= 0.0001f;
     }
 }

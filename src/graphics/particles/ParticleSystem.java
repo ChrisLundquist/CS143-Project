@@ -42,6 +42,7 @@ public class ParticleSystem {
         
         // Particles are transparent.
         gl.glEnable( GL2.GL_BLEND );
+        gl.glDisable(GL2.GL_LIGHTING);
         gl.glBlendFunc( GL2.GL_SRC_ALPHA, GL2.GL_ONE );
         gl.glDepthMask( false );
         
@@ -64,6 +65,8 @@ public class ParticleSystem {
         gl.glEnd();
         gl.glDepthMask( true );
         gl.glDisable( GL2.GL_BLEND );
+        gl.glEnable(GL2.GL_LIGHTING);
+
     }
     public static boolean isEnabled() {
         return enabled;

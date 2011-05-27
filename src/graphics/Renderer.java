@@ -145,7 +145,7 @@ public class Renderer implements GLEventListener {
     private void render(Polygon p) {
         if (p.verticies.size() < 2)
             return;
-
+        gl.glColor4f(1, 1, 1, 1);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);

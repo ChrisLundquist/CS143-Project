@@ -156,6 +156,7 @@ public class Hud {
         gl.glMatrixMode(GL2.GL_MODELVIEW );
         gl.glPushMatrix(); // save our model matrix 
         gl.glLoadIdentity();
+        gl.glColor4f(1,1,1,1);
     }
     /**
      * Stops 2D and goes back to 3D
