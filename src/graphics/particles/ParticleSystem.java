@@ -14,7 +14,7 @@ import javax.media.opengl.*;
  */
 public class ParticleSystem {
     //Max amount of particles
-    private static int MAX_PARTICLES = 2500;
+    private static int MAX_PARTICLES = 4096;
     private static List<Particle> particles = new LinkedList<Particle>();
     private static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>(); 
     public static boolean enabled = true;

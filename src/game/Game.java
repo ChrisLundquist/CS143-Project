@@ -49,7 +49,7 @@ public class Game {
             }
         });
 
-        game.addCallback(gameType);
+        //game.addCallback(gameType);
     }
 
     public static void joinServer(String server) {
