@@ -10,24 +10,18 @@ import com.jogamp.openal.AL;
  */
 public class Source {
     transient int sourceId[];
-    float pitch, gain;
     // Not sure if we will need this
     //Queue<Buffer> queuedSounds;
 
     public Source(){
         //queuedSounds = new LinkedList<Buffer>();
         sourceId = new int[1];
-        pitch = 1.0f;
-        gain = 0.5f;
 
         AL al = Manager.getAL();
         // Bind buffer with a source.
         al.alGenSources(1, IntBuffer.wrap(sourceId));
 
         Manager.checkForALErrorsWithMessage("failed to generate new source");
-
-        al.alSourcef(sourceId[0], AL.AL_PITCH, pitch);
-        al.alSourcef(sourceId[0], AL.AL_GAIN, gain);
     }
 
     public void play(){
@@ -63,6 +57,8 @@ public class Source {
         AL al = Manager.getAL();
         // Bind the buffer to this source
         al.alSourcei(getId(), AL.AL_BUFFER, event.getBuffer().getId());
+        al.alSourcef(getId(), AL.AL_PITCH, event.pitch);
+        al.alSourcef(getId(), AL.AL_GAIN, event.gain);
         al.alSourcefv(getId(), AL.AL_POSITION, event.getPosition(), 0);
         al.alSourcefv(getId(), AL.AL_VELOCITY, event.getVelocity(), 0);
         al.alSourcei(getId(), AL.AL_LOOPING, event.getBuffer().loop[0]);

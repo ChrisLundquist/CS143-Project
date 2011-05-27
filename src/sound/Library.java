@@ -9,7 +9,7 @@ import java.util.Map;
 public class Library {
     private static final String SOUND_PATH = "assets/audio/";
     protected static Map<String, Buffer> sounds = new java.util.HashMap<String, Buffer>();
-    protected static String[] files = {"Gun1.wav"};
+    protected static String[] files = {"Gun1.wav","explode.wav"};
 
     public static Buffer findOrCreateByName(String name) {
         Buffer sound = sounds.get(name);

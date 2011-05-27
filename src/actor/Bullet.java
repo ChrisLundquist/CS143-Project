@@ -13,6 +13,7 @@ public class Bullet extends Projectile {
 
     protected static final String MODEL_NAME = Model.Models.BULLET;
     private static final String SOUND_EFFECT = "Gun1.wav";
+    private static final float EFFECT_VOLUME = 0.5f;
 
     public Bullet(Actor actor,float speed,int multiplier){
         super(actor);
@@ -23,7 +24,9 @@ public class Bullet extends Projectile {
         }
         damage = BULLET_DAMAGE;
 
-        sound.Manager.addEvent(new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT)));
+        sound.Event effect = new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT));
+        effect.gain = EFFECT_VOLUME;
+        sound.Manager.addEvent(effect);
         velocity.timesEquals(BULLET_SPEED);
     }
 
@@ -40,20 +43,18 @@ public class Bullet extends Projectile {
 
     @Override
     public void handleCollision(Actor other) {
-        System.err.println("Collision Detected Between " + other + " and " + this);
-
         if (other instanceof ship.PlayerShip)
             return;
         else{
             die();
         }
-        
+
         if(ParticleSystem.isEnabled()){
             for(int i = 0; i < 50; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.randomPosition(1)));
             }
         }
-        
+
         bounce(other);
     }
 

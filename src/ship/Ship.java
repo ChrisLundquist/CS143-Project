@@ -28,9 +28,10 @@ public abstract class Ship extends Actor {
     
     @Override
     public void handleCollision(Actor other) {
-        System.err.println("Collision Detected Between " + other + " and " + this);
-
         if(other instanceof actor.Projectile) {
+            // Don't collide with our own bullets
+            if(other.getParentId().equals(id))
+                return;
             //shield testing code
             actor.Projectile projectile = (actor.Projectile) other;
             shields.get(0).takeDamage(projectile.getDamage());
