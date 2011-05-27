@@ -15,9 +15,9 @@ public class Asteroid extends Actor {
     private static final String SOUND_EFFECT = "explode.wav";
     private static final float EFFECT_VOLUME = 10.5f;
     private static final float FRAGMENT_SPEED = 0.01f;
+    private static final float DAMAGE_FACTOR = 0.5f;
 
     protected int hitPoints;
-    protected game.types.AsteroidField field;
 
     public Asteroid(){
         super();
@@ -41,24 +41,24 @@ public class Asteroid extends Actor {
     public Asteroid(Asteroid other){
         super(other);
         hitPoints = other.hitPoints;
-        field = other.field;
     }
 
     @Override
     public void handleCollision(Actor other) {
         if(other instanceof Projectile){
             hitPoints -= ((Projectile) other).getDamage();
-            if(hitPoints < 0)
-                die();
+        } else if ( other instanceof Asteroid || other instanceof ship.Ship){
+            float otherKE = other.getMass() * other.getVelocity().magnitude2() * 0.5f;
+
+            hitPoints -= otherKE * DAMAGE_FACTOR;
         }
+        if(hitPoints < 0)
+            die();
         bounce(other);
     }
 
     @Override
     public void die(){
-        if(field != null)
-            field.asteroidDied();
-
         sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SOUND_EFFECT));
         // make bigger asteroids explode bigger
         effect.gain = EFFECT_VOLUME * scale.magnitude2();
@@ -66,7 +66,7 @@ public class Asteroid extends Actor {
         sound.Manager.addEvent(effect);
 
         if(ParticleSystem.isEnabled())
-            for(int i = 0; i < 160; i++){
+            for(int i = 0; i < 500; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
 
@@ -89,13 +89,6 @@ public class Asteroid extends Actor {
         }
 
         delete();
-    }
-
-    public void setAsteroidField(game.types.AsteroidField asteroidField) {
-        // Don't let it change if it points somewhere
-        if(field == null){
-            field = asteroidField;
-        }
     }
 
     public void update(){

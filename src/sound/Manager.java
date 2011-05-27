@@ -2,7 +2,7 @@ package sound;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Queue;
 
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALFactory;
@@ -15,13 +15,13 @@ import com.jogamp.openal.util.ALut;
  */
 public class Manager {
     private static AL al;
-    private static List<Event> events;
+    private static Queue<Event> events;
     private static final int MAX_SOURCES = 32;
     private static List<Source> sources;
     private static actor.Movable listener;
     private static boolean enabled=true;
 
-    static public void addEvent(Event event){
+    static public synchronized void addEvent(Event event){
         if(enabled){
             events.add(event);
         }
@@ -29,16 +29,15 @@ public class Manager {
 
     static public void processEvents(){
         updateListener();
-        ListIterator<Event> it = events.listIterator();
-        while(it.hasNext()){
-            Event event = it.next();
+
+        while(events.peek() != null){
+            Event event = events.poll();
             Source source = getNextFreeSource();
             if(source == null) // We can't play any more sounds right now
                 return; 
             source.load(event);
             source.play();
             checkForALErrorsWithMessage("Error when proccessing Event: " + event);
-            it.remove();
         }
     }
 
@@ -112,7 +111,7 @@ public class Manager {
             ALut.alutInit();
             checkForALErrorsWithMessage("Failed to initialize OpenAl");
             sources = new LinkedList<Source>();
-            events = new LinkedList<Event>();
+            events = new java.util.concurrent.ConcurrentLinkedQueue<Event>();
             Library.initialize();
 
             for(int i = 0; i < MAX_SOURCES; i++)

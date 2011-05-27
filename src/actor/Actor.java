@@ -176,7 +176,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     public ActorId getId() {
         return id;
     }
-
+    
+    public float getMass() {
+        // TODO make a better estimate of mass?
+        return scale.magnitude2();
+    }
     public Model getModel() {
         // CL - If our reference is null, go look it up
         if (model == null) {

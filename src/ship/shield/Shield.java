@@ -16,8 +16,20 @@ public abstract class Shield implements Serializable{
         this.strength = strength;
     }
 
-    public void takeDamage(int damage) {
-        strength -= damage;
+    /**
+     * 
+     * @param damage
+     * @return The remainder of damage to take
+     */
+    public int takeDamage(int damage) {
+        if(damage < strength){
+            strength -= damage;
+            return 0;
+        } else {
+            int damageLeft = damage - strength;
+            strength = 0;
+            return damageLeft;
+        }
     }
 
     public boolean getStatus() {
