@@ -10,21 +10,27 @@ import java.io.RandomAccessFile;
 public class Settings {
     public static class Profile{
         public static class Keys{
-            public static int forward = -1;
-            public static int backward = -1;
+            public static int forward = 0;
+            public static int backward = 0;
 
-            public static int pitchUp = -1;
-            public static int pitchDown = -1;
+            public static int pitchUp = 0;
+            public static int pitchDown = 0;
 
-            public static int rollLeft = -1;
-            public static int rollRight = -1;
+            public static int rollLeft = 0;
+            public static int rollRight = 0;
 
-            public static int yawLeft = -1;
-            public static int yawRight = -1;
+            public static int yawLeft = 0;
+            public static int yawRight = 0;
 
-            public static int shoot = -1;
-            public static int previousWeapon = -1;
-            public static int nextWeapon = -1;
+            public static int shoot = 0;
+            public static int previousWeapon = 0;
+            public static int nextWeapon = 0;
+
+            public static int energyGun = 0;
+            public static int energyShield = 0;
+            public static int energySpeed = 0;
+
+            public static int energyModifier=0;
         }
         public static boolean particlesOn = false;
         public static boolean soundOn = true;
@@ -129,11 +135,23 @@ public class Settings {
             else if(part[0].equalsIgnoreCase("previous_weapon")){
                 Profile.Keys.previousWeapon  = stringToKey(part[1]);
             }
+            else if(part[0].equalsIgnoreCase("energy_gun")){
+                Profile.Keys.energyGun = stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("energy_shield")){
+                Profile.Keys.energyShield = stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("energy_speed")){
+                Profile.Keys.energySpeed = stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("energy_modifier")){
+                Profile.Keys.energyModifier=stringToKey(part[1]);
+            }
         }
     }
 
     public static int stringToKey(String input){
-        
+
         /**
          * LETTERS
          */
@@ -212,7 +230,7 @@ public class Settings {
         if(input.equalsIgnoreCase("z")){
             return KeyEvent.VK_Z;
         }
-        
+
         /**
          * Arrows
          */
@@ -228,7 +246,7 @@ public class Settings {
         if(input.equalsIgnoreCase("right")){
             return KeyEvent.VK_RIGHT;
         }
-        
+
         /**
          * NUMBERS
          */
@@ -239,7 +257,7 @@ public class Settings {
             return KeyEvent.VK_1;
         }
         if(input.equalsIgnoreCase("2")){
-            return KeyEvent.VK_A;
+            return KeyEvent.VK_2;
         }
         if(input.equalsIgnoreCase("3")){
             return KeyEvent.VK_3;
@@ -262,7 +280,7 @@ public class Settings {
         if(input.equalsIgnoreCase("9")){
             return KeyEvent.VK_9;
         }
-        
+
         /**
          * Numpad
          */
@@ -296,7 +314,7 @@ public class Settings {
         if(input.equalsIgnoreCase("num_9")){
             return KeyEvent.VK_NUMPAD9;
         }
-        
+
         /**
          * misc keys
          */
@@ -312,11 +330,12 @@ public class Settings {
         if(input.equalsIgnoreCase("alt")){
             return KeyEvent.VK_ALT;
         }
-        
+
         try{
             return Integer.parseInt(input);
         }
         catch(Exception e){
+            System.err.println("illegal key modifier: "+input);
             return -1;
         }
     }

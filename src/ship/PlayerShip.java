@@ -15,42 +15,35 @@ public abstract class PlayerShip extends Ship {
     protected abstract float getAngularDampening();
     protected abstract float getVelocityDampening();
     protected abstract String getLocalModelName();
-    protected Energy energy;
+    public final Energy energy;
     
     public PlayerShip(){
         super();
-        energy = new Energy();
+        energy = new Energy(this);
         modelName = this.getLocalModelName();
     }
    
     public void forwardThrust() {
         velocity.plusEquals(getDirection().times(getAdditiveSpeed()));
     }
-    
     public void reverseThrust() {
         velocity.minusEquals(getDirection().times(getNegativeSpeed()));
     }
-    
     public void pitchUp(){
         changePitch(getPitchRate());
     }
-    
     public void pitchDown(){
         changePitch(-getPitchRate());
     }
-    
     public void yawLeft() {
         changeYaw(getYawRate());
     }
-    
     public void yawRight() {
         changeYaw(-getYawRate());
     }
-    
     public void rollLeft() {
         changeRoll(getRollRate());
     }
-    
     public void rollRight() {
         changeRoll(-getRollRate());
     }
@@ -59,11 +52,9 @@ public abstract class PlayerShip extends Ship {
         // Get the next weapon in the list
         setWeapon((selectedWeapon + 1) % weapons.size());
     }
-    
     public void previousWeapon() {
         setWeapon((selectedWeapon - 1) % weapons.size());
     }
-
     public void setWeapon(int weaponNumber){
         selectedWeapon = weaponNumber % weapons.size();
         System.out.println("Switching to "+weapons.get(weaponNumber).getWeaponName());

@@ -6,92 +6,84 @@ package ship;
  *
  */ 
 public class Energy {
-    final int[] energyPoints = new int[4];
-    public static final byte POWER = 0;
-    public static final byte SHIELD = 1;
-    public static final byte SPEED = 2;
-    public static final byte TOTAL = 3;
+    private int leftOverEnergy = 15;
+    private int shieldEnergy = 0;
+    private int gunEnergy = 0;
+    private int speedEnergy = 0;
+    
 
-    public Energy() {
-        energyPoints[TOTAL] = 12;
-    }   
-    public int getPowerPoints() {
-        return energyPoints[POWER];
+    private final PlayerShip ship;
+
+    public Energy(PlayerShip ship) {
+        this.ship=ship;
     }
-    public void setPowerPoints(int powerPoints) {
-        energyPoints[POWER] = powerPoints;
-    }
-    public void increasePowerEnergy(PlayerShip ship) {
-        if(arePointsAvailable()) {
-            energyPoints[POWER] += 1;
-            for(int i=0; i < ship.weapons.size(); i++) {
-               // ship.weapons.get(i);
-            }
+    
+    public void increaseGunEnergy() {
+        if(leftOverEnergy>0) {
+            gunEnergy++;
+            leftOverEnergy--;
         }
     }
-    public void decreasePowerEnergy() {
-
+    public void decreaseGunEnergy() {
+        if(gunEnergy>0){
+            gunEnergy--;
+            leftOverEnergy++;
+        }
     }
-    public int getShieldPoints() {
-        return energyPoints[SHIELD];
+    public int getGunEnergy(){
+        return gunEnergy;
     }
-    public void setShieldPoints(int shieldPoints) {
-        energyPoints[SHIELD] = shieldPoints;
-    }
+    
     /**
      * Increases strength of each shield by 100
-     * @param ship
      */
-    public void increaseShieldEnergy(PlayerShip ship) {
-        if(arePointsAvailable()) {
-            energyPoints[SHIELD] += 1; 
+    public void increaseShieldEnergy() {
+        if(leftOverEnergy>0) {
+            shieldEnergy++;
+            leftOverEnergy--;
             for(int i=0; i < ship.shields.size(); i++) {
-                ship.shields.get(i).setStrength(energyPoints[SHIELD]*100);
+                ship.shields.get(i).setStrength(shieldEnergy*100);
             }
         }
+        debug();
     }
     /**
      * Decreases each shield strength by 100
      * @param ship
      */
-    public void decreaseShieldEnergy(PlayerShip ship) {
-        if(energyPoints[SHIELD] > 0) {
-            energyPoints[SHIELD] -= 1;
+    public void decreaseShieldEnergy() {
+        if(shieldEnergy > 0) {
+            shieldEnergy--;
+            leftOverEnergy++;
             for(int i=0; i < ship.shields.size(); i++) {
-                ship.shields.get(i).setStrength(energyPoints[SHIELD]*100);
+                ship.shields.get(i).setStrength(shieldEnergy*100);
             }
         }
+        debug();
     }
-    public int getSpeedPoints() {
-        return energyPoints[SPEED];
+    public int getShieldEnergy() {
+        return shieldEnergy;
     }
-    public void setSpeedPoints(int speedPoints) {
-        energyPoints[SPEED] = speedPoints;
+    
+    public void increaseSpeedEnergy(){
+        if(leftOverEnergy>0){
+            speedEnergy++;
+            leftOverEnergy--;
+        }
     }
-
-    public int getTotalPoints() {
-        return energyPoints[TOTAL];
-    }
-
-    public void setTotalPoints(int totalPoints) {
-        energyPoints[TOTAL] = totalPoints;
-    }
-
-    public int getAvailablePoints() {
-        return energyPoints[TOTAL] - energyPoints[POWER] - energyPoints[SHIELD] - energyPoints[SPEED];
-    }
-
-    public boolean arePointsAvailable() {
-        return (energyPoints[TOTAL] - energyPoints[POWER] - energyPoints[SHIELD] - energyPoints[SPEED]) > 0;
-    }
-
-    public int[] getAllPoints() {
-        return energyPoints;
+    public void decreaseSpeedEnergy(){
+        if(speedEnergy>0){
+            speedEnergy--;
+            leftOverEnergy++;
+        }
     }
 
     public String toString() {
-        String returnString =  energyPoints[POWER] + ","+  energyPoints[SHIELD] + "," + energyPoints[SPEED] +
-        "," +  energyPoints[TOTAL] + "," +  getAvailablePoints();   
-        return returnString;
+        String toReturn = String.format("gunEnergy: %d, shieldEnergy: %d, speedEnergy: %d, leftOverEnergy: %d",gunEnergy,shieldEnergy,speedEnergy,leftOverEnergy);  
+        return toReturn;
+    }
+    
+    public void debug(){
+        System.out.println(this.toString());
     }
 }

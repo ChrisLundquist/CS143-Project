@@ -19,10 +19,17 @@ public class InputRouter{
         CHANGE_WEAPON,
         NEXT_WEAPON,
         PREVIOUS_WEAPON,
+        ENERGY_GUN_UP,
+        ENERGY_GUN_DOWN,
+        ENERGY_SHIELD_UP,
+        ENERGY_SHIELD_DOWN,
+        ENERGY_SPEED_UP,
+        ENERGY_SPEED_DOWN,
     }
 
     public static void sendAction(Interaction i) {
         Player player = Game.getPlayer();
         player.input(i);
+        System.out.println(i);
     }
 }

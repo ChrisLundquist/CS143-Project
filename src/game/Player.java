@@ -90,6 +90,24 @@ public class Player implements Serializable {
             case NEXT_WEAPON:
                 ship.nextWeapon();
                 break;
+            case ENERGY_GUN_UP:
+                ship.energy.increaseGunEnergy();
+                break;
+            case ENERGY_GUN_DOWN:
+                ship.energy.decreaseGunEnergy();
+                break;
+            case ENERGY_SHIELD_UP:
+                ship.energy.increaseShieldEnergy();
+                break;
+            case ENERGY_SHIELD_DOWN:
+                ship.energy.decreaseShieldEnergy();
+                break;
+            case ENERGY_SPEED_UP:
+                ship.energy.increaseSpeedEnergy();
+                break;
+            case ENERGY_SPEED_DOWN:
+                ship.energy.decreaseSpeedEnergy();
+                break;
             default:
                 System.err.println("Player: unhandled input: " + action);
         }
