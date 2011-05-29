@@ -30,6 +30,5 @@ public class InputRouter{
     public static void sendAction(Interaction i) {
         Player player = Game.getPlayer();
         player.input(i);
-        System.out.println(i);
     }
 }

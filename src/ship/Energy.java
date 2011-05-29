@@ -45,7 +45,6 @@ public class Energy {
                 ship.shields.get(i).setStrength(shieldEnergy*100);
             }
         }
-        debug();
     }
     /**
      * Decreases each shield strength by 100
@@ -59,7 +58,6 @@ public class Energy {
                 ship.shields.get(i).setStrength(shieldEnergy*100);
             }
         }
-        debug();
     }
     public int getShieldEnergy() {
         return shieldEnergy;
