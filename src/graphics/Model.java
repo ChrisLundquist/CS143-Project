@@ -8,7 +8,7 @@ import math.Vector3f;
 
 public class Model implements math.Supportable{
     public static class Models{
-        public static final String ROUND_CAPITAL_SHIP = "fighter";//"ship3";
+        public static final String ROUND_CAPITAL_SHIP = "round_capital";//"ship3";
         public static final String SHIP_TEST = "ship_test";
         public static final String BULLET = "bullet";
         public static final String MISSILE = "missile";
