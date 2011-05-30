@@ -29,7 +29,7 @@ public class XboxInputListener extends Thread implements Updateable {
      * Sends actions to InputRouter
      */
     public void update() {
-
+        
         /**
          * Shooting
          */
@@ -37,13 +37,12 @@ public class XboxInputListener extends Thread implements Updateable {
             InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
             System.err.println("Shooting Primary");
         }
-        //TODO change weapons
+        //TODO Allow shooting secondary weapon
         if(getLeftTriggerState() >= .2){
-            InputRouter.sendAction(InputRouter.Interaction.CHANGE_WEAPON);
-            InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
+            InputRouter.sendAction(InputRouter.Interaction.SHOOT_SECONDARY);
             System.err.println("Shooting Secondary");
-        }
-
+        } 
+      
         /**
          * Energy
          */
@@ -113,7 +112,7 @@ public class XboxInputListener extends Thread implements Updateable {
          * Menu    
          */
         if(getButtonState() == 9) {
-            InputRouter.sendAction(InputRouter.Interaction.MENU);
+            InputRouter.sendAction(InputRouter.Interaction.OPEN_MENU);
             System.err.println("Menu Opened");
         }
 
@@ -135,8 +134,8 @@ public class XboxInputListener extends Thread implements Updateable {
 
         Process p = null;
         try {
-            //p = Runtime.getRuntime().exec("./sshscript.sh");
-            p = Runtime.getRuntime().exec("XboxControllerInputConsole.exe");
+           // p = Runtime.getRuntime().exec("./sshscript.sh");
+           p = Runtime.getRuntime().exec("XboxControllerInputConsole.exe");
             
         } catch (IOException e) {
             System.out.println("Couldn't start Xbox Controller Drivers, make sure you have the drivers and the xna runtime installed");

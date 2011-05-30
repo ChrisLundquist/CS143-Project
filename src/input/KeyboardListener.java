@@ -36,7 +36,7 @@ public class KeyboardListener implements KeyListener, Updateable {
 
     public void update() {
 
-
+        //Forwards and Backwards
         if(currentKeys[Settings.Profile.Keys.forward]){
             InputRouter.sendAction(InputRouter.Interaction.FORWARD);
         }
@@ -68,7 +68,7 @@ public class KeyboardListener implements KeyListener, Updateable {
         //Shoot
         if(currentKeys[Settings.Profile.Keys.shoot]){
             InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
-         //   Hud.flashHealthCross();
+        
         }
         if(currentKeys[Settings.Profile.Keys.nextWeapon]){
             if(!previousKeys[Settings.Profile.Keys.nextWeapon]) {

@@ -58,6 +58,7 @@ public abstract class PlayerShip extends Ship {
     public void setWeapon(int weaponNumber){
         selectedWeapon = weaponNumber % weapons.size();
         System.out.println("Switching to "+weapons.get(weaponNumber).getWeaponName());
+        
     }
 
     @Override

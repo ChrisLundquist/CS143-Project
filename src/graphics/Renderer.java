@@ -25,11 +25,13 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Renderer implements GLEventListener {
     private static final int NUM_LIGHTS = 2;
     GLU glu;
+
     GLCanvas canvas;
     Frame frame;
     FPSAnimator animator;
-    Shader shader;
+     Shader shader;
     Hud hud;
+
     Camera camera;
     private GL2 gl; // Must be recached each frame
 
@@ -40,6 +42,7 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         shader = new Shader("texture.vert","texture.frag");
         hud = new Hud();
+       
         this.camera = camera;
     }
 
@@ -64,12 +67,13 @@ public class Renderer implements GLEventListener {
 
         if(ParticleSystem.isEnabled())
             ParticleSystem.render(gl);
-         hud.drawStaticHud(gl);
-         hud.flashHealthCross(gl);
+        hud.drawStaticHud(gl);
+       
 
         checkForGLErrors(gl);
 
     }
+ 
 
     private static void checkForGLErrors(GL2 gl) {
         int errno = gl.glGetError();
@@ -117,11 +121,11 @@ public class Renderer implements GLEventListener {
 
         Model.loadModels();
         Texture.initialize(gl);
-        
+
         for(Model model: Model.loaded_models())
             build_display_list(model);
 
-        try {
+          try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             // TODO Auto-generated catch block
@@ -130,7 +134,7 @@ public class Renderer implements GLEventListener {
         shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
-        shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
+         shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
         System.gc(); // This is probably a good a idea
     }
 
@@ -263,7 +267,7 @@ public class Renderer implements GLEventListener {
     }
 
 
-    public Shader getShader() {
+     public Shader getShader() {
         return shader;
     }
 }

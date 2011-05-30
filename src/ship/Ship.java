@@ -1,5 +1,7 @@
 package ship;
 
+import graphics.Hud;
+
 import java.util.List;
 
 import ship.shield.Shield;
@@ -48,12 +50,13 @@ public abstract class Ship extends Actor {
 
     public void takeDamage(float amount){
         //TODO When we have multiple shields find which shield to take damage on
-
+        Hud.flashHealthCross();
         amount = shields.get(0).takeDamage((int)amount);
 
         if(shields.get(0).getStatus() == false){
             hitPoints -= amount;
         }
         System.out.println(shields.get(0).getStrength());
+        
     }
 }

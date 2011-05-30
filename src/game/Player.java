@@ -1,6 +1,7 @@
 package game;
 
 import graphics.Camera;
+import graphics.InGameMenu;
 import input.InputRouter;
 
 import java.io.Serializable;
@@ -107,6 +108,17 @@ public class Player implements Serializable {
                 break;
             case ENERGY_SPEED_DOWN:
                 ship.energy.decreaseSpeedEnergy();
+                break;
+            case OPEN_MENU:
+                InGameMenu.setMenuOpen(true);
+                switch(action) {
+                    case MENU_DOWN:
+                        break;
+                    case MENU_UP:
+                        break;
+                    case MENU_SELECT:
+                        break;
+                }
                 break;
             default:
                 System.err.println("Player: unhandled input: " + action);
