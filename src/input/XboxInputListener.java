@@ -4,11 +4,13 @@ package input;
  * Gives access to XboxControllerInput.exe output
  */
 
+import game.Updateable;
+
 import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class XboxInputListener {
+public class XboxInputListener extends Thread implements Updateable {
     String line;
     StringTokenizer tokenizer;
     //strings to hold output
@@ -22,66 +24,127 @@ public class XboxInputListener {
     Process p;
     BufferedReader input;
 
-    public XboxInputListener() throws IOException {
-        //player is alive
-        startInputListener();
-    }
+
     /**
-     * Not sure what to do with this, current prints debug messages
+     * Sends actions to InputRouter
      */
     public void update() {
+
+        /**
+         * Shooting
+         */
         if(getRightTriggerState() >= .2) {
             InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
+            System.err.println("Shooting Primary");
         }
+        //TODO change weapons
         if(getLeftTriggerState() >= .2){
-            InputRouter.sendAction(InputRouter.Interaction.SHOOT_SECONDARY);
+            InputRouter.sendAction(InputRouter.Interaction.CHANGE_WEAPON);
+            InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
+            System.err.println("Shooting Secondary");
         }
 
+        /**
+         * Energy
+         */
+        if(getButtonState() == 1) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_GUN_UP);
+            System.err.println("Gun Up");
+        }
+        if(getButtonState() == 3) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_GUN_DOWN);
+            System.err.println("Gun Down");
+        } 
+        if(getButtonState() == 2) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_SPEED_UP);
+            System.err.println("Speed Up");
+        }     
+        if(getButtonState() == 4) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_SPEED_DOWN);
+            System.err.println("Speed Down");
+        }     
+        //TODO add modifier for seperate shields
+        if(getButtonState() == 11) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_SHIELD_UP);
+            System.err.println("Shield Up");
+        }
+        if(getButtonState() == 13) {
+            InputRouter.sendAction(InputRouter.Interaction.ENERGY_SHIELD_DOWN);
+            System.err.println("Shield Down");
+        } 
+        /**
+         * Movement
+         */
         if(getButtonState() == 5) {
             InputRouter.sendAction(InputRouter.Interaction.ROLL_RIGHT);
+            System.err.println("Rolling Right");
         }
         if(getButtonState() == 6) {
             InputRouter.sendAction(InputRouter.Interaction.ROLL_LEFT);
+            System.err.println("Rolling Left");
         }
 
-        if(getLeftStickState().getY() > 0 && getLeftStickState().getY() < 1) {
+        if(getLeftStickState().getY() > 0 && getLeftStickState().getY() <= 1) {
             InputRouter.sendAction(InputRouter.Interaction.FORWARD);
+            System.err.println("Forward");
         }
-        if(getLeftStickState().getY() < 0 && getLeftStickState().getY() < -1) {
+        if(getLeftStickState().getY() >= -1 && getLeftStickState().getY() < 0) {
             InputRouter.sendAction(InputRouter.Interaction.BACK);
+            System.err.println("Backward");
         }
-
-        if(getRightStickState().getY() < 0 && getRightStickState().getY() < -1) {
+        if(getLeftStickState().getX() > 0 && getLeftStickState().getX() <= 1 ) {
+            InputRouter.sendAction(InputRouter.Interaction.YAW_RIGHT);
+            System.err.println("Yaw Right");
+        }     
+        if(getLeftStickState().getX() >= -1 && getLeftStickState().getX() < 0 ) {
+            InputRouter.sendAction(InputRouter.Interaction.YAW_LEFT);
+            System.err.println("Yaw Left");
+        }        
+        if(getRightStickState().getY() >= -1 && getRightStickState().getY() < 0) {
             InputRouter.sendAction(InputRouter.Interaction.PITCH_UP);
+            System.err.println("Pitch Up");
         }
-        if(getRightStickState().getY() > 0 && getRightStickState().getY() < 1 ) {
+        if(getRightStickState().getY() > 0 && getRightStickState().getY() <= 1 ) {
             InputRouter.sendAction(InputRouter.Interaction.PITCH_DOWN);
+            System.err.println("Pitch Down");
         }
 
+        /**
+         * Menu    
+         */
+        if(getButtonState() == 9) {
+            InputRouter.sendAction(InputRouter.Interaction.MENU);
+            System.err.println("Menu Opened");
+        }
+
+        //debug messages
         System.out.println("Button " + getButtonState());
         System.out.println("LeftStick " + getLeftStickState());
         System.out.println("RightStick " + getRightStickState());
         System.out.println("LeftTrigger " + getLeftTriggerState());
         System.out.println("RightTrigger " + getRightTriggerState());
     }
-    
+
     /**
      * Starts the InputListener
-     * @throws IOException 
      * @throws IOException
      */
-    public void startInputListener() throws IOException {
+    public void run() {
+        
+        //TODO check OS
 
-        if (isWindows() == true) {
-            Process p = null;
-            try {
-                p = Runtime.getRuntime().exec("XboxControllerInput.exe");
-            } catch (IOException e) {
-                System.out.println("Couldn't start Xbox Controller Drivers, make sure you have the drivers and the xna runtime installed");
-                e.printStackTrace();
-            }
-            input =new BufferedReader(new InputStreamReader(p.getInputStream()));
+        Process p = null;
+        try {
+            //p = Runtime.getRuntime().exec("./sshscript.sh");
+            p = Runtime.getRuntime().exec("XboxControllerInputConsole.exe");
+            
+        } catch (IOException e) {
+            System.out.println("Couldn't start Xbox Controller Drivers, make sure you have the drivers and the xna runtime installed");
+            e.printStackTrace();
+        }
+        input =new BufferedReader(new InputStreamReader(p.getInputStream()));
 
+        try {
             while ((line = input.readLine()) != null)
             {
                 tokenizer = new StringTokenizer(line, ",");
@@ -93,13 +156,17 @@ public class XboxInputListener {
                 update();
 
             }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-
-        else {
-            System.out.println("No Linux or Apple support, blame Microsoft");
-        }
-
     }
+
+    /*else {
+        System.out.println("No Linux or Apple support, blame Microsoft");
+    }*/
+
+
     /**
      * Gets coordinates of right stick
      * @return rightStick coordinates
@@ -220,7 +287,4 @@ public class XboxInputListener {
 
     }
 
-    public static void main(String []args) throws IOException {
-        new XboxInputListener();
-    }
 }

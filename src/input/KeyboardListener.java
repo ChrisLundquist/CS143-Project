@@ -1,5 +1,6 @@
 package input;
 import game.Updateable;
+import graphics.Hud;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -67,6 +68,7 @@ public class KeyboardListener implements KeyListener, Updateable {
         //Shoot
         if(currentKeys[Settings.Profile.Keys.shoot]){
             InputRouter.sendAction(InputRouter.Interaction.SHOOT_PRIMARY);
+         //   Hud.flashHealthCross();
         }
         if(currentKeys[Settings.Profile.Keys.nextWeapon]){
             if(!previousKeys[Settings.Profile.Keys.nextWeapon]) {

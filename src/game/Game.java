@@ -2,6 +2,8 @@ package game;
 
 import game.types.AsteroidField;
 import input.KeyboardListener;
+import input.XboxInputListener;
+
 import java.io.IOException;
 import settings.Settings;
 import actor.ActorSet;
@@ -9,6 +11,7 @@ import actor.ActorSet;
 public class Game {
     private static graphics.Renderer renderer;
     private static input.KeyboardListener input;
+    private static input.XboxInputListener controller;
     private static Player player;
     private static Map map;
     private static ActorSet actors;
@@ -30,6 +33,14 @@ public class Game {
 
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
+        
+        //TODO add boolean to check if controller enabled
+        //TODO addCallBack
+        //starts xbox controller thread
+        controller = new XboxInputListener();
+        Thread myThread = new Thread(controller);
+        myThread.start();
+        
         graphics.Model.loadModels();
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getShip());
@@ -72,6 +83,10 @@ public class Game {
 
     public static KeyboardListener getInputHandler(){
         return input;
+    }
+    
+    public static XboxInputListener getControllerHandler(){
+        return controller;
     }
 
     public static Player getPlayer() {

@@ -25,6 +25,7 @@ public class InputRouter{
         ENERGY_SHIELD_DOWN,
         ENERGY_SPEED_UP,
         ENERGY_SPEED_DOWN,
+        MENU,
     }
 
     public static void sendAction(Interaction i) {
