@@ -3,9 +3,16 @@ package settings;
 import graphics.particles.ParticleSystem;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Writer;
+
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+
+import sun.misc.BASE64Decoder;
 
 public class Settings {
     public static class Profile{
@@ -49,10 +56,50 @@ public class Settings {
         System.out.println("nextWeapon: "+Profile.Keys.nextWeapon);
         System.out.println("previousWeapon: "+Profile.Keys.previousWeapon);
     }
+    /**
+     * Writes a string to a file
+     * @param file
+     * @param input
+     * @throws IOException
+     */
+    private static void writeToFile(File file, String input) throws IOException {
+        BufferedWriter output = new BufferedWriter(new FileWriter(file));
+        output.write(input);
+        output.close();
+        System.out.println("String has been written to " + file.getCanonicalFile());  
+    }
+    
+    /**
+     * Decodes a Base64 String
+     * @param base64String
+     * @return
+     * @throws IOException
+     */
+    private static String Base64ToString(String base64String) throws IOException {        
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] decodedBytes = decoder.decodeBuffer(base64String);
+        String s = new String(decodedBytes);
+        return s;
+    }
+    
+    public static void init() throws IOException, Base64DecodingException{
 
-    public static void init() throws IOException{
+        final String defaultSettings = "Y29uZj1jb25maWd1cmF0aW9uMS5jb25mCmRlYnVnPW9uCnBhcnRpY2xlcz1vb" +
+        "gplbmFibGVfc291bmQ9b24KY29udHJvbGxlcj1vZmYK";
+
+        final String defaultConfig= "Zm9yd2FyZD13CmJhY2t3YXJkPXMKcGl0Y2h" +
+        "fdXA9aQpwaXRjaF9kb3duPWsKcm9sbF9sZWZ0PWoKcm9sbF9yaWdodD1s" +
+        "Cnlhd19sZWZ0PWEKeWF3X3JpZ2h0PWQKc2hvb3Q9c3Bh" +
+        "Y2UKbmV4dF93ZWFwb249Y3RybAplbmVyZ3lfZ3VuPTEKZW5lcmd5X3Noa" +
+        "WVsZD0yCmVuZXJneV9zcGVlZD0zCmVuZXJneV9tb2RpZmllcj1zaGlmdA==";
 
         File settingsFile = new File("config/settings.ini");
+
+        if(!settingsFile.exists()) {
+            settingsFile.createNewFile();
+            writeToFile(settingsFile, Base64ToString(defaultSettings));
+        }
+
         File configFile = null;
 
         String[] settingsLines = stringFromFile(settingsFile).split("\n");
@@ -62,6 +109,10 @@ public class Settings {
 
             if(part[0].equalsIgnoreCase("conf")){
                 configFile = new File("config/"+part[1]);
+                if(!configFile.exists()){
+                    configFile.createNewFile();
+                    writeToFile(configFile, Base64ToString(defaultConfig));
+                }
             }
             if(part[0].equalsIgnoreCase("particles")){
                 if(part[1].equalsIgnoreCase("on")){
@@ -348,7 +399,7 @@ public class Settings {
         return new String(byteBuffer);
     }
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, Base64DecodingException{
         init();
         Settings.debugKeys();
     }

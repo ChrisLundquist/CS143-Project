@@ -61,7 +61,15 @@ public class Player implements Serializable {
         }
 
         switch(action) {
+            case SHOOT:
+                ship.shoot();
+                break;
             case SHOOT_PRIMARY:
+                ship.setWeapon(0);
+                ship.shoot();
+                break;
+            case SHOOT_SECONDARY:
+                ship.setWeapon(1);
                 ship.shoot();
                 break;
             case YAW_LEFT:
