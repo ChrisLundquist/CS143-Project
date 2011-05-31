@@ -38,8 +38,6 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
-
-
     //buttons
     JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
     JCheckBox enableController, enableSound, enableParticles;
@@ -173,9 +171,6 @@ public class MainMenu extends JPanel implements ActionListener {
         add(enableParticles);
         add(quitButton);
         add(backButton);
-
-
-
     }
     /**
      * Paints the background image to the panel
