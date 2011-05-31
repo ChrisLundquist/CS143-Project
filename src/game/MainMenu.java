@@ -19,12 +19,15 @@ public class MainMenu extends JPanel implements ActionListener {
     BufferedImage background;
     int y, x;
     //paths to all images used
-    ImageIcon play, play_selected, settings, settings_selected, quit, quit_selected;
+    ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
     private static final String BACKGROUND_PATH = "assets/images/background.jpg";
     private static final String PLAY_PATH  = "assets/images/play.png";
+    private static final String JOINGAME_PATH = "assets/images/joingame.png";
     private static final String SETTINGS_PATH = "assets/images/settings.png";
     private static final String QUIT_PATH = "assets/images/quit.png";
+    
     private static final String PLAY_PATH_SELECTED  = "assets/images/play_selected.png";
+    private static final String JOINGAME_PATH_SELECTED = "assets/images/joingame_selected.png";
     private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
 
@@ -43,9 +46,12 @@ public class MainMenu extends JPanel implements ActionListener {
         try {
             background = ImageIO.read(new File(BACKGROUND_PATH));
             play = new ImageIcon(PLAY_PATH);
+            joinGame = new ImageIcon(JOINGAME_PATH);
             settings = new ImageIcon(SETTINGS_PATH);
             quit = new ImageIcon(QUIT_PATH);
+            
             play_selected = new ImageIcon(PLAY_PATH_SELECTED);
+            joinGame_selected = new ImageIcon(JOINGAME_PATH_SELECTED);
             settings_selected = new ImageIcon(SETTINGS_PATH_SELECTED);
             quit_selected = new ImageIcon(QUIT_PATH_SELECTED);
         } catch (IOException e) {
@@ -72,7 +78,7 @@ public class MainMenu extends JPanel implements ActionListener {
      * 
      */
     private void createGUI() {
-        this.setLayout( new FlowLayout(FlowLayout.RIGHT, 60, 10) );
+        this.setLayout(null);
 
         playButton = new JButton(play);   
         playButton.setOpaque(false);
@@ -81,9 +87,17 @@ public class MainMenu extends JPanel implements ActionListener {
         playButton.setBorder(null);
         playButton.setRolloverIcon(play_selected);
         playButton.addActionListener(this);
+        playButton.setBounds(50,50,100,50);
 
-        joinGameButton = new JButton("Join Game");
+        joinGameButton = new JButton(joinGame);
         joinGameButton.addActionListener(this);
+        joinGameButton.setOpaque(false);
+        joinGameButton.setBorderPainted(false);
+        joinGameButton.setContentAreaFilled(false);
+        joinGameButton.setBorder(null);
+        joinGameButton.setRolloverIcon(joinGame_selected);
+        joinGameButton.addActionListener(this);
+        joinGameButton.setBounds(50,100,230,50);
 
         settingsButton = new JButton(settings);
         settingsButton.setOpaque(false);
@@ -92,6 +106,7 @@ public class MainMenu extends JPanel implements ActionListener {
         settingsButton.setBorder(null);
         settingsButton.setRolloverIcon(settings_selected);
         settingsButton.addActionListener(this);
+        settingsButton.setBounds(50, 150, 180, 50);
 
         quitButton = new JButton(quit);
         quitButton.setOpaque(false);
@@ -104,18 +119,22 @@ public class MainMenu extends JPanel implements ActionListener {
         enableController = new JCheckBox("Enable Xbox 360 Controller", controllerEnabled);
         enableController.setVisible(false);
         enableController.addActionListener(this);
+        enableController.setBounds(50, 50, 100, 50);
 
         enableSound = new JCheckBox("Enable Sound", soundEnabled);
         enableSound.setVisible(false);
         enableSound.addActionListener(this);
+        enableSound.setBounds(50, 100, 100, 50);
 
         enableParticles = new JCheckBox("Enable Particles", particlesEnabled);
         enableParticles.setVisible(false);
         enableParticles.addActionListener(this);
+        enableParticles.setBounds(50, 150, 100, 50);
 
         backButton = new JButton("Back");
         backButton.addActionListener(this);
         backButton.setVisible(false);
+        backButton.setBounds(50, 200, 100, 50);
 
         add(playButton);
         add(joinGameButton);
