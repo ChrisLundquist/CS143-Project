@@ -20,7 +20,11 @@ public class MainMenu extends JPanel implements ActionListener {
     int y, x;
     //paths to all images used
     ImageIcon play, play_selected, settings, settings_selected, quit, quit_selected;
-    private static final String BACKGROUND_PATH = "assets/images/background.jpg";
+    private static final String BACKGROUND1_PATH = "assets/images/mainmenu/background1.jpg";
+    private static final String BACKGROUND2_PATH = "assets/images/mainmenu/background2.jpg";
+    private static final String BACKGROUND3_PATH = "assets/images/mainmenu/background3.jpg";
+    private static final String BACKGROUND4_PATH = "assets/images/mainmenu/background4.jpg";
+    private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
     private static final String PLAY_PATH  = "assets/images/play.png";
     private static final String SETTINGS_PATH = "assets/images/settings.png";
     private static final String QUIT_PATH = "assets/images/quit.png";
@@ -41,7 +45,7 @@ public class MainMenu extends JPanel implements ActionListener {
     public MainMenu() throws IOException {        
         //loads all images from assets/images/
         try {
-            background = ImageIO.read(new File(BACKGROUND_PATH));
+            background = ImageIO.read(new File(getRandomImage()));
             play = new ImageIcon(PLAY_PATH);
             settings = new ImageIcon(SETTINGS_PATH);
             quit = new ImageIcon(QUIT_PATH);
@@ -66,7 +70,22 @@ public class MainMenu extends JPanel implements ActionListener {
         f.setVisible(true);
         menuVisible = true;
     }
-
+    public String getRandomImage() {
+        int random = (int)(5*Math.random())+1;
+        switch(random) {
+            case 1:
+                return BACKGROUND1_PATH;
+            case 2:
+                return BACKGROUND2_PATH;
+            case 3:
+                return BACKGROUND3_PATH;
+            case 4:
+                return BACKGROUND4_PATH;
+            case 5:
+                return BACKGROUND5_PATH;
+        }
+        return null;
+    }
     /**
      * creates and adds gui components
      * 
@@ -203,7 +222,7 @@ public class MainMenu extends JPanel implements ActionListener {
                 controllerEnabled = true;
                 enableController.setEnabled(controllerEnabled);
             }
-           
+
         }
         if(e.getSource() == enableSound) {
             if(soundEnabled == true) {
@@ -214,7 +233,7 @@ public class MainMenu extends JPanel implements ActionListener {
                 soundEnabled = true;
                 enableSound.setEnabled(soundEnabled);
             }
-           
+
 
         }
         if(e.getSource() == enableParticles) {
