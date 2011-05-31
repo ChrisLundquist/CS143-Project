@@ -26,7 +26,7 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String BACKGROUND4_PATH = "assets/images/mainmenu/background4.jpg";
     private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
- 
+    
 
     private static final String PLAY_PATH  = "assets/images/play.png";
     private static final String JOINGAME_PATH = "assets/images/joingame.png";
@@ -137,10 +137,17 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setBorder(null);
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
-
-        enableController = new JCheckBox("Enable Xbox 360 Controller", controllerEnabled);
-        enableController.setVisible(false);
+   
+     
+        
+        enableController = new JCheckBox(play, controllerEnabled);
+        enableController.setOpaque(false);
+        enableController.setBorderPainted(false);
+        enableController.setContentAreaFilled(false);
+        enableController.setBorder(null);
+        enableController.setRolloverIcon(play_selected);
         enableController.addActionListener(this);
+        enableController.setVisible(false);
         enableController.setBounds(50, 50, 100, 50);
 
         enableSound = new JCheckBox("Enable Sound", soundEnabled);
@@ -235,6 +242,7 @@ public class MainMenu extends JPanel implements ActionListener {
             backButton.setVisible(true);
 
         }
+       
         if(e.getSource() == enableController) {
             if(controllerEnabled == true) {
                 controllerEnabled = false;
