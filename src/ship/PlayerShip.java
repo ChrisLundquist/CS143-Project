@@ -1,5 +1,7 @@
 package ship;
 
+import graphics.Hud;
+
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
 
@@ -66,5 +68,10 @@ public abstract class PlayerShip extends Ship {
         super.update();
         dampenAngularVelocity(getAngularDampening());
         velocity = velocity.times(getVelocityDampening());
+    }
+    
+    public void takeDamage(float amount){
+        super.takeDamage(amount);
+        Hud.flashHealthCross();
     }
 }
