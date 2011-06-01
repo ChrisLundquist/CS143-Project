@@ -27,7 +27,8 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
     
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
-    ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, controller_on, controller_off, back;
+    ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, controller_on,
+    controller_off, back, back_selected;
     
     
     private static final String PLAY_PATH  = "assets/images/mainmenu/play.png";
@@ -40,22 +41,33 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String SETTINGS_PATH_SELECTED = "assets/images/mainmenu/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/mainmenu/quit_selected.png";
     
-    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on";
-    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off";
+    private static final String CONTROLLER_ON = "assets/images/mainmenu/controller_on.png";
+    private static final String CONTROLLER_OFF = "assets/images/mainmenu/controller_off.png";
     
+    private static final String SOUND_ON = "assets/images/mainmenu/sound_on.png";
+    private static final String SOUND_OFF = "assets/images/mainmenu/sound_off.png";
     
+    private static final String SHADERS_ON = "assets/images/mainmenu/shaders_on.png";
+    private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_on.png";
     
-
+    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on.png";
+    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off.png";
+    
+    private static final String BACK = "assets/images/mainmenu/back.png";
+    private static final String BACK_SELECTED = "assets/images/mainmenu/back_selected.png";
+   
     //buttons
     JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
-    JCheckBox enableController, enableSound, enableParticles;
+    JCheckBox enableController, enableSound, enableShaders, enableParticles;
+    
     public boolean controllerEnabled = false;
     public boolean soundEnabled = true;
     public boolean particlesEnabled = true;
+    public boolean shadersEnabled = true;
     public boolean menuVisible;
 
     public MainMenu() throws IOException {        
-        //loads all images from assets/images/
+        //loads all images from assets/images/mainmenu
         try {
             background = ImageIO.read(new File(getRandomImage()));
             play = new ImageIcon(PLAY_PATH);
@@ -67,6 +79,18 @@ public class MainMenu extends JPanel implements ActionListener {
             joinGame_selected = new ImageIcon(JOINGAME_PATH_SELECTED);
             settings_selected = new ImageIcon(SETTINGS_PATH_SELECTED);
             quit_selected = new ImageIcon(QUIT_PATH_SELECTED);
+            
+            controller_on = new ImageIcon(CONTROLLER_ON);
+            controller_off = new ImageIcon(CONTROLLER_OFF);
+            sound_on = new ImageIcon(SOUND_ON);
+            sound_off = new ImageIcon(SOUND_OFF);
+            shaders_on = new ImageIcon(SHADERS_ON);
+            shaders_off = new ImageIcon(SHADERS_OFF);
+            particles_on = new ImageIcon(PARTICLES_ON);
+            particles_off = new ImageIcon(PARTICLES_OFF);
+            back = new ImageIcon(BACK);
+            back_selected = new ImageIcon(BACK_SELECTED);
+            
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
             e.printStackTrace();
@@ -143,39 +167,88 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setBorder(null);
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
+        settingsButton.setBounds(50, 200, 180, 50);
    
      
         
-        enableController = new JCheckBox(play, controllerEnabled);
+        enableController = new JCheckBox();
+        if(controllerEnabled == true) {
+            enableController.setIcon(controller_on);
+        }
+        else {
+            enableController.setIcon(controller_off);
+        }
         enableController.setOpaque(false);
         enableController.setBorderPainted(false);
         enableController.setContentAreaFilled(false);
         enableController.setBorder(null);
-        enableController.setRolloverIcon(play_selected);
         enableController.addActionListener(this);
         enableController.setVisible(false);
         enableController.setBounds(50, 50, 100, 50);
 
-        enableSound = new JCheckBox("Enable Sound", soundEnabled);
-        enableSound.setVisible(false);
+        enableSound = new JCheckBox();
+        if(soundEnabled == true) {
+            enableSound.setIcon(sound_on);
+        }
+        else {
+            enableSound.setIcon(sound_off);
+        }
+        enableSound.setOpaque(false);
+        enableSound.setBorderPainted(false);
+        enableSound.setContentAreaFilled(false);
+        enableSound.setBorder(null);
         enableSound.addActionListener(this);
+        enableSound.setVisible(false);
         enableSound.setBounds(50, 100, 100, 50);
+        
+        enableShaders = new JCheckBox();
+        if(shadersEnabled == true) {
+            enableShaders.setIcon(shaders_on);
+        }
+        else {
+            enableShaders.setIcon(shaders_off);
+        }
+        enableShaders.setOpaque(false);
+        enableShaders.setBorderPainted(false);
+        enableShaders.setContentAreaFilled(false);
+        enableShaders.setBorder(null);
+        enableShaders.addActionListener(this);
+        enableShaders.setVisible(false);
+        enableShaders.setBounds(50, 150, 100, 50);
 
-        enableParticles = new JCheckBox("Enable Particles", particlesEnabled);
-        enableParticles.setVisible(false);
+        enableParticles = new JCheckBox();
+        if(particlesEnabled == true) {
+            enableParticles.setIcon(particles_on);
+        }
+        else {
+            enableParticles.setIcon(particles_off);
+        }
+        enableParticles.setOpaque(false);
+        enableParticles.setBorderPainted(false);
+        enableParticles.setContentAreaFilled(false);
+        enableParticles.setBorder(null);
         enableParticles.addActionListener(this);
-        enableParticles.setBounds(50, 150, 100, 50);
+        enableParticles.setVisible(false);
+        enableParticles.setBounds(50, 200, 100, 50);
 
-        backButton = new JButton("Back");
-        backButton.addActionListener(this);
+        backButton = new JButton(back);
         backButton.setVisible(false);
-        backButton.setBounds(50, 200, 100, 50);
+        backButton.addActionListener(this);
+        backButton.setOpaque(false);
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setBorder(null);
+        backButton.setRolloverIcon(back_selected);
+        backButton.addActionListener(this);
+        backButton.setBounds(50,250,230,50);
+        
 
         add(playButton);
         add(joinGameButton);
         add(settingsButton);
         add(enableController);
         add(enableSound);
+        add(enableShaders);
         add(enableParticles);
         add(quitButton);
         add(backButton);
@@ -241,6 +314,7 @@ public class MainMenu extends JPanel implements ActionListener {
             joinGameButton.setVisible(false);
             enableController.setVisible(true);
             enableSound.setVisible(true);
+            enableShaders.setVisible(true);
             enableParticles.setVisible(true);
             backButton.setVisible(true);
 
@@ -250,10 +324,12 @@ public class MainMenu extends JPanel implements ActionListener {
             if(controllerEnabled == true) {
                 controllerEnabled = false;
                 enableController.setEnabled(controllerEnabled);
+                enableController.setIcon(controller_off);
             }
             if(controllerEnabled == false) {
                 controllerEnabled = true;
                 enableController.setEnabled(controllerEnabled);
+                enableController.setIcon(controller_on);
             }
 
         }
@@ -261,10 +337,26 @@ public class MainMenu extends JPanel implements ActionListener {
             if(soundEnabled == true) {
                 soundEnabled = false;
                 enableSound.setEnabled(soundEnabled);
+                enableSound.setIcon(sound_off);
             }
             if(soundEnabled == false) {
                 soundEnabled = true;
                 enableSound.setEnabled(soundEnabled);
+                enableSound.setIcon(sound_on);
+            }
+
+
+        }
+        if(e.getSource() == enableShaders) {
+            if(shadersEnabled == true) {
+                shadersEnabled = false;
+                enableShaders.setEnabled(shadersEnabled);
+                enableShaders.setIcon(shaders_off);
+            }
+            if(shadersEnabled == false) {
+                shadersEnabled = true;
+                enableShaders.setEnabled(shadersEnabled);
+                enableShaders.setIcon(shaders_on);
             }
 
 
@@ -273,10 +365,12 @@ public class MainMenu extends JPanel implements ActionListener {
             if(particlesEnabled == true) {
                 particlesEnabled = false;
                 enableParticles.setEnabled(particlesEnabled);
+                enableParticles.setIcon(particles_off);
             }
             if(particlesEnabled == false) {
                 particlesEnabled = true;
                 enableParticles.setEnabled(particlesEnabled);
+                enableParticles.setIcon(particles_on);
             }
 
         }
@@ -287,6 +381,7 @@ public class MainMenu extends JPanel implements ActionListener {
             joinGameButton.setVisible(true);
             enableController.setVisible(false);
             enableSound.setVisible(false);
+            enableShaders.setVisible(false);
             enableParticles.setVisible(false);
             backButton.setVisible(false);
         }
