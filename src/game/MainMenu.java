@@ -27,7 +27,7 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
     
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
-    ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, back;
+    ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, controller_on, controller_off, back;
     
     
     private static final String PLAY_PATH  = "assets/images/mainmenu/play.png";
@@ -39,6 +39,12 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String JOINGAME_PATH_SELECTED = "assets/images/mainmenu/joingame_selected.png";
     private static final String SETTINGS_PATH_SELECTED = "assets/images/mainmenu/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/mainmenu/quit_selected.png";
+    
+    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on";
+    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off";
+    
+    
+    
 
     //buttons
     JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
