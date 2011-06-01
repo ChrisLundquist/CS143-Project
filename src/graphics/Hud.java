@@ -13,7 +13,7 @@ import javax.media.opengl.GL2;
 public class Hud extends HUDTools {
 
 
-    private Texture healthbackdrop, healthbar, crosshair, gunbar, gunbackdrop, gunammosingle, gunammodouble, gunammomissile;
+    private Texture healthbackdrop, healthbar, crosshairdual, gunbar, gunbackdrop, gunammosingle, gunammodouble, gunammomissile;
     
     private static Texture healthcross;
 
@@ -21,7 +21,7 @@ public class Hud extends HUDTools {
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
     private static final String HEALTHCROSSFLASH = "assets/images/hud/health_cross_red.png";
-    private static final String CROSSHAIR = "assets/images/hud/crosshair.png";
+    private static final String CROSSHAIRDUAL = "assets/images/hud/dual_crosshair.png";
     private static final String GUNBAR = "assets/images/hud/gun_bar.png";
     private static final String GUNBACKDROP = "assets/images/hud/gun_backdrop.png";
     private static final String GUNAMMOSINGLE = "assets/images/hud/gun_ammo_single.png";
@@ -40,7 +40,7 @@ public class Hud extends HUDTools {
         gunammosingle = Texture.findOrCreateByName(GUNAMMOSINGLE);
         gunammodouble = Texture.findOrCreateByName(GUNAMMODOUBLE);
         gunammomissile = Texture.findOrCreateByName(GUNAMMOMISSILE);
-        crosshair = Texture.findOrCreateByName(CROSSHAIR);
+        crosshairdual = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
     
     /**
@@ -65,6 +65,13 @@ public class Hud extends HUDTools {
     public void drawStaticHud(GL2 gl) {
         start2D(gl);
 
+        if(crosshairdual != null) {
+            crosshairdual.bind(gl);
+        }
+        gl.glBegin(GL2.GL_QUADS );
+        draw(WIDTH/2,HEIGHT/2,128,128,gl);
+        gl.glEnd();
+        
         if(healthbackdrop != null) {
             healthbackdrop.bind(gl);
         }
@@ -114,11 +121,7 @@ public class Hud extends HUDTools {
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
-        if(crosshair != null) {
-            crosshair.bind(gl);
-        }
-        gl.glBegin(GL2.GL_QUADS );
-        //draw(-18,20,36,36,gl);
+        
         gl.glEnd();
 
         gl.glFlush();
