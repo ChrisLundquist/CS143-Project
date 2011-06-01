@@ -25,18 +25,20 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String BACKGROUND3_PATH = "assets/images/mainmenu/background3.jpg";
     private static final String BACKGROUND4_PATH = "assets/images/mainmenu/background4.jpg";
     private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
+    
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
+    ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, back;
     
-
-    private static final String PLAY_PATH  = "assets/images/play.png";
-    private static final String JOINGAME_PATH = "assets/images/joingame.png";
-    private static final String SETTINGS_PATH = "assets/images/settings.png";
-    private static final String QUIT_PATH = "assets/images/quit.png";
     
-    private static final String PLAY_PATH_SELECTED  = "assets/images/play_selected.png";
-    private static final String JOINGAME_PATH_SELECTED = "assets/images/joingame_selected.png";
-    private static final String SETTINGS_PATH_SELECTED = "assets/images/settings_selected.png";
-    private static final String QUIT_PATH_SELECTED = "assets/images/quit_selected.png";
+    private static final String PLAY_PATH  = "assets/images/mainmenu/play.png";
+    private static final String JOINGAME_PATH = "assets/images/mainmenu/joingame.png";
+    private static final String SETTINGS_PATH = "assets/images/mainmenu/settings.png";
+    private static final String QUIT_PATH = "assets/images/mainmenu/quit.png";
+    
+    private static final String PLAY_PATH_SELECTED  = "assets/images/mainmenu/play_selected.png";
+    private static final String JOINGAME_PATH_SELECTED = "assets/images/mainmenu/joingame_selected.png";
+    private static final String SETTINGS_PATH_SELECTED = "assets/images/mainmenu/settings_selected.png";
+    private static final String QUIT_PATH_SELECTED = "assets/images/mainmenu/quit_selected.png";
 
     //buttons
     JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
