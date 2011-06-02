@@ -126,7 +126,7 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-
+        
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {

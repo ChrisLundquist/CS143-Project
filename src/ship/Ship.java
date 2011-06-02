@@ -1,5 +1,7 @@
 package ship;
 
+import graphics.Model;
+
 import java.util.List;
 
 import ship.shield.Shield;
@@ -18,10 +20,16 @@ public abstract class Ship extends Actor {
 
     public Ship(){
         super();
+        modelName = Model.Models.FIGHTER;
         selectedWeapon = 0;
         weapons = new java.util.ArrayList<Weapon>();
         shields = new java.util.ArrayList<Shield>();
         hitPoints = 1000;
+    }
+    
+    public Ship(math.Vector3f pos){
+        this();
+        setPosition(pos);
     }
 
     public void shoot(){
