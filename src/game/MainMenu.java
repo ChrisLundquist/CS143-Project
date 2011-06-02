@@ -31,12 +31,12 @@ public class MainMenu extends JPanel implements ActionListener {
     controller_off, back, back_selected;
     
     
-    private static final String PLAY_PATH  = "assets/images/mainmenu/play.png";
+    private static final String PLAY_PATH  = "assets/images/mainmenu/start.png";
     private static final String JOINGAME_PATH = "assets/images/mainmenu/joingame.png";
     private static final String SETTINGS_PATH = "assets/images/mainmenu/settings.png";
     private static final String QUIT_PATH = "assets/images/mainmenu/quit.png";
     
-    private static final String PLAY_PATH_SELECTED  = "assets/images/mainmenu/play_selected.png";
+    private static final String PLAY_PATH_SELECTED  = "assets/images/mainmenu/start_selected.png";
     private static final String JOINGAME_PATH_SELECTED = "assets/images/mainmenu/joingame_selected.png";
     private static final String SETTINGS_PATH_SELECTED = "assets/images/mainmenu/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/mainmenu/quit_selected.png";
@@ -139,7 +139,7 @@ public class MainMenu extends JPanel implements ActionListener {
         playButton.setBorder(null);
         playButton.setRolloverIcon(play_selected);
         playButton.addActionListener(this);
-        playButton.setBounds(50,50,100,50);
+        playButton.setBounds(50,50,200,50);
 
         joinGameButton = new JButton(joinGame);
         joinGameButton.addActionListener(this);
@@ -149,7 +149,7 @@ public class MainMenu extends JPanel implements ActionListener {
         joinGameButton.setBorder(null);
         joinGameButton.setRolloverIcon(joinGame_selected);
         joinGameButton.addActionListener(this);
-        joinGameButton.setBounds(50,100,230,50);
+        joinGameButton.setBounds(50,100,200,50);
 
         settingsButton = new JButton(settings);
         settingsButton.setOpaque(false);
@@ -158,7 +158,7 @@ public class MainMenu extends JPanel implements ActionListener {
         settingsButton.setBorder(null);
         settingsButton.setRolloverIcon(settings_selected);
         settingsButton.addActionListener(this);
-        settingsButton.setBounds(50, 150, 180, 50);
+        settingsButton.setBounds(50, 150, 200, 50);
 
         quitButton = new JButton(quit);
         quitButton.setOpaque(false);
@@ -167,7 +167,7 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setBorder(null);
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
-        settingsButton.setBounds(50, 200, 180, 50);
+        quitButton.setBounds(50, 200, 200, 50);
    
      
         

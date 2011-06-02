@@ -23,13 +23,15 @@ import com.jogamp.opengl.util.FPSAnimator;
  *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
  */
 public class Renderer implements GLEventListener {
+    public static String shaderString="texture";
+    
     private static final int NUM_LIGHTS = 2;
     GLU glu;
 
     GLCanvas canvas;
     Frame frame;
     FPSAnimator animator;
-    // Shader shader;
+    Shader shader;
     Hud hud;
 
     Camera camera;
@@ -40,7 +42,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-      //  shader = new Shader("texture.vert","texture.frag");
+        shader = new Shader(shaderString+".vert",shaderString+".frag");
         hud = new Hud();
        
         this.camera = camera;
@@ -124,17 +126,17 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-
-        /*  try {
+        
+        try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        shader.enable(gl);*/
+        shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
-      //   shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
+        shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
         System.gc(); // This is probably a good a idea
     }
 

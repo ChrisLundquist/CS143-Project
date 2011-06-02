@@ -1,6 +1,6 @@
 package game;
 
-import game.types.AsteroidField;
+import game.types.*;
 import input.KeyboardListener;
 import input.XboxInputListener;
 
@@ -19,8 +19,6 @@ public class Game {
     private static Map map;
     private static ActorSet actors;
     private static GameThread game;
-    @SuppressWarnings("unused")
-    private static GameType gameType = new AsteroidField();
 
     public static void init() {
         System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
@@ -41,6 +39,7 @@ public class Game {
         renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         
+        /*
         try {
             //TODO add boolean to check if controller enabled
             //TODO addCallBack
@@ -52,7 +51,7 @@ public class Game {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+        */
         graphics.Model.loadModels();
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getShip());
@@ -72,7 +71,8 @@ public class Game {
             }
         });
 
-        //game.addCallback(gameType);
+        //game.addCallback(new AsteroidField());
+        //game.addCallback(new Bandits());
     }
 
     public static void joinServer(String server) {

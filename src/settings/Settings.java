@@ -1,15 +1,11 @@
 package settings;
 
+import graphics.Renderer;
 import graphics.particles.ParticleSystem;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-
-import sun.misc.BASE64Decoder;
 
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
@@ -40,6 +36,7 @@ public class Settings {
         }
         public static boolean particlesOn = false;
         public static boolean soundOn = true;
+        public static String shader = null;
     }
 
     public static void debugKeys(){
@@ -55,77 +52,40 @@ public class Settings {
         System.out.println("nextWeapon: "+Profile.Keys.nextWeapon);
         System.out.println("previousWeapon: "+Profile.Keys.previousWeapon);
     }
-    /**
-     * Writes a string to a file
-     * @param file
-     * @param input
-     * @throws IOException
-     */
-    private static void writeToFile(File file, String input) throws IOException {
-        BufferedWriter output = new BufferedWriter(new FileWriter(file));
-        output.write(input);
-        output.close();
-        System.out.println("String has been written to " + file.getCanonicalFile());  
-    }
-    
-    /**
-     * Decodes a Base64 String
-     * @param base64String
-     * @return
-     * @throws IOException
-     */
-    private static String Base64ToString(String base64String) throws IOException {        
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] decodedBytes = decoder.decodeBuffer(base64String);
-        String s = new String(decodedBytes);
-        return s;
-    }
-    
+
     public static void init() throws IOException, Base64DecodingException{
-
-        final String defaultSettings = "Y29uZj1jb25maWd1cmF0aW9uMS5jb25mCmRlYnVnPW9uCnBhcnRpY2xlcz1vb" +
-        "gplbmFibGVfc291bmQ9b24KY29udHJvbGxlcj1vZmYK";
-
-        final String defaultConfig= "Zm9yd2FyZD13CmJhY2t3YXJkPXMKcGl0Y2h" +
-        "fdXA9aQpwaXRjaF9kb3duPWsKcm9sbF9sZWZ0PWoKcm9sbF9yaWdodD1s" +
-        "Cnlhd19sZWZ0PWEKeWF3X3JpZ2h0PWQKc2hvb3Q9c3Bh" +
-        "Y2UKbmV4dF93ZWFwb249Y3RybAplbmVyZ3lfZ3VuPTEKZW5lcmd5X3Noa" +
-        "WVsZD0yCmVuZXJneV9zcGVlZD0zCmVuZXJneV9tb2RpZmllcj1zaGlmdA==";
-
+        setDefaults();
         File settingsFile = new File("config/settings.ini");
-
-        if(!settingsFile.exists()) {
-            settingsFile.createNewFile();
-            writeToFile(settingsFile, Base64ToString(defaultSettings));
-        }
+        Util.checkSettingFile(settingsFile);
 
         File configFile = null;
 
-        String[] settingsLines = stringFromFile(settingsFile).split("\n");
+        String[] settingsLines = Util.stringFromFile(settingsFile).split("\n");
         for(String line:settingsLines){
             String[] rmComment = line.split(";");
             String[] part = rmComment[0].split("=");
 
             if(part[0].equalsIgnoreCase("conf")){
                 configFile = new File("config/"+part[1]);
-                if(!configFile.exists()){
-                    configFile.createNewFile();
-                    writeToFile(configFile, Base64ToString(defaultConfig));
-                }
+                Util.checkConfFile(configFile);
+            }
+            if(part[0].equalsIgnoreCase("shader")){
+                setShader(part[1]);
             }
             if(part[0].equalsIgnoreCase("particles")){
                 if(part[1].equalsIgnoreCase("on")){
-                    Profile.particlesOn=true;
-                    ParticleSystem.enabled=true;
+                    setParticles(true);
                 }
                 else{
-                    Profile.particlesOn=false;
-                    ParticleSystem.enabled=false;
+                    setParticles(false);
                 }
             }
             if(part[0].equalsIgnoreCase("sound")){
-                if(part[1].equalsIgnoreCase("off")){
-                    Profile.soundOn=false;
+                if(part[1].equalsIgnoreCase("on")){
+                    setSound(true);
+                }
+                else{
+                    setSound(false);
                 }
             }
             if(part[0].equalsIgnoreCase("debug")){
@@ -147,7 +107,11 @@ public class Settings {
             }
         }
 
-        String[] configLines = stringFromFile(configFile).split("\n");
+        parseKeys(configFile);
+    }
+    
+    private static void parseKeys(File configFile) throws IOException{
+        String[] configLines = Util.stringFromFile(configFile).split("\n");
         for(String line: configLines){
             String[] rmComment = line.split(";");
             String[] part = rmComment[0].split("=");
@@ -200,7 +164,7 @@ public class Settings {
         }
     }
 
-    public static int stringToKey(String input){
+    private static int stringToKey(String input){
 
         /**
          * LETTERS
@@ -390,14 +354,27 @@ public class Settings {
         }
     }
 
-    public static String stringFromFile(File f) throws IOException{
-        RandomAccessFile ram = new RandomAccessFile(f, "r");
-        byte[] byteBuffer = new byte[(int)f.length()];
-        ram.readFully(byteBuffer);
-        ram.close();
-        return new String(byteBuffer);
-    }
 
+
+    private static void setDefaults(){
+        setParticles(true);
+        setSound(true);
+        setShader("texture");
+    }
+    
+    private static void setParticles(boolean b){
+        Profile.particlesOn=b;
+        ParticleSystem.enabled=b;
+    }
+    private static void setSound(boolean b){
+        Profile.soundOn=b;
+        sound.Manager.enabled=b;
+    }
+    private static void setShader(String s){
+        Profile.shader=s;
+        Renderer.shaderString=s;
+    }
+    
     public static void main(String[] args) throws IOException, Base64DecodingException{
         init();
         Settings.debugKeys();
