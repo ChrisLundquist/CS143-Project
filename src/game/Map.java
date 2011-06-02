@@ -13,6 +13,7 @@ import java.util.Random;
 
 import ship.CapitalShip;
 
+import math.Quaternion;
 import math.Vector3f;
 import actor.Actor;
 
@@ -57,13 +58,18 @@ public class Map implements Serializable {
         assert map.actors != null : "Actors was not initialized";
         assert map.spawningPositions != null : "Spawning positions was not initialized";
 
-        map.spawningPositions.add(new Vector3f(20.0f, 0.0f, 0.0f));
-        map.spawningPositions.add(new Vector3f(-20.0f, 0.0f, 0.0f));
-        map.spawningPositions.add(new Vector3f(0.0f, 20.0f, 0.0f));
-        map.spawningPositions.add(new Vector3f(0.0f, -20.0f, 0.0f));
-        map.spawningPositions.add(new Vector3f(0.0f, 0.0f, 20.0f));
-        map.spawningPositions.add(new Vector3f(0.0f, 0.0f, -20.0f));
         
+        Vector3f posititions[] = {
+                new Vector3f(20.0f, 0.0f, 0.0f),
+                new Vector3f(-20.0f, 0.0f, 0.0f),
+                new Vector3f(0.0f, 20.0f, 0.0f),
+                new Vector3f(0.0f, -20.0f, 0.0f),
+                new Vector3f(0.0f, 0.0f, 20.0f),
+                new Vector3f(0.0f, 0.0f, -20.0f)
+        };
+        
+        for (Vector3f p: posititions)
+            map.spawningPositions.add(new SpawningPosition(p, new Quaternion(p.negate(), Vector3f.UNIT_Y)));
         
         Actor a = new actor.Asteroid();
         a.setPosition(new math.Vector3f(-20.0f,0.0f,-30.0f));
@@ -89,11 +95,11 @@ public class Map implements Serializable {
     public String name;
     public graphics.Skybox skybox;
     public List<Actor> actors;
-    public List<Vector3f> spawningPositions;
+    public List<SpawningPosition> spawningPositions;
     // TODO private List<Object> triggers;
 
     public Map() {
-        this.spawningPositions = new java.util.ArrayList<Vector3f>();
+        this.spawningPositions = new java.util.ArrayList<SpawningPosition>();
         this.actors = new java.util.ArrayList<Actor>();
     }
     
@@ -150,7 +156,7 @@ public class Map implements Serializable {
         }
     }
 
-    public Vector3f getSpawnPosition() {
+    public SpawningPosition getSpawnPosition() {
         return spawningPositions.get(rand.nextInt(spawningPositions.size()));
     }
 }

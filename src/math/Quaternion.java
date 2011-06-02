@@ -41,6 +41,52 @@ public class Quaternion implements Serializable {
         z_ = axis.z * angle;
     }
 
+    public Quaternion(Vector3f lookAt, Vector3f up) {
+        this(rotationMatrix(lookAt, up));
+    }
+    
+    static float[] rotationMatrix(Vector3f lookAt, Vector3f up) {
+        Vector3f z = new Vector3f(lookAt).normalize();
+        Vector3f x = up.cross(z).normalize();
+        Vector3f y = z.cross(x).normalize();
+
+        float m[] = {
+                 x.x,  x.y,  x.z, 0.0f,
+                 y.x,  y.y,  y.z, 0.0f,
+                 z.x,  z.y,  z.z, 0.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+        };
+        return m;
+    }
+
+    public Quaternion(float m[]) {
+        if (m[0] + m[5] + m[10] > 0) {
+            float s = (float)Math.sqrt(1.0f + m[0] + m[5] + m[10]) * 2;
+            w_ = 0.25f * s;
+            x_ = (m[6] - m[9]) / s;
+            y_ = (m[8] - m[2]) / s; 
+            z_ = (m[1] - m[4]) / s; 
+        } else if (m[0] > m[5] & m[0] > m[10]) { 
+            float s = (float)Math.sqrt(1.0f + m[0] - m[5] - m[10]) * 2; // S=4*x_ 
+            w_ = (m[6] - m[9]) / s;
+            x_ = 0.25f * s;
+            y_ = (m[4] + m[1]) / s; 
+            z_ = (m[8] + m[2]) / s; 
+        } else if (m[5] > m[10]) { 
+            float s = (float)Math.sqrt(1.0f + m[5] - m[0] - m[10]) * 2; // S=4*y_
+            w_ = (m[8] - m[2]) / s;
+            x_ = (m[4] + m[1]) / s; 
+            y_ = 0.25f * s;
+            z_ = (m[9] + m[6]) / s; 
+        } else { 
+            float s = (float)Math.sqrt(1.0f + m[10] - m[0] - m[5]) * 2; // S=4*z_
+            w_ = (m[1] - m[4]) / s;
+            x_ = (m[8] + m[2]) / s;
+            y_ = (m[9] + m[6]) / s;
+            z_ = 0.25f * s;
+        }
+    }
+
     /*
      * Copy constructor
      */

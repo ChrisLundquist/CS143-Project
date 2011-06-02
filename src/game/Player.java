@@ -3,10 +3,7 @@ package game;
 import graphics.Camera;
 import graphics.InGameMenu;
 import input.InputRouter;
-
 import java.io.Serializable;
-
-import math.Vector3f;
 import ship.PlayerShip;
 import actor.Actor;
 import actor.ActorId;
@@ -137,7 +134,7 @@ public class Player implements Serializable {
         return (status == PlayerStatus.ALIVE);
     }
 
-    public void respawn(ActorSet actors, Vector3f position) {
+    public void respawn(ActorSet actors, SpawningPosition spawningPosition) {
         if (shipId == null) {
             ship = getShip();
         } else {
@@ -149,7 +146,8 @@ public class Player implements Serializable {
             }
         }
 
-        ship.setPosition(position);
+        ship.setPosition(spawningPosition.getPosition());
+        ship.setRotation(spawningPosition.getOrientation());
         setShipId(ship.getId());
         status = PlayerStatus.ALIVE;
         actors.add(ship);

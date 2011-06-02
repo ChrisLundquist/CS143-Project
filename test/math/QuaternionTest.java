@@ -1,11 +1,14 @@
 package math;
 
 import static org.junit.Assert.*;
+
+import java.util.Random;
+
 import org.junit.Test;
 
 public class QuaternionTest {
-
     private static final double EPSILON = 1.00E-6;
+    private Random gen = new Random();
 
     @Test
     public void testEqualsQuaternion() {
@@ -51,6 +54,67 @@ public class QuaternionTest {
         Vector3Test.assertVector3Equals(Vector3f.UNIT_X.negate().times(r), r.pitchAxis());
         Vector3Test.assertVector3Equals(Vector3f.UNIT_Y.negate().times(r), r.yawAxis());
         Vector3Test.assertVector3Equals(Vector3f.UNIT_Z.negate().times(r), r.rollAxis());
+    }
+    
+    @Test
+    public void testQuaterionMatrix() {
+        float identity[] = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1,
+        };
+        assertQuaternionEquals(Quaternion.IDENTITY, new Quaternion(identity));
+        
+        
+        for (int i = 0; i < 100; i++) {
+            // Start with a fairly random rotation
+            Quaternion r = new Quaternion(Vector3f.UNIT_X, gen.nextInt(360)); 
+            r.timesEquals(new Quaternion(Vector3f.UNIT_Y, gen.nextInt(360)));
+            r.timesEquals(new Quaternion(Vector3f.UNIT_Z, gen.nextInt(360)));
+
+            Quaternion q = new Quaternion(r.toGlMatrix());
+            assertQuaternionEquals(q, r);
+        }
+    }
+    
+    @Test
+    public void testRotationMatrix() {        
+        float m[] = Quaternion.rotationMatrix(Vector3f.UNIT_Z, Vector3f.UNIT_Y);
+        
+        System.out.println(String.format(
+                "| %06.3f %06.3f %06.3f %06.3f |\n" +
+                "| %06.3f %06.3f %06.3f %06.3f |\n" +
+                "| %06.3f %06.3f %06.3f %06.3f |\n" +
+                "| %06.3f %06.3f %06.3f %06.3f |",
+                m[0], m[4], m[8], m[12],
+                m[1], m[5], m[9], m[13],
+                m[2], m[6], m[10], m[14],
+                m[3], m[7], m[11], m[15]));
+    }
+    
+    @Test
+    public void testQuaterionFromLookAt() {
+        Vector3f tests[] = {
+                Vector3f.UNIT_X,
+                Vector3f.UNIT_X.negate(),
+                Vector3f.UNIT_Z,
+                Vector3f.UNIT_Z.negate(),
+                new Vector3f(1, 1, 1),
+        };
+        
+        for (Vector3f v: tests) {
+            System.out.println(v);
+            Quaternion q = new Quaternion(v, Vector3f.UNIT_Y);
+            Vector3Test.assertVector3Equals(v, q.rollAxis());
+        }
+        
+        
+    
+        
+        System.out.println(new Quaternion(Vector3f.UNIT_Z, Vector3f.UNIT_Y).toMatrixString());
+        System.out.println("");
+        System.out.println(new Quaternion(Vector3f.UNIT_Y.negate(), Vector3f.UNIT_Z).toMatrixString());
     }
    
 

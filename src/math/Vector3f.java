@@ -166,7 +166,7 @@ public class Vector3f implements Serializable {
 
     /**
      * 
-     * @return The negation of this vector
+     * @return A vector pointing in the opposite direction
      */
     public Vector3f negate() {
         return this.times(-1.0f);
