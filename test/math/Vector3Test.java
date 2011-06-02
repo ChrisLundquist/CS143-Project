@@ -202,8 +202,12 @@ public class Vector3Test {
 
 
     public static void assertVector3Equals(Vector3f a, Vector3f b, double epsilon) {
+        try {
         assertEquals(a.x, b.x, epsilon);
         assertEquals(a.y, b.y, epsilon);
         assertEquals(a.z, b.z, epsilon);
+        } catch(AssertionError e){
+            throw new AssertionError("Expected: " + a + " but was " + b);
+        }
     }
 }
