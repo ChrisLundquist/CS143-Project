@@ -43,7 +43,8 @@ public class Bullet extends Projectile {
 
     @Override
     public void handleCollision(Actor other) {
-        if (other instanceof ship.PlayerShip)
+        // Don't shoot our parents
+        if (parentId.equals(other.getId()))
             return;
         else{
             die();
