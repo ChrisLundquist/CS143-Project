@@ -4,13 +4,8 @@ import graphics.Renderer;
 import graphics.particles.ParticleSystem;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-
-import sun.misc.BASE64Decoder;
 
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
