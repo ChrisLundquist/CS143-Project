@@ -12,17 +12,15 @@ import javax.media.opengl.GL2;
  */
 public class Hud extends HUDTools {
 
-
-    @SuppressWarnings("unused")
-    private Texture healthbackdrop, healthbar, crosshairdual, gunbar, gunbackdrop, gunammosingle, gunammodouble, gunammomissile;
-    
-    private static Texture healthcross;
-
+    private Texture healthbackdrop, healthbar, gunbar, gunbackdrop;    
+    private static Texture healthcross, crosshair, gunammo;
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
     private static final String HEALTHCROSSFLASH = "assets/images/hud/health_cross_red.png";
     private static final String CROSSHAIRDUAL = "assets/images/hud/dual_crosshair.png";
+    private static final String CROSSHAIRSINGLE = "assets/images/hud/machinegun_crosshair.png";
+    private static final String CROSSHAIRSNIPER = "assets/images/hud/sniper_crosshair.png";
     private static final String GUNBAR = "assets/images/hud/gun_bar.png";
     private static final String GUNBACKDROP = "assets/images/hud/gun_backdrop.png";
     private static final String GUNAMMOSINGLE = "assets/images/hud/gun_ammo_single.png";
@@ -38,12 +36,25 @@ public class Hud extends HUDTools {
         healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
         gunbar = Texture.findOrCreateByName(GUNBAR);
         gunbackdrop = Texture.findOrCreateByName(GUNBACKDROP);
-        gunammosingle = Texture.findOrCreateByName(GUNAMMOSINGLE);
-        gunammodouble = Texture.findOrCreateByName(GUNAMMODOUBLE);
-        gunammomissile = Texture.findOrCreateByName(GUNAMMOMISSILE);
-        crosshairdual = Texture.findOrCreateByName(CROSSHAIRDUAL);
+        gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
+        crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
     
+    public static void switchWeaponToMissile() {
+        crosshair = Texture.findOrCreateByName(GUNAMMOMISSILE);
+    }
+    
+    public static void switchWeaponToTwinLinkedMachineGun() {
+        crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
+        gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
+    }
+    public static void switchWeaponToMachineGun() {
+        crosshair = Texture.findOrCreateByName(CROSSHAIRSINGLE);
+        gunammo = Texture.findOrCreateByName(GUNAMMOSINGLE);
+    }
+    public static void switchToSniper() {
+        crosshair = Texture.findOrCreateByName(CROSSHAIRSNIPER);
+    }
     /**
      * Flashes the health cross red and then resets back to green after 500 ms
      */
@@ -58,22 +69,22 @@ public class Hud extends HUDTools {
             }
         }, inteveral);
     }
-
+   
     /**
-     * Draws the static elements of the HUD
+     * Draws the static elements of the HUD     
      * @param gl
      */
     public void drawStaticHud(GL2 gl) {
         start2D(gl);
 
-        if(crosshairdual != null) {
-            crosshairdual.bind(gl);
+        if(crosshair != null) {
+            crosshair.bind(gl);
         }
-        gl.glBegin(GL2.GL_QUADS );
-        draw(WIDTH/2,HEIGHT/2,128,128,gl);
+        gl.glBegin(GL2.GL_QUADS);
+        draw(-510,100+HEIGHT/2,1024,1024,gl);
         gl.glEnd();
         
-        if(healthbackdrop != null) {
+        if(healthbackdrop != null) { 
             healthbackdrop.bind(gl);
         }
 
@@ -85,7 +96,7 @@ public class Hud extends HUDTools {
         if(healthbar != null) {
             healthbar.bind(gl);
         }
-
+ 
         gl.glBegin(GL2.GL_QUADS );
         draw(0,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
@@ -115,8 +126,8 @@ public class Hud extends HUDTools {
         draw(-WIDTH,0,WIDTH,HEIGHT,gl);
         gl.glEnd();
 
-        if(gunammosingle != null) {
-            gunammosingle.bind(gl);
+        if(gunammo != null) {
+            gunammo.bind(gl);
         }
 
         gl.glBegin(GL2.GL_QUADS );

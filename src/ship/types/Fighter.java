@@ -20,7 +20,7 @@ public class Fighter extends PlayerShip {
     public Fighter() {
         weapons.add(new ship.weapon.TwinLinkedMachinegun());
         weapons.add(new ship.weapon.Machinegun());
-        shields.add(new ship.shield.PlayerShield());
+        shields.add(new ship.shield.PlayerShield());    
         
     }
     
