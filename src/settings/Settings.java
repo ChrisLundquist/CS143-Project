@@ -8,11 +8,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.Writer;
-
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
 import sun.misc.BASE64Decoder;
+
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
 public class Settings {
     public static class Profile{

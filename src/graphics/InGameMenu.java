@@ -1,5 +1,4 @@
 package graphics;
-import javax.media.opengl.GL2;
 
 /**
  * In game menu, allows people to rage quit and turn off their sound
@@ -8,6 +7,7 @@ import javax.media.opengl.GL2;
  */
 public class InGameMenu extends HUDTools {
     private static boolean menuOpen = false;
+    @SuppressWarnings("unused")
     private int selection;
   
     public InGameMenu() {

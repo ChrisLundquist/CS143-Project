@@ -38,7 +38,7 @@ public class Renderer implements GLEventListener {
     public Renderer(Camera camera) {
         glu = new GLU();
         canvas = new GLCanvas();
-        frame = new Frame("cs143 projectx");
+        frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
       //  shader = new Shader("texture.vert","texture.frag");
         hud = new Hud();
@@ -65,8 +65,8 @@ public class Renderer implements GLEventListener {
         for(Actor a: game.Game.getActors())
             render(a);
 
-        /*if(ParticleSystem.isEnabled())
-            ParticleSystem.render(gl);*/
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.render(gl);
         hud.drawStaticHud(gl);
        
 

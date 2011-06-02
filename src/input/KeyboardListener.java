@@ -1,6 +1,5 @@
 package input;
 import game.Updateable;
-import graphics.Hud;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,12 +8,8 @@ import settings.Settings;
 
 public class KeyboardListener implements KeyListener, Updateable {
 
-    private final int HOLD_TIME = 50;
-
     boolean[] currentKeys = new boolean[KeyEvent.KEY_LAST];
     boolean[] previousKeys= new boolean[KeyEvent.KEY_LAST];
-
-    private long curTime = 0;
 
     public KeyboardListener() {
         System.out.println("==="+KeyEvent.KEY_LAST+" Keys Mapped===");

@@ -13,6 +13,7 @@ import javax.media.opengl.GL2;
 public class Hud extends HUDTools {
 
 
+    @SuppressWarnings("unused")
     private Texture healthbackdrop, healthbar, crosshairdual, gunbar, gunbackdrop, gunammosingle, gunammodouble, gunammomissile;
     
     private static Texture healthcross;
@@ -120,8 +121,6 @@ public class Hud extends HUDTools {
 
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH,0,WIDTH,HEIGHT,gl);
-        gl.glEnd();
-        
         gl.glEnd();
 
         gl.glFlush();

@@ -19,6 +19,7 @@ public class Game {
     private static Map map;
     private static ActorSet actors;
     private static GameThread game;
+    @SuppressWarnings("unused")
     private static GameType gameType = new AsteroidField();
 
     public static void init() {
