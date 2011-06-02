@@ -71,8 +71,8 @@ public class Game {
             }
         });
 
-        game.addCallback(new AsteroidField());
-        game.addCallback(new Bandits());
+        //game.addCallback(new AsteroidField());
+        //game.addCallback(new Bandits());
     }
 
     public static void joinServer(String server) {
