@@ -35,7 +35,7 @@ public class Hud extends HUDTools {
         healthbar = Texture.findOrCreateByName(HEALTHBAR);
         healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
         gunbar = Texture.findOrCreateByName(GUNBAR);
-        gunbackdrop = Texture.findOrCreateByName(GUNBACKDROP);
+        gunbackdrop = Texture.findOrCreateByName(GUNBACKDROP);  
         gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
         crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
