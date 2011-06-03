@@ -7,7 +7,6 @@ import math.*;
 
 public class Bullet extends Projectile {
     private static final long serialVersionUID = -3860927022451699968L;
-    private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     protected final float BULLET_SPEED;
     protected int BULLET_DAMAGE = 5;
 
@@ -41,33 +40,13 @@ public class Bullet extends Projectile {
         position.plusEquals(positionOffset);
     }
 
-    @Override
-    public void handleCollision(Actor other) {
-        // Don't shoot our parents
-        if (parentId.equals(other.getId()))
-            return;
-        else{
-            die();
-        }
 
+    public void die(){
         if(ParticleSystem.isEnabled()){
             for(int i = 0; i < 50; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
         }
-
-        bounce(other);
-    }
-
-    public void update() {
-        super.update();
-
-        if (age > MAX_AGE){
-            die();   
-        }
-    }
-
-    public void die(){
         delete();
     }
 }

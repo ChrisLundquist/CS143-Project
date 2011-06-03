@@ -5,6 +5,8 @@ import math.Vector3f;
 
 public abstract class Projectile extends Actor{
     private static final long serialVersionUID = 8097256529802244313L;
+    private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
+
     protected final float DEFAULT_SPEED = 1.0f;
     protected final float DEFAULT_SIZE = 0.1f;
     protected int damage;
@@ -22,5 +24,22 @@ public abstract class Projectile extends Actor{
     }
     public int getDamage() {
         return damage;
+    }
+
+    public void update() {
+        super.update();
+
+        if (age > MAX_AGE){
+            die();   
+        }
+    }
+    
+    @Override
+    public void handleCollision(Actor other) {
+        // Don't shoot our parents
+        if (parentId.equals(other.getId()))
+            return;
+        die();
+        bounce(other);
     }
 }

@@ -7,15 +7,16 @@ import math.*;
 
 public class Missile extends Projectile {
     private static final long serialVersionUID = -8381240274687476481L;
-    private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
     protected final float MISSILE_SPEED;
     //does 15 more damage than a missile
-    protected int MISSILE_DAMAGE = 20;
+    protected int MISSILE_DAMAGE = 100;
 
     protected static final String MODEL_NAME = Model.Models.MISSILE;
-    private static final String SOUND_EFFECT = "Gun1.wav";
     //TODO sound for Missiles
-    private static final float EFFECT_VOLUME = 0.5f;
+    private static final String SHOOT_EFFECT = "Gun1.wav";
+    private static final String DEATH_EFFECT = "explode.wav";
+
+    private static final float EFFECT_VOLUME = 10f;
 
     public Missile(Actor actor,float speed,int multiplier){
         super(actor);
@@ -25,11 +26,12 @@ public class Missile extends Projectile {
             MISSILE_DAMAGE = MISSILE_DAMAGE * multiplier;
         }
         damage = MISSILE_DAMAGE;
+        modelName = MODEL_NAME;
 
-        sound.Event effect = new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SOUND_EFFECT));
+        sound.Event effect = new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findByName(SHOOT_EFFECT));
         effect.gain = EFFECT_VOLUME;
         sound.Manager.addEvent(effect);
-        velocity.timesEquals(MISSILE_DAMAGE);
+        velocity.timesEquals(MISSILE_SPEED);
     }
 
 
@@ -43,32 +45,16 @@ public class Missile extends Projectile {
         position.plusEquals(positionOffset);
     }
 
-    @Override
-    public void handleCollision(Actor other) {
-        if (other instanceof ship.PlayerShip)
-            return;
-        else{
-            die();
-        }
-
+    public void die(){
+        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(DEATH_EFFECT));
+        effect.gain = EFFECT_VOLUME;
+        sound.Manager.addEvent(effect);
+        
         if(ParticleSystem.isEnabled()){
-            for(int i = 0; i < 50; i++){
+            for(int i = 0; i < 256; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
         }
-
-        bounce(other);
-    }
-
-    public void update() {
-        super.update();
-
-        if (age > MAX_AGE){
-            die();   
-        }
-    }
-
-    public void die(){
         delete();
     }
 }
