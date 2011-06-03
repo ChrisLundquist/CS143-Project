@@ -2,7 +2,10 @@ package ship.types;
 
 import graphics.Model;
 import ship.PlayerShip;
-import ship.weapon.TwinLinkedMissileLauncher;
+import ship.weapon.TwinLinkedWeapon;
+import ship.weapon.Weapon;
+import actor.Bullet;
+import actor.Missile;
 
 public class Bomber extends PlayerShip {
     private static final long serialVersionUID = -8832365458776599623L;
@@ -18,9 +21,9 @@ public class Bomber extends PlayerShip {
     private final float VELOCITY_DAMPENING = 0.75f;
     
     public Bomber() {
-        weapons.add(new TwinLinkedMissileLauncher());
-        weapons.add(new ship.weapon.Machinegun());
-        shields.add(new ship.shield.PlayerShield());    
+        weapons.add(new TwinLinkedWeapon<Missile>(Missile.class,Missile.getShotCoolDown()));
+        weapons.add(new Weapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
+        shields.add(new ship.shield.PlayerShield());
     }
     
     @Override

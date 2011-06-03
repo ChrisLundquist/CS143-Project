@@ -122,6 +122,7 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
 
         Model.loadModels();
+        Hud.initialize();
         Texture.initialize(gl);
 
         for(Model model: Model.loaded_models())

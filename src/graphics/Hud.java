@@ -12,7 +12,7 @@ import javax.media.opengl.GL2;
  */
 public class Hud extends HUDTools {
 
-    private Texture healthbackdrop, healthbar, gunbar, gunbackdrop;    
+    private static Texture healthbackdrop, healthbar, gunbar, gunbackdrop;
     private static Texture healthcross, crosshair, gunammo;
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
@@ -30,7 +30,7 @@ public class Hud extends HUDTools {
     /**
      * Constructor loads all the textures   
      */
-    public Hud() {   
+    public static void initialize() {   
         healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
         healthbar = Texture.findOrCreateByName(HEALTHBAR);
         healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
@@ -137,6 +137,4 @@ public class Hud extends HUDTools {
         gl.glFlush();
         stop2D(gl);
     }
-
-
 }

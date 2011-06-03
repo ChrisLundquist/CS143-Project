@@ -1,7 +1,11 @@
 package ship.types;
 
+import actor.Bullet;
+import actor.Missile;
 import graphics.Model;
 import ship.PlayerShip;
+import ship.weapon.AlternatingWeapon;
+import ship.weapon.Weapon;
 
 public class Fighter extends PlayerShip {
     private static final long serialVersionUID = -2035608530335353067L;
@@ -18,8 +22,8 @@ public class Fighter extends PlayerShip {
     private final float VELOCITY_DAMPENING = 0.95f;
     
     public Fighter() {
-        weapons.add(new ship.weapon.AlternatingMachinegun());
-        weapons.add(new ship.weapon.MissileLauncher());
+        weapons.add(new Weapon<Missile>(Missile.class,Missile.getShotCoolDown()));
+        weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
         shields.add(new ship.shield.PlayerShield());
         
     }

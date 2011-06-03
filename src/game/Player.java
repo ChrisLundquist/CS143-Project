@@ -155,7 +155,7 @@ public class Player implements Serializable {
 
     // TODO create ship of players preference
     public PlayerShip getNewShip() {
-        return new ship.types.Bomber();
+        return new ship.types.Scout();
     }
 
     public void setName(String name) {

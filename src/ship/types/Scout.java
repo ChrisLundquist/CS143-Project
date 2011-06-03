@@ -1,7 +1,10 @@
 package ship.types;
 
+import actor.Bullet;
+import actor.SniperBullet;
 import graphics.Model;
 import ship.PlayerShip;
+import ship.weapon.Weapon;
 
 public class Scout extends PlayerShip  {
     private static final long serialVersionUID = -6885874668025162786L;
@@ -18,8 +21,9 @@ public class Scout extends PlayerShip  {
     private final float VELOCITY_DAMPENING = 0.90f;
     
     public Scout() {
-        weapons.add(new ship.weapon.Machinegun());
-        weapons.add(new ship.weapon.Sniper());
+        weapons.add(new Weapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
+        weapons.add(new Weapon<SniperBullet>(SniperBullet.class,SniperBullet.getShotCoolDown()));
+
         shields.add(new ship.shield.PlayerShield());
         
     }

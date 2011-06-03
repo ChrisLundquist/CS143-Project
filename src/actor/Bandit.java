@@ -3,7 +3,7 @@ package actor;
 import math.Vector3f;
 import ship.Ship;
 import ship.shield.PlayerShield;
-import ship.weapon.AlternatingMachinegun;
+import ship.weapon.AlternatingWeapon;
 
 public class Bandit extends Ship {
     static final long serialVersionUID = 8866311066404784908L;
@@ -12,7 +12,7 @@ public class Bandit extends Ship {
     public Bandit(){
         super();
         hitPoints = DEFAULT_HITPOINTS;
-        weapons.add(new AlternatingMachinegun());
+        weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
         shields.add(new PlayerShield());
     }
 

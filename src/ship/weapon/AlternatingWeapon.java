@@ -1,8 +1,13 @@
 package ship.weapon;
 
+import actor.Projectile;
 import math.Vector3f;
 
-public abstract class AlternatingWeapon extends Weapon {
+public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
+    public AlternatingWeapon(Class<? extends T> projectileType, long coolDown) {
+        super(projectileType,coolDown);
+    }
+
     public final float DEFAULT_OFFSET = 0.5f;
     protected short counter = 0;
 
@@ -12,7 +17,7 @@ public abstract class AlternatingWeapon extends Weapon {
 
     public void shoot(actor.Actor ship) {
         //calculates time passed in milliseconds
-        if((System.currentTimeMillis() - getLastShotTime()) > getShotCoolDown()) {
+        if((System.currentTimeMillis() - getLastShotTime()) > coolDown / 2) {
             actor.Projectile p = newProjectile(ship);
 
             if(counter%2==0){
@@ -27,5 +32,4 @@ public abstract class AlternatingWeapon extends Weapon {
             counter++;
         }
     }
-
 }

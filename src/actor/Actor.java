@@ -304,6 +304,8 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
     // CL - updates the state of the actor for the next frame
     public void update() {
+        if(age == 0)
+            onFirstUpdate();
         position.plusEquals(velocity);
         rotation.normalize();
 
@@ -311,6 +313,9 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         // this may be an overridden in subclasses to provide different handling
         rotation.timesEquals(angularVelocity);
         age++;
+    }
+
+    protected void onFirstUpdate() {        
     }
 
     public ActorId getParentId() {

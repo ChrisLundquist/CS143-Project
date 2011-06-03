@@ -15,10 +15,11 @@ public abstract class Projectile extends Actor{
     protected ParticleFountain<? extends Particle> particleFountain;
 
     protected static final String MODEL_NAME = "bullet";
+    protected static final long DEFAULT_DELAY = 1000;
 
     public Projectile(Actor actor){
         super();
-        this.velocity = actor.velocity.plus(actor.getDirection().times(DEFAULT_SPEED));
+        velocity = actor.velocity.plus(actor.getDirection().times(DEFAULT_SPEED));
         position = new Vector3f(actor.getPosition());
         rotation = new Quaternion(actor.getRotation());
         parentId = actor.id;
@@ -44,5 +45,9 @@ public abstract class Projectile extends Actor{
             return;
         die();
         bounce(other);
+    }
+    
+    public static long getShotCoolDown() {
+        return DEFAULT_DELAY;
     }
 }
