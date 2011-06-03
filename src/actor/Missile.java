@@ -15,18 +15,8 @@ public class Missile extends Projectile {
 
     public Missile(Actor actor){
         super(actor);
-
         damage = MISSILE_DAMAGE;
         modelName = MODEL_NAME;
-
-        sound.Event effect = new sound.Event(actor.getPosition(), actor.getVelocity(),sound.Library.findOrCreateByName(SHOOT_EFFECT));
-        effect.gain = EFFECT_VOLUME;
-        sound.Manager.addEvent(effect);
-
-        if(ParticleSystem.isEnabled()){
-            particleFountain = new graphics.particles.ParticleFountain<PlasmaParticle>(PlasmaParticle.class,this);
-            ParticleSystem.addFountain(particleFountain);
-        }
     }
 
     public void die(){
@@ -42,6 +32,18 @@ public class Missile extends Projectile {
 
         ParticleSystem.removeFountain(particleFountain);
         delete();
+    }
+    
+    @Override
+    public void onFirstUpdate(){
+        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SHOOT_EFFECT));
+        effect.gain = EFFECT_VOLUME;
+        sound.Manager.addEvent(effect);
+
+        if(ParticleSystem.isEnabled()){
+            particleFountain = new graphics.particles.ParticleFountain<PlasmaParticle>(PlasmaParticle.class,this);
+            ParticleSystem.addFountain(particleFountain);
+        }
     }
     
     public static long getShotCoolDown() {
