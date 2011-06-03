@@ -30,8 +30,8 @@ public class InGameMenu extends HUDTools {
             if(selection == 1) {
                 inGameMenu = Texture.findOrCreateByName(QUIT);
             }
+            stop2D(gl);
         }
-        stop2D(gl);
     }
     public static void selectionDown() {
         selection = 1;
