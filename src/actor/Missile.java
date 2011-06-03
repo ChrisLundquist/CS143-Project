@@ -1,14 +1,13 @@
 package actor;
 
 import graphics.Model;
-import graphics.particles.FireParticle;
-import graphics.particles.ParticleSystem;
+import graphics.particles.*;
+
 import math.*;
 
 public class Missile extends Projectile {
     private static final long serialVersionUID = -8381240274687476481L;
     protected final float MISSILE_SPEED;
-    //does 15 more damage than a missile
     protected int MISSILE_DAMAGE = 100;
 
     protected static final String MODEL_NAME = Model.Models.MISSILE;
@@ -32,6 +31,10 @@ public class Missile extends Projectile {
         effect.gain = EFFECT_VOLUME;
         sound.Manager.addEvent(effect);
         velocity.timesEquals(MISSILE_SPEED);
+        if(ParticleSystem.isEnabled()){
+            particleFountain = new graphics.particles.ParticleFountain<PlasmaParticle>(PlasmaParticle.class,this);
+            ParticleSystem.addFountain(particleFountain);
+        }
     }
 
 
@@ -55,6 +58,8 @@ public class Missile extends Projectile {
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
         }
+        
+        ParticleSystem.removeFountain(particleFountain);
         delete();
     }
 }

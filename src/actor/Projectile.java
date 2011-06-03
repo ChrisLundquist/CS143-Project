@@ -1,5 +1,7 @@
 package actor;
 
+import graphics.particles.Particle;
+import graphics.particles.ParticleFountain;
 import math.Quaternion;
 import math.Vector3f;
 
@@ -10,6 +12,7 @@ public abstract class Projectile extends Actor{
     protected final float DEFAULT_SPEED = 1.0f;
     protected final float DEFAULT_SIZE = 0.1f;
     protected int damage;
+    protected ParticleFountain<? extends Particle> particleFountain;
 
     protected static final String MODEL_NAME = "bullet";
 

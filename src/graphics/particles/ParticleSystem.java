@@ -15,9 +15,10 @@ import javax.media.opengl.*;
 public class ParticleSystem {
     //Max amount of particles
     private static int MAX_PARTICLES = 4096;
-    private static List<Particle> particles = new LinkedList<Particle>();
-    private static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>(); 
-    public static boolean enabled = true;
+    static List<Particle> particles = new LinkedList<Particle>();
+    static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>();
+    static List<ParticleFountain<? extends Particle>> fountains = new LinkedList<ParticleFountain<? extends Particle>>();
+    public static boolean enabled = true, fountainsEnabled = true;
 
     public static boolean addParticle(Particle particle){
         // We can't add a particle if we have too many
@@ -27,6 +28,11 @@ public class ParticleSystem {
         newParticles.offer(particle);
         return true;
     }
+    
+    public static boolean addFountain(ParticleFountain<? extends Particle> fountain){
+        fountains.add(fountain);
+        return true;
+    }
 
     /**
      * Draws the particles
@@ -34,6 +40,10 @@ public class ParticleSystem {
      */
     public static void render( GL2 gl ){
         Particle particle;
+        
+        if(fountainsEnabled)
+            for(ParticleFountain<? extends Particle> fountain : fountains)
+                fountain.update();
         
         // Check for new particles
         while ((particle = newParticles.poll())!= null)
@@ -70,5 +80,9 @@ public class ParticleSystem {
     }
     public static boolean isEnabled() {
         return enabled;
+    }
+
+    public static synchronized void removeFountain(ParticleFountain<? extends Particle> particleFountain) {
+        fountains.remove(particleFountain);
     }
 }
