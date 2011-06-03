@@ -14,7 +14,7 @@ public abstract class Ship extends Actor {
 
     private static final float DAMAGE_FACTOR = .25f;
 
-    protected List<Weapon> weapons;
+    protected List<Weapon<? extends actor.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon, hitPoints;
 
@@ -22,7 +22,7 @@ public abstract class Ship extends Actor {
         super();
         modelName = Model.Models.FIGHTER;
         selectedWeapon = 0;
-        weapons = new java.util.ArrayList<Weapon>();
+        weapons = new java.util.ArrayList<Weapon<? extends actor.Projectile>>();
         shields = new java.util.ArrayList<Shield>();
         hitPoints = 1000;
     }
@@ -62,6 +62,5 @@ public abstract class Ship extends Actor {
             hitPoints -= amount;
         }
         System.out.println(shields.get(0).getStrength());
-        
     }
 }
