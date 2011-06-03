@@ -3,7 +3,6 @@ package ship.weapon;
 import actor.Actor;
 
 public class MissileLauncher extends ship.weapon.Weapon {
-    private static final int MULTIPLIER = 0;
     
     //longer cool downs then machinegun
     @Override
@@ -13,7 +12,7 @@ public class MissileLauncher extends ship.weapon.Weapon {
 
     @Override
     protected actor.Projectile newProjectile(actor.Actor ship) {
-        return new actor.Missile(ship,0.5f,MULTIPLIER);
+        return new actor.Missile(ship,0.5f,getMultiplier());
     }
     @Override
     public void shoot(Actor ship) {
@@ -27,8 +26,5 @@ public class MissileLauncher extends ship.weapon.Weapon {
     @Override
     public String getWeaponName() {
         return "Missile Launcher";
-    }
-    public static int getMulitplier() {
-        return MULTIPLIER;
     }
 }

@@ -18,7 +18,7 @@ public class Fighter extends PlayerShip {
     private final float VELOCITY_DAMPENING = 0.95f;
     
     public Fighter() {
-        weapons.add(new ship.weapon.TwinLinkedMachinegun());
+        weapons.add(new ship.weapon.AlternatingMachinegun());
         weapons.add(new ship.weapon.MissileLauncher());
         shields.add(new ship.shield.PlayerShield());
         
