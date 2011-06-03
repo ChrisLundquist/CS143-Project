@@ -14,8 +14,10 @@ public class Model implements math.Supportable{
         public static final String MISSILE = "missile";
         public static final String FIGHTER = "fighter";
         public static final String ASTEROID = "asteroid";
+        public static final String BANDIT = "fighter";
+        public static final String BANDIT_BASE = "fighter";
         
-        public static final String[] TOTAL = {ROUND_CAPITAL_SHIP,SHIP_TEST,BULLET,MISSILE,FIGHTER,ASTEROID};
+        public static final String[] TOTAL = {ROUND_CAPITAL_SHIP,SHIP_TEST,BULLET,MISSILE,FIGHTER,ASTEROID, BANDIT, BANDIT_BASE};
     }
         
     static final String MODEL_PATH = "assets/models/";

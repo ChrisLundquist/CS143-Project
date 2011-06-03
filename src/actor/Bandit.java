@@ -1,5 +1,6 @@
 package actor;
 
+import graphics.Model;
 import math.Vector3f;
 import ship.Ship;
 import ship.shield.PlayerShield;
@@ -14,6 +15,7 @@ public class Bandit extends Ship {
         hitPoints = DEFAULT_HITPOINTS;
         weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
         shields.add(new PlayerShield());
+        modelName = Model.Models.BANDIT;
     }
 
     public Bandit(Vector3f pos) {
