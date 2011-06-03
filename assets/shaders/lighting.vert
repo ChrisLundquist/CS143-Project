@@ -8,5 +8,7 @@ void main(void)
    N = normalize(gl_NormalMatrix * gl_Normal);
    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
    texCoordinate0 = vec2(gl_MultiTexCoord0);
+   gl_FrontColor = gl_Color;
+   
 }
 

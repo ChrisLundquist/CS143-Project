@@ -23,7 +23,6 @@ public class Model implements math.Supportable{
     private static final int NO_LIST = -1;
     protected static Map<String, Model>models = new java.util.HashMap<String, Model>();
 
-
     public static Model findOrCreateByName(String name) {
         Model model = models.get(name);
         if(model == null) {
@@ -74,6 +73,7 @@ public class Model implements math.Supportable{
     public final Map<String, Model> groups;
     public final String name;
     public final float radius;
+    public final boolean isTextured;
 
     public Model(String name, List<Polygon> polygons){
         this.name = name;
@@ -81,6 +81,14 @@ public class Model implements math.Supportable{
         groups = buildGroups();
         displayList = NO_LIST;
         radius = findRadius();
+        boolean textures = false;
+        for(Polygon p : polygons){
+            if(p.getMaterial().getTexture() != null){
+                textures = true;
+                break;
+            }
+        }
+        isTextured = textures;
     }
 
     // CL - XXX Hack used for collision detection.
@@ -92,6 +100,14 @@ public class Model implements math.Supportable{
         this.polygons = polygons;
         displayList = NO_LIST;
         radius = findRadius();
+        boolean textures = false;
+        for(Polygon p : polygons){
+            if(p.getMaterial().getTexture() != null){
+                textures = true;
+                break;
+            }
+        }
+        isTextured = textures;
     }
 
     private Map<String, Model> buildGroups() {

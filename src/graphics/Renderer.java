@@ -23,7 +23,7 @@ import com.jogamp.opengl.util.FPSAnimator;
  *  Based on the work by  Julien Gouesse (http://tuer.sourceforge.net)
  */
 public class Renderer implements GLEventListener {
-    public static String shaderString="texture";
+    public static String shaderString  = "lighting";
     
     private static final int NUM_LIGHTS = 2;
     GLU glu;
@@ -42,7 +42,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        shader = new Shader(shaderString+".vert",shaderString+".frag");
+        shader = new Shader(shaderString + ".vert", shaderString + ".frag");
         hud = new Hud();
        
         this.camera = camera;
@@ -67,15 +67,17 @@ public class Renderer implements GLEventListener {
         for(Actor a: game.Game.getActors())
             render(a);
 
-        if(ParticleSystem.isEnabled())
+        if(ParticleSystem.isEnabled()){
+            shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
+            shader.setUniform1b(gl, "isTextured", true);
+        }
         hud.drawStaticHud(gl);
        
 
         checkForGLErrors(gl);
 
     }
- 
 
     private static void checkForGLErrors(GL2 gl) {
         int errno = gl.glGetError();
@@ -131,7 +133,6 @@ public class Renderer implements GLEventListener {
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         shader.enable(gl);
@@ -146,7 +147,7 @@ public class Renderer implements GLEventListener {
         gl.glNewList(model.displayList, GL2.GL_COMPILE);
         for (Polygon p: model.polygons)
             render(p);
-        gl.glEndList();   
+        gl.glEndList();
     }
 
     private void render(Polygon p) {
@@ -263,6 +264,8 @@ public class Renderer implements GLEventListener {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
+        shader.setUniform1b(gl, "isTextured", model.isTextured);
+
         if(gl.glIsList(model.displayList) == false)
             build_display_list(model);
         else
