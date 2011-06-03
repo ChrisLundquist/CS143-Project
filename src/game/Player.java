@@ -117,11 +117,19 @@ public class Player implements Serializable {
             case OPEN_MENU:
                 InGameMenu.setMenuOpen(true);
                 switch(action) {
-                    case MENU_DOWN:
+                    case FORWARD:
+                        InGameMenu.selectionUp();
                         break;
-                    case MENU_UP:
+                    case BACK:
+                        InGameMenu.selectionDown();
                         break;
-                    case MENU_SELECT:
+                    case SHOOT:
+                        if(InGameMenu.getSelection() == 1) {
+                            System.exit(0);
+                        }
+                        else{
+                            InGameMenu.setMenuOpen(false);
+                        }
                         break;
                 }
                 break;

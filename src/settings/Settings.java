@@ -33,6 +33,8 @@ public class Settings {
             public static int energySpeed = 0;
 
             public static int energyModifier=0;
+            
+            public static int mainMenu = 0;
         }
         public static boolean particlesOn = false;
         public static boolean soundOn = true;
@@ -51,6 +53,7 @@ public class Settings {
         System.out.println("shoot: "+Profile.Keys.shoot);
         System.out.println("nextWeapon: "+Profile.Keys.nextWeapon);
         System.out.println("previousWeapon: "+Profile.Keys.previousWeapon);
+        System.out.println("mainMenu: "+Profile.Keys.mainMenu);
     }
 
     public static void init() throws IOException, Base64DecodingException{
@@ -160,6 +163,9 @@ public class Settings {
             }
             else if(part[0].equalsIgnoreCase("energy_modifier")){
                 Profile.Keys.energyModifier=stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("main_menu")){
+                Profile.Keys.mainMenu=stringToKey(part[1]);
             }
         }
     }

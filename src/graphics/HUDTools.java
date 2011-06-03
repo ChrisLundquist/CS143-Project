@@ -9,8 +9,8 @@ import javax.media.opengl.GL2;
  *
  */
 public class HUDTools {
-    protected final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-    protected final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+    protected static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+    protected static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
     
     /**
      * Easier way to draw 2d shapes
@@ -20,7 +20,7 @@ public class HUDTools {
      * @param height height of image
      * @param gl
      */
-    protected void draw(float x, float y, float width, float height, GL2 gl) {
+    protected static void draw(float x, float y, float width, float height, GL2 gl) {
         gl.glTexCoord2d(0.0, 1.0); gl.glVertex2d(x,y);
         gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d(x,y-height);
         gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d(x+width,y-height); 
@@ -31,7 +31,7 @@ public class HUDTools {
      * Changes to 2D
      * @param gl
      */
-    protected void start2D(GL2 gl) {
+    protected static void start2D(GL2 gl) {
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
         gl.glEnable(GL2.GL_BLEND);
@@ -55,7 +55,7 @@ public class HUDTools {
      * Stops 2D and goes back to 3D
      * @param gl
      */
-    protected void stop2D(GL2 gl) {
+    protected static void stop2D(GL2 gl) {
         gl.glPopMatrix(); // recover model matrix
         gl.glMatrixMode(GL2.GL_PROJECTION );
 
