@@ -39,14 +39,17 @@ public class Bullet extends Projectile {
         this(actor,speed,damage);
         position.plusEquals(positionOffset);
     }
-
-
-    public void die(){
+    
+    public void handleCollision(Actor other){
+        // Don't shoot our parents
+        if (parentId.equals(other.getId()))
+            return;
+        
         if(ParticleSystem.isEnabled()){
             for(int i = 0; i < 50; i++){
                 ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
             }
         }
-        delete();
+        die();
     }
 }
