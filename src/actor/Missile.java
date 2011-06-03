@@ -11,8 +11,7 @@ public class Missile extends Projectile {
     protected int MISSILE_DAMAGE = 100;
 
     protected static final String MODEL_NAME = Model.Models.MISSILE;
-    //TODO sound for Missiles
-    private static final String SHOOT_EFFECT = "Gun1.wav";
+    private static final String SHOOT_EFFECT = "missile_firing.wav";
     private static final String DEATH_EFFECT = "explode.wav";
 
     private static final float EFFECT_VOLUME = 10f;

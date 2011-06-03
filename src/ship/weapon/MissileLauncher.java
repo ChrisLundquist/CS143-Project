@@ -9,7 +9,7 @@ public class MissileLauncher extends ship.weapon.Weapon {
 
     @Override
     protected actor.Projectile newProjectile(actor.Actor ship) {
-        return new actor.Missile(ship,0.5f,getMultiplier());
+        return new actor.Missile(ship,0.7f,getMultiplier());
     }
 
     @Override
