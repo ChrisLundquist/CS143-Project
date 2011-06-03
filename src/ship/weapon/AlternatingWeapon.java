@@ -6,6 +6,7 @@ import math.Vector3f;
 public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
     public AlternatingWeapon(Class<? extends T> projectileType, long coolDown) {
         super(projectileType,coolDown);
+        coolDown /= 2;
     }
 
     public final float DEFAULT_OFFSET = 0.5f;
@@ -17,7 +18,7 @@ public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
 
     public void shoot(actor.Actor ship) {
         //calculates time passed in milliseconds
-        if((System.currentTimeMillis() - getLastShotTime()) > coolDown / 2) {
+        if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
             actor.Projectile p = newProjectile(ship);
 
             if(counter%2==0){
