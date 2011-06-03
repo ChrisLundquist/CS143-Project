@@ -4,7 +4,7 @@ import graphics.Model;
 import ship.PlayerShip;
 
 public class Bomber extends PlayerShip {
-
+    private static final long serialVersionUID = -8832365458776599623L;
     private final float PITCH_RATE = 0.035f;
     private final float ROLL_RATE = 0.05f;
     private final float YAW_RATE = 0.01f;
