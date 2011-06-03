@@ -4,7 +4,6 @@ import math.Vector3f;
 
 public abstract class AlternatingWeapon extends Weapon {
     public final float DEFAULT_OFFSET = 0.5f;
-    private final float BULLET_SPEED = 1.0f;
     protected short counter = 0;
 
     public float getOffsetDistance(){
@@ -14,14 +13,16 @@ public abstract class AlternatingWeapon extends Weapon {
     public void shoot(actor.Actor ship) {
         //calculates time passed in milliseconds
         if((System.currentTimeMillis() - getLastShotTime()) > getShotCoolDown()) {
+            actor.Projectile p = newProjectile(ship);
 
             if(counter%2==0){
                 // Left Shot
-                game.Game.getActors().add(new actor.Bullet(ship,BULLET_SPEED,multiplier,Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
+                p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
             } else {
                 // Right Shot
-                game.Game.getActors().add(new actor.Bullet(ship,BULLET_SPEED,multiplier,Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
+                p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
             }
+            game.Game.getActors().add(p);
             setLastShotTime(System.currentTimeMillis());
             counter++;
         }
