@@ -111,6 +111,7 @@ public class Material {
         color = ambient.toFloat();
         color[3] = alpha;
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color,0);
+        gl.glColor4f(color[0], color[1], color[2], color[3]);
         
 
         Texture texture = getTexture();

@@ -1,2 +1,9 @@
 # Blender MTL File: 'missile.blend'
 # Material Count: 0
+newmtl missile
+Ka 0.500000 0.500000 0.500000
+Kd 1.000000 0.100000 0.100000
+Ks 1.000000 1.000000 0.000000
+Ns 100.000000
+Tr 0.000000
+illum 
