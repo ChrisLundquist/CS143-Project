@@ -65,7 +65,7 @@ public abstract class PlayerShip extends Ship {
             Hud.switchWeaponToMissile();
         }
         if(weapons.get(selectedWeapon).getWeaponName().equalsIgnoreCase("Sniper")) {
-            Hud.switchWeaponToMachineGun();
+            
         }
 
         }

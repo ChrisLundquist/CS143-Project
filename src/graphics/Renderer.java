@@ -33,7 +33,7 @@ public class Renderer implements GLEventListener {
     FPSAnimator animator;
     Shader shader;
     Hud hud;
-
+    InGameMenu inGameMenu;
     Camera camera;
     private GL2 gl; // Must be recached each frame
 
@@ -44,7 +44,7 @@ public class Renderer implements GLEventListener {
         animator = new FPSAnimator(canvas,60);
         shader = new Shader(shaderString+".vert",shaderString+".frag");
         hud = new Hud();
-       
+        inGameMenu = new InGameMenu();
         this.camera = camera;
     }
 
@@ -70,7 +70,7 @@ public class Renderer implements GLEventListener {
         if(ParticleSystem.isEnabled())
             ParticleSystem.render(gl);
         hud.drawStaticHud(gl);
-       
+        inGameMenu.drawInGameMenu(gl);
 
         checkForGLErrors(gl);
 

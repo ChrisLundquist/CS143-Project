@@ -63,7 +63,7 @@ public class KeyboardListener implements KeyListener, Updateable {
         //Shoot
         if(currentKeys[Settings.Profile.Keys.shoot]){
             InputRouter.sendAction(InputRouter.Interaction.SHOOT);
-        
+
         }
         if(currentKeys[Settings.Profile.Keys.nextWeapon]){
             if(!previousKeys[Settings.Profile.Keys.nextWeapon]) {
@@ -101,6 +101,9 @@ public class KeyboardListener implements KeyListener, Updateable {
                     InputRouter.sendAction(InputRouter.Interaction.ENERGY_SPEED_UP);
                 }
             }
+        }
+        if(currentKeys[Settings.Profile.Keys.mainMenu]){
+                InputRouter.sendAction(InputRouter.Interaction.OPEN_MENU);
         }
 
         for(int i=0;i<currentKeys.length;i++){

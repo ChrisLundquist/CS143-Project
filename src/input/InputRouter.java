@@ -29,7 +29,7 @@ public class InputRouter{
         OPEN_MENU,
         MENU_UP,
         MENU_DOWN,
-        MENU_SELECT,
+        MENU_SELECT, CLOSE_MENU,
     }
 
     public static void sendAction(Interaction i) {
