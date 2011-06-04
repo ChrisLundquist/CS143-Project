@@ -18,11 +18,13 @@ public class Nuke extends Missile {
         velocity.timesEquals(0.6f);
         scale.timesEquals(2);
     }
-    
+
     public void die(){
-        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(DEATH_EFFECT));
-        effect.gain = EFFECT_VOLUME;
-        sound.Manager.addEvent(effect);
+        if (sound.Manager.enabled) {
+            sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(DEATH_EFFECT));
+            effect.gain = EFFECT_VOLUME;
+            sound.Manager.addEvent(effect);
+        }
 
         velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())
@@ -31,7 +33,7 @@ public class Nuke extends Missile {
         ParticleSystem.removeGenerator(particleGenerator);
         delete();
     }
-    
+
     public static long getShotCoolDown() {
         return NUKE_DELAY;
     }

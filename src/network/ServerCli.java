@@ -53,9 +53,9 @@ public class ServerCli extends Thread {
         while ((parentGroup = rootGroup.getParent()) != null )
             rootGroup = parentGroup;
 
-        Thread[] threads = new Thread[ rootGroup.activeCount() ];
+        Thread[] threads = new Thread[rootGroup.activeCount()];
         while (rootGroup.enumerate(threads, true) == threads.length)
-            threads = new Thread[ threads.length * 2 ];
+            threads = new Thread[threads.length * 2];
 
         for (int i = 0; i < threads.length && threads[i] != null; i ++)
             System.out.println(threads[i]);

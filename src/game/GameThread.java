@@ -35,6 +35,7 @@ public class GameThread extends Thread {
         
         for(int i = 0; i < collisionThreads.length; ++i)
             collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
+        
 
         while (gameState != STATE_STOPPED) {
             int frames = waitForNextFrame();
