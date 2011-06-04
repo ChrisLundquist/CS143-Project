@@ -8,7 +8,7 @@ import actor.ActorSet;
 public class GameThread extends Thread {
     private static final long FRAME_RATE = 1000 / 60;
     private static final long COLLISION_TIME = FRAME_RATE * 9 /10; // arbitrarily 90% maximum
-    private static final int CORE_SUBSCRIPTION_FACTOR = 4;
+    private static final int CORE_SUBSCRIPTION_FACTOR = 1;
     public static final int STATE_RUNNING = 1001;
     public static final int STATE_PAUSED = 1002;
     public static final int STATE_STOPPED = 1003;
