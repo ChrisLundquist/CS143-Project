@@ -17,6 +17,7 @@ public abstract class Ship extends Actor {
     protected List<Weapon<? extends actor.ship.projectile.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon, hitPoints;
+    protected long lastHitFrame; // age when last hit
 
     public Ship(){
         super();
@@ -26,7 +27,7 @@ public abstract class Ship extends Actor {
         shields = new java.util.ArrayList<Shield>();
         hitPoints = 1000;
     }
-    
+
     public Ship(math.Vector3f pos){
         this();
         setPosition(pos);
@@ -54,9 +55,18 @@ public abstract class Ship extends Actor {
             die();
     }
 
+    /**
+     * returns the number of frames since the last hit   
+     * @return
+     */
+    public long getLastHitAge() {
+        return (age - lastHitFrame);
+    }
+
     public void takeDamage(float amount){
         //TODO When we have multiple shields find which shield to take damage on
         amount = shields.get(0).takeDamage((int)amount);
+        lastHitFrame = age;
 
         if(shields.get(0).getStatus() == false){
             hitPoints -= amount;

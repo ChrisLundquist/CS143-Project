@@ -1,6 +1,7 @@
 package actor.ship;
 
-import graphics.Hud;
+import actor.ship.projectile.Projectile;
+import actor.ship.weapon.Weapon;
 
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
@@ -53,30 +54,20 @@ public abstract class PlayerShip extends Ship {
     }
 
     public void nextWeapon() {
-        // Get the next weapon in the list
         setWeapon((selectedWeapon + 1) % weapons.size());
+    }
 
-
-        if(weapons.get(selectedWeapon).getWeaponName().equalsIgnoreCase("Twin Linked Machine Gun")) {
-            Hud.switchWeaponToTwinLinkedMachineGun();
-        }
-        if(weapons.get(selectedWeapon).getWeaponName().equalsIgnoreCase("Machine Gun")) {
-            Hud.switchWeaponToMachineGun();
-        }
-        if(weapons.get(selectedWeapon).getWeaponName().equalsIgnoreCase("Missile")) {
-            Hud.switchWeaponToMissile();
-        }
-        if(weapons.get(selectedWeapon).getWeaponName().equalsIgnoreCase("Sniper")) {
-            
-        }
-
-        }
     public void previousWeapon() {
         setWeapon((selectedWeapon - 1) % weapons.size());
     }
+    
     public void setWeapon(int weaponNumber){
         selectedWeapon = weaponNumber % weapons.size();
-        System.out.println("Switching to "+weapons.get(weaponNumber).getWeaponName());
+        System.out.println("Switching to " + getWeapon());
+    }
+
+    public Weapon<? extends Projectile> getWeapon() {
+        return weapons.get(selectedWeapon);
     }
 
     @Override
@@ -88,6 +79,5 @@ public abstract class PlayerShip extends Ship {
 
     public void takeDamage(float amount){
         super.takeDamage(amount);
-        Hud.flashHealthCross();
     }
 }

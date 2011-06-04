@@ -49,7 +49,7 @@ public class Renderer implements GLEventListener {
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
         shader = new Shader(shaderString + ".vert", shaderString + ".frag");
-        hud = new Hud();
+        hud = null; // default no HUD;
         inGameMenu = new InGameMenu();
         this.camera = camera;
     }
@@ -78,8 +78,12 @@ public class Renderer implements GLEventListener {
             ParticleSystem.render(gl);
             shader.setUniform1b(gl, "isTextured", true);
         }
-        hud.drawStaticHud(gl);
-        inGameMenu.drawInGameMenu(gl);
+        
+        if (hud != null)
+            hud.drawStaticHud(gl);
+        
+        if (inGameMenu != null)
+            inGameMenu.drawInGameMenu(gl);
 
         checkForGLErrors(gl);
 
@@ -132,7 +136,6 @@ public class Renderer implements GLEventListener {
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
 
         Model.loadModels();
-        Hud.initialize();
         Texture.initialize(gl);
 
         for(Model model: Model.loaded_models())
@@ -278,6 +281,10 @@ public class Renderer implements GLEventListener {
             build_display_list(model);
         else
             gl.glCallList(model.displayList);
+    }
+
+    public void setHud(Hud hud) {
+        this.hud = hud;
     }
 
 

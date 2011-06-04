@@ -19,20 +19,21 @@ public class InGameMenu extends HUDTools {
         inGameMenu = Texture.findOrCreateByName(RESUME);
     }
     public void drawInGameMenu(GL2 gl) {
+        this.gl = gl;
         if(isMenuOpen()) {
-            start2D(gl);
+            start2D();
             if(selection == 0) {
                 if(inGameMenu != null) {
                     inGameMenu.bind(gl);
                     gl.glBegin(GL2.GL_QUADS);
-                    draw(-510,100+HEIGHT/2,512,341,gl);
+                    draw(-WIDTH/2,-HEIGHT/2, 512, 341);
                     gl.glEnd();
                 }
             }
             if(selection == 1) {
                 inGameMenu = Texture.findOrCreateByName(QUIT);
             }
-            stop2D(gl);
+            stop2D();
         }
     }
     public static void selectionDown() {

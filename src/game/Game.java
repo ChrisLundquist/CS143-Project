@@ -69,8 +69,9 @@ public class Game {
 
 
         renderer = new graphics.core.Renderer(player.getCamera());
+        renderer.setHud(new graphics.Hud(player));
         input = new KeyboardListener();
-
+        
 
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getCamera());

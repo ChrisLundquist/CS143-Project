@@ -43,7 +43,7 @@ public class Weapon<T extends Projectile> implements Serializable{
         return lastShot;
     }
 
-    protected T newProjectile(actor.Actor ship){
+    public T newProjectile(actor.Actor ship){
         T projectile = null;
         try {
             projectile = getCtor().newInstance(ship);
@@ -72,7 +72,7 @@ public class Weapon<T extends Projectile> implements Serializable{
         }
     }
 
-    public String getWeaponName(){
+    public String toString(){
         return "" + getClass().getSimpleName() + " " + getCtor().getName();
     }
 }
