@@ -1,6 +1,7 @@
 package game;
 
 import game.types.*;
+import graphics.core.Renderer;
 import input.KeyboardListener;
 import input.XboxInputListener;
 
@@ -30,6 +31,7 @@ public class Game {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        sound.Manager.enabled = true;
         map = Map.load("example_1");
         player = new Player();
         actors = new ActorSet();
@@ -81,7 +83,7 @@ public class Game {
 
         actors = network.ClientServerThread.joinServer(server, player);
 
-        renderer = new graphics.Renderer(player.getCamera());
+        renderer = new Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.core.Model.loadModels();
         sound.Manager.initialize(player.getShip());

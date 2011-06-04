@@ -26,6 +26,7 @@ public class ActorSet implements Set<Actor> {
         addNotifyees = java.util.Collections.synchronizedList(new java.util.ArrayList<Queue<Actor>>());
         asteroidCount = 0;
         banditCount = 0;
+        banditBaseCount = 0;
     }
     
     private void adjustStat(Actor a, int increment){

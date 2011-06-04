@@ -31,6 +31,8 @@ public class GameThread extends Thread {
     }
 
     public void run() {
+        this.setName("Game Thread");
+        
         for(int i = 0; i < collisionThreads.length; ++i)
             collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);
 
@@ -58,6 +60,8 @@ public class GameThread extends Thread {
             // Update the actors
             actors.update(frames);
         }
+        // Shutdown collision thread pool so we can exit cleanly.
+        pool.shutdown();
 
     }
     

@@ -19,7 +19,7 @@ public class Manager {
     private static final int MAX_SOURCES = 64;
     private static List<Source> sources;
     private static actor.interfaces.Movable listener;
-    public static boolean enabled=true;
+    public static boolean enabled=false;
 
     static public synchronized void addEvent(Event event){
         if(enabled){

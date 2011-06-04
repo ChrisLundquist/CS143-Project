@@ -43,6 +43,24 @@ public class ServerCli extends Thread {
         }
     }
 
+    /*
+     * Print all currently running threads
+     * based on http://stackoverflow.com/questions/1323408/get-a-list-of-all-threads-currently-running-in-java
+     */
+    private void displayThreads() {
+        ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
+        ThreadGroup parentGroup;
+        while ((parentGroup = rootGroup.getParent()) != null )
+            rootGroup = parentGroup;
+
+        Thread[] threads = new Thread[ rootGroup.activeCount() ];
+        while (rootGroup.enumerate(threads, true) == threads.length)
+            threads = new Thread[ threads.length * 2 ];
+
+        for (int i = 0; i < threads.length && threads[i] != null; i ++)
+            System.out.println(threads[i]);
+    }
+
     private void displayStatus(StringTokenizer tokenizer) {
         long totalMemory = Runtime.getRuntime().totalMemory() / (1024 * 1024);
         long freeMemory = Runtime.getRuntime().freeMemory() / (1024 * 1024);
@@ -88,6 +106,9 @@ public class ServerCli extends Thread {
             case LIST:
                 displayList(tokenizer);
                 break;
+            case THREADS:
+                displayThreads();
+                break;
             default:
                 displayHelp(tokenizer);
                 break;
@@ -128,6 +149,11 @@ public class ServerCli extends Thread {
             return ServerCommand.LIST;
         if (token.equalsIgnoreCase("ls"))
             return ServerCommand.LIST;
+        if (token.equalsIgnoreCase("threads"))
+            return ServerCommand.THREADS;
+        if (token.equalsIgnoreCase("ps"))
+            return ServerCommand.THREADS;
+
 
         return ServerCommand.UNKNOWN;
     }
@@ -140,5 +166,6 @@ public class ServerCli extends Thread {
         QUIT,
         STATUS,
         UNKNOWN,
+        THREADS,
     }
 }

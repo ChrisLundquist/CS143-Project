@@ -41,7 +41,7 @@ public class FlakShell extends Projectile {
             Shrapnel s = new Shrapnel(this);
             Vector3f v = Vector3f.newRandom(1000).normalize().times(0.15f);
             s.setVelocity(v);
-            game.Game.getActors().add(s);
+            add(s);
         }
     }
     

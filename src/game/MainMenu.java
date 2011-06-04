@@ -113,6 +113,7 @@ public class MainMenu extends JPanel implements ActionListener {
     }
     public String getRandomImage() {
         java.util.Random rand = new java.util.Random();
+        
         return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
     }
     /**

@@ -22,11 +22,11 @@ public class TwinLinkedWeapon<T extends Projectile> extends Weapon<T> {
             actor.ship.projectile.Projectile p = newProjectile(ship);
             p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
             // Left Shot
-            game.Game.getActors().add(p);
+            ship.add(p);
             // Right Shot
             p = newProjectile(ship);
             p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
-            game.Game.getActors().add(p);
+            ship.add(p);
             setLastShotTime(System.currentTimeMillis());
         }
     }
