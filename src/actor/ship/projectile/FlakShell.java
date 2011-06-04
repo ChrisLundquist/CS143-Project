@@ -39,7 +39,7 @@ public class FlakShell extends Projectile {
     protected void detonate(){
         for(int i = 0; i < shrapnelCount; ++i){
             Shrapnel s = new Shrapnel(this);
-            Vector3f v = Vector3f.newRandom(1000).normalize().times(0.1f);
+            Vector3f v = Vector3f.newRandom(1000).normalize().times(0.15f);
             s.setVelocity(v);
             game.Game.getActors().add(s);
         }

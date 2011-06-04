@@ -15,9 +15,9 @@ public class Shrapnel extends Bullet {
     @Override
     public void handleCollision(Actor other) {
         // Don't shoot our parents or other shrapnel
-        if (other instanceof Shrapnel || parentId.equals(other.getId()))
+        if (other instanceof Shrapnel)
             return;
-        die();
+        super.handleCollision(other);
     }
     
     public void update() {
