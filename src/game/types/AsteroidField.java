@@ -18,7 +18,7 @@ public class AsteroidField implements GameType{
     }
 
     @Override
-    public void update() {
+    public void update(boolean pasued) {
         // Add more to taste
         while(game.Game.getActors().getAsteroidCount() < asteroidMax){
             Vector3f pos = Vector3f.newRandom(FIELD_SIZE);

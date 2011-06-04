@@ -6,6 +6,7 @@ import game.Player;
 import java.io.*;
 import java.net.*;
 import java.util.List;
+import java.util.Set;
 import actor.ActorSet;
 
 public class DedicatedServer extends Thread {
@@ -106,8 +107,12 @@ public class DedicatedServer extends Thread {
         return newId + 1;
     }
 
-    public List<String> getModelsInUse() {
-        // TODO Auto-generated method stub
-        return null;
+    public Set<String> getModelsInUse() {
+        Set<String> models = new java.util.HashSet<String>();
+
+        for (graphics.core.Model m: graphics.core.Model.loaded_models())
+            models.add(m.name);
+        
+        return models;
     }
 }

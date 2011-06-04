@@ -261,7 +261,7 @@ public class Renderer implements GLEventListener {
     private void render(Skybox skybox) {
         gl.glPushMatrix();
         math.Vector3f pos = camera.getPosition();
-        gl.glTranslatef(-pos.x, -pos.y, -pos.z);
+        gl.glTranslatef(pos.x, pos.y, pos.z);
         gl.glScalef(Skybox.SKYBOX_SIZE, Skybox.SKYBOX_SIZE , Skybox.SKYBOX_SIZE);
         render(skybox.getModel());
         gl.glPopMatrix(); 

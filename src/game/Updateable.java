@@ -6,6 +6,6 @@ package game;
  */
 public interface Updateable {
 
-    void update();
+    void update(boolean paused);
 
 }

@@ -1,11 +1,12 @@
 package game;
 
 import game.types.*;
-import graphics.core.Renderer;
 import input.KeyboardListener;
 import input.XboxInputListener;
 
 import java.io.IOException;
+
+import network.ClientServerThread;
 
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
@@ -20,6 +21,7 @@ public class Game {
     private static Map map;
     private static ActorSet actors;
     private static GameThread game;
+    private static ClientServerThread networkConnection;
 
     public static void init() {
         System.out.println(Runtime.getRuntime().availableProcessors() + " available cores detected");
@@ -32,15 +34,24 @@ public class Game {
             e.printStackTrace();
         }
         sound.Manager.enabled = true;
-        map = Map.load("example_1");
-        player = new Player();
-        actors = new ActorSet();
-        actors.addAll(map.actors);
-        player.respawn(actors, map.getSpawnPosition());
 
-        renderer = new graphics.core.Renderer(player.getCamera());
-        input = new KeyboardListener();
-        
+        if (networkConnection == null) {
+            player = new Player();
+            map = Map.load("example_1");
+
+            actors = new ActorSet();
+            actors.addAll(map.actors);
+
+            graphics.core.Model.loadModels();
+        } else {
+            map = networkConnection.getHello().map;
+            actors = networkConnection.getActors();
+
+            graphics.core.Model.loadModels(networkConnection.getHello().modelNames);
+        }
+
+
+
         /*
         try {
             //TODO add boolean to check if controller enabled
@@ -53,67 +64,57 @@ public class Game {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        */
-        graphics.core.Model.loadModels();
+         */
+
+
+
+        renderer = new graphics.core.Renderer(player.getCamera());
+        input = new KeyboardListener();
+
+
         // When we pass player.getCamera() the sound doesn't match the player position
-        sound.Manager.initialize(player.getShip());
+        sound.Manager.initialize(player.getCamera());
 
         game = new GameThread(actors);
         // CL - We need to get input even if the game is paused,
         //      that way we can unpause the game.
         game.addCallback(input);
         game.addCallback(new Updateable() {
-            public void update() {
+            public void update(boolean paused) {
                 player.updateCamera();
             }
         });
         game.addCallback(new Updateable() {
-            public void update() {
+            public void update(boolean paused) {
                 sound.Manager.processEvents();
             }
         });
-
-        game.addCallback(new AsteroidField());
-        game.addCallback(new Bandits());
+        
+        if (networkConnection == null) {
+            game.addCallback(new AsteroidField());
+            game.addCallback(new Bandits());
+        }
     }
 
     public static void joinServer(String server) {
         player = new Player();
-        map = Map.load("example_1");
+        networkConnection = ClientServerThread.joinServer(server, player);  
+        if (networkConnection == null)
+            return;
 
-        actors = network.ClientServerThread.joinServer(server, player);
-
-        renderer = new Renderer(player.getCamera());
-        input = new KeyboardListener();
-        graphics.core.Model.loadModels();
-        sound.Manager.initialize(player.getShip());
-        game = new GameThread(actors);
-
-        // CL - We need to get input even if the game is paused,
-        //      that way we can unpause the game.
-        game.addCallback(input);
-        game.addCallback(new Updateable() {
-            public void update() {
-                player.updateCamera();
-            }
-        });
-        game.addCallback(new Updateable() {
-            public void update() {
-                sound.Manager.processEvents();
-            }
-        });
+        init();
     }
 
     public static void start() {
         game.start();
         renderer.start();
-        network.ServerCli.displayThreads();
+        player.respawn(actors, map.getSpawnPosition());
     }
 
     public static KeyboardListener getInputHandler(){
         return input;
     }
-    
+
     public static XboxInputListener getControllerHandler(){
         return controller;
     }

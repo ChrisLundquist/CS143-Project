@@ -22,19 +22,16 @@ public class Camera implements actor.interfaces.Movable{
 
     public void updateFromActor(Actor actor) {
         velocity = actor.getVelocity();
-        position = actor.getPosition().times(-1.0f);
-        rotation = actor.getRotation().inverse();
+        position = actor.getPosition();
+        rotation = actor.getRotation();
     }
     
-    public void setPerspective(GL2 gl) {
-        float[] matrix;       
+    public void setPerspective(GL2 gl) {    
         gl.glLoadIdentity();
-        // Combine the pitch and heading rotations and store the results in q
-        matrix = rotation.toGlMatrix();
         // Let OpenGL set our new perspective on the world!
-        gl.glMultMatrixf(matrix,0);
+        gl.glMultMatrixf(rotation.inverse().toGlMatrix(), 0);
         // Translate to our new position.
-        gl.glTranslatef(position.x, position.y, position.z);
+        gl.glTranslatef(-position.x, -position.y, -position.z);
     }
 
     @Override
