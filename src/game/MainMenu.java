@@ -20,11 +20,13 @@ public class MainMenu extends JPanel implements ActionListener {
     int y, x;
     //paths to all images used
     
-    private static final String BACKGROUND1_PATH = "assets/images/mainmenu/background1.jpg";
-    private static final String BACKGROUND2_PATH = "assets/images/mainmenu/background2.jpg";
-    private static final String BACKGROUND3_PATH = "assets/images/mainmenu/background3.jpg";
-    private static final String BACKGROUND4_PATH = "assets/images/mainmenu/background4.jpg";
-    private static final String BACKGROUND5_PATH = "assets/images/mainmenu/background5.jpg";
+    private static final String BACKGROUND_PATHS[] = {
+        "assets/images/mainmenu/background1.jpg",
+        "assets/images/mainmenu/background2.jpg",
+        "assets/images/mainmenu/background3.jpg",
+        "assets/images/mainmenu/background4.jpg",
+        "assets/images/mainmenu/background5.jpg",
+    };
     
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
     ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, controller_on,
@@ -110,20 +112,8 @@ public class MainMenu extends JPanel implements ActionListener {
         menuVisible = true;
     }
     public String getRandomImage() {
-        int random = (int)(5*Math.random())+1;
-        switch(random) {
-            case 1:
-                return BACKGROUND1_PATH;
-            case 2:
-                return BACKGROUND2_PATH;
-            case 3:
-                return BACKGROUND3_PATH;
-            case 4:
-                return BACKGROUND4_PATH;
-            case 5:
-                return BACKGROUND5_PATH;
-        }
-        return null;
+        java.util.Random rand = new java.util.Random();
+        return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
     }
     /**
      * creates and adds gui components
