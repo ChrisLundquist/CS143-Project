@@ -17,7 +17,6 @@ public class Asteroid extends Actor {
     private static final String SOUND_EFFECT = "explode.wav";
     private static final float EFFECT_VOLUME = 10.5f;
     private static final float FRAGMENT_SPEED = 0.01f;
-    private static final float DAMAGE_FACTOR = 0.5f;
     private static final float MAX_ROTATION_SPEED = 1.5f;
 
     protected int hitPoints;
@@ -51,13 +50,13 @@ public class Asteroid extends Actor {
         if(other instanceof Projectile){
             hitPoints -= ((Projectile) other).getDamage();
         } else if ( other instanceof Asteroid || other instanceof actor.ship.Ship){
-            float otherKE = other.getMass() * other.getVelocity().magnitude2() * 0.5f;
-
-            hitPoints -= otherKE * DAMAGE_FACTOR;
+            // Don't collide with our siblings
+            if(other.getParentId() != null && other.getParentId().equals(getParentId()))
+                return;
+            die();
         }
         if(hitPoints < 0)
             die();
-        bounce(other);
     }
 
     @Override

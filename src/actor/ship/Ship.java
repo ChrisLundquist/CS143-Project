@@ -12,8 +12,6 @@ import actor.ship.weapon.Weapon;
 public abstract class Ship extends Actor {
     private static final long serialVersionUID = -7048308038567858490L;
 
-    private static final float DAMAGE_FACTOR = .25f;
-
     protected List<Weapon<? extends actor.ship.projectile.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon, hitPoints;
@@ -47,10 +45,14 @@ public abstract class Ship extends Actor {
             actor.ship.projectile.Projectile projectile = (actor.ship.projectile.Projectile) other;
             takeDamage(projectile.getDamage());
 
-        } else if( other instanceof actor.Asteroid || other instanceof Ship){
-            float otherKE = other.getMass() * other.getVelocity().magnitude2() * 0.5f;
-            takeDamage(otherKE * DAMAGE_FACTOR);
+        } else if( other instanceof actor.Asteroid ){
+            // TODO bounce or spin
+            takeDamage(other.getMass());
+        } else if (other instanceof Ship){
+            // TODO bounce or spin
+            takeDamage(other.getMass());
         }
+
         if(hitPoints < 0)
             die();
     }
