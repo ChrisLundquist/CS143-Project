@@ -5,6 +5,7 @@ import graphics.core.Model;
 import java.io.Serializable;
 import java.util.Random;
 
+import actor.interfaces.AngularlyVelocitable;
 import actor.interfaces.Collidable;
 import actor.interfaces.Movable;
 
@@ -14,7 +15,7 @@ import math.Supportable;
 import math.Vector3f;
 import physics.GJKSimplex;
 
-public abstract class Actor implements Serializable, Supportable, Movable, Collidable {
+public abstract class Actor implements Serializable, Supportable, Movable, Collidable, AngularlyVelocitable {
     protected static Random gen = new Random(); // Common random number generator object
     private static final long serialVersionUID = 744085604446096658L;
 
@@ -45,8 +46,6 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         velocity = new Vector3f();
         scale = new Vector3f(1.0f,1.0f,1.0f);
         age = 0;
-        //sets the time of the actor's birth
-        //setTimeStamp();
     }
     
     public Actor(Actor a) {
@@ -318,10 +317,16 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         age++;
     }
 
-    protected void onFirstUpdate() {        
+    protected void onFirstUpdate() {
     }
 
     public ActorId getParentId() {
         return parentId;
+    }
+
+    @Override
+    public Actor setAngularVelocity(Quaternion omega) {
+        angularVelocity = omega;
+        return this;
     }
 }

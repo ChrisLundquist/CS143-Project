@@ -182,10 +182,7 @@ public class QuaternionTest {
     public void testInverse() {
         // Test the inverse works as expected
         // Sometimes the inverse isn't quite accurate, but every near due to floating point
-        Quaternion rotation = new Quaternion();
-        rotation.timesEquals(new Quaternion(Vector3f.UNIT_X, 40));
-        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Y, 40));
-        rotation.timesEquals(new Quaternion(Vector3f.UNIT_Z, 40));
+        Quaternion rotation = Quaternion.newRandom(360);
         assertQuaternionEquals(Quaternion.IDENTITY, rotation.times(rotation.inverse()));
 
     }
