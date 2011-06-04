@@ -23,9 +23,11 @@ public class Missile extends Projectile {
     }
 
     public void die(){
-        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(DEATH_EFFECT));
-        effect.gain = EFFECT_VOLUME;
-        sound.Manager.addEvent(effect);
+        if (sound.Manager.enabled) {
+            sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(DEATH_EFFECT));
+            effect.gain = EFFECT_VOLUME;
+            sound.Manager.addEvent(effect);
+        }
 
         velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())

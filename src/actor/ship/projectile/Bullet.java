@@ -26,7 +26,7 @@ public class Bullet extends Projectile {
         // Don't shoot our parents
         if (parentId.equals(other.getId()))
             return;
-        
+
         // This isn't handled in die because we only want to make particles on contact
         velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())
@@ -38,9 +38,11 @@ public class Bullet extends Projectile {
     @Override
     public void onFirstUpdate(){
         // Our velocity isn't quite accurate, but it will be good enough
-        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SOUND_EFFECT));
-        effect.gain = EFFECT_VOLUME;
-        sound.Manager.addEvent(effect);
+        if (sound.Manager.enabled) {
+            sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SOUND_EFFECT));
+            effect.gain = EFFECT_VOLUME;
+            sound.Manager.addEvent(effect);
+        }
     }
 
     public static long getShotCoolDown() {
