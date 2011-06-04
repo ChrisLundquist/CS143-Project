@@ -1,9 +1,12 @@
 package actor;
 
-import graphics.Model;
+import graphics.core.Model;
 
 import java.io.Serializable;
 import java.util.Random;
+
+import actor.interfaces.Collidable;
+import actor.interfaces.Movable;
 
 import math.Matrix4f;
 import math.Quaternion;
@@ -78,7 +81,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         delta_p.timesEquals(other.rotation.inverse());
         delta_v.timesEquals(other.rotation.inverse());
 
-        graphics.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
+        graphics.core.Polygon intersection = other.model.getIntersectingPolygon(delta_p, delta_v);
         // CL - Not sure if not handling the collision if we don't know how is best
         // but its better than throwing exceptions
         if(intersection == null) {

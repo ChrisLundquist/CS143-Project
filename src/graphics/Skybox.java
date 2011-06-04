@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.core.Model;
+
 import java.io.Serializable;
 
 public class Skybox implements Serializable{

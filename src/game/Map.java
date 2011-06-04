@@ -11,11 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-import ship.CapitalShip;
 
 import math.Quaternion;
 import math.Vector3f;
 import actor.Actor;
+import actor.ship.CapitalShip;
 
 public class Map implements Serializable {
     private static final String MAP_DIR = "assets/maps/";
@@ -75,7 +75,7 @@ public class Map implements Serializable {
         a.setPosition(new math.Vector3f(-20.0f,0.0f,-30.0f));
         map.actors.add(a);
         
-        CapitalShip capitalShip = new ship.CapitalShip();
+        CapitalShip capitalShip = new actor.ship.CapitalShip();
         // capitalShip.setSize(5f);
         capitalShip.setSize(new math.Vector3f(5,4,8));
         capitalShip.setPosition(new math.Vector3f(60f,0.0f,-40.0f));

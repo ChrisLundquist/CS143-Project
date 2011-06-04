@@ -1,7 +1,7 @@
 package math;
 
-import actor.Positionable;
-import actor.Velocitable;
+import actor.interfaces.Positionable;
+import actor.interfaces.Velocitable;
 
 public class Sphere implements Supportable, Positionable, Velocitable{
     Vector3f position, velocity;

@@ -5,7 +5,7 @@ import javax.media.opengl.GL2;
 import math.Vector3f;
 import math.Vector4f;
 
-public abstract class Particle implements actor.Velocitable, actor.Positionable {
+public abstract class Particle implements actor.interfaces.Velocitable, actor.interfaces.Positionable {
     protected final static int DEFAULT_LIFETIME = 90;
     protected final static float SLOW_FACTOR = 0.05f;
     protected math.Vector4f color;
@@ -19,13 +19,6 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         velocity = new Vector3f();
         size = 1.0f;
         age = 0;
-    }
-
-    Particle(actor.Actor actor, Vector3f direction){
-        this();
-        //velocity = actor.getVelocity().plus(direction.times(SLOW_FACTOR));
-        velocity = Vector3f.newRandom(1).times(SLOW_FACTOR);
-        position = actor.getFarthestPointInDirection(direction);
     }
 
     public void draw( GL2 gl ){

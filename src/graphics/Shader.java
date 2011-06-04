@@ -37,6 +37,11 @@ public class Shader {
         int location = gl.glGetUniformLocation(programID, name);
         gl.glUniform1i(location, value);
     }
+    
+    public void setUniform1b(GL2 gl, String name, boolean value){
+        int location = gl.glGetUniformLocation(programID, name);
+        gl.glUniform1i(location, value ? 1 : 0);
+    }
 
     private void compileShader(GL2 gl, int programObject, String filePath) throws IOException{
         int[] sourceArrayLength = new int[1];

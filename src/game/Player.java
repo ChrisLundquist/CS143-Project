@@ -4,10 +4,10 @@ import graphics.Camera;
 import graphics.InGameMenu;
 import input.InputRouter;
 import java.io.Serializable;
-import ship.PlayerShip;
 import actor.Actor;
 import actor.ActorId;
 import actor.ActorSet;
+import actor.ship.PlayerShip;
 
 public class Player implements Serializable {
     private static final long serialVersionUID = 8330574859953611636L;
@@ -117,11 +117,19 @@ public class Player implements Serializable {
             case OPEN_MENU:
                 InGameMenu.setMenuOpen(true);
                 switch(action) {
-                    case MENU_DOWN:
+                    case FORWARD:
+                        InGameMenu.selectionUp();
                         break;
-                    case MENU_UP:
+                    case BACK:
+                        InGameMenu.selectionDown();
                         break;
-                    case MENU_SELECT:
+                    case SHOOT:
+                        if(InGameMenu.getSelection() == 1) {
+                            System.exit(0);
+                        }
+                        else{
+                            InGameMenu.setMenuOpen(false);
+                        }
                         break;
                 }
                 break;
@@ -155,7 +163,7 @@ public class Player implements Serializable {
 
     // TODO create ship of players preference
     public PlayerShip getNewShip() {
-        return new ship.types.Bomber();
+        return new actor.ship.types.Bomber();
     }
 
     public void setName(String name) {

@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.core.Texture;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +54,7 @@ public class Hud extends HUDTools {
         crosshair = Texture.findOrCreateByName(CROSSHAIRSINGLE);
         gunammo = Texture.findOrCreateByName(GUNAMMOSINGLE);
     }
-    public static void switchToSniper() {
+    public static void switchWeaponToSniper() {
         crosshair = Texture.findOrCreateByName(CROSSHAIRSNIPER);
     }
     /**

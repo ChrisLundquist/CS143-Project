@@ -10,7 +10,7 @@ import math.Vector3f;
  * A camera is kind of like an actor in that it has a position and rotation
  * but it's position and rotation are opposite of the actors.
  */
-public class Camera implements actor.Movable{
+public class Camera implements actor.interfaces.Movable{
     Vector3f position, velocity;
     Quaternion rotation;
     

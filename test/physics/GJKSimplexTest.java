@@ -2,7 +2,7 @@ package physics;
 
 import static org.junit.Assert.*;
 
-import graphics.Model;
+import graphics.core.Model;
 
 import java.util.Random;
 

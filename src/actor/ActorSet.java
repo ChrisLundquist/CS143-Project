@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import actor.ship.Bandit;
+
 /**
  * ActorSet provides a thread safe backing store for our actors
  * @author Dustin Lundquist <dustin@null-ptr.net>
@@ -16,11 +18,24 @@ public class ActorSet implements Set<Actor> {
     private Map<ActorId, Actor> actors;
     private final int playerId;
     private List<Queue<Actor>> addNotifyees;
+    private int asteroidCount, banditCount, banditBaseCount;
 
     public ActorSet(int playerId) {
         this.playerId = playerId;
         actors = new java.util.concurrent.ConcurrentHashMap<ActorId, Actor>();
         addNotifyees = java.util.Collections.synchronizedList(new java.util.ArrayList<Queue<Actor>>());
+        asteroidCount = 0;
+        banditCount = 0;
+    }
+    
+    private void adjustStat(Actor a, int increment){
+        if(a instanceof Asteroid){
+            asteroidCount += increment;
+        } else if(a instanceof Bandit){
+            banditCount += increment;
+        } else if(a instanceof BanditBase){
+            banditBaseCount += increment;
+        }
     }
 
     public ActorSet() {
@@ -31,7 +46,7 @@ public class ActorSet implements Set<Actor> {
     /**
      * Add an actor to the ActorSet, assigning it an ActorId if one isn't already set
      */
-    public synchronized boolean add(Actor a) {     
+    public synchronized boolean add(Actor a) {
         if (a.id == null)
             a.id = new ActorId(playerId);
 
@@ -42,6 +57,7 @@ public class ActorSet implements Set<Actor> {
         a.actors = this;
         
         actors.put(a.id, a);
+        adjustStat(a,1);
         
         for(Queue<Actor> q: addNotifyees)
             q.offer(a);
@@ -49,6 +65,18 @@ public class ActorSet implements Set<Actor> {
         return true;
     }
     
+
+    public int getAsteroidCount() {
+        return asteroidCount;
+    }
+
+    public int getBanditCount() {
+        return banditCount;
+    }
+    
+    public int getBanditBaseCount(){
+        return banditBaseCount;
+    }
 
     /**
      * Adds an actor to the ActorSet, replacing the an actor with the same id if it
@@ -77,6 +105,8 @@ public class ActorSet implements Set<Actor> {
     @Override
     public synchronized void clear() {
         actors.clear();
+        asteroidCount = 0;
+        banditCount = 0;
     }
 
     @Override
@@ -119,7 +149,7 @@ public class ActorSet implements Set<Actor> {
     public synchronized boolean remove(Actor a) {
         if (a.id == null)
             return false;
-
+        adjustStat(a,-1);
         return actors.remove(a.id) != null;
     }
 
