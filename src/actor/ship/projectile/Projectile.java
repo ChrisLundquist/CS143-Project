@@ -42,7 +42,6 @@ public abstract class Projectile extends Actor{
         if (parentId.equals(other.getId()))
             return;
         die();
-        bounce(other);
     }
     
     public static long getShotCoolDown() {

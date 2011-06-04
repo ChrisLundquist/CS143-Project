@@ -4,6 +4,8 @@ import actor.ship.projectile.Projectile;
 import math.Vector3f;
 
 public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
+    private static final long serialVersionUID = 4362231465338858745L;
+
     public AlternatingWeapon(Class<? extends T> projectileType, long coolDown) {
         super(projectileType,coolDown);
         coolDown /= 2;

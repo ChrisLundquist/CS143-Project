@@ -1,10 +1,8 @@
 package actor.ship.types;
 
 import actor.ship.PlayerShip;
-import actor.ship.projectile.Bullet;
-import actor.ship.projectile.Missile;
-import actor.ship.weapon.TwinLinkedWeapon;
-import actor.ship.weapon.Weapon;
+import actor.ship.projectile.*;
+import actor.ship.weapon.*;
 import graphics.core.Model;
 
 public class Bomber extends PlayerShip {
@@ -23,6 +21,9 @@ public class Bomber extends PlayerShip {
     public Bomber() {
         weapons.add(new TwinLinkedWeapon<Missile>(Missile.class,Missile.getShotCoolDown()));
         weapons.add(new Weapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
+        weapons.add(new Weapon<Nuke>(Nuke.class,Nuke.getShotCoolDown()));
+        weapons.add(new AlternatingWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown()));
+
         shields.add(new actor.ship.shield.PlayerShield());
     }
     

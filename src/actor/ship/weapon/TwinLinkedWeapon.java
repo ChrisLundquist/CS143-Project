@@ -4,6 +4,8 @@ import actor.ship.projectile.Projectile;
 import math.Vector3f;
 
 public class TwinLinkedWeapon<T extends Projectile> extends Weapon<T> {
+    private static final long serialVersionUID = 1390245390427366837L;
+
     public TwinLinkedWeapon(Class<? extends T> projectileType, long coolDown) {
         super(projectileType, coolDown);
     }
@@ -27,10 +29,5 @@ public class TwinLinkedWeapon<T extends Projectile> extends Weapon<T> {
             game.Game.getActors().add(p);
             setLastShotTime(System.currentTimeMillis());
         }
-    }
-
-    @Override
-    public String getWeaponName() {
-        return "" + getClass().getName() + " " + ctor.getName();
     }
 }
