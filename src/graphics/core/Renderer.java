@@ -115,6 +115,8 @@ public class Renderer implements GLEventListener {
     }
 
     public void init(GLAutoDrawable gLDrawable) {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        
         getGL2(); // Repopulate gl each frame because it is not guaranteed to be persistent
 
         gl.glShadeModel(GL2.GL_SMOOTH);
