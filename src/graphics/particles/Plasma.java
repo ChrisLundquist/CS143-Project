@@ -1,13 +1,8 @@
 package graphics.particles;
 
-import math.Vector3f;
 
-public class PlasmaParticle extends Particle {
-    public PlasmaParticle(){
-        color = new math.Vector4f(1,1,1,0);
-    }
-    public PlasmaParticle(actor.Actor actor,Vector3f direction) {
-        super(actor,direction);
+public class Plasma extends Particle {
+    public Plasma(){
         color = new math.Vector4f(1,1,1,0);
     }
 

@@ -1,4 +1,7 @@
-package graphics.particles;
+package graphics.particles.generators;
+
+import graphics.particles.Particle;
+import graphics.particles.ParticleSystem;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,14 +13,13 @@ import actor.Movable;
  * based on http://stackoverflow.com/questions/299998/instantiating-object-of-type-parameter
  * @param <T>
  */
-public class ParticleFountain <T extends Particle >{
-    private static final float SLOW_FACTOR = 0.5f;
-    private Constructor<? extends T> ctor;
-    Movable source;
+public abstract class ParticleGenerator <T extends Particle >{
+    protected Constructor<? extends T> ctor;
+    protected Movable source;
     public int intensity;
 
 
-    public ParticleFountain(Class<? extends T> impl, actor.Movable source) {
+    public ParticleGenerator(Class<? extends T> impl, actor.Movable source) {
         try {
             ctor = impl.getConstructor();
         } catch (SecurityException e) {
@@ -53,13 +55,16 @@ public class ParticleFountain <T extends Particle >{
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        particle.setPosition(new math.Vector3f(source.getPosition()));
-        particle.setVelocity(source.getVelocity().times(SLOW_FACTOR).plus(math.Vector3f.newRandom(0.001f)));
-        
-        return particle;
+        return configureParticule(particle);
     }
     
+    abstract protected T configureParticule(T particle);
+
     public void update(){
         generateParticles();
+    }
+    public ParticleGenerator<? extends Particle> setIntensity(int i) {
+        intensity = i;
+        return this;
     }
 }

@@ -21,13 +21,6 @@ public abstract class Particle implements actor.Velocitable, actor.Positionable 
         age = 0;
     }
 
-    Particle(actor.Actor actor, Vector3f direction){
-        this();
-        //velocity = actor.getVelocity().plus(direction.times(SLOW_FACTOR));
-        velocity = Vector3f.newRandom(1).times(SLOW_FACTOR);
-        position = actor.getFarthestPointInDirection(direction);
-    }
-
     public void draw( GL2 gl ){
         gl.glColor4f(color.x, color.y, color.z, color.t);
         gl.glVertex3f(position.x,position.y,position.z);

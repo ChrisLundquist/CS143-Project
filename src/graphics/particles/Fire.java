@@ -1,18 +1,13 @@
 
 package graphics.particles;
 
-import math.Vector3f;
 /**
  * Particle System for each particle
  * @author Tim Mikeladze, Chris Lundquist
  *
  */
-public class FireParticle extends Particle  {
-    public FireParticle(){
-        color = new math.Vector4f(1,1,1,0);
-    }
-    public FireParticle(actor.Actor actor,Vector3f direction) {
-        super(actor,direction);
+public class Fire extends Particle  {
+    public Fire(){
         color = new math.Vector4f(1,1,1,0);
     }
 

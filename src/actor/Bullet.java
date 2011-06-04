@@ -1,9 +1,9 @@
 package actor;
 
 import graphics.Model;
-import graphics.particles.FireParticle;
 import graphics.particles.ParticleSystem;
-import math.*;
+import graphics.particles.Plasma;
+import graphics.particles.generators.Explosion;
 
 public class Bullet extends Projectile {
     private static final long serialVersionUID = -3860927022451699968L;
@@ -20,20 +20,20 @@ public class Bullet extends Projectile {
         damage = BULLET_DAMAGE;
         velocity.timesEquals(BULLET_SPEED);
     }
-    
+
     public void handleCollision(Actor other){
         // Don't shoot our parents
         if (parentId.equals(other.getId()))
             return;
         
-        if(ParticleSystem.isEnabled()){
-            for(int i = 0; i < 50; i++){
-                ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
-            }
-        }
+        // This isn't handled in die because we only want to make particles on contact
+        velocity.timesEquals(0);
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.addEvent( new Explosion<Plasma>(Plasma.class,this));
+
         die();
     }
-    
+
     @Override
     public void onFirstUpdate(){
         // Our velocity isn't quite accurate, but it will be good enough
@@ -41,7 +41,7 @@ public class Bullet extends Projectile {
         effect.gain = EFFECT_VOLUME;
         sound.Manager.addEvent(effect);
     }
-    
+
     public static long getShotCoolDown() {
         return DEFAULT_DELAY;
     }

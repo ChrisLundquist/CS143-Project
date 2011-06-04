@@ -2,8 +2,8 @@ package actor;
 
 import graphics.Model;
 import graphics.particles.*;
-
-import math.*;
+import graphics.particles.generators.Explosion;
+import graphics.particles.generators.ParticleGenerator;
 
 public class Missile extends Projectile {
     private static final long serialVersionUID = -8381240274687476481L;
@@ -12,6 +12,8 @@ public class Missile extends Projectile {
     protected static final String SHOOT_EFFECT = "missile_firing.wav";
     protected static final String DEATH_EFFECT = "explode.wav";
     protected static final float EFFECT_VOLUME = 16f;
+    protected ParticleGenerator<? extends Particle> particleGenerator;
+
 
     public Missile(Actor actor){
         super(actor);
@@ -24,16 +26,14 @@ public class Missile extends Projectile {
         effect.gain = EFFECT_VOLUME;
         sound.Manager.addEvent(effect);
 
-        if(ParticleSystem.isEnabled()){
-            for(int i = 0; i < 256; i++){
-                ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
-            }
-        }
+        velocity.timesEquals(0);
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.addEvent((new Explosion<Fire>(Fire.class,this)).setIntensity(96));
 
-        ParticleSystem.removeFountain(particleFountain);
+        ParticleSystem.removeGenerator(particleGenerator);
         delete();
     }
-    
+
     @Override
     public void onFirstUpdate(){
         sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SHOOT_EFFECT));
@@ -41,11 +41,11 @@ public class Missile extends Projectile {
         sound.Manager.addEvent(effect);
 
         if(ParticleSystem.isEnabled()){
-            particleFountain = new graphics.particles.ParticleFountain<PlasmaParticle>(PlasmaParticle.class,this);
-            ParticleSystem.addFountain(particleFountain);
+            particleGenerator = new graphics.particles.generators.Exhaust<Plasma>(Plasma.class,this);
+            ParticleSystem.addGenerator(particleGenerator);
         }
     }
-    
+
     public static long getShotCoolDown() {
         return DEFAULT_DELAY;
     }

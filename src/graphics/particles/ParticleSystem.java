@@ -1,5 +1,7 @@
 package graphics.particles;
 
+import graphics.particles.generators.ParticleGenerator;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +19,9 @@ public class ParticleSystem {
     private static int MAX_PARTICLES = 4096;
     static List<Particle> particles = new LinkedList<Particle>();
     static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>();
-    static List<ParticleFountain<? extends Particle>> fountains = new LinkedList<ParticleFountain<? extends Particle>>();
+    static Queue<ParticleGenerator<? extends Particle>> generators = new java.util.concurrent.ConcurrentLinkedQueue<ParticleGenerator<? extends Particle>>();
+    static Queue<ParticleGenerator<? extends Particle>> events = new java.util.concurrent.ConcurrentLinkedQueue<ParticleGenerator<? extends Particle>>();
+
     public static boolean enabled = true, fountainsEnabled = true;
 
     public static boolean addParticle(Particle particle){
@@ -25,13 +29,15 @@ public class ParticleSystem {
         if(particles.size() > MAX_PARTICLES)
             return false;
 
-        newParticles.offer(particle);
-        return true;
+        return newParticles.offer(particle);
+    }
+
+    public static boolean addGenerator(ParticleGenerator<? extends Particle> generator){
+        return generators.add(generator);
     }
     
-    public static boolean addFountain(ParticleFountain<? extends Particle> fountain){
-        fountains.add(fountain);
-        return true;
+    public static boolean addEvent(ParticleGenerator<? extends Particle> event){
+        return events.add(event);
     }
 
     /**
@@ -40,26 +46,29 @@ public class ParticleSystem {
      */
     public static void render( GL2 gl ){
         Particle particle;
-        
+
+        for(ParticleGenerator<? extends Particle> event : events)
+            event.update();
+        events.clear();
         if(fountainsEnabled)
-            for(ParticleFountain<? extends Particle> fountain : fountains)
+            for(ParticleGenerator<? extends Particle> fountain : generators)
                 fountain.update();
-        
+
         // Check for new particles
         while ((particle = newParticles.poll())!= null)
             particles.add(particle);
-        
-        
+
+
         // Particles are transparent.
         gl.glEnable( GL2.GL_BLEND );
         gl.glDisable(GL2.GL_LIGHTING);
         gl.glBlendFunc( GL2.GL_SRC_ALPHA, GL2.GL_ONE );
         gl.glDepthMask( false );
-        
+
         gl.glEnable(GL2.GL_POINT_SMOOTH);
         //gl.glPointSize(size);
         gl.glBegin(GL2.GL_POINTS);
-        
+
         // Loop over particles.
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
@@ -71,7 +80,7 @@ public class ParticleSystem {
                 it.remove();
             }
         }
-        
+
         gl.glEnd();
         gl.glDepthMask( true );
         gl.glDisable( GL2.GL_BLEND );
@@ -82,7 +91,7 @@ public class ParticleSystem {
         return enabled;
     }
 
-    public static synchronized void removeFountain(ParticleFountain<? extends Particle> particleFountain) {
-        fountains.remove(particleFountain);
+    public static synchronized void removeGenerator(ParticleGenerator<? extends Particle> particleFountain) {
+        generators.remove(particleFountain);
     }
 }

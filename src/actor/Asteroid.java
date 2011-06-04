@@ -1,8 +1,9 @@
 package actor;
 
 import graphics.Model;
-import graphics.particles.FireParticle;
+import graphics.particles.Fire;
 import graphics.particles.ParticleSystem;
+import graphics.particles.generators.Explosion;
 import math.Quaternion;
 import math.Vector3f;
 
@@ -64,11 +65,9 @@ public class Asteroid extends Actor {
         effect.gain = EFFECT_VOLUME * scale.magnitude2();
         effect.pitch = 0.6f;
         sound.Manager.addEvent(effect);
-
+        velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())
-            for(int i = 0; i < 500; i++){
-                ParticleSystem.addParticle( new FireParticle(this,Vector3f.newRandom(1)));
-            }
+            ParticleSystem.addEvent((new Explosion<Fire>(Fire.class,this)).setIntensity((int)scale.magnitude2()));
 
         if(scale.magnitude2() > SHATTER_THRESHOLD){
             // Make a copy of this, but be sure it reset its HP

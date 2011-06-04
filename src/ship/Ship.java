@@ -61,6 +61,5 @@ public abstract class Ship extends Actor {
         if(shields.get(0).getStatus() == false){
             hitPoints -= amount;
         }
-        System.out.println(shields.get(0).getStrength());
     }
 }
