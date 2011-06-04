@@ -71,7 +71,7 @@ public class Game {
             }
         });
 
-        //game.addCallback(new AsteroidField());
+        game.addCallback(new AsteroidField());
         game.addCallback(new Bandits());
     }
 
