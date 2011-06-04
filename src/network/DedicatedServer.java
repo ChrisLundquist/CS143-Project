@@ -99,8 +99,11 @@ public class DedicatedServer extends Thread {
     }
 
     public int getNewPlayerId() {
-        // TODO Auto-generated method stub
-        return 0;
+        int newId = actors.playerId;
+        for (Player p: players)
+            newId = Math.max(newId, p.getPlayerId());
+            
+        return newId + 1;
     }
 
     public List<String> getModelsInUse() {

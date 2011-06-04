@@ -16,7 +16,7 @@ public class ListenerThread extends Thread {
     }
 
     public void run() {
-        setName("Listener " + socket.getLocalSocketAddress() + ":" + socket.getLocalPort());
+        setName(this.getClass().getSimpleName() + " [" + socket.getLocalSocketAddress() + "]");
         
         try {
             while (server.isRunning()) {

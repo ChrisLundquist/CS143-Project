@@ -10,7 +10,7 @@ import java.io.*;
  */
 public abstract class AbstractConnectionThread extends Thread {
     private Socket socket;    
-    
+
     protected AbstractConnectionThread(Socket socket) {
         this.socket = socket;
     }
@@ -19,7 +19,7 @@ public abstract class AbstractConnectionThread extends Thread {
      * This is the main body of the network connection thread
      */
     public void run() {
-        setName(this.getClass().toString() + " [" + socket.getRemoteSocketAddress() + "]");
+        setName(this.getClass().getSimpleName() + " [" + socket.getRemoteSocketAddress() + "]");
         Message msg;
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
@@ -27,32 +27,24 @@ public abstract class AbstractConnectionThread extends Thread {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
-            
+
             // Include a hook to send an initial hello message
             msg = helloMessage();
             if (msg != null) {
                 out.writeObject(msg);
                 out.flush();
             }
-            
+
             // Main loop to receive updates and respond          
             while (true) {
-                
-                // Having issue with reading partial objects over the wire, so trying mark
-                in.mark(64 * 1024);
-                try {
-                    msg = (Message)in.readObject();
-                } catch (java.io.EOFException e) {
-                    System.out.println("EOF encountered, trying to retry");
-                    e.printStackTrace();
-                    Thread.sleep(5);
-                    in.reset();
-                    continue;
-                }
-                
-                
+                msg = (Message)in.readObject();
+
                 msg = handleMessage(msg);
-                out.writeObject(msg);
+                try {
+                    out.writeObject(msg);
+                } catch (Exception e) {
+                    System.err.println(msg + "was not serializable");
+                }
                 out.flush();
                 out.reset(); // Flush the object cache so the next update will actually update stuff
             }

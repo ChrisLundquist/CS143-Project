@@ -73,6 +73,6 @@ public class Weapon<T extends Projectile> implements Serializable{
     }
 
     public String getWeaponName(){
-        return "" + getClass().getName() + " " + getCtor().getName();
+        return "" + getClass().getSimpleName() + " " + getCtor().getName();
     }
 }

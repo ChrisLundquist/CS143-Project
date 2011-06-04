@@ -16,7 +16,7 @@ import actor.ship.Bandit;
 public class ActorSet implements Set<Actor> {
 
     private Map<ActorId, Actor> actors;
-    private final int playerId;
+    public final int playerId;
     private List<Queue<Actor>> addNotifyees;
     private int asteroidCount, banditCount, banditBaseCount;
 
@@ -82,6 +82,7 @@ public class ActorSet implements Set<Actor> {
     /**
      * Adds an actor to the ActorSet, replacing the an actor with the same id if it
      * already exists. Used for network updates
+     * This bypasses the normal add and any newActorConsumers (so the network clients don't send updates about the new actors they just received from the server)
      * @param a the actor to add
      */
     public synchronized void addOrReplace(Actor a) {
@@ -214,7 +215,7 @@ public class ActorSet implements Set<Actor> {
      * @return
      */
     public synchronized List<Actor> getCopyList() {
-        return new CopyList();    
+        return new java.util.ArrayList<Actor>(actors.values());    
     }
 
     /**
@@ -246,16 +247,9 @@ public class ActorSet implements Set<Actor> {
         }
     }
 
-    private class CopyList extends java.util.ArrayList<Actor> {
-        private static final long serialVersionUID = -7412443957198423304L;
-
-        public CopyList() {
-            super(actors.values());
-        }
-    }
-
     /**
      * Adds a queue to that should be offered each new actor added to this ActorSet
+     * Basically this is subscribing to a copy of each new actor.
      * Used for networking
      * @param queue
      */

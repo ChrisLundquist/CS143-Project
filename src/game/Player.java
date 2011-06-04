@@ -19,10 +19,13 @@ public class Player implements Serializable {
     private ActorId shipId;
     // TODO ship preference - once we have ships
 
+    private int playerId;
+
     public Player() {
         setName("Pilot");
         status = PlayerStatus.OBSERVING;
         camera = new Camera();
+        playerId = 0;
     }
 
     @Override
@@ -202,5 +205,14 @@ public class Player implements Serializable {
         }
 
         return camera;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+    
+    public Player setPlayerId(int id) {
+        playerId = id;
+        return this;
     }
 }

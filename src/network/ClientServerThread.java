@@ -3,6 +3,7 @@ package network;
 import java.io.*;
 import java.net.*;
 import java.util.Queue;
+import javax.swing.JOptionPane;
 import actor.Actor;
 import actor.ActorSet;
 import game.Player;
@@ -23,7 +24,7 @@ public class ClientServerThread extends AbstractConnectionThread {
     private int status;
     private ActorSet actors;
     private HelloMessage hello;
-    private Queue<Actor> newActors;
+    private Queue<Actor> newActorsQueue;
 
 
     public ClientServerThread(String host, Player player) throws IOException {
@@ -37,18 +38,20 @@ public class ClientServerThread extends AbstractConnectionThread {
         lastUpdate = System.currentTimeMillis();   
     }
 
-    protected Message handleMessage(Message msg) throws IOException, InterruptedException {
+    protected synchronized Message handleMessage(Message msg) throws IOException, InterruptedException {
         if (msg instanceof HelloMessage) {
             hello = (HelloMessage)msg;
+            status = CONNECTING;
             // This is kind of annoying, we have to create fields for every variable we want to present to the rest of the client
             actors = new ActorSet(hello.playerId);
-            newActors = new java.util.concurrent.ConcurrentLinkedQueue<Actor>();
-            actors.addNewActorConsumer(newActors);
-            
-            this.notifyAll();
+            newActorsQueue = new java.util.concurrent.ConcurrentLinkedQueue<Actor>();
+            actors.addNewActorConsumer(newActorsQueue);
+            player.setPlayerId(actors.playerId);
+
+            this.notifyAll(); 
             while (status == CONNECTING)
                 wait(); // wait for player to decide if they want to join this map
-            
+
             return new JoinMessage(player);
         } if (msg instanceof UpdateMessage) {
             UpdateMessage update = (UpdateMessage) msg;
@@ -58,13 +61,13 @@ public class ClientServerThread extends AbstractConnectionThread {
 
         rate_limit();
 
-        return new UpdateMessage(player, newActors);
+        return new UpdateMessage(player, newActorsQueue);
     }
-    
+
     public int getStatus() {
         return status;
     }
-    
+
     /**
      * The server provides the playerId we use for initializing the ActorSet
      * @return
@@ -72,7 +75,7 @@ public class ClientServerThread extends AbstractConnectionThread {
     public ActorSet getActors() {
         return actors;
     }
-    
+
     public HelloMessage getHello() {
         return hello;
     }
@@ -89,8 +92,7 @@ public class ClientServerThread extends AbstractConnectionThread {
 
             lastUpdate = System.currentTimeMillis();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // someone interrupted our thread, silently fail
         }
     }
 
@@ -98,13 +100,10 @@ public class ClientServerThread extends AbstractConnectionThread {
         try {
             ClientServerThread connection = new ClientServerThread(host, player);
             connection.start();
-   
+
             synchronized(connection) {
-                 connection.wait(30000);
-            }
-            if (connection.getStatus() != CONNECTING) {
-                System.err.println("Connection failed");
-                return null;
+                while (connection.getStatus() != CONNECTING)
+                    connection.wait();          
             }
             ActorSet actors = connection.getActors();
             /*
@@ -113,21 +112,24 @@ public class ClientServerThread extends AbstractConnectionThread {
             connection.joinGame();
             return actors;     
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Unable to resolve server name " + e.getMessage());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Network error occured: " + e.getMessage());
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            // someone interrupted our thread, silently die
+        }  
         return null;
-        
+
     }
 
-    private void joinGame() {
+    private synchronized void joinGame() {
         status = JOINING_GAME;
         notifyAll();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Starting client");
+        ActorSet a = joinServer("localhost", new Player());
+        System.out.println(a.playerId);
     }
 }

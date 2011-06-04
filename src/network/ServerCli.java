@@ -47,7 +47,7 @@ public class ServerCli extends Thread {
      * Print all currently running threads
      * based on http://stackoverflow.com/questions/1323408/get-a-list-of-all-threads-currently-running-in-java
      */
-    private void displayThreads() {
+    public static void displayThreads() {
         ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
         ThreadGroup parentGroup;
         while ((parentGroup = rootGroup.getParent()) != null )
@@ -57,8 +57,18 @@ public class ServerCli extends Thread {
         while (rootGroup.enumerate(threads, true) == threads.length)
             threads = new Thread[threads.length * 2];
 
-        for (int i = 0; i < threads.length && threads[i] != null; i ++)
-            System.out.println(threads[i]);
+        System.out.println("Name\t\t\t\t\tPrior\tState");
+        for (int i = 0; i < threads.length && threads[i] != null; i ++) {
+            Thread t = threads[i];
+            String line = t.getName();
+            
+            while (line.length() < 40)
+                line += " ";
+            
+            line += t.getPriority() + "\t" + t.getState();
+            
+            System.out.println(line);
+        }
     }
 
     private void displayStatus(StringTokenizer tokenizer) {

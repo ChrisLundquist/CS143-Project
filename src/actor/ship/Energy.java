@@ -1,11 +1,14 @@
 package actor.ship;
 
+import java.io.Serializable;
+
 /**
  * Manages energy distributition of ship
  * @author Tim Mikeladze
  *
  */ 
-public class Energy {
+public class Energy implements Serializable {
+    private static final long serialVersionUID = -2431129829468476516L;
     private int leftOverEnergy = 15;
     private int shieldEnergy = 0;
     private int gunEnergy = 0;

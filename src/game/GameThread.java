@@ -31,7 +31,8 @@ public class GameThread extends Thread {
     }
 
     public void run() {
-        this.setName("Game Thread");
+        setName(this.getClass().getSimpleName() + " [" + actors.playerId + "]");
+        setPriority(NORM_PRIORITY + 2);
         
         for(int i = 0; i < collisionThreads.length; ++i)
             collisionThreads[i] = new physics.CollisionSolverThread(actors, i, collisionThreads.length);

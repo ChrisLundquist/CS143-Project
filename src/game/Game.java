@@ -107,6 +107,7 @@ public class Game {
     public static void start() {
         game.start();
         renderer.start();
+        network.ServerCli.displayThreads();
     }
 
     public static KeyboardListener getInputHandler(){
