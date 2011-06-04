@@ -4,32 +4,34 @@ import graphics.Hud;
 
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
-
+    private static final float MAX_SPEED = 0.8f;
 
     protected abstract float getRollRate();
     protected abstract float getPitchRate();
     protected abstract float getYawRate();
 
-    protected abstract float getDefaultSpeed();
     protected abstract float getAdditiveSpeed();
     protected abstract float getNegativeSpeed();
 
     protected abstract float getAngularDampening();
-    protected abstract float getVelocityDampening();
     protected abstract String getLocalModelName();
     public final Energy energy;
+    protected float speed;
 
     public PlayerShip(){
         super();
         energy = new Energy(this);
         modelName = this.getLocalModelName();
+        speed = 0;
     }
 
     public void forwardThrust() {
-        velocity.plusEquals(getDirection().times(getAdditiveSpeed()));
+        speed += getAdditiveSpeed();
+        speed = Math.min(speed, MAX_SPEED);
     }
     public void reverseThrust() {
-        velocity.minusEquals(getDirection().times(getNegativeSpeed()));
+        speed -= getNegativeSpeed();
+        speed = Math.max(speed, -MAX_SPEED / 4.0f);
     }
     public void pitchUp(){
         changePitch(getPitchRate());
@@ -48,7 +50,7 @@ public abstract class PlayerShip extends Ship {
     }
     public void rollRight() {
         changeRoll(-getRollRate());
-    }   
+    }
 
     public void nextWeapon() {
         // Get the next weapon in the list
@@ -74,14 +76,14 @@ public abstract class PlayerShip extends Ship {
     }
     public void setWeapon(int weaponNumber){
         selectedWeapon = weaponNumber % weapons.size();
-        System.out.println("Switching to "+weapons.get(weaponNumber).getWeaponName());       
+        System.out.println("Switching to "+weapons.get(weaponNumber).getWeaponName());
     }
 
     @Override
     public void update(){
+        velocity = getDirection().times(speed);
         super.update();
         dampenAngularVelocity(getAngularDampening());
-        velocity = velocity.times(getVelocityDampening());
     }
 
     public void takeDamage(float amount){
