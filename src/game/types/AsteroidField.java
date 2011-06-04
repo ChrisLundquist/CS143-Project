@@ -11,7 +11,7 @@ public class AsteroidField implements GameType{
     public static final int DEFAULT_ASTEROID_LIMIT = 50;
     private int asteroidMax;
 
-    public static final float FIELD_SIZE = graphics.Skybox.SKYBOX_SIZE;
+    public static final float FIELD_SIZE = graphics.Skybox.SKYBOX_SIZE * 2;
 
     public AsteroidField(){
         asteroidMax = DEFAULT_ASTEROID_LIMIT;

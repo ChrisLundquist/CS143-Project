@@ -16,7 +16,7 @@ import com.jogamp.openal.util.ALut;
 public class Manager {
     private static AL al;
     private static Queue<Event> events;
-    private static final int MAX_SOURCES = 32;
+    private static final int MAX_SOURCES = 64;
     private static List<Source> sources;
     private static actor.Movable listener;
     public static boolean enabled=true;
