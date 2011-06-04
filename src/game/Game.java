@@ -79,13 +79,27 @@ public class Game {
         player = new Player();
         map = Map.load("example_1");
 
-        network.ClientServerThread.joinServer(server, player);
+        actors = network.ClientServerThread.joinServer(server, player);
 
-        //renderer = new graphics.Renderer();
+        renderer = new graphics.Renderer(player.getCamera());
         input = new KeyboardListener();
         graphics.Model.loadModels();
+        sound.Manager.initialize(player.getShip());
+        game = new GameThread(actors);
 
-        //new GameThread().start();
+        // CL - We need to get input even if the game is paused,
+        //      that way we can unpause the game.
+        game.addCallback(input);
+        game.addCallback(new Updateable() {
+            public void update() {
+                player.updateCamera();
+            }
+        });
+        game.addCallback(new Updateable() {
+            public void update() {
+                sound.Manager.processEvents();
+            }
+        });
     }
 
     public static void start() {
