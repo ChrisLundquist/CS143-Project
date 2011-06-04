@@ -18,12 +18,13 @@ public class Asteroid extends Actor {
     private static final float EFFECT_VOLUME = 10.5f;
     private static final float FRAGMENT_SPEED = 0.01f;
     private static final float DAMAGE_FACTOR = 0.5f;
+    private static final float MAX_ROTATION_SPEED = 1.5f;
 
     protected int hitPoints;
 
     public Asteroid(){
         super();
-        this.angularVelocity = new Quaternion(Vector3f.newRandom(1), 1);
+        this.angularVelocity = Quaternion.newRandom(MAX_ROTATION_SPEED);
         this.scale = new Vector3f(DEFAULT_SCALE,DEFAULT_SCALE,DEFAULT_SCALE).plus(Vector3f.newRandom(1));
         this.hitPoints = calculateHitpoints(); 
         this.modelName = MODEL_NAME;
@@ -77,13 +78,17 @@ public class Asteroid extends Actor {
             a.hitPoints = a.calculateHitpoints();
             a.id = null; // ID must be null or the actor set wont add it
             // Move it a random direction half the radius for each piece
-            Vector3f displacement = Vector3f.newRandom(1).normalize().times(getRadius() * 0.51f);
+            Vector3f displacement = Vector3f.newRandom(1).normalize().times(getRadius() * 0.52f);
             Asteroid b = new Asteroid(a);
             a.position.plusEquals(displacement);
             a.velocity.plusEquals(displacement.times(FRAGMENT_SPEED));
+            a.setRotation(Quaternion.newRandom(100));
+            a.setAngularVelocity(Quaternion.newRandom(MAX_ROTATION_SPEED));
             b.position.plusEquals(displacement.negate());
             b.velocity.plusEquals(displacement.negate().times(FRAGMENT_SPEED));
-            // TODO randomize rotation rates
+            b.setRotation(Quaternion.newRandom(100));
+            b.setAngularVelocity(Quaternion.newRandom(MAX_ROTATION_SPEED));
+
             actors.add(a);
             actors.add(b);
         }

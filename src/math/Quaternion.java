@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Quaternion implements Serializable {
     private static final long serialVersionUID = 5284423308557214091L;
     public static final Quaternion IDENTITY = new Quaternion();
+    private static java.util.Random gen = new java.util.Random();
 
     float w_; // real
     float x_; // i
@@ -23,6 +24,10 @@ public class Quaternion implements Serializable {
         x_ = x;
         y_ = y;
         z_ = z;
+    }
+    
+    public static Quaternion newRandom(float rotationRate){
+        return new Quaternion(Vector3f.newRandom(100).normalize(),gen.nextFloat() * rotationRate);
     }
 
     /**

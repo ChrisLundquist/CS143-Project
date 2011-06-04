@@ -1,6 +1,6 @@
 package actor.interfaces;
 
-import math.Vector3f;;
+import math.Vector3f;
 
 public interface Velocitable{
     public Vector3f getVelocity();
