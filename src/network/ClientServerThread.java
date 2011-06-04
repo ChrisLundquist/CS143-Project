@@ -96,7 +96,7 @@ public class ClientServerThread extends AbstractConnectionThread {
         }
     }
 
-    public static ActorSet joinServer(String host, Player player) {
+    public static ClientServerThread joinServer(String host, Player player) {
         try {
             ClientServerThread connection = new ClientServerThread(host, player);
             connection.start();
@@ -105,12 +105,11 @@ public class ClientServerThread extends AbstractConnectionThread {
                 while (connection.getStatus() != CONNECTING)
                     connection.wait();          
             }
-            ActorSet actors = connection.getActors();
             /*
              * In a more verbose connection routine we probably want to display the list of players and server map
              */
             connection.joinGame();
-            return actors;     
+            return connection;     
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, "Unable to resolve server name " + e.getMessage());
         } catch (IOException e) {
@@ -129,7 +128,7 @@ public class ClientServerThread extends AbstractConnectionThread {
 
     public static void main(String[] args) {
         System.out.println("Starting client");
-        ActorSet a = joinServer("localhost", new Player());
-        System.out.println(a.playerId);
+        joinServer("localhost", new Player());
+        
     }
 }

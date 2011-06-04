@@ -42,7 +42,7 @@ public class GameThread extends Thread {
             int frames = waitForNextFrame();
             
             for (Updateable c: callbacks)
-                c.update();
+                c.update(gameState == STATE_PAUSED);
 
             // Don't update the game state if we are paused
             if(gameState == STATE_PAUSED)

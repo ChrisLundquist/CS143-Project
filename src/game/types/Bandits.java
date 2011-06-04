@@ -18,7 +18,7 @@ public class Bandits implements game.GameType{
     }
 
     @Override
-    public void update() {
+    public void update(boolean pasued) {
         // See if we have any work to do
         if(spawned == true && respawnBases == false)
             return;

@@ -1,6 +1,6 @@
 package network;
 
-import java.util.List;
+import java.util.Collection;
 
 
 /**
@@ -13,7 +13,7 @@ public class HelloMessage extends Message {
     public final int playerCount;
     public final int playerId;
     public final game.Map map;
-    public final List<String> modelNames;
+    public final Collection<String> modelNames;
 
     public HelloMessage(DedicatedServer server) {
         playerCount = server.getPlayers().size();

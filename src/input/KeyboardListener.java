@@ -29,7 +29,7 @@ public class KeyboardListener implements KeyListener, Updateable {
     public void keyTyped(KeyEvent e) {
     }
 
-    public void update() {
+    public void update(boolean pasued) {
 
         //Forwards and Backwards
         if(currentKeys[Settings.Profile.Keys.forward]){

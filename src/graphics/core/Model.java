@@ -43,6 +43,16 @@ public class Model implements math.Supportable{
         return model;
     }
 
+    public static void loadModels(Collection<String> models) {
+        for (String model: models)
+            Model.findOrCreateByName(model);
+
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+            System.err.println(err);      
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) 
+            System.err.println(err);  
+    }
+    
     public static void loadModels() {
         /* This was a little over ambitious for now, but if new models might be showing up it might be a good idea
         File dir = new File(MODEL_PATH);
@@ -52,17 +62,17 @@ public class Model implements math.Supportable{
             if (file.toLowerCase().endsWith(MODEL_EXTENSION))
                 Model.findOrCreateByName(file.replaceAll(".obj$", ""));
          */
-        for (String model: Models.TOTAL) {
+        loadModels(Models.TOTAL);
+    }
+    
+    public static void loadModels(String[] models) {      
+        for (String model: models)
             Model.findOrCreateByName(model);
-        }
 
-
-        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors()) {
-            System.err.println(err);
-        }
-        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) {
-            System.err.println(err);
-        }
+        for (WavefrontLoaderError err: WavefrontObjLoader.getErrors())
+            System.err.println(err);      
+        for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) 
+            System.err.println(err);      
     }
     
     public static Collection<Model> loaded_models() {

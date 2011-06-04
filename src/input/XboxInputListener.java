@@ -27,7 +27,7 @@ public class XboxInputListener extends Thread implements Updateable {
     /**
      * Sends actions to InputRouter
      */
-    public void update() {
+    public void update(boolean pasued) {
         
         /**
          * Shooting
@@ -151,7 +151,7 @@ public class XboxInputListener extends Thread implements Updateable {
                 rightStick_string = tokenizer.nextToken();
                 leftTrigger_string = tokenizer.nextToken();
                 rightTrigger_string = tokenizer.nextToken();
-                update();
+                update(true);
 
             }
         } catch (IOException e) {
