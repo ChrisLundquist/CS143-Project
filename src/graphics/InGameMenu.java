@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.core.Texture;
+
 import javax.media.opengl.GL2;
 
 /**

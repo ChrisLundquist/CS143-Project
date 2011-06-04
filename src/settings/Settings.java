@@ -1,6 +1,6 @@
 package settings;
 
-import graphics.Renderer;
+import graphics.core.Renderer;
 import graphics.particles.ParticleSystem;
 
 import java.awt.event.KeyEvent;

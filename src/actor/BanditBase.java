@@ -1,8 +1,9 @@
 package actor;
 
+import actor.ship.Bandit;
+import actor.ship.Ship;
+import actor.ship.shield.CapitalShipShield;
 import math.Vector3f;
-import ship.Ship;
-import ship.shield.CapitalShipShield;
 
 public class BanditBase extends Ship {
     private static final long serialVersionUID = 4896997019168002153L;

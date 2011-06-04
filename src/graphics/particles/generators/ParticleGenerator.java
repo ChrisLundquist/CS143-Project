@@ -6,7 +6,7 @@ import graphics.particles.ParticleSystem;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import actor.Movable;
+import actor.interfaces.Movable;
 /**
  * 
  * @author Durandal
@@ -19,7 +19,7 @@ public abstract class ParticleGenerator <T extends Particle >{
     public int intensity;
 
 
-    public ParticleGenerator(Class<? extends T> impl, actor.Movable source) {
+    public ParticleGenerator(Class<? extends T> impl, actor.interfaces.Movable source) {
         try {
             ctor = impl.getConstructor();
         } catch (SecurityException e) {

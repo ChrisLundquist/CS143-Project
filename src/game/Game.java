@@ -12,7 +12,7 @@ import settings.Settings;
 import actor.ActorSet;
 
 public class Game {
-    private static graphics.Renderer renderer;
+    private static graphics.core.Renderer renderer;
     private static input.KeyboardListener input;
     private static input.XboxInputListener controller;
     private static Player player;
@@ -36,7 +36,7 @@ public class Game {
         actors.addAll(map.actors);
         player.respawn(actors, map.getSpawnPosition());
 
-        renderer = new graphics.Renderer(player.getCamera());
+        renderer = new graphics.core.Renderer(player.getCamera());
         input = new KeyboardListener();
         
         /*
@@ -52,7 +52,7 @@ public class Game {
             e.printStackTrace();
         }
         */
-        graphics.Model.loadModels();
+        graphics.core.Model.loadModels();
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getShip());
 
@@ -83,7 +83,7 @@ public class Game {
 
         //renderer = new graphics.Renderer();
         input = new KeyboardListener();
-        graphics.Model.loadModels();
+        graphics.core.Model.loadModels();
 
         //new GameThread().start();
     }
@@ -137,7 +137,7 @@ public class Game {
         Game.start();
     }
 
-    public static graphics.Renderer getRenderer() {
+    public static graphics.core.Renderer getRenderer() {
         return renderer;
     }
 

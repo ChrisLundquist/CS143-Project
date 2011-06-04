@@ -1,7 +1,7 @@
 package graphics.particles.generators;
 
 import graphics.particles.Particle;
-import actor.Movable;
+import actor.interfaces.Movable;
 
 public class Exhaust<T extends Particle> extends ParticleGenerator<T> {
     private static final float SLOW_FACTOR = 0.5f;

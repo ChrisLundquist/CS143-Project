@@ -1,7 +1,7 @@
 package graphics.particles.generators;
 
 import graphics.particles.Particle;
-import actor.Movable;
+import actor.interfaces.Movable;
 import math.Vector3f;
 
 public class Explosion<T extends Particle> extends ParticleGenerator<T> {

@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
-import actor.Positionable;
+
+import actor.interfaces.Positionable;
 import math.Vector3f;
 
 /**

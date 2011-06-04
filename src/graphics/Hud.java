@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.core.Texture;
+
 import java.util.Timer;
 import java.util.TimerTask;
 

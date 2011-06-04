@@ -1,7 +1,7 @@
 package actor;
 
 import static org.junit.Assert.*;
-import graphics.Model;
+import graphics.core.Model;
 
 import math.Quaternion;
 import math.Vector3f;

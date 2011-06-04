@@ -1,6 +1,7 @@
 package actor;
 
-import graphics.Model;
+import actor.ship.projectile.Projectile;
+import graphics.core.Model;
 import graphics.particles.Fire;
 import graphics.particles.ParticleSystem;
 import graphics.particles.generators.Explosion;
@@ -48,7 +49,7 @@ public class Asteroid extends Actor {
     public void handleCollision(Actor other) {
         if(other instanceof Projectile){
             hitPoints -= ((Projectile) other).getDamage();
-        } else if ( other instanceof Asteroid || other instanceof ship.Ship){
+        } else if ( other instanceof Asteroid || other instanceof actor.ship.Ship){
             float otherKE = other.getMass() * other.getVelocity().magnitude2() * 0.5f;
 
             hitPoints -= otherKE * DAMAGE_FACTOR;

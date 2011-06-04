@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import actor.ship.Bandit;
+
 /**
  * ActorSet provides a thread safe backing store for our actors
  * @author Dustin Lundquist <dustin@null-ptr.net>
