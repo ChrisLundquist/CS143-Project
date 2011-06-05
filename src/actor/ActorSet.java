@@ -22,8 +22,8 @@ public class ActorSet implements Set<Actor> {
 
     public ActorSet(int playerId) {
         this.playerId = playerId;
-        actors = new java.util.concurrent.ConcurrentHashMap<ActorId, Actor>();
-        addNotifyees = java.util.Collections.synchronizedList(new java.util.ArrayList<Queue<Actor>>());
+        actors = new java.util.HashMap<ActorId, Actor>();
+        addNotifyees = new java.util.ArrayList<Queue<Actor>>();
         asteroidCount = 0;
         banditCount = 0;
         banditBaseCount = 0;
