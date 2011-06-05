@@ -23,8 +23,11 @@ public class ActorId implements Serializable {
         return this.id == other.id && this.playerId == other.playerId;
     }
     
-    public int hashCode() {
-        return playerId & id << 16;
+    public int hashCode() {   
+        int hash = 1;
+        hash = hash * 31 + playerId;
+        hash = hash * 31 + id;
+        return hash;
     }
 
     public String toString() {
