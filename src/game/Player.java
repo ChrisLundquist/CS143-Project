@@ -124,27 +124,35 @@ public class Player implements Serializable {
                 break;
             case OPEN_MENU:
                 InGameMenu.setMenuOpen(true);
-                switch(action) {
-                    case FORWARD:
-                        InGameMenu.selectionUp();
-                        break;
-                    case BACK:
-                        InGameMenu.selectionDown();
-                        break;
-                    case SHOOT:
-                        if(InGameMenu.getSelection() == 1) {
-                            System.exit(0);
-                        }
-                        else{
-                            InGameMenu.setMenuOpen(false);
-                        }
-                        break;
+                break;
+            case MENU_UP:
+                if(InGameMenu.isMenuOpen()) {
+                    InGameMenu.selectionUp();
+                    System.out.println("Up " + InGameMenu.getSelection());
+                }
+                break;
+            case MENU_DOWN:
+                if(InGameMenu.isMenuOpen()) {
+                    InGameMenu.selectionDown();
+                    System.out.println("Down " +InGameMenu.getSelection());
+                }
+                break;
+            case MENU_SELECT:
+                if(InGameMenu.isMenuOpen()) {
+                    System.out.println("Select");
+                    if(InGameMenu.getSelection() == 0) {
+                        InGameMenu.setMenuOpen(false);
+                    }
+                    if(InGameMenu.getSelection() == 1) {
+                        System.err.println("EXITED");
+                    }
                 }
                 break;
             default:
                 System.err.println("Player: unhandled input: " + action);
         }
     }
+
 
     public boolean isAlive() {
         if (getShip().isAlive() == false) {
