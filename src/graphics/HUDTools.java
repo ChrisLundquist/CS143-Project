@@ -27,6 +27,14 @@ public class HUDTools {
         gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d(x + width, y); 
         gl.glTexCoord2d(1.0, 1.0); gl.glVertex2d(x + width, y + height);
     }
+    
+    protected void drawBarGraph(float x, float y, float width, float height, float value) {
+        gl.glTexCoord2d(0.0, 1.0 * value); gl.glVertex2d(x, y + height * value);
+        gl.glTexCoord2d(0.0, 0.0); gl.glVertex2d(x, y);
+        gl.glTexCoord2d(1.0, 0.0); gl.glVertex2d(x + width, y); 
+        gl.glTexCoord2d(1.0, 1.0 * value); gl.glVertex2d(x + width, y + height * value);
+    }
+    
 
     /**
      * Changes to 2D

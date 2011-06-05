@@ -11,6 +11,7 @@ import actor.ship.weapon.Weapon;
 
 public abstract class Ship extends Actor {
     private static final long serialVersionUID = -7048308038567858490L;
+    private static final int MAX_HIT_POINTS = 1000;
 
     protected List<Weapon<? extends actor.ship.projectile.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
@@ -23,7 +24,7 @@ public abstract class Ship extends Actor {
         selectedWeapon = 0;
         weapons = new java.util.ArrayList<Weapon<? extends actor.ship.projectile.Projectile>>();
         shields = new java.util.ArrayList<Shield>();
-        hitPoints = 1000;
+        hitPoints = MAX_HIT_POINTS;
     }
 
     public Ship(math.Vector3f pos){
@@ -53,7 +54,7 @@ public abstract class Ship extends Actor {
             takeDamage(other.getMass());
         }
 
-        if(hitPoints < 0)
+        if(hitPoints <= 0)
             die();
     }
 
@@ -73,6 +74,14 @@ public abstract class Ship extends Actor {
         if(shields.get(0).getStatus() == false){
             hitPoints -= amount;
         }
+    }
+    
+    /**
+     * Returns the ships health from 1.0 .. 0.0
+     * @return
+     */
+    public float health() {
+        return (float)hitPoints / MAX_HIT_POINTS;
     }
 
     public boolean isAlive(){

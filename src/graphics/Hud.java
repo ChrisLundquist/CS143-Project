@@ -80,7 +80,7 @@ public class Hud extends HUDTools {
         }
  
         gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
+        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.health());
         gl.glEnd();
 
         if(healthcross != null) {
