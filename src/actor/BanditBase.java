@@ -1,5 +1,6 @@
 package actor;
 
+import graphics.core.Model;
 import actor.ship.Bandit;
 import actor.ship.Ship;
 import actor.ship.shield.CapitalShipShield;
@@ -18,6 +19,7 @@ public class BanditBase extends Ship {
         banditMax = DEFAULT_LIMIT;
         hitPoints = DEFAULT_HITPOINTS;
         shields.add(new CapitalShipShield());
+        modelName = Model.Models.BANDIT_BASE;
     }
     public BanditBase(Vector3f pos) {
         this();

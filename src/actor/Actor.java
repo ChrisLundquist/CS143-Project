@@ -19,10 +19,10 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     protected static Random gen = new Random(); // Common random number generator object
     private static final long serialVersionUID = 744085604446096658L;
 
-
     protected long age; // actor age in frames;
     protected ActorId id, parentId; // unique ID for each Actor
     private transient Model model; // CL - Used to store the model reference, after we look it up once
+    private transient Supportable collisionModel;
     
     /*
      * DL - a back reference to the actor set containing this actor
@@ -34,7 +34,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
      * variable somewhere. At this point it seem like this is a better way.
      */
     protected transient ActorSet actors;
-    protected String modelName;
+    protected String modelName, collisionModelName;
     protected Vector3f position, velocity, scale;
     protected Quaternion rotation, angularVelocity;
 
@@ -55,7 +55,9 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         velocity = new Vector3f(a.velocity);
         scale = new Vector3f(a.scale);
         modelName = new String(a.modelName);
+        collisionModelName = a.collisionModelName;
         model = a.model;
+        collisionModel = a.collisionModel;
         parentId = a.parentId;
         id= a.id;
         actors = a.actors;
@@ -190,6 +192,12 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         }
 
         return model;
+    }
+    
+    public Supportable getCollisionModel(){
+        //if(collisionModel == null)
+        return getModel();
+            
     }
 
     public String getModelName(){
