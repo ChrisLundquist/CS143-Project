@@ -13,7 +13,7 @@ public class Missile extends Projectile {
     protected static final String SHOOT_EFFECT = "missile_firing.wav";
     protected static final String DEATH_EFFECT = "explode.wav";
     protected static final float EFFECT_VOLUME = 16f;
-    protected ParticleGenerator<? extends Particle> particleGenerator;
+    protected transient ParticleGenerator<? extends Particle> particleGenerator;
 
 
     public Missile(Actor actor){

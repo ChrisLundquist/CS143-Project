@@ -1,15 +1,10 @@
 package game;
 
-import game.types.*;
 import input.KeyboardListener;
 import input.XboxInputListener;
-
 import java.io.IOException;
-
 import network.ClientServerThread;
-
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-
 import settings.Settings;
 import actor.ActorSet;
 
@@ -76,7 +71,7 @@ public class Game {
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getCamera());
 
-        game = new GameThread(actors);
+        game = new GameMultiThread(actors);
         // CL - We need to get input even if the game is paused,
         //      that way we can unpause the game.
         game.addCallback(input);
@@ -90,10 +85,10 @@ public class Game {
                 sound.Manager.processEvents();
             }
         });
-        
+        // Single player only callbacks
         if (networkConnection == null) {
-            game.addCallback(new AsteroidField());
-            game.addCallback(new Bandits());
+            game.addCallback(new game.types.AsteroidField());
+            game.addCallback(new game.types.Bandits());
         }
     }
 
@@ -109,7 +104,6 @@ public class Game {
     public static void start() {
         game.start();
         renderer.start();
-        player.respawn(actors, map.getSpawnPosition());
     }
 
     public static KeyboardListener getInputHandler(){
