@@ -179,7 +179,7 @@ public class ActorSet implements Set<Actor> {
 
 
     @Override
-    public synchronized int size() {
+    public int size() {
         return actors.size();
     }
 
@@ -200,7 +200,7 @@ public class ActorSet implements Set<Actor> {
      * @param id
      * @return
      */
-    public synchronized Actor findById(ActorId id) {
+    public Actor findById(ActorId id) {
         return actors.get(id);
     }
 

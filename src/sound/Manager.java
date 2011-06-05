@@ -21,7 +21,7 @@ public class Manager {
     private static actor.interfaces.Movable listener;
     public static boolean enabled=false;
 
-    static public synchronized void addEvent(Event event){
+    static public void addEvent(Event event){
         if(enabled){
             events.add(event);
         }
