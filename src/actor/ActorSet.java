@@ -22,11 +22,15 @@ public class ActorSet implements Set<Actor> {
 
     public ActorSet(int playerId) {
         this.playerId = playerId;
-        actors = new java.util.HashMap<ActorId, Actor>();
-        addNotifyees = new java.util.ArrayList<Queue<Actor>>();
+        actors = new java.util.concurrent.ConcurrentHashMap<ActorId, Actor>();
+        addNotifyees = new java.util.concurrent.CopyOnWriteArrayList<Queue<Actor>>();
         asteroidCount = 0;
         banditCount = 0;
         banditBaseCount = 0;
+    }
+    
+    public ActorSet() {
+        this(0);
     }
     
     private void adjustStat(Actor a, int increment){
@@ -39,15 +43,11 @@ public class ActorSet implements Set<Actor> {
         }
     }
 
-    public ActorSet() {
-        this(0);
-    }
-
     @Override
     /**
      * Add an actor to the ActorSet, assigning it an ActorId if one isn't already set
      */
-    public synchronized boolean add(Actor a) {
+    public boolean add(Actor a) {
         if (a.id == null)
             a.id = new ActorId(playerId);
 
@@ -85,7 +85,7 @@ public class ActorSet implements Set<Actor> {
      * This bypasses the normal add and any newActorConsumers (so the network clients don't send updates about the new actors they just received from the server)
      * @param a the actor to add
      */
-    public synchronized void addOrReplace(Actor a) {
+    public void addOrReplace(Actor a) {
         if (a.id == null)
             return;
         
@@ -94,7 +94,7 @@ public class ActorSet implements Set<Actor> {
     }
 
     @Override
-    public  boolean addAll(Collection<? extends Actor> list) {
+    public boolean addAll(Collection<? extends Actor> list) {
         boolean changed = false;
         
         for (Actor a: list)
@@ -105,7 +105,7 @@ public class ActorSet implements Set<Actor> {
     }
 
     @Override
-    public synchronized void clear() {
+    public void clear() {
         actors.clear();
         asteroidCount = 0;
         banditCount = 0;
@@ -116,7 +116,7 @@ public class ActorSet implements Set<Actor> {
         return false;
     }
 
-    public synchronized boolean contains(Actor a) {
+    public boolean contains(Actor a) {
         if (a.id == null)
             return false;
         return actors.containsKey(a.id);
@@ -132,14 +132,14 @@ public class ActorSet implements Set<Actor> {
     }
 
     @Override
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return actors.isEmpty();
     }
 
 
     @Override
-    public synchronized Iterator<Actor> iterator() {
-        return new CopyIterator();
+    public Iterator<Actor> iterator() {
+        return actors.values().iterator();
     }
 
 
@@ -148,7 +148,7 @@ public class ActorSet implements Set<Actor> {
         return false;
     }
 
-    public synchronized boolean remove(Actor a) {
+    public boolean remove(Actor a) {
         if (a.id == null)
             return false;
         adjustStat(a,-1);
@@ -180,13 +180,13 @@ public class ActorSet implements Set<Actor> {
 
 
     @Override
-    public synchronized Object[] toArray() {
+    public Object[] toArray() {
         return actors.values().toArray();
     }
 
 
     @Override
-    public synchronized <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(T[] a) {
         return actors.values().toArray(a);
     }
 
@@ -214,7 +214,7 @@ public class ActorSet implements Set<Actor> {
      * the actors currently in the ActorSet
      * @return
      */
-    public synchronized List<Actor> getCopyList() {
+    public List<Actor> getCopyList() {
         return new java.util.ArrayList<Actor>(actors.values());    
     }
 
@@ -253,7 +253,7 @@ public class ActorSet implements Set<Actor> {
      * Used for networking
      * @param queue
      */
-    public synchronized void addNewActorConsumer(Queue<Actor> queue) {
+    public void addNewActorConsumer(Queue<Actor> queue) {
         addNotifyees.add(queue);
     }
 }
