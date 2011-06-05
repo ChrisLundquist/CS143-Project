@@ -227,6 +227,10 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         return scale;
     }
 
+    public String toString() {
+        return this.getClass().getSimpleName() + " " + id + " " + position;
+    }
+    
     public Matrix4f getTransform(){
         return Matrix4f.newFromScale(scale).times(getRotation().toMatrix4f()).setTranslation(getPosition());
     }
