@@ -74,4 +74,12 @@ public abstract class Ship extends Actor {
             hitPoints -= amount;
         }
     }
+
+    public boolean isAlive(){
+        return hitPoints > 0;
+    }
+
+    public boolean isDead(){
+        return hitPoints <= 0;
+    }
 }

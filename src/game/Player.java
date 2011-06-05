@@ -142,7 +142,7 @@ public class Player implements Serializable {
     }
 
     public boolean isAlive() {
-        return (status == PlayerStatus.ALIVE);
+        return getShip().isAlive();
     }
 
     public void respawn(ActorSet actors, SpawningPosition spawningPosition) {

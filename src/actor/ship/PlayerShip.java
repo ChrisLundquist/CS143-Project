@@ -60,7 +60,7 @@ public abstract class PlayerShip extends Ship {
     public void previousWeapon() {
         setWeapon((selectedWeapon - 1) % weapons.size());
     }
-    
+
     public void setWeapon(int weaponNumber){
         selectedWeapon = weaponNumber % weapons.size();
         System.out.println("Switching to " + getWeapon());
@@ -77,7 +77,7 @@ public abstract class PlayerShip extends Ship {
         dampenAngularVelocity(getAngularDampening());
     }
 
-    public void takeDamage(float amount){
-        super.takeDamage(amount);
+    public void die(){
+        System.err.println("Dead Player");
     }
 }
