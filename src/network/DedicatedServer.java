@@ -1,5 +1,6 @@
 package network;
 
+import game.GameMultiThread;
 import game.GameThread;
 import game.Map;
 import game.Player;
@@ -91,7 +92,7 @@ public class DedicatedServer extends Thread {
         currentMap = Map.load("example_1");
         actors.addAll(currentMap.actors);
 
-        game = new GameThread(actors);
+        game = new GameMultiThread(actors);
         game.start();
         
         new ListenerThread(socket, this).start();

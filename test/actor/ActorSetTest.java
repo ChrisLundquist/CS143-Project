@@ -29,8 +29,42 @@ public class ActorSetTest {
 
     @Test
     public void testAdd() {
-        ActorSet as = new ActorSet(1);
+        ActorSet as = new ActorSet();
         as.add(new TestActor(Vector3f.newRandom(100)));
+        assertEquals(1, as.size());
+          
+        Actor a = new TestActor(Vector3f.newRandom(100));
+        a.id = new ActorId(123, 345);
+        
+        Actor b = new TestActor(Vector3f.newRandom(100));
+        b.id = new ActorId(123, 345);
+
+        as.add(a);
+        assertEquals(2, as.size());
+        
+        as.add(b);
+        assertEquals(2, as.size());
+    }
+    
+    @Test
+    public void testAddOrReplace() {
+        ActorSet as = new ActorSet();
+        as.addOrReplace(new TestActor(Vector3f.newRandom(100)));
+        assertEquals(0, as.size()); // no actor id by default
+        
+        Actor a = new TestActor(Vector3f.newRandom(100));
+        a.id = new ActorId(123, 345);
+        
+        Actor b = new TestActor(Vector3f.newRandom(100));
+        b.id = new ActorId(123, 345);
+               
+        assertFalse(a.equals(b));
+        assertTrue(a.id.equals(b.id));
+        
+        as.addOrReplace(a);
+        assertEquals(1, as.size());
+        
+        as.addOrReplace(b);
         assertEquals(1, as.size());
     }
 

@@ -19,6 +19,16 @@ public class ActorId implements Serializable {
         this.id = ++lastId;
     }
     
+    /**
+     * only used for testing
+     * @param playerId
+     * @param id
+     */
+    ActorId(int playerId, int id) {
+        this.playerId = playerId;
+        this.id = id;
+    }
+    
     public boolean equals(ActorId other) {
         return this.id == other.id && this.playerId == other.playerId;
     }

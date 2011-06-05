@@ -51,6 +51,14 @@ public class UpdateMessage extends Message {
     }
 
     public void applyTo(ActorSet actors) {
+        System.err.println("Network Update");
+        for (Actor a: this.actors)
+            System.err.println(a);
+        
+        System.err.println("Applying to local actors");
+        for (Actor a: actors)
+            System.err.println(a);
+        
         for (Actor a: this.actors)
             actors.addOrReplace(a);
     }

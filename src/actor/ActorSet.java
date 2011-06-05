@@ -48,6 +48,11 @@ public class ActorSet implements Set<Actor> {
      * Add an actor to the ActorSet, assigning it an ActorId if one isn't already set
      */
     public boolean add(Actor a) {
+        if (playerId != 0) { // Restrictive actor creation on network client
+            if (!(a.getParentId() != null && actors.get(a.getParentId()) instanceof actor.ship.PlayerShip))
+                return false;
+        }
+        
         if (a.id == null)
             a.id = new ActorId(playerId);
 
@@ -216,35 +221,6 @@ public class ActorSet implements Set<Actor> {
      */
     public List<Actor> getCopyList() {
         return new java.util.ArrayList<Actor>(actors.values());    
-    }
-
-    /**
-     * Copy iterator
-     * @author dustin
-     */
-    private class CopyIterator implements Iterator<Actor> {
-        List<Actor> copy;
-        Iterator<Actor> it;
-
-        public CopyIterator() {
-            copy = new java.util.ArrayList<Actor>(actors.values());
-            it = copy.iterator();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public Actor next() {
-            return it.next();
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("remove() not supported by " + this.getClass());
-        }
     }
 
     /**

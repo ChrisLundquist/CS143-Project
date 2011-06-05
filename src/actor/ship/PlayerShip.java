@@ -78,6 +78,6 @@ public abstract class PlayerShip extends Ship {
     }
 
     public void die(){
-        System.err.println("Dead Player");
+        actors.remove(this);
     }
 }
