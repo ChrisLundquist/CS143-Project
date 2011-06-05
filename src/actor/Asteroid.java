@@ -61,11 +61,13 @@ public class Asteroid extends Actor {
 
     @Override
     public void die(){
-        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SOUND_EFFECT));
-        // make bigger asteroids explode bigger
-        effect.gain = EFFECT_VOLUME * scale.magnitude2();
-        effect.pitch = 0.6f;
-        sound.Manager.addEvent(effect);
+        if (sound.Manager.enabled) {
+            sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SOUND_EFFECT));
+            // make bigger asteroids explode bigger
+            effect.gain = EFFECT_VOLUME * scale.magnitude2();
+            effect.pitch = 0.6f;
+            sound.Manager.addEvent(effect);
+        }        
         velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())
             ParticleSystem.addEvent((new Explosion<Fire>(Fire.class,this)).setIntensity((int)scale.magnitude2()));

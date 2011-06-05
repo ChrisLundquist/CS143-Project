@@ -39,10 +39,12 @@ public class Missile extends Projectile {
 
     @Override
     public void onFirstUpdate(){
-        sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SHOOT_EFFECT));
-        effect.gain = EFFECT_VOLUME;
-        sound.Manager.addEvent(effect);
-
+        if (sound.Manager.enabled) {
+            sound.Event effect = new sound.Event(getPosition(), getVelocity(),sound.Library.findByName(SHOOT_EFFECT));
+            effect.gain = EFFECT_VOLUME;
+            sound.Manager.addEvent(effect);
+        }
+  
         if(ParticleSystem.isEnabled()){
             particleGenerator = new graphics.particles.generators.Exhaust<Plasma>(Plasma.class,this);
             ParticleSystem.addGenerator(particleGenerator);
