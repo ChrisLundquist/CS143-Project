@@ -4,7 +4,6 @@ import game.Player;
 
 import java.util.List;
 import java.util.Queue;
-
 import actor.Actor;
 import actor.ActorSet;
 
@@ -31,11 +30,16 @@ public class UpdateMessage extends Message {
     public UpdateMessage(Player player, Queue<Actor> newActors) {
         actors = new java.util.ArrayList<Actor>();
         this.player = player;
-        actors.add(player.getShip());
+        Actor ship = player.getShip();
         
-        Actor a;
-        while((a = newActors.poll()) != null)
-            actors.add(a);
+        if (ship.getId() != null) {
+            actors.add(ship);
+
+            Actor a;
+            while((a = newActors.poll()) != null)
+                if (a.getParentId() != null && a.getParentId().equals(ship.getId()))
+                    actors.add(a);
+        }
     }
 
     public Player getPlayer() {

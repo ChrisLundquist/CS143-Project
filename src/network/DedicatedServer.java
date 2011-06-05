@@ -79,6 +79,8 @@ public class DedicatedServer extends Thread {
         setName("Dedicated Server");
         running = true;
         
+        graphics.core.Model.loadModels();
+        
         try {
             socket = new ServerSocket(SERVER_PORT);
         } catch (IOException e) {

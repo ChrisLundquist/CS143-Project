@@ -128,7 +128,10 @@ public class ClientServerThread extends AbstractConnectionThread {
 
     public static void main(String[] args) {
         System.out.println("Starting client");
-        joinServer("localhost", new Player());
+        ClientServerThread con = joinServer("localhost", new Player());
+        if (con == null)
+            System.exit(1);
         
+        new game.GameThread(con.getActors()).start();
     }
 }
