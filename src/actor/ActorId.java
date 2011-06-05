@@ -29,10 +29,18 @@ public class ActorId implements Serializable {
         this.id = id;
     }
     
+    @Override
+    public boolean equals(Object other) {
+       if(other == null || other.getClass() != getClass())
+           return false;
+       return equals((ActorId)other);
+    }
+
     public boolean equals(ActorId other) {
         return this.id == other.id && this.playerId == other.playerId;
     }
     
+    @Override
     public int hashCode() {   
         int hash = 1;
         hash = hash * 31 + playerId;
@@ -40,6 +48,7 @@ public class ActorId implements Serializable {
         return hash;
     }
 
+    @Override
     public String toString() {
         return "#" + playerId + "." + id;
     }
