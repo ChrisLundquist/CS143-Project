@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Map;
 
-import math.Vector3f;
-
 import org.junit.Test;
 
 public class ActorIdTest {
