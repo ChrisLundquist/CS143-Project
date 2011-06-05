@@ -174,7 +174,7 @@ public class ActorSet implements Set<Actor> {
 
 
     @Override
-    public synchronized int size() {
+    public int size() {
         return actors.size();
     }
 
@@ -195,7 +195,7 @@ public class ActorSet implements Set<Actor> {
      * @param id
      * @return
      */
-    public synchronized Actor findById(ActorId id) {
+    public Actor findById(ActorId id) {
         return actors.get(id);
     }
 
@@ -216,35 +216,6 @@ public class ActorSet implements Set<Actor> {
      */
     public List<Actor> getCopyList() {
         return new java.util.ArrayList<Actor>(actors.values());    
-    }
-
-    /**
-     * Copy iterator
-     * @author dustin
-     */
-    private class CopyIterator implements Iterator<Actor> {
-        List<Actor> copy;
-        Iterator<Actor> it;
-
-        public CopyIterator() {
-            copy = new java.util.ArrayList<Actor>(actors.values());
-            it = copy.iterator();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public Actor next() {
-            return it.next();
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("remove() not supported by " + this.getClass());
-        }
     }
 
     /**
