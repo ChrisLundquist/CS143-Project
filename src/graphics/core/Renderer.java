@@ -5,6 +5,7 @@ import graphics.Camera;
 import graphics.Hud;
 import graphics.InGameMenu;
 import graphics.Light;
+import graphics.RespawnMenu;
 import graphics.Shader;
 import graphics.Skybox;
 import graphics.particles.ParticleSystem;
@@ -40,6 +41,7 @@ public class Renderer implements GLEventListener {
     Shader shader;
     Hud hud;
     InGameMenu inGameMenu;
+    RespawnMenu respawnMenu;
     Camera camera;
     private GL2 gl; // Must be recached each frame
 
@@ -51,6 +53,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader(shaderString + ".vert", shaderString + ".frag");
         hud = null; // default no HUD;
         inGameMenu = new InGameMenu();
+        respawnMenu = new RespawnMenu();
         this.camera = camera;
     }
 
@@ -77,7 +80,7 @@ public class Renderer implements GLEventListener {
             if (a.getId().equals(playerShipId) == false)
                 render(a);
 
-        shader.setUniform1b(gl, "lightingEnabled", false);
+      shader.setUniform1b(gl, "lightingEnabled", false);
         if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
@@ -85,11 +88,17 @@ public class Renderer implements GLEventListener {
         }
 
 
-        if (hud != null)
+        if (hud != null) {
             hud.drawStaticHud(gl);
+        }
 
-        if (inGameMenu != null)
+        if (inGameMenu != null) {
             inGameMenu.drawInGameMenu(gl);
+        }
+        
+        if (respawnMenu != null) {
+            respawnMenu.drawRespawnMenu(gl);
+        }
         shader.setUniform1b(gl, "lightingEnabled", true);
 
         checkForGLErrors(gl);

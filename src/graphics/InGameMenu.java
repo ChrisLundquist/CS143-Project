@@ -15,7 +15,7 @@ public class InGameMenu extends HUDTools {
     static Texture inGameMenu;
     private static String RESUME = "assets/images/ingamemenu/resume_selected.png";
     private static String QUIT = "assets/images/ingamemenu/quit_selected.png";
-    int s = HEIGHT / 2;
+    private int s = HEIGHT / 2;
 
     public void drawInGameMenu(GL2 gl) {
         this.gl = gl;
