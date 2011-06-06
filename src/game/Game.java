@@ -76,7 +76,7 @@ public class Game {
         // When we pass player.getCamera() the sound doesn't match the player position
         sound.Manager.initialize(player.getCamera());
 
-        game = new GameThread(actors);
+        game = new GameMultiThread(actors);
         // CL - We need to get input even if the game is paused,
         //      that way we can unpause the game.
         game.addCallback(input);
@@ -97,13 +97,14 @@ public class Game {
         }
     }
 
-    public static void joinServer(String server) {
+    public static boolean joinServer(String server) {
         player = new Player();
         networkConnection = ClientServerThread.joinServer(server, player);  
         if (networkConnection == null)
-            return;
+            return false;
 
         init();
+        return true;
     }
 
     public static void start() {

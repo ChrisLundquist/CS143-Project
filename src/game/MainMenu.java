@@ -19,7 +19,7 @@ public class MainMenu extends JPanel implements ActionListener {
     BufferedImage background;
     int y, x;
     //paths to all images used
-    
+
     private static final String BACKGROUND_PATHS[] = {
         "assets/images/mainmenu/background1.jpg",
         "assets/images/mainmenu/background2.jpg",
@@ -27,41 +27,42 @@ public class MainMenu extends JPanel implements ActionListener {
         "assets/images/mainmenu/background4.jpg",
         "assets/images/mainmenu/background5.jpg",
     };
-    
+
     ImageIcon play, joinGame,joinGame_selected, play_selected, settings, settings_selected, quit, quit_selected;
     ImageIcon particles_on, particles_off, shaders_on, shaders_off, sound_on, sound_off, controller_on,
     controller_off, back, back_selected;
-    
-    
+
+    private static final String[] NETWORK_SERVERS = {"openspace.overthere.org", "localhost"};
+
     private static final String PLAY_PATH  = "assets/images/mainmenu/start.png";
     private static final String JOINGAME_PATH = "assets/images/mainmenu/joingame.png";
     private static final String SETTINGS_PATH = "assets/images/mainmenu/settings.png";
     private static final String QUIT_PATH = "assets/images/mainmenu/quit.png";
-    
+
     private static final String PLAY_PATH_SELECTED  = "assets/images/mainmenu/start_selected.png";
     private static final String JOINGAME_PATH_SELECTED = "assets/images/mainmenu/joingame_selected.png";
     private static final String SETTINGS_PATH_SELECTED = "assets/images/mainmenu/settings_selected.png";
     private static final String QUIT_PATH_SELECTED = "assets/images/mainmenu/quit_selected.png";
-    
+
     private static final String CONTROLLER_ON = "assets/images/mainmenu/controller_on.png";
     private static final String CONTROLLER_OFF = "assets/images/mainmenu/controller_off.png";
-    
+
     private static final String SOUND_ON = "assets/images/mainmenu/sound_on.png";
     private static final String SOUND_OFF = "assets/images/mainmenu/sound_off.png";
-    
+
     private static final String SHADERS_ON = "assets/images/mainmenu/shaders_on.png";
     private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_on.png";
-    
+
     private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on.png";
     private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off.png";
-    
+
     private static final String BACK = "assets/images/mainmenu/back.png";
     private static final String BACK_SELECTED = "assets/images/mainmenu/back_selected.png";
-   
+
     //buttons
     JButton playButton, joinGameButton, settingsButton, quitButton, backButton;
     JCheckBox enableController, enableSound, enableShaders, enableParticles;
-    
+
     public boolean controllerEnabled = false;
     public boolean soundEnabled = true;
     public boolean particlesEnabled = true;
@@ -76,12 +77,12 @@ public class MainMenu extends JPanel implements ActionListener {
             joinGame = new ImageIcon(JOINGAME_PATH);
             settings = new ImageIcon(SETTINGS_PATH);
             quit = new ImageIcon(QUIT_PATH);
-            
+
             play_selected = new ImageIcon(PLAY_PATH_SELECTED);
             joinGame_selected = new ImageIcon(JOINGAME_PATH_SELECTED);
             settings_selected = new ImageIcon(SETTINGS_PATH_SELECTED);
             quit_selected = new ImageIcon(QUIT_PATH_SELECTED);
-            
+
             controller_on = new ImageIcon(CONTROLLER_ON);
             controller_off = new ImageIcon(CONTROLLER_OFF);
             sound_on = new ImageIcon(SOUND_ON);
@@ -92,7 +93,7 @@ public class MainMenu extends JPanel implements ActionListener {
             particles_off = new ImageIcon(PARTICLES_OFF);
             back = new ImageIcon(BACK);
             back_selected = new ImageIcon(BACK_SELECTED);
-            
+
         } catch (IOException e) {
             System.out.println("Can't find image in assets");
             e.printStackTrace();
@@ -113,7 +114,7 @@ public class MainMenu extends JPanel implements ActionListener {
     }
     public String getRandomImage() {
         java.util.Random rand = new java.util.Random();
-        
+
         return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
     }
     /**
@@ -159,9 +160,9 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
         quitButton.setBounds(50, 200, 200, 50);
-   
-     
-        
+
+
+
         enableController = new JCheckBox();
         if(controllerEnabled == true) {
             enableController.setIcon(controller_on);
@@ -191,7 +192,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableSound.addActionListener(this);
         enableSound.setVisible(false);
         enableSound.setBounds(50, 100, 100, 50);
-        
+
         enableShaders = new JCheckBox();
         if(shadersEnabled == true) {
             enableShaders.setIcon(shaders_on);
@@ -232,7 +233,7 @@ public class MainMenu extends JPanel implements ActionListener {
         backButton.setRolloverIcon(back_selected);
         backButton.addActionListener(this);
         backButton.setBounds(50,250,230,50);
-        
+
 
         add(playButton);
         add(joinGameButton);
@@ -279,24 +280,36 @@ public class MainMenu extends JPanel implements ActionListener {
             Game.start();
         }
         if(e.getSource() == joinGameButton) {
-            // TODO a better way to populate the server list and an option to enter a custom address
-            String[] servers = {"localhost", "openspace.overthere.org"};
-            String server = (String)JOptionPane.showInputDialog(this,
-                    "Select a server to join",
-                    "Join a Network Game",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null, // Icon
-                    servers,
-                    null // initial value
+            JComboBox comboSelect = new JComboBox(NETWORK_SERVERS);
+            comboSelect.setEditable(true);
+            JLabel label = new JLabel("Select a server to join");
+            JPanel panel = new JPanel();
+            GroupLayout layout = new GroupLayout(panel);
+            panel.setLayout(layout);
+            layout.setHorizontalGroup(
+                    layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(label)
+                            .addComponent(comboSelect))
+            );
+            layout.setVerticalGroup(
+                    layout.createSequentialGroup()
+                    .addComponent(label)
+                    .addComponent(comboSelect)
             );
 
-            if (server == null) // user hit cancel
+            int choice = JOptionPane.showConfirmDialog(null, panel, "Join a Network Game", JOptionPane.CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION)
                 return;
 
-            Game.joinServer(server);
+            String server = (String) comboSelect.getSelectedItem();
+
+            if (Game.joinServer(server) == false)
+                return;
+
             this.setVisible(false);
             menuVisible = false;
-            Game.start(); 
+            Game.start();
         }
         if(e.getSource() == settingsButton) {
             playButton.setVisible(false);
@@ -310,7 +323,7 @@ public class MainMenu extends JPanel implements ActionListener {
             backButton.setVisible(true);
 
         }
-       
+
         if(e.getSource() == enableController) {
             if(controllerEnabled == true) {
                 controllerEnabled = false;
