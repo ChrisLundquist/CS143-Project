@@ -36,6 +36,10 @@ public class UpdateMessage extends Message {
     public UpdateMessage(Player player, Queue<Actor> newActors) {
         actors = new java.util.ArrayList<Actor>();
         this.player = player;
+        
+        Actor ship = player.getShip();
+        if (ship.getId() != null)
+            actors.add(ship);
 
         Actor a;
         while((a = newActors.poll()) != null)
