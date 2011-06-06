@@ -11,16 +11,23 @@ import actor.ActorSet;
 import actor.ship.PlayerShip;
 
 public class Player implements Serializable {
-    private static final long serialVersionUID = 8330574859953611636L;
+    // Statuses for our Player state machine
+    public static enum PlayerStatus {
+        ALIVE,
+        DEAD,
+        OBSERVING,
+    }
 
-    private String name;
-    private PlayerStatus status;
+    private static final long serialVersionUID = 8330574859953611636L;
     private transient final Camera camera;
+    private String name;
+    private int playerId;
     private transient PlayerShip ship;
+
     private ActorId shipId;
     // TODO ship preference - once we have ships
 
-    private int playerId;
+    private PlayerStatus status;
 
     public Player() {
         setName("Pilot");
@@ -29,32 +36,44 @@ public class Player implements Serializable {
         playerId = 0;
     }
 
-    @Override
-    public String toString() {
-        String msg = name + " " + status;
-        Actor ship = getShip();
-        if (ship != null) {
-            msg += " @ " + ship.getPosition();
-        }
-        return msg;
-    }
-
     public Camera getCamera() {
         return camera;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    // TODO create ship of players preference
+    public PlayerShip getNewShip() {
+        return new actor.ship.types.Bomber();
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+
     public PlayerShip getShip() {
+        return getShip(Game.getActors());
+    }
+
+    public PlayerShip getShip(ActorSet actors) {
         if (ship == null) {
             if (shipId != null) {
-                Actor a = Game.getActors().findById(shipId);
-                if (a instanceof PlayerShip) {
+                Actor a = actors.findById(shipId);
+                if (a instanceof PlayerShip)
                     return ship = (PlayerShip) a;
-                }
+                shipId = null;
             }
             ship = getNewShip();
             shipId = ship.getId();
         }
         return ship;
+    }
+
+    public ActorId getShipId() {
+        return shipId;
     }
 
     public void input(InputRouter.Interaction action) {
@@ -169,7 +188,7 @@ public class Player implements Serializable {
 
 
     public boolean isAlive() {
-        if (getShip().isAlive() == false) {
+        if (getShip().isDead() || getShip().getId() == null) {
             status = PlayerStatus.DEAD;
             getShip().die();
             ship = null;
@@ -198,39 +217,42 @@ public class Player implements Serializable {
             }
         }
 
+        if (ship == null)
+            ship = new actor.ship.types.Bomber();
+        if (ship == null)
+            throw new RuntimeException("WTF");
+
         ship.setPosition(spawningPosition.getPosition());
         ship.setRotation(spawningPosition.getOrientation());
-        setShipId(ship.getId());
-        status = PlayerStatus.ALIVE;
-        actors.add(ship);
-    }
-
-    // TODO create ship of players preference
-    public PlayerShip getNewShip() {
-        return new actor.ship.types.Bomber();
+        if (actors.add(ship)) {
+            shipId = ship.getId();
+            status = PlayerStatus.ALIVE;
+        } else {
+            throw new RuntimeException("Unable to add new player ship to ActorSet");
+        }
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public Player setPlayerId(int id) {
+        playerId = id;
+        return this;
     }
 
     public void setShipId(ActorId shipId) {
         this.shipId = shipId;
     }
 
-    public ActorId getShipId() {
-        return shipId;
-    }
-
-    // Statuses for our Player state machine
-    public static enum PlayerStatus {
-        OBSERVING,
-        ALIVE,
-        DEAD,
+    @Override
+    public String toString() {
+        String msg = name + " " + status;
+        Actor ship = getShip();
+        if (ship != null) {
+            msg += " @ " + ship.getPosition();
+        }
+        return msg;
     }
 
     /**
@@ -243,14 +265,5 @@ public class Player implements Serializable {
             camera.updateFromActor(ship);
 
         return camera;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-    public Player setPlayerId(int id) {
-        playerId = id;
-        return this;
     }
 }

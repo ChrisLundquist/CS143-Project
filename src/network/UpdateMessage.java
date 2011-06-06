@@ -11,7 +11,7 @@ public class UpdateMessage extends Message {
     private static final long serialVersionUID = 6956652733302442322L;
     private List<Actor> actors;
     private Player player;
-    
+
     /**
      * Constructor for server updates (from server to client)
      * @param player
@@ -19,8 +19,13 @@ public class UpdateMessage extends Message {
      */
     public UpdateMessage(DedicatedServer server, Player p) {
         player = p;
-        actors = server.getActors().getCopyList();
-        actors.remove(player.getShip());
+        actors = new java.util.ArrayList<Actor>();
+        for (Actor a: server.getActors())
+            if (a.getId().getPlayerId() != player.getPlayerId())
+                actors.add(a);
+        
+//        actors = server.getActors().getCopyList();
+//        actors.remove(player.getShip());
     }
 
     /**
@@ -30,22 +35,16 @@ public class UpdateMessage extends Message {
     public UpdateMessage(Player player, Queue<Actor> newActors) {
         actors = new java.util.ArrayList<Actor>();
         this.player = player;
-        Actor ship = player.getShip();
-        
-        if (ship.getId() != null) {
-            actors.add(ship);
 
-            Actor a;
-            while((a = newActors.poll()) != null)
-                if (a.getParentId() != null && a.getParentId().equals(ship.getId()))
-                    actors.add(a);
-        }
+        Actor a;
+        while((a = newActors.poll()) != null)
+            actors.add(a);
     }
 
     public Player getPlayer() {
         return player;
     }
-    
+
     public List<Actor> getActors() {
         return actors;
     }
@@ -55,11 +54,11 @@ public class UpdateMessage extends Message {
         System.err.println("Network Update");
         for (Actor a: this.actors)
             System.err.println(a);
-        
+
         System.err.println("Applying to local actors");
         for (Actor a: actors)
             System.err.println(a);
-        */
+         */
         for (Actor a: this.actors)
             actors.addOrReplace(a);
     }

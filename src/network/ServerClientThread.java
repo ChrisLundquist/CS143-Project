@@ -28,16 +28,16 @@ public class ServerClientThread extends AbstractConnectionThread {
     protected Message handleMessage(Message msg) throws IOException {
         if (msg instanceof JoinMessage) {
             player = ((JoinMessage) msg).getPlayer();
-            server.addPlayer(player);
+            server.addPlayer(this);
         } else if (msg instanceof UpdateMessage) {
             UpdateMessage update = (UpdateMessage) msg;
             Player playerUpdate = update.getPlayer();
-            if (playerUpdate.getShipId() != player.getShipId()) {
+            
+            if (player.getShipId() != null && ! player.getShipId().equals(playerUpdate.getShipId())) {
                 // Player died or respawned or something
-
-                // Check if there new player ship id is in use by someone else
-                if (actors.contains(player.getShip()))
-                        throw new IllegalArgumentException("Duplicate Player Ship ID" + playerUpdate.getShipId());
+                
+                if (player.getPlayerId() != playerUpdate.getPlayerId())
+                    throw new RuntimeException("Player tried something sneaky and changed their player id");
 
                 // Easiest way to resolve update
                 // TODO this doesn't notify the server process of the new player so we should probably do a member by member copy
@@ -49,6 +49,10 @@ public class ServerClientThread extends AbstractConnectionThread {
     }
 
     protected void shutdownHook() {
-        server.removePlayer(player);
+        server.removePlayer(this);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

@@ -78,6 +78,7 @@ public abstract class PlayerShip extends Ship {
     }
 
     public void die(){
-        actors.remove(this);
+        if (actors != null)
+            actors.remove(this);
     }
 }
