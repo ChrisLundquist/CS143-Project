@@ -37,7 +37,7 @@ public class Renderer implements GLEventListener {
     GLCanvas canvas;
     Frame frame;
     FPSAnimator animator;
-    //Shader shader;
+    Shader shader;
     Hud hud;
     InGameMenu inGameMenu;
     Camera camera;
@@ -48,7 +48,7 @@ public class Renderer implements GLEventListener {
         canvas = new GLCanvas();
         frame = new Frame("cs143 project");
         animator = new FPSAnimator(canvas,60);
-        //shader = new Shader(shaderString + ".vert", shaderString + ".frag");
+        shader = new Shader(shaderString + ".vert", shaderString + ".frag");
         hud = null; // default no HUD;
         inGameMenu = new InGameMenu();
         this.camera = camera;
@@ -77,11 +77,11 @@ public class Renderer implements GLEventListener {
             if (a.getId().equals(playerShipId) == false)
                 render(a);
 
-       /* if(ParticleSystem.isEnabled()){
+       if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
             shader.setUniform1b(gl, "isTextured", true);
-        }*/
+        }
         
         if (hud != null)
             hud.drawStaticHud(gl);
@@ -144,16 +144,16 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-       /* 
+       
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {
             e.printStackTrace();
-        }*/
-        //shader.enable(gl);
+        }
+        shader.enable(gl);
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
-      //  shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
+        shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
         System.gc(); // This is probably a good a idea
     }
 
@@ -276,7 +276,7 @@ public class Renderer implements GLEventListener {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
-       // shader.setUniform1b(gl, "isTextured", model.isTextured);
+       shader.setUniform1b(gl, "isTextured", model.isTextured);
 
         if(gl.glIsList(model.displayList) == false)
             build_display_list(model);
@@ -289,7 +289,7 @@ public class Renderer implements GLEventListener {
     }
 
 
-    /* public Shader getShader() {
+    public Shader getShader() {
         return shader;
-    }*/
+    }
 }

@@ -1,5 +1,7 @@
 package game;
 
+import game.types.AsteroidField;
+import game.types.Bandits;
 import input.KeyboardListener;
 import input.XboxInputListener;
 import java.io.IOException;
@@ -87,8 +89,8 @@ public class Game {
         });
         // Single player only callbacks
         if (networkConnection == null) {
-            //game.addCallback(new AsteroidField());
-            //game.addCallback(new Bandits());
+            game.addCallback(new AsteroidField());
+            game.addCallback(new Bandits());
         }
     }
 
