@@ -51,15 +51,20 @@ public class Player implements Serializable {
                 }
             }
             ship = getNewShip();
+            shipId = ship.getId();
         }
         return ship;
     }
 
     public void input(InputRouter.Interaction action) {
-        if (getShip() == null) {
-            return;
-        }
+        if (isAlive())
+            inputAlive(action);
+        else
+            respawn();
 
+    }
+
+    private void inputAlive(InputRouter.Interaction action) {
         switch(action) {
             case SHOOT:
                 ship.shoot();
@@ -142,10 +147,24 @@ public class Player implements Serializable {
     }
 
     public boolean isAlive() {
-        return getShip().isAlive();
+        if (getShip().isAlive() == false) {
+            status = PlayerStatus.DEAD;
+            getShip().die();
+            ship = null;
+            shipId = null;
+        }
+
+        return status == PlayerStatus.ALIVE;
     }
 
-    public void respawn(ActorSet actors, SpawningPosition spawningPosition) {
+    /**
+     * Respawn the player, this will only be called on the client
+     * the server can not transition us from the observing state
+     */
+    public void respawn() {
+        SpawningPosition spawningPosition = Game.getMap().getSpawnPosition();
+        ActorSet actors = Game.getActors();
+
         if (shipId == null) {
             ship = getShip();
         } else {
@@ -198,11 +217,8 @@ public class Player implements Serializable {
      * @return the players camera object so it can be chained with setPerspective()
      */
     public Camera updateCamera() {
-        if (ship != null) {
+        if (ship != null)
             camera.updateFromActor(ship);
-
-
-        }
 
         return camera;
     }
@@ -210,7 +226,7 @@ public class Player implements Serializable {
     public int getPlayerId() {
         return playerId;
     }
-    
+
     public Player setPlayerId(int id) {
         playerId = id;
         return this;

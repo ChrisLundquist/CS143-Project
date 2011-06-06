@@ -1,15 +1,10 @@
 package game;
 
-import game.types.*;
 import input.KeyboardListener;
 import input.XboxInputListener;
-
 import java.io.IOException;
-
 import network.ClientServerThread;
-
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-
 import settings.Settings;
 import actor.ActorSet;
 
@@ -90,10 +85,10 @@ public class Game {
                 sound.Manager.processEvents();
             }
         });
-        
+        // Single player only callbacks
         if (networkConnection == null) {
-            game.addCallback(new AsteroidField());
-            game.addCallback(new Bandits());
+            game.addCallback(new game.types.AsteroidField());
+            game.addCallback(new game.types.Bandits());
         }
     }
 
@@ -109,7 +104,6 @@ public class Game {
     public static void start() {
         game.start();
         renderer.start();
-        player.respawn(actors, map.getSpawnPosition());
     }
 
     public static KeyboardListener getInputHandler(){
