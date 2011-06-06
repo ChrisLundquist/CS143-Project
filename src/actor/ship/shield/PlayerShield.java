@@ -6,7 +6,7 @@ public class PlayerShield extends Shield {
     
     public PlayerShield() {
         setStrength(STRENGTH);
-        
+        setMaxStrength(STRENGTH);
     }
     
 }

@@ -83,6 +83,11 @@ public abstract class Ship extends Actor {
     public float health() {
         return (float)hitPoints / MAX_HIT_POINTS;
     }
+    
+    public float shield(){
+        System.out.println((float)shields.get(0).getStrength()/shields.get(0).getMaxStrength());
+        return (float)shields.get(0).getStrength()/shields.get(0).getMaxStrength();
+    }
 
     public boolean isAlive(){
         return hitPoints > 0;
