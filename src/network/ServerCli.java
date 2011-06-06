@@ -1,5 +1,7 @@
 package network;
 
+import game.Player;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -77,13 +79,13 @@ public class ServerCli extends Thread {
         long freeMemory = Runtime.getRuntime().freeMemory() / (1024 * 1024);
         long usedMemory = totalMemory - freeMemory;
         int processors = Runtime.getRuntime().availableProcessors();
-        List<ServerClientThread> players = server.getPlayers();
+        List<Player> players = server.getPlayers();
         int playerCount = players.size();
 
         out.println(server.getActors().size() + " actors");
         out.println(playerCount + " players");
-        for (ServerClientThread p: players)
-            out.println("\t" + p.getPlayer());
+        for (Player p: players)
+            out.println("\t" + p);
         out.println(processors + " processors");
         out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB total");
     }

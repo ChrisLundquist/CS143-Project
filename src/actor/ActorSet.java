@@ -219,6 +219,8 @@ public class ActorSet implements Set<Actor> {
      */
     public void update(int frames) {
         for (Actor a: this) {
+            if (playerId != 0)
+                System.err.println(a);
             a.update();
         }
     }
