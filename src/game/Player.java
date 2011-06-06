@@ -2,6 +2,7 @@ package game;
 
 import graphics.Camera;
 import graphics.InGameMenu;
+import graphics.RespawnMenu;
 import input.InputRouter;
 import java.io.Serializable;
 import actor.Actor;
@@ -147,18 +148,26 @@ public class Player implements Serializable {
             case MENU_UP:
                 if(InGameMenu.isMenuOpen()) {
                     InGameMenu.selectionUp();
-                    System.out.println("Up " + InGameMenu.getSelection());
+                    //   System.out.println("Up " + InGameMenu.getSelection());
                 }
+                if(RespawnMenu.isRespawnOpen()) {
+
+                }
+
                 break;
             case MENU_DOWN:
                 if(InGameMenu.isMenuOpen()) {
                     InGameMenu.selectionDown();
-                    System.out.println("Down " +InGameMenu.getSelection());
+                    // System.out.println("Down " +InGameMenu.getSelection());
                 }
+                if(RespawnMenu.isRespawnOpen()) {
+                    
+                }
+
                 break;
             case MENU_SELECT:
                 if(InGameMenu.isMenuOpen()) {
-                    System.out.println("Select");
+                    //System.out.println("Select");
                     if(InGameMenu.getSelection() == 0) {
                         InGameMenu.setMenuOpen(false);
                     }
@@ -166,6 +175,11 @@ public class Player implements Serializable {
                         System.err.println("EXITED");
                     }
                 }
+                
+                if(RespawnMenu.isRespawnOpen()) {
+                    
+                }
+
                 break;
             default:
                 System.err.println("Player: unhandled input: " + action);
