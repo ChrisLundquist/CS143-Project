@@ -91,7 +91,7 @@ public class Hud extends HUDTools {
             shieldbar.bind(gl);
         }
         gl.glBegin(GL2.GL_QUADS );
-        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.shield()*0.72f);
+        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.shield()*0.70f);
         gl.glEnd();
 
         //health cross
