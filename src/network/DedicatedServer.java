@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import actor.ActorSet;
 
-public class DedicatedServer extends Thread implements Monitorable {
+public class DedicatedServer extends Thread {
     public static final int SERVER_PORT = 8348;
     
     public static void main(String[] args) {
