@@ -9,7 +9,6 @@ import actor.ship.projectile.Projectile;
 
 public class SingleShotWeapon<T extends Projectile> extends Weapon<T>{
     private static final long serialVersionUID = -5639387880039566435L;
-    long lastShot,coolDown;
     transient protected Constructor<? extends T> ctor;
     protected Class<? extends T> projectileType;
 
@@ -18,7 +17,7 @@ public class SingleShotWeapon<T extends Projectile> extends Weapon<T>{
     }
 
     public void shoot(Actor ship) {
-        if(canShoot(1)){
+        if(canShoot()){
             if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
                 game.Game.getActors().add(newProjectile(ship));
                 setLastShotTime(System.currentTimeMillis());

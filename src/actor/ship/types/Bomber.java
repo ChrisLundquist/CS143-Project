@@ -16,7 +16,7 @@ public class Bomber extends PlayerShip {
 
     private final float ANGULAR_DAMPENING = 0.025f;
     
-    private static final int MISSILE_AMMO = 2;
+    private static final int MISSILE_AMMO = 3;
     private static final int NUKE_AMMO = 5;
     private static final int FLAK_SHELL_AMMO = 30;
     private static final int BULLET_AMMO = 5000;
