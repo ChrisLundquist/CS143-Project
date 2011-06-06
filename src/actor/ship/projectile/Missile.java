@@ -33,7 +33,8 @@ public class Missile extends Projectile {
         if(ParticleSystem.isEnabled())
             ParticleSystem.addEvent((new Explosion<Fire>(Fire.class,this)).setIntensity(96));
 
-        ParticleSystem.removeGenerator(particleGenerator);
+        if(ParticleSystem.isEnabled())
+            ParticleSystem.removeGenerator(particleGenerator);
         delete();
     }
 
@@ -44,7 +45,7 @@ public class Missile extends Projectile {
             effect.gain = EFFECT_VOLUME;
             sound.Manager.addEvent(effect);
         }
-  
+
         if(ParticleSystem.isEnabled()){
             particleGenerator = new graphics.particles.generators.Exhaust<Plasma>(Plasma.class,this);
             ParticleSystem.addGenerator(particleGenerator);

@@ -23,12 +23,12 @@ public class Light implements java.io.Serializable{
     }
     public Light(){
         position = new Vector4f(1,1,1,1);
-        ambient = new Vector4f(0,0,0,0);
+        ambient = new Vector4f(0.05f,0.05f,0.05f,0.05f);
         diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),0);
         specular = new Vector4f(1,1,1,1);
         constantAttenuation = 1.0f;
-        linearAttenuation = 2.0f;
-        quadraticAttenuation = 4.0f;
+        linearAttenuation = 1.0f;
+        quadraticAttenuation = 1.0f;
     }
 
     public math.Vector4f getAmbient() {

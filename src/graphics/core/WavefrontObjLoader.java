@@ -24,7 +24,7 @@ public class WavefrontObjLoader {
 
         try {
             if (transform_file.exists())
-                wol.loadTranform(transform_file);
+                wol.transform = loadTranform(transform_file);
 
             in = new BufferedReader(new FileReader(file));
 
@@ -116,7 +116,7 @@ public class WavefrontObjLoader {
         }
     }
 
-    private void loadTranform(File file) throws IOException {
+    public static float[] loadTranform(File file) throws IOException {
         String line;
         BufferedReader in = new BufferedReader(new FileReader(file));
         float[] newTransform = new float[16];
@@ -131,15 +131,15 @@ public class WavefrontObjLoader {
             }
         } catch (NumberFormatException e) {
             errors.add(new WavefrontLoaderError(file, "Malformed tranform file"));
-            return;
+            return null;
         }
 
         // Check that we loaded a complete transform
         if (pos != 16) {
             errors.add(new WavefrontLoaderError(file, "Malformed tranform file"));
-            return;
+            return null;
         }
-        transform = newTransform;
+        return newTransform;
     }
 
     private void setObject(String nextToken) {

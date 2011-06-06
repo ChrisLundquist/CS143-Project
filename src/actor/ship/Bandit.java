@@ -18,6 +18,7 @@ public class Bandit extends Ship {
         weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),WEAPON_AMMO));
         shields.add(new PlayerShield());
         modelName = Model.Models.BANDIT;
+        velocity.z -= 0.05f;
     }
 
     public Bandit(Vector3f pos) {

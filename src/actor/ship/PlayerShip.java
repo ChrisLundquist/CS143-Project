@@ -1,5 +1,8 @@
 package actor.ship;
 
+import graphics.particles.Particle;
+import graphics.particles.ParticleSystem;
+import graphics.particles.generators.ParticleGenerator;
 import actor.ship.projectile.Projectile;
 import actor.ship.weapon.Weapon;
 
@@ -80,5 +83,8 @@ public abstract class PlayerShip extends Ship {
     public void die(){
         if (actors != null)
             actors.remove(this);
+        if(ParticleSystem.isEnabled())
+            for(ParticleGenerator<? extends Particle> particleGenerator : particleGenerators)
+                ParticleSystem.removeGenerator(particleGenerator);
     }
 }

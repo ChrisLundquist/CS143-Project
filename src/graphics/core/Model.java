@@ -1,6 +1,12 @@
 package graphics.core;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +22,10 @@ public class Model implements math.Supportable{
         public static final String ASTEROID = "asteroid";
         public static final String BANDIT = "fighter";
         public static final String BANDIT_BASE = "asteroid";
-        
+
         public static final String[] TOTAL = {ROUND_CAPITAL_SHIP,SHIP_TEST,BULLET,MISSILE,FIGHTER,ASTEROID, BANDIT, BANDIT_BASE};
     }
-        
+
     static final String MODEL_PATH = "assets/models/";
     static final String MODEL_EXTENSION = ".obj";
     private static final int NO_LIST = -1;
@@ -52,7 +58,7 @@ public class Model implements math.Supportable{
         for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) 
             System.err.println(err);  
     }
-    
+
     public static void loadModels() {
         /* This was a little over ambitious for now, but if new models might be showing up it might be a good idea
         File dir = new File(MODEL_PATH);
@@ -64,7 +70,7 @@ public class Model implements math.Supportable{
          */
         loadModels(Models.TOTAL);
     }
-    
+
     public static void loadModels(String[] models) {      
         for (String model: models)
             Model.findOrCreateByName(model);
@@ -74,7 +80,7 @@ public class Model implements math.Supportable{
         for (WavefrontLoaderError err: WavefrontMtlLoader.getErrors()) 
             System.err.println(err);      
     }
-    
+
     public static Collection<Model> loaded_models() {
         return models.values();
     }
@@ -83,6 +89,7 @@ public class Model implements math.Supportable{
     int displayList;
     public final List<Polygon> polygons;
     public final Map<String, Model> groups;
+    public final Map<String, List<Vector3f>> hotSpots;
     public final String name;
     public final float radius;
     public final boolean isTextured;
@@ -100,8 +107,55 @@ public class Model implements math.Supportable{
                 break;
             }
         }
+        hotSpots = new HashMap<String, List<Vector3f>>();
+        buildHotSpots();
         isTextured = textures;
     }
+
+    private void buildHotSpots() {
+        File hotSpotFile = new File(MODEL_PATH + name + ".hspot");
+        BufferedReader in;
+        String line;
+
+
+        try {
+            if (hotSpotFile.exists()){
+                in = new BufferedReader(new FileReader(hotSpotFile));
+                File transformFile = new File(MODEL_PATH + name + ".trfm");
+                math.Matrix4f transform;
+                
+                if(transformFile.exists())
+                    transform =  new math.Matrix4f(WavefrontObjLoader.loadTranform(transformFile));
+                else
+                    transform = new math.Matrix4f();
+
+                // While we have lines in our file
+                while((line = in.readLine()) != null){
+                    String[] tokens = line.split(" ", 5);
+                    // Get our type we are going to add
+                    List<Vector3f> spotList = hotSpots.get(tokens[0]);
+                    // Make it if it is a new type
+                    if(spotList == null){
+                        hotSpots.put(tokens[0], new ArrayList<Vector3f>());
+                    }
+                    try{
+                        float x = Float.parseFloat(tokens[1]);
+                        float y = Float.parseFloat(tokens[2]);
+                        float z = Float.parseFloat(tokens[3]);
+                        hotSpots.get(tokens[0]).add(transform.times(new Vector3f(x,y,z)));
+
+                    } catch(NumberFormatException e){
+                        System.err.println("Unable to parse hotspots for " + name + " on tokens " + tokens[0] + " " + tokens[1] + " " +tokens[2] + " " +tokens[3]);
+                    }
+                }
+            }
+        }
+        catch (IOException e) {
+            // Oh well
+        }
+    }
+
+
 
     // CL - XXX Hack used for collision detection.
     //      Might be worth making a ModelGroup class that extends Model
@@ -119,6 +173,7 @@ public class Model implements math.Supportable{
                 break;
             }
         }
+        hotSpots = new HashMap<String, List<Vector3f>>();
         isTextured = textures;
     }
 
@@ -188,5 +243,9 @@ public class Model implements math.Supportable{
         }
 
         return (float)Math.sqrt(radius2);
+    }
+    
+    public List<Vector3f> getHotSpotFor(String key){
+        return hotSpots.get(key);
     }
 }
