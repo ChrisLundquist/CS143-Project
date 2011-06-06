@@ -42,8 +42,7 @@ public class Hud extends HUDTools {
         gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
         crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
-
-
+    
     /**
      * Draws the static elements of the HUD     
      * @param gl
@@ -54,7 +53,7 @@ public class Hud extends HUDTools {
         update();
         
         start2D();
-
+        drawEnergy(gl);
         if(crosshair != null) {
             crosshair.bind(gl);
         }
@@ -93,7 +92,7 @@ public class Hud extends HUDTools {
         if(gunbackdrop != null) {
             gunbackdrop.bind(gl);
         }
-
+        
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
         gl.glEnd();
@@ -117,12 +116,17 @@ public class Hud extends HUDTools {
         gl.glFlush();
         stop2D();
     }
-
+    private void drawEnergy(GL2 gl) {
+        unBind();
+        gl.glBegin(GL2.GL_QUADS );
+        gl.glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
+        int s = HEIGHT / 2;
+        draw(-s / 2, -s / 2, s, s);
+        gl.glEnd();
+    }
     private void update() {
         ship = player.getShip();
-        
         setupCrossHair(ship.getWeapon());   
-        
         /**
          * Flashes the health cross red and then resets back to green after 500 ms
          */

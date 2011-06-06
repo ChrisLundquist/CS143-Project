@@ -17,9 +17,6 @@ public class InGameMenu extends HUDTools {
     private static String QUIT = "assets/images/ingamemenu/quit_selected.png";
     int s = HEIGHT / 2;
 
-    public InGameMenu() {
-
-    }
     public void drawInGameMenu(GL2 gl) {
         this.gl = gl;
         if(isMenuOpen()) {
@@ -45,9 +42,6 @@ public class InGameMenu extends HUDTools {
             }
             stop2D();
         }
-    }
-    public void unBind() {
-        gl.glBindTexture(0, 0);
     }
     public static void selectionDown() {
         selection = 1;
