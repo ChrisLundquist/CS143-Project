@@ -69,9 +69,13 @@ public class Renderer implements GLEventListener {
         Light.update(gl, camera);
         render(Game.getMap().getSkybox());
 
+        actor.ActorId playerShipId = Game.getPlayer().getShip().getId();
+        
         // Render each actor
         for(Actor a: game.Game.getActors())
-            render(a);
+            //Don't render the players ship
+            if (a.getId().equals(playerShipId) == false)
+                render(a);
 
         if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
@@ -251,14 +255,11 @@ public class Renderer implements GLEventListener {
     }
 
     private void render(Actor actor) {
-        //Don't render the players ship
-        if(actor!=Game.getPlayer().getShip()){
-            gl.glPushMatrix();
-            gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
-            // CL - Render our model.
-            render(actor.getModel());
-            gl.glPopMatrix();
-        }
+        gl.glPushMatrix();
+        gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
+        // CL - Render our model.
+        render(actor.getModel());
+        gl.glPopMatrix();
     }
 
     private void render(Skybox skybox) {

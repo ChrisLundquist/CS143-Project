@@ -49,7 +49,11 @@ public class ActorSet implements Set<Actor> {
      */
     public boolean add(Actor a) {
         if (playerId != 0) { // Restrictive actor creation on network client
-            if (!(a.getParentId() != null && actors.get(a.getParentId()) instanceof actor.ship.PlayerShip))
+            if (a instanceof actor.ship.PlayerShip && a.id == null && ((actor.ship.PlayerShip)a).isAlive()) {
+                // Permit respawning for new live player ships
+            } else if (a.getParentId() != null && actors.get(a.getParentId()) instanceof actor.ship.PlayerShip) {
+                // Permit projectiles from our local player
+            } else
                 return false;
         }
         

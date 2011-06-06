@@ -33,11 +33,7 @@ public class ActorId implements Serializable {
     public boolean equals(Object other) {
        if(other == null || other.getClass() != getClass())
            return false;
-       return equals((ActorId)other);
-    }
-
-    public boolean equals(ActorId other) {
-        return this.id == other.id && this.playerId == other.playerId;
+       return this.id ==((ActorId)other).id && this.playerId ==((ActorId)other).playerId;
     }
     
     @Override
