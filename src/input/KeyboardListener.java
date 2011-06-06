@@ -103,7 +103,19 @@ public class KeyboardListener implements KeyListener, Updateable {
             }
         }
         if(currentKeys[Settings.Profile.Keys.mainMenu]){
-                InputRouter.sendAction(InputRouter.Interaction.OPEN_MENU);
+            InputRouter.sendAction(InputRouter.Interaction.OPEN_MENU);
+        }
+        /* if(currentKeys[Settings.Profile.Keys.mainMenuDown]){
+            InputRouter.sendAction(InputRouter.Interaction.CLOSE_MENU);
+        }*/
+        if(currentKeys[Settings.Profile.Keys.mainMenuDown]){
+            InputRouter.sendAction(InputRouter.Interaction.MENU_DOWN);
+        }
+        if(currentKeys[Settings.Profile.Keys.mainMenuUp]){
+            InputRouter.sendAction(InputRouter.Interaction.MENU_UP);
+        }
+        if(currentKeys[Settings.Profile.Keys.menuSelect]){
+            InputRouter.sendAction(InputRouter.Interaction.MENU_SELECT);
         }
 
         for(int i=0;i<currentKeys.length;i++){

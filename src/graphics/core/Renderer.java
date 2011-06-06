@@ -77,7 +77,7 @@ public class Renderer implements GLEventListener {
             if (a.getId().equals(playerShipId) == false)
                 render(a);
 
-        if(ParticleSystem.isEnabled()){
+       if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
             shader.setUniform1b(gl, "isTextured", true);
@@ -90,7 +90,7 @@ public class Renderer implements GLEventListener {
             inGameMenu.drawInGameMenu(gl);
 
         checkForGLErrors(gl);
-
+            
     }
 
     private static void checkForGLErrors(GL2 gl) {
@@ -144,7 +144,7 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-        
+       
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {
@@ -276,7 +276,7 @@ public class Renderer implements GLEventListener {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
-        shader.setUniform1b(gl, "isTextured", model.isTextured);
+       shader.setUniform1b(gl, "isTextured", model.isTextured);
 
         if(gl.glIsList(model.displayList) == false)
             build_display_list(model);
@@ -289,7 +289,7 @@ public class Renderer implements GLEventListener {
     }
 
 
-    /* public Shader getShader() {
+    public Shader getShader() {
         return shader;
-    }*/
+    }
 }

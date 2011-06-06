@@ -25,8 +25,6 @@ public class Hud extends HUDTools {
     private static final String GUNAMMOSINGLE = "assets/images/hud/gun_ammo_single.png";
     private static final String GUNAMMODOUBLE = "assets/images/hud/gun_ammo_double.png";
     private static final String GUNAMMOMISSILE = "assets/images/hud/gun_ammo_missile.png";
-
-    
     
     private Player player;
     private PlayerShip ship;
@@ -126,7 +124,7 @@ public class Hud extends HUDTools {
     private void update() {
         ship = player.getShip();
         
-        setupCrossHair(ship.getWeapon());
+        setupCrossHair(ship.getWeapon());   
         
         /**
          * Flashes the health cross red and then resets back to green after 500 ms
@@ -150,7 +148,6 @@ public class Hud extends HUDTools {
             crosshair = Texture.findOrCreateByName(CROSSHAIRSINGLE);
             gunammo = Texture.findOrCreateByName(GUNAMMOSINGLE);
         }
-        
         
         Projectile p = weapon.newProjectile(ship);
         if (p instanceof actor.ship.projectile.Missile) {
