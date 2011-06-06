@@ -42,8 +42,8 @@ public class HUDTools {
      */
     protected void start2D() {
         gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
         gl.glEnable(GL2.GL_BLEND);
+        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE);
         gl.glDisable(GL2.GL_LIGHTING);
 
         gl.glMatrixMode(GL2.GL_PROJECTION );
@@ -58,7 +58,7 @@ public class HUDTools {
         gl.glMatrixMode(GL2.GL_MODELVIEW );
         gl.glPushMatrix(); // save our model matrix 
         gl.glLoadIdentity();
-        gl.glColor4f(1,1,1,1);
+        gl.glColor4f(0,0,0,1);
     }
     /**
      * Stops 2D and goes back to 3D

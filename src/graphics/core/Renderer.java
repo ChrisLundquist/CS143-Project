@@ -83,6 +83,7 @@ public class Renderer implements GLEventListener {
             shader.setUniform1b(gl, "isTextured", true);
         }
         
+       
         if (hud != null)
             hud.drawStaticHud(gl);
         
@@ -168,7 +169,7 @@ public class Renderer implements GLEventListener {
     private void render(Polygon p) {
         if (p.verticies.size() < 2)
             return;
-        gl.glColor4f(1, 1, 1, 1);
+        gl.glColor4f(0, 0, 0, 1);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
