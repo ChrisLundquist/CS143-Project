@@ -3,6 +3,8 @@ package network;
 import game.GameMultiThread;
 import game.GameThread;
 import game.Map;
+import game.Player;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -40,7 +42,12 @@ public class DedicatedServer extends Thread {
         return currentMap;
     }
 
-    public List<ServerClientThread> getPlayers() {
+    public List<Player> getPlayers() {
+        List<Player> players = new java.util.ArrayList<Player>();
+        
+        for (ServerClientThread t: this.players)
+            players.add(t.getPlayer());
+        
         return players;
     }
 
@@ -50,8 +57,7 @@ public class DedicatedServer extends Thread {
 
     public void removePlayer(ServerClientThread player) {
         players.remove(player);
-        // TODO this is broken
-        //actors.remove(player.getShipId());
+        actors.remove(player.getPlayer().getShip(actors));
     }
 
     public void run() {
