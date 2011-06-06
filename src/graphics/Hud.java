@@ -15,6 +15,7 @@ import actor.ship.weapon.Weapon;
 public class Hud extends HUDTools {
     private static final String HEALTHBACKDROP="assets/images/hud/health_backdrop.png";
     private static final String HEALTHBAR="assets/images/hud/health_bar.png";
+    private static final String SHIELDBAR="assets/images/hud/shield_bar.png";
     private static final String HEALTHCROSS = "assets/images/hud/health_cross.png";
     private static final String HEALTHCROSSFLASH = "assets/images/hud/health_cross_red.png";
     private static final String CROSSHAIRDUAL = "assets/images/hud/dual_crosshair.png";
@@ -28,7 +29,7 @@ public class Hud extends HUDTools {
     
     private Player player;
     private PlayerShip ship;
-    private Texture healthbackdrop, healthbar, gunbar, gunbackdrop;
+    private Texture healthbackdrop, healthbar, shieldbar, gunbar, gunbackdrop;
     private Texture healthcross, crosshair, gunammo;
     
     public Hud(Player player) {
@@ -36,14 +37,14 @@ public class Hud extends HUDTools {
         
         healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
         healthbar = Texture.findOrCreateByName(HEALTHBAR);
+        shieldbar = Texture.findOrCreateByName(SHIELDBAR);
         healthcross =  Texture.findOrCreateByName(HEALTHCROSS);
         gunbar = Texture.findOrCreateByName(GUNBAR);
         gunbackdrop = Texture.findOrCreateByName(GUNBACKDROP);  
         gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
         crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
-
-
+    
     /**
      * Draws the static elements of the HUD     
      * @param gl
@@ -57,7 +58,7 @@ public class Hud extends HUDTools {
         update();
         
         start2D();
-
+        drawEnergy(gl);
         if(crosshair != null) {
             crosshair.bind(gl);
         }
@@ -79,12 +80,20 @@ public class Hud extends HUDTools {
         if(healthbar != null) {
             healthbar.bind(gl);
         }
- 
+        
         //draws the health bar
         gl.glBegin(GL2.GL_QUADS );
         drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.health()*0.72f);
         gl.glEnd();
+        
+        if(shieldbar!=null){
+            shieldbar.bind(gl);
+        }
+        gl.glBegin(GL2.GL_QUADS );
+        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.shield()*0.70f);
+        gl.glEnd();
 
+        //health cross
         if(healthcross != null) {
             healthcross.bind(gl);
         }
@@ -98,7 +107,6 @@ public class Hud extends HUDTools {
             gunbackdrop.bind(gl);
         }
 
-        //draw the outline for the gun-meter
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
         gl.glEnd();
@@ -123,12 +131,17 @@ public class Hud extends HUDTools {
         gl.glFlush();
         stop2D();
     }
-
+    private void drawEnergy(GL2 gl) {
+        unBind();
+        gl.glBegin(GL2.GL_QUADS );
+        gl.glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
+        int s = HEIGHT / 2;
+        draw(-s / 2, -s / 2, s, s);
+        gl.glEnd();
+    }
     private void update() {
         ship = player.getShip();
-        
         setupCrossHair(ship.getWeapon());   
-        
         /**
          * Flashes the health cross red and then resets back to green after 500 ms
          */

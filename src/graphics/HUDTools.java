@@ -61,6 +61,12 @@ public class HUDTools {
         gl.glColor4f(0,0,0,1);
     }
     /**
+     * Unbinds the texture
+     */
+    public void unBind() {
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+    }
+    /**
      * Stops 2D and goes back to 3D
      * @param gl
      */

@@ -7,6 +7,7 @@ public abstract class Shield implements Serializable{
     int strength;
     long rechargeRate;
     int maxStrength;
+    
 
     public int getStrength() {
         return strength;

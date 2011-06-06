@@ -14,7 +14,6 @@ import actor.ship.Bandit;
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
 public class ActorSet implements Set<Actor> {
-
     private Map<ActorId, Actor> actors;
     public final int playerId;
     private List<Queue<Actor>> addNotifyees;
@@ -218,9 +217,8 @@ public class ActorSet implements Set<Actor> {
      * @param frames the number of frame elapsed since the last update
      */
     public void update(int frames) {
-        for (Actor a: this) {
-            a.update();
-        }
+        for (Actor a: this)
+            a.update();      
     }
     
     /**
