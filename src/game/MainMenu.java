@@ -279,8 +279,12 @@ public class MainMenu extends JPanel implements ActionListener {
             Game.start();
         }
         if(e.getSource() == joinGameButton) {
+            // Do not join game once a game is already in progress
+            if (game.Game.getActors() != null)
+                return;
+            
             // TODO a better way to populate the server list and an option to enter a custom address
-            String[] servers = {"localhost", "openspace.overthere.org"};
+            String[] servers = {"openspace.overthere.org", "localhost"};
             String server = (String)JOptionPane.showInputDialog(this,
                     "Select a server to join",
                     "Join a Network Game",
