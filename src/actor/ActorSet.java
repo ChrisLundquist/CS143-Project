@@ -64,7 +64,7 @@ public class ActorSet implements Set<Actor> {
         
         actors.put(a.id, a);
         adjustStat(a,1);
-        
+
         for(Queue<Actor> q: addNotifyees)
             q.offer(a);
 
@@ -114,11 +114,14 @@ public class ActorSet implements Set<Actor> {
         actors.clear();
         asteroidCount = 0;
         banditCount = 0;
+        banditBaseCount = 0;
     }
 
     @Override
-    public boolean contains(Object arg0) {
-        return false;
+    public boolean contains(Object other) {
+        if(other == null || other.getClass() != Actor.class)
+            return false;
+        return contains((ActorId)other);
     }
 
     public boolean contains(Actor a) {
@@ -144,13 +147,15 @@ public class ActorSet implements Set<Actor> {
 
     @Override
     public Iterator<Actor> iterator() {
-        return actors.values().iterator();
+        return getCopyList().iterator();
     }
 
 
     @Override
-    public boolean remove(Object arg0) {
-        return false;
+    public boolean remove(Object other) {
+        if(other == null || other.getClass() != Actor.class)
+            return false;
+        return remove((ActorId)other);
     }
 
     public boolean remove(Actor a) {
@@ -220,7 +225,7 @@ public class ActorSet implements Set<Actor> {
      * @return
      */
     public List<Actor> getCopyList() {
-        return new java.util.ArrayList<Actor>(actors.values());    
+        return new java.util.ArrayList<Actor>(actors.values());
     }
 
     /**

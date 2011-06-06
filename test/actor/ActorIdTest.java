@@ -1,9 +1,7 @@
 package actor;
 
 import static org.junit.Assert.*;
-
 import java.util.Map;
-
 import org.junit.Test;
 
 public class ActorIdTest {
