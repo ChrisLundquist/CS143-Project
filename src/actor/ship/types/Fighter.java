@@ -4,7 +4,7 @@ import actor.ship.PlayerShip;
 import actor.ship.projectile.Bullet;
 import actor.ship.projectile.Missile;
 import actor.ship.weapon.AlternatingWeapon;
-import actor.ship.weapon.Weapon;
+import actor.ship.weapon.SingleShotWeapon;
 import graphics.core.Model;
 
 public class Fighter extends PlayerShip {
@@ -19,9 +19,12 @@ public class Fighter extends PlayerShip {
     
     private final float ANGULAR_DAMPENING = 0.035f;
     
+    private static final int SINGLE_GUN_AMMO = Integer.MAX_VALUE;
+    private static final int DOUBLE_GUN_AMMO = Integer.MAX_VALUE/2;
+    
     public Fighter() {
-        weapons.add(new Weapon<Missile>(Missile.class,Missile.getShotCoolDown()));
-        weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
+        weapons.add(new SingleShotWeapon<Missile>(Missile.class,Missile.getShotCoolDown(),SINGLE_GUN_AMMO));
+        weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),DOUBLE_GUN_AMMO));
         shields.add(new actor.ship.shield.PlayerShield());
         
     }
