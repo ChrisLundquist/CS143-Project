@@ -62,6 +62,7 @@ public class Hud extends HUDTools {
         
         // Set the crosshair color to green
         gl.glColor4f(0.0f, 1.0f, 0.0f, 0.0f);
+        
         if(crosshair != null) {
             crosshair.bind(gl);
         }
@@ -71,6 +72,7 @@ public class Hud extends HUDTools {
         draw(-s / 2, -s / 2, s, s);
         gl.glEnd();
         gl.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+        
         if(healthbackdrop != null) { 
             healthbackdrop.bind(gl);
         }
@@ -79,7 +81,7 @@ public class Hud extends HUDTools {
         draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
         gl.glEnd();
 
-
+        
         if(healthbar != null) {
             healthbar.bind(gl);
         }
@@ -104,8 +106,8 @@ public class Hud extends HUDTools {
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
         gl.glEnd();
-
-        //
+        
+        
         if(gunbackdrop != null) {
             gunbackdrop.bind(gl);
         }
