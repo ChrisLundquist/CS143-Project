@@ -85,7 +85,6 @@ public abstract class Ship extends Actor {
     }
     
     public float shield(){
-        System.out.println((float)shields.get(0).getStrength()/shields.get(0).getMaxStrength());
         return (float)shields.get(0).getStrength()/shields.get(0).getMaxStrength();
     }
 
