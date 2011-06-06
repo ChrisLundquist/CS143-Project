@@ -136,6 +136,7 @@ public class Hud extends HUDTools {
         gl.glFlush();
         stop2D();
     }
+    @SuppressWarnings("unused")
     private void drawEnergy(GL2 gl) {
         unBind();
         gl.glBegin(GL2.GL_QUADS );

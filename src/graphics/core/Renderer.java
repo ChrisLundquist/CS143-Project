@@ -31,7 +31,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Renderer implements GLEventListener {
     public static String shaderString  = "lighting";
 
-    private static final int NUM_LIGHTS = 1;
+    private static final int NUM_LIGHTS = 8;
     GLU glu;
 
     GLCanvas canvas;

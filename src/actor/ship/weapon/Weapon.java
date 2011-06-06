@@ -14,16 +14,16 @@ public abstract class Weapon<T extends Projectile> implements Serializable{
     long lastShot,coolDown;
     transient protected Constructor<? extends T> ctor;
     protected Class<? extends T> projectileType;
-    
-    private final int maxAmmo;
-    private int curAmmo;
+
+    protected final int maxAmmo;
+    protected int currentAmmo;
 
     public Weapon(Class<? extends T> projectileType, long coolDown, int maxAmmo) {
         this.projectileType = projectileType;
         lastShot = 0;
         this.coolDown = coolDown;
         this.maxAmmo = maxAmmo;
-        this.curAmmo = maxAmmo;
+        this.currentAmmo = maxAmmo;
         try {
             ctor = getCtor();
         } catch (SecurityException e) {
@@ -41,7 +41,7 @@ public abstract class Weapon<T extends Projectile> implements Serializable{
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
-        return ctor;
+            return ctor;
     }
 
     protected long getLastShotTime() {
@@ -70,25 +70,21 @@ public abstract class Weapon<T extends Projectile> implements Serializable{
     }
 
     public abstract void shoot(Actor ship);
-    
-    protected void minusAmmo(int ammount){
-        this.curAmmo-=ammount;
-        if(this.curAmmo<0){
-            this.curAmmo=0;
-        }
-    }
-    
+
     public float getAmmoPercent(){
-        return (float)this.curAmmo/(float)this.maxAmmo;
+        return (float)currentAmmo/(float)maxAmmo;
     }
-    
-    protected boolean canShoot(){
-        if(curAmmo>0){ return true;}
-        else{return false;}
+
+    protected boolean hasAmmo(){
+        return currentAmmo > 0;
     }
-    
-    protected int getCurAmmo(){
-        return this.curAmmo;
+
+    protected boolean hasNoAmmo(){
+        return currentAmmo <= 0;
+    }
+
+    protected int getCurrentAmmo(){
+        return currentAmmo;
     }
 
     public String toString(){

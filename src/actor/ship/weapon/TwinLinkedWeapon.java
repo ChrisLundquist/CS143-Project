@@ -17,22 +17,30 @@ public class TwinLinkedWeapon<T extends Projectile> extends Weapon<T> {
     }
 
     public void shoot(actor.Actor ship) {
-        if(canShoot()){
-            //calculates time passed in milliseconds
-            if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
-                actor.ship.projectile.Projectile p = newProjectile(ship);
-                p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
-                // Left Shot
-                ship.add(p);
-                if(getCurAmmo()>1){
-                    // Right Shot
-                    p = newProjectile(ship);
-                    p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
-                    ship.add(p);
-                    setLastShotTime(System.currentTimeMillis());
-                }
-                minusAmmo(2);
-            }
-        }
+        // Don't shoot if we have no ammo
+        if(hasNoAmmo())
+            return;
+        // Don't shoot if we are on cool down
+        if((System.currentTimeMillis() - getLastShotTime()) < coolDown)
+            return;
+
+        // Update our last shot time
+        setLastShotTime(System.currentTimeMillis());
+
+        // Left Shot
+        actor.ship.projectile.Projectile p = newProjectile(ship);
+        p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
+        ship.add(p);
+        currentAmmo--;
+
+        // The left shot may have ran us out of ammo
+        if(hasNoAmmo())
+            return;
+
+        // Right Shot
+        p = newProjectile(ship);
+        p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
+        ship.add(p);
+        currentAmmo--;
     }
 }

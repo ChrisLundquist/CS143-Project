@@ -23,12 +23,12 @@ public class Light implements java.io.Serializable{
     }
     public Light(){
         position = new Vector4f(1,1,1,1);
-        ambient = new Vector4f(1,1,1,1);
-        diffuse = new Vector4f(1,1,1,1);
+        ambient = new Vector4f(0,0,0,0);
+        diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),0);
         specular = new Vector4f(1,1,1,1);
         constantAttenuation = 1.0f;
-        linearAttenuation = 0.0f;
-        quadraticAttenuation = 0.0f;
+        linearAttenuation = 2.0f;
+        quadraticAttenuation = 4.0f;
     }
 
     public math.Vector4f getAmbient() {
@@ -136,6 +136,10 @@ public class Light implements java.io.Serializable{
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.times(inverseRot).toFloatArray(), 0);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_CONSTANT_ATTENUATION,light.constantAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_LINEAR_ATTENUATION,light.linearAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_QUADRATIC_ATTENUATION,light.quadraticAttenuation);
+
         }
     }
 }

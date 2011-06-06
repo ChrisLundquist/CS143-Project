@@ -54,6 +54,12 @@ public class Asteroid extends Actor {
     public Asteroid(Asteroid other){
         super(other);
         hitPoints = other.hitPoints;
+        r_x = other.r_x;
+        r_y = other.r_y;
+        r_z = other.r_z;
+        e_x = other.e_x;
+        e_y = other.e_y;
+        e_z = other.e_z;
     }
 
     @Override
@@ -64,10 +70,9 @@ public class Asteroid extends Actor {
             // Don't collide with our siblings
             if(other.getParentId() != null && other.getParentId().equals(getParentId()))
                 return;
-            die();
+            // "Die" for our next update
+            hitPoints = 0;
         }
-        if(hitPoints < 0)
-            die();
     }
 
     @Override
@@ -110,6 +115,8 @@ public class Asteroid extends Actor {
 
     public void update(){
         velocity = orbitField(position);
+        if(hitPoints < 0)
+            die();
         super.update();
         //TODO: Write code that detects if it is out of the skybox. (or some other boundry).
     }

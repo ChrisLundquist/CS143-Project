@@ -11,7 +11,6 @@ public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
     }
 
     public final float DEFAULT_OFFSET = 0.5f;
-    protected short counter = 0;
 
     public float getOffsetDistance(){
         return DEFAULT_OFFSET;
@@ -19,22 +18,19 @@ public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
 
     public void shoot(actor.Actor ship) {
         //calculates time passed in milliseconds
-        if(canShoot()){
-            if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
-                actor.ship.projectile.Projectile p = newProjectile(ship);
+        if(hasNoAmmo())
+            return;
+        if((System.currentTimeMillis() - getLastShotTime()) < coolDown)
+            return;
 
-                if(counter%2==0){
-                    // Left Shot
-                    p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
-                } else {
-                    // Right Shot
-                    p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
-                }
-                game.Game.getActors().add(p);
-                setLastShotTime(System.currentTimeMillis());
-                counter++;
-                minusAmmo(1);
-            }
+        actor.ship.projectile.Projectile p = newProjectile(ship);
+        if( currentAmmo % 2 == 0){// Left Shot
+            p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
+        } else { // Right Shot
+            p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
         }
+        game.Game.getActors().add(p);
+        setLastShotTime(System.currentTimeMillis());
+        currentAmmo--;
     }
 }

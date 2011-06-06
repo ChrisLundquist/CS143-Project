@@ -17,12 +17,14 @@ public class SingleShotWeapon<T extends Projectile> extends Weapon<T>{
     }
 
     public void shoot(Actor ship) {
-        if(canShoot()){
-            if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
-                game.Game.getActors().add(newProjectile(ship));
-                setLastShotTime(System.currentTimeMillis());
-                minusAmmo(1);
-            }
-        }
+        if(hasNoAmmo())
+            return;
+
+        if((System.currentTimeMillis() - getLastShotTime()) < coolDown) 
+            return;
+
+        game.Game.getActors().add(newProjectile(ship));
+        setLastShotTime(System.currentTimeMillis());
+        currentAmmo--;
     }
 }

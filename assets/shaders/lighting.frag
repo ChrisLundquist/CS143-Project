@@ -20,6 +20,12 @@ void main (void) {
             vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
             vec3 R = normalize(-reflect(L,N)); 
 
+            float dist = length(L);
+
+            float atten = 1.0 / (gl_LightSource[i].constantAttenuation +
+                    gl_LightSource[i].linearAttenuation * dist +
+                    gl_LightSource[i].quadraticAttenuation * dist * dist);
+
             //calculate Ambient Term:
             vec4 Iamb = gl_FrontLightProduct[i].ambient;
 
@@ -29,7 +35,7 @@ void main (void) {
             // calculate Specular Term:
             vec4 Ispec = gl_FrontLightProduct[i].specular * pow(max(dot(R,E),0.0),0.3*gl_FrontMaterial.shininess);
             // write Total Color:
-            effectiveLight += gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec; 
+            effectiveLight += gl_FrontLightModelProduct.sceneColor + atten * (Iamb + Idiff + Ispec); 
         }
         gl_FragColor *= effectiveLight;
     }
