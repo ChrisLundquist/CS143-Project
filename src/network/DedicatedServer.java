@@ -3,7 +3,6 @@ package network;
 import game.GameMultiThread;
 import game.GameThread;
 import game.Map;
-import game.Player;
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -22,16 +21,18 @@ public class DedicatedServer extends Thread {
     private ActorSet actors;
     private Map currentMap;
     private GameThread game;
-    private List<Player> players;
+    private List<ServerClientThread> players;
     private boolean running;
     private ServerSocket socket;
+    private int lastPlayerId;
 
     public DedicatedServer() {
-        players = java.util.Collections.synchronizedList(new java.util.ArrayList<Player>());
+        players = new java.util.concurrent.CopyOnWriteArrayList<ServerClientThread>();
         actors = new ActorSet();
+        lastPlayerId = actors.playerId;
     }
     
-    public void addPlayer(Player player) {
+    public void addPlayer(ServerClientThread player) {
         players.add(player);
     }
 
@@ -39,7 +40,7 @@ public class DedicatedServer extends Thread {
         return currentMap;
     }
 
-    public List<Player> getPlayers() {
+    public List<ServerClientThread> getPlayers() {
         return players;
     }
 
@@ -47,9 +48,10 @@ public class DedicatedServer extends Thread {
         return running;
     }
 
-    public void removePlayer(Player player) {
+    public void removePlayer(ServerClientThread player) {
         players.remove(player);
-        actors.remove(player.getShip());
+        // TODO this is broken
+        //actors.remove(player.getShipId());
     }
 
     public void run() {
@@ -103,11 +105,7 @@ public class DedicatedServer extends Thread {
     }
 
     public int getNewPlayerId() {
-        int newId = actors.playerId;
-        for (Player p: players)
-            newId = Math.max(newId, p.getPlayerId());
-            
-        return newId + 1;
+        return ++lastPlayerId ;
     }
 
     public Set<String> getModelsInUse() {

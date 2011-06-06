@@ -51,6 +51,9 @@ public class Hud extends HUDTools {
     public void drawStaticHud(GL2 gl) {
         this.gl = gl;
         
+        if (! player.isAlive())
+            return;
+        
         update();
         
         start2D();
