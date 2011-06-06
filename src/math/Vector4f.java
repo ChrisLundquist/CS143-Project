@@ -3,6 +3,15 @@ package math;
 public class Vector4f extends Vector3f {
     private static final long serialVersionUID = 6357784296699011970L;
     public float t;
+    
+    public static Vector4f newRandom(float max) {
+        return new Vector4f(
+                gen.nextFloat() * 2 * max - max,
+                gen.nextFloat() * 2 * max - max,
+                gen.nextFloat() * 2 * max - max,
+                gen.nextFloat() * 2 * max - max);
+    }
+    
     public Vector4f(float x, float y, float z, float t){
         super(x,y,z);
         this.t = t;

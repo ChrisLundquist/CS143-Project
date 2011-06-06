@@ -21,6 +21,8 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
 
+import math.Vector3f;
+
 import actor.Actor;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -31,7 +33,11 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Renderer implements GLEventListener {
     public static String shaderString  = "lighting";
 
-    private static final int NUM_LIGHTS = 2;
+    private static final int NUM_LIGHTS = 4;
+
+    private static final float FAR_PLANE = Skybox.SKYBOX_SIZE * 6.0f;
+
+    private static final double FOV = 60;
     GLU glu;
 
     GLCanvas canvas;
@@ -101,7 +107,6 @@ public class Renderer implements GLEventListener {
         shader.setUniform1b(gl, "lightingEnabled", true);
 
         checkForGLErrors(gl);
-
     }
 
     private static void checkForGLErrors(GL2 gl) {
@@ -147,6 +152,10 @@ public class Renderer implements GLEventListener {
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+        gl.glMatrixMode(GL2.GL_PROJECTION);
+        gl.glLoadIdentity();
+        gl.glFrustumf(-1, 1, -1, 1, Vector3f.EPSILON, FAR_PLANE);
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
 
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
 
@@ -224,11 +233,12 @@ public class Renderer implements GLEventListener {
             height = 1;
 
         float h = (float) width / (float) height;
+        gl.glPushMatrix();
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
+        glu.gluPerspective(FOV, h, 1.0, FAR_PLANE);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        gl.glPopMatrix();
     }
 
     public void dispose(GLAutoDrawable gLDrawable) {
@@ -279,7 +289,7 @@ public class Renderer implements GLEventListener {
         gl.glPushMatrix();
         math.Vector3f pos = camera.getPosition();
         gl.glTranslatef(pos.x, pos.y, pos.z);
-        gl.glScalef(Skybox.SKYBOX_SIZE, Skybox.SKYBOX_SIZE , Skybox.SKYBOX_SIZE);
+        gl.glScalef(-Skybox.SKYBOX_SIZE, -Skybox.SKYBOX_SIZE , -Skybox.SKYBOX_SIZE);
         render(skybox.getModel());
         gl.glPopMatrix(); 
     }

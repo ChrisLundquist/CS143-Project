@@ -15,16 +15,15 @@ public class Light implements java.io.Serializable{
 
     public static Light newRandom(float rangeMax){
         Light light = new Light();
-        light.setPosition(new Vector4f(gen.nextFloat()* rangeMax,
-                gen.nextFloat() * rangeMax,
-                gen.nextFloat() * rangeMax,
-                0.0f));
+        light.setPosition(Vector4f.newRandom(rangeMax));
+        // Not a directional light
+        light.position.t = 0.0f;
         return light;
     }
     public Light(){
-        position = new Vector4f(1,1,1,1);
-        ambient = new Vector4f(0.05f,0.05f,0.05f,0.05f);
-        diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),0);
+        position = new Vector4f(0,0,0,1);
+        ambient = new Vector4f(0,0,0,1);
+        diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),1);
         specular = new Vector4f(1,1,1,1);
         constantAttenuation = 1.0f;
         linearAttenuation = 1.0f;
@@ -114,7 +113,7 @@ public class Light implements java.io.Serializable{
         }
 
         for(int i = 0; i < numLights; i++){
-            Light.add(Light.newRandom(256));
+            Light.add(Light.newRandom(Skybox.SKYBOX_SIZE));
             gl.glEnable(GL2.GL_LIGHT0 + i);
         }
     }
