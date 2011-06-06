@@ -82,13 +82,13 @@ public abstract class Weapon<T extends Projectile> implements Serializable{
         return (float)this.curAmmo/(float)this.maxAmmo;
     }
     
-    public boolean canShoot(int amount){
-        if(curAmmo-amount>=0){
-            return true;
-        }
-        else{
-            return false;
-        }
+    protected boolean canShoot(){
+        if(curAmmo>0){ return true;}
+        else{return false;}
+    }
+    
+    protected int getCurAmmo(){
+        return this.curAmmo;
     }
 
     public String toString(){

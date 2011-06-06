@@ -19,7 +19,7 @@ public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
 
     public void shoot(actor.Actor ship) {
         //calculates time passed in milliseconds
-        if(canShoot(1)){
+        if(canShoot()){
             if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
                 actor.ship.projectile.Projectile p = newProjectile(ship);
 
@@ -33,7 +33,7 @@ public class AlternatingWeapon<T extends Projectile> extends Weapon<T> {
                 game.Game.getActors().add(p);
                 setLastShotTime(System.currentTimeMillis());
                 counter++;
-                minusAmmo(2);
+                minusAmmo(1);
             }
         }
     }

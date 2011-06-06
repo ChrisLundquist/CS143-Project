@@ -17,18 +17,20 @@ public class TwinLinkedWeapon<T extends Projectile> extends Weapon<T> {
     }
 
     public void shoot(actor.Actor ship) {
-        if(canShoot(2)){
+        if(canShoot()){
             //calculates time passed in milliseconds
             if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
                 actor.ship.projectile.Projectile p = newProjectile(ship);
                 p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(-getOffsetDistance())));
                 // Left Shot
                 ship.add(p);
-                // Right Shot
-                p = newProjectile(ship);
-                p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
-                ship.add(p);
-                setLastShotTime(System.currentTimeMillis());
+                if(getCurAmmo()>1){
+                    // Right Shot
+                    p = newProjectile(ship);
+                    p.setPosition(p.getPosition().plus(Vector3f.UNIT_X.times(ship.getRotation()).times(getOffsetDistance())));
+                    ship.add(p);
+                    setLastShotTime(System.currentTimeMillis());
+                }
                 minusAmmo(2);
             }
         }
