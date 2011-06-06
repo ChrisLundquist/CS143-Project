@@ -1,5 +1,6 @@
 package game;
 
+import game.Player.ShipType;
 import game.types.AsteroidField;
 import game.types.Bandits;
 import input.KeyboardListener;
@@ -94,8 +95,8 @@ public class Game {
         }
     }
 
-    public static boolean joinServer(String server) {
-        player = new Player();
+    public static boolean joinServer(String server, String playerName, ShipType ship) {
+        player = new Player(playerName, ship);
         networkConnection = ClientServerThread.joinServer(server, player);  
         if (networkConnection == null)
             return false;

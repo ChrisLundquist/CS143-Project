@@ -1,5 +1,7 @@
 package game;
 
+import game.Player.ShipType;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -284,31 +286,49 @@ public class MainMenu extends JPanel implements ActionListener {
             if (game.Game.getActors() != null)
                 return;
 
-            JComboBox comboSelect = new JComboBox(NETWORK_SERVERS);
-            comboSelect.setEditable(true);
-            JLabel label = new JLabel("Select a server to join");
+            JLabel serverLabel = new JLabel("Select a server to join");
+            JComboBox serverInput = new JComboBox(NETWORK_SERVERS);
+            serverInput.setEditable(true);
+
+            JLabel playerLabel = new JLabel("Player Name");
+            JTextField playerInput = new JTextField(Player.DEFAULT_NAME);
+
+            JLabel shipLabel = new JLabel("Select a ship");
+            JComboBox shipInput = new JComboBox(ShipType.values());
+
             JPanel panel = new JPanel();
             GroupLayout layout = new GroupLayout(panel);
             panel.setLayout(layout);
             layout.setHorizontalGroup(
                     layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(label)
-                            .addComponent(comboSelect))
+                            .addComponent(serverLabel)
+                            .addComponent(serverInput)
+                            .addComponent(playerLabel)
+                            .addComponent(playerInput)
+                            .addComponent(shipLabel)
+                            .addComponent(shipInput)
+                    )
             );
             layout.setVerticalGroup(
                     layout.createSequentialGroup()
-                    .addComponent(label)
-                    .addComponent(comboSelect)
+                    .addComponent(serverLabel)
+                    .addComponent(serverInput)
+                    .addComponent(playerLabel)
+                    .addComponent(playerInput)
+                    .addComponent(shipLabel)
+                    .addComponent(shipInput)
             );
 
-            int choice = JOptionPane.showConfirmDialog(null, panel, "Join a Network Game", JOptionPane.CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int choice = JOptionPane.showConfirmDialog(this, panel, "Join a Network Game", JOptionPane.CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION)
                 return;
 
-            String server = (String) comboSelect.getSelectedItem();
+            String server = (String) serverInput.getSelectedItem();
+            String playerName = playerInput.getText();
+            ShipType ship = (ShipType) shipInput.getSelectedItem();
 
-            if (Game.joinServer(server) == false)
+            if (Game.joinServer(server, playerName, ship) == false)
                 return;
 
             this.setVisible(false);

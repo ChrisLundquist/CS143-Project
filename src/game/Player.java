@@ -26,23 +26,25 @@ public class Player implements Serializable {
 
 
     private static final long serialVersionUID = 8330574859953611636L;
+    public static final String DEFAULT_NAME = "Pilot";
     private transient final Camera camera;
     private String name;
     private int playerId;
     private transient PlayerShip ship;
-
     private ActorId shipId;
-    // TODO ship preference - once we have ships
-
     private PlayerStatus status;
     private ShipType shipPreference;
-    //  private ShipType shipType;
+
     public Player() {
-        setName("Pilot");
+        this(DEFAULT_NAME, ShipType.FIGHTER);
+    }
+
+    public Player(String name, ShipType shipPreference) {
+        this.name = name;
         status = PlayerStatus.OBSERVING;
         camera = new Camera();
         playerId = 0;
-        shipPreference = ShipType.FIGHTER;
+        this.shipPreference = shipPreference;     
     }
 
     public Camera getCamera() {
