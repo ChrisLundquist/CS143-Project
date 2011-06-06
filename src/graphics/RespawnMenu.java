@@ -1,6 +1,8 @@
 package graphics;
 
 import javax.media.opengl.GL2;
+
+import game.Player.ShipType;
 import graphics.core.Texture;
 /**
  * Allows user to choose what ship to respawn as
@@ -50,17 +52,25 @@ public class RespawnMenu extends HUDTools {
         }
     }
     public static void selectionUp() {
-        if(selection > 0) {
-            selection--;
-        }
+        selection --;
+        selection %= 3;
     }
     public static void selectionDown() {
-        if(selection < 2 ) {
-            selection++;
-        }
+        selection ++;
+        selection %=3;
     }
-    public static int getSelection() {
-        return selection;
+    public static ShipType getSelection() {
+        switch (selection) {
+            case 0:
+                return ShipType.FIGHTER;
+            case 1:
+                return ShipType.SCOUT;
+            case 2:
+                return ShipType.BOMBER;
+            default:
+                System.err.println("Should not happen check Respawn Menu");
+                return null;
+        }
     }
     public static void setRespawnOpen(boolean respawnOpen) {
         RespawnMenu.respawnOpen = respawnOpen;
