@@ -21,16 +21,22 @@ public class CollisionSolverThread extends Thread {
         // TODO it would be nice use a single list for all our threads
         List<Actor> actorsList = actors.getCopyList();
         // Check our guy we stride to against all the others
-        for(int i = start; i < actorsList.size(); i += stride)
+        for(int i = start; i < actorsList.size(); i += stride){
+            Actor a = actorsList.get(i);
+            // Don't collide with actors we added this frame to prevent or minimize runaway collision
+            if(a.getAge() == 0)
+                continue;
             for(int j = i + 1; j < actorsList.size(); ++j){
-                Actor a = actorsList.get(i);
                 Actor b = actorsList.get(j);
+                if(b.getAge() == 0)
+                    continue;
 
                 if(a.isColliding(b)){
                     a.handleCollision(b);
                     b.handleCollision(a);
                 }
             }
+        }
     }
 
 

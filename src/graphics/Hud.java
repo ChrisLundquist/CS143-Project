@@ -58,7 +58,10 @@ public class Hud extends HUDTools {
         update();
         
         start2D();
-        drawEnergy(gl);
+        //drawEnergy(gl);
+        
+        // Set the crosshair color to green
+        gl.glColor4f(0.0f, 1.0f, 0.0f, 0.0f);
         if(crosshair != null) {
             crosshair.bind(gl);
         }
@@ -67,7 +70,7 @@ public class Hud extends HUDTools {
         
         draw(-s / 2, -s / 2, s, s);
         gl.glEnd();
-        
+        gl.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
         if(healthbackdrop != null) { 
             healthbackdrop.bind(gl);
         }

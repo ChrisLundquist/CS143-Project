@@ -134,7 +134,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         actors.remove(this);
     }
 
-    protected long getAge() {
+    public long getAge() {
         return age;
     }
 
