@@ -77,8 +77,9 @@ public class Hud extends HUDTools {
             healthbar.bind(gl);
         }
  
+        //draws the health bar
         gl.glBegin(GL2.GL_QUADS );
-        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.health());
+        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.health()*0.72f);
         gl.glEnd();
 
         if(healthcross != null) {
@@ -94,6 +95,7 @@ public class Hud extends HUDTools {
             gunbackdrop.bind(gl);
         }
 
+        //draw the outline for the gun-meter
         gl.glBegin(GL2.GL_QUADS );
         draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
         gl.glEnd();
@@ -102,8 +104,9 @@ public class Hud extends HUDTools {
             gunbar.bind(gl);
         }
 
+        //draw the percent bar for the gun
         gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
+        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2,ship.getWeapon().getAmmoPercent()*0.72f);
         gl.glEnd();
 
         if(gunammo != null) {
