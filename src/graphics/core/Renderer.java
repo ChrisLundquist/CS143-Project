@@ -30,8 +30,8 @@ import com.jogamp.opengl.util.FPSAnimator;
  */
 public class Renderer implements GLEventListener {
     public static String shaderString  = "lighting";
-    
-    private static final int NUM_LIGHTS = 2;
+
+    private static final int NUM_LIGHTS = 1;
     GLU glu;
 
     GLCanvas canvas;
@@ -70,28 +70,30 @@ public class Renderer implements GLEventListener {
         render(Game.getMap().getSkybox());
 
         actor.ActorId playerShipId = Game.getPlayer().getShip().getId();
-        
+
         // Render each actor
         for(Actor a: game.Game.getActors())
             //Don't render the players ship
             if (a.getId().equals(playerShipId) == false)
                 render(a);
 
-       if(ParticleSystem.isEnabled()){
+        shader.setUniform1b(gl, "lightingEnabled", false);
+        if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
             shader.setUniform1b(gl, "isTextured", true);
         }
-        
-       
+
+
         if (hud != null)
             hud.drawStaticHud(gl);
-        
+
         if (inGameMenu != null)
             inGameMenu.drawInGameMenu(gl);
+        shader.setUniform1b(gl, "lightingEnabled", true);
 
         checkForGLErrors(gl);
-            
+
     }
 
     private static void checkForGLErrors(GL2 gl) {
@@ -125,7 +127,7 @@ public class Renderer implements GLEventListener {
 
     public void init(GLAutoDrawable gLDrawable) {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-        
+
         getGL2(); // Repopulate gl each frame because it is not guaranteed to be persistent
 
         gl.glShadeModel(GL2.GL_SMOOTH);
@@ -145,7 +147,7 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-       
+
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {
@@ -155,6 +157,8 @@ public class Renderer implements GLEventListener {
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
         shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
+        shader.setUniform1b(gl, "lightingEnabled", true);
+
         System.gc(); // This is probably a good a idea
     }
 
@@ -277,7 +281,7 @@ public class Renderer implements GLEventListener {
         //      The display list should have already been "adjusted" if it
         //      wasn't at the center of mass or correct world orientation
         //      when it was loaded.
-       shader.setUniform1b(gl, "isTextured", model.isTextured);
+        shader.setUniform1b(gl, "isTextured", model.isTextured);
 
         if(gl.glIsList(model.displayList) == false)
             build_display_list(model);

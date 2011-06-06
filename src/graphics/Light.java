@@ -19,29 +19,16 @@ public class Light implements java.io.Serializable{
                 gen.nextFloat() * rangeMax,
                 gen.nextFloat() * rangeMax,
                 0.0f));
-        light.setAmbient(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-        light.setDiffuse(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-        light.setSpecular(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-
         return light;
     }
     public Light(){
-        position = new Vector4f();
-        ambient = new Vector4f();
-        diffuse = new Vector4f();
-        specular = new Vector4f();
-        constantAttenuation = 100.0f;
-        linearAttenuation = 500.0f;
-        quadraticAttenuation = 10.0f;
+        position = new Vector4f(1,1,1,1);
+        ambient = new Vector4f(1,1,1,1);
+        diffuse = new Vector4f(1,1,1,1);
+        specular = new Vector4f(1,1,1,1);
+        constantAttenuation = 1.0f;
+        linearAttenuation = 0.0f;
+        quadraticAttenuation = 0.0f;
     }
 
     public math.Vector4f getAmbient() {

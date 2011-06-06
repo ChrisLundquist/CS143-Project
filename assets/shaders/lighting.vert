@@ -1,3 +1,5 @@
+uniform bool lightingEnabled;
+uniform bool isTextured;
 varying vec3 N;
 varying vec3 v;
 varying vec2 texCoordinate0;
