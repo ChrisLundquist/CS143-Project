@@ -210,7 +210,15 @@ public class Player implements Serializable {
 
         ship.setPosition(spawningPosition.getPosition());
         ship.setRotation(spawningPosition.getOrientation());
+        
+        if (ship == null)
+            throw new RuntimeException("WTF");
+        
         if (actors.add(ship)) {
+            
+            if (ship == null)
+                throw new RuntimeException("WTF");
+            
             shipId = ship.getId();
             status = PlayerStatus.ALIVE;
         } else {
@@ -233,8 +241,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        String msg = name + " " + status;
-        Actor ship = getShip();
+        String msg = name + " #" + playerId + " " + status;
         if (ship != null) {
             msg += " @ " + ship.getPosition();
         }

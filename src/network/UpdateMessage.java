@@ -20,12 +20,13 @@ public class UpdateMessage extends Message {
     public UpdateMessage(DedicatedServer server, Player p) {
         player = p;
         actors = new java.util.ArrayList<Actor>();
+        
         for (Actor a: server.getActors())
             if (a.getId().getPlayerId() != player.getPlayerId())
                 actors.add(a);
         
-//        actors = server.getActors().getCopyList();
-//        actors.remove(player.getShip());
+        // actors = server.getActors().getCopyList();
+        // actors.remove(player.getShip());
     }
 
     /**
