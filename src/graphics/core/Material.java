@@ -85,7 +85,7 @@ public class Material {
         ambient = Color.GRAY;
         specular = Color.GRAY;
         diffuse = Color.GRAY;
-        alpha = 1.0f;
+        alpha = 0.0f;
         shininess = new float[1];
     }
 

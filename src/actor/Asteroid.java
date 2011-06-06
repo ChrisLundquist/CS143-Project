@@ -20,6 +20,10 @@ public class Asteroid extends Actor {
     private static final float MAX_ROTATION_SPEED = 1.5f;
 
     protected int hitPoints;
+    
+    // orbitField paramters
+    protected float r_x, r_y, r_z;
+    protected float e_x, e_y, e_z;
 
     public Asteroid(){
         super();
@@ -27,6 +31,13 @@ public class Asteroid extends Actor {
         this.scale = new Vector3f(DEFAULT_SCALE,DEFAULT_SCALE,DEFAULT_SCALE).plus(Vector3f.newRandom(1));
         this.hitPoints = calculateHitpoints(); 
         this.modelName = MODEL_NAME;
+        
+        r_x = gen.nextFloat() * gen.nextFloat() * 100 - 50;
+        r_y = gen.nextFloat() * gen.nextFloat() * 100 - 50;
+        r_z = gen.nextFloat() * gen.nextFloat() * 100 - 50;
+        e_x = (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f);
+        e_y = (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f);
+        e_z = (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f) * (gen.nextFloat() + 0.5f);
     }
 
     private int calculateHitpoints() {
@@ -43,6 +54,12 @@ public class Asteroid extends Actor {
     public Asteroid(Asteroid other){
         super(other);
         hitPoints = other.hitPoints;
+        r_x = other.r_x;
+        r_y = other.r_y;
+        r_z = other.r_z;
+        e_x = other.e_x;
+        e_y = other.e_y;
+        e_z = other.e_z;
     }
 
     @Override
@@ -53,10 +70,9 @@ public class Asteroid extends Actor {
             // Don't collide with our siblings
             if(other.getParentId() != null && other.getParentId().equals(getParentId()))
                 return;
-            die();
+            // "Die" for our next update
+            hitPoints = 0;
         }
-        if(hitPoints < 0)
-            die();
     }
 
     @Override
@@ -98,7 +114,22 @@ public class Asteroid extends Actor {
     }
 
     public void update(){
+        velocity = orbitField(position);
+        if(hitPoints < 0)
+            die();
         super.update();
         //TODO: Write code that detects if it is out of the skybox. (or some other boundry).
+    }
+
+    private Vector3f orbitField(Vector3f pos) {
+
+        
+        Vector3f newVelocity = new Vector3f();
+        newVelocity.plusEquals(new Vector3f(e_z * pos.y, - pos.x / e_z, 0).times(r_z / pos.magnitude2()));
+        newVelocity.plusEquals(new Vector3f(0, e_x * pos.z, -pos.y / e_x).times(r_x / pos.magnitude2()));
+        newVelocity.plusEquals(new Vector3f(- pos.z / e_y, 0, e_y * pos.x).times(r_y / pos.magnitude2()));
+        
+        
+        return newVelocity;
     }
 }

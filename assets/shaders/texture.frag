@@ -1,7 +1,11 @@
 
 uniform sampler2D texture0;
 varying vec2 texCoordinate0;
+uniform bool isTextured;
 
 void main() {
-    gl_FragColor = texture2D(texture0,texCoordinate0) + (1.0 - gl_Color.a) * gl_Color;
+ if(isTextured)
+        gl_FragColor = texture2D(texture0,texCoordinate0) + gl_Color;
+    else
+        gl_FragColor = gl_Color;
 }

@@ -15,33 +15,19 @@ public class Light implements java.io.Serializable{
 
     public static Light newRandom(float rangeMax){
         Light light = new Light();
-        light.setPosition(new Vector4f(gen.nextFloat()* rangeMax,
-                gen.nextFloat() * rangeMax,
-                gen.nextFloat() * rangeMax,
-                0.0f));
-        light.setAmbient(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-        light.setDiffuse(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-        light.setSpecular(new Vector4f(gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat(),
-                gen.nextFloat()));
-
+        light.setPosition(Vector4f.newRandom(rangeMax));
+        // Not a directional light
+        light.position.t = 0.0f;
         return light;
     }
     public Light(){
-        position = new Vector4f();
-        ambient = new Vector4f();
-        diffuse = new Vector4f();
-        specular = new Vector4f();
-        constantAttenuation = 100.0f;
-        linearAttenuation = 500.0f;
-        quadraticAttenuation = 10.0f;
+        position = new Vector4f(0,0,0,1);
+        ambient = new Vector4f(0,0,0,1);
+        diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),1);
+        specular = new Vector4f(1,1,1,1);
+        constantAttenuation = 1.0f;
+        linearAttenuation = 1.0f;
+        quadraticAttenuation = 1.0f;
     }
 
     public math.Vector4f getAmbient() {
@@ -127,7 +113,7 @@ public class Light implements java.io.Serializable{
         }
 
         for(int i = 0; i < numLights; i++){
-            Light.add(Light.newRandom(256));
+            Light.add(Light.newRandom(Skybox.SKYBOX_SIZE));
             gl.glEnable(GL2.GL_LIGHT0 + i);
         }
     }
@@ -149,6 +135,10 @@ public class Light implements java.io.Serializable{
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.times(inverseRot).toFloatArray(), 0);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_CONSTANT_ATTENUATION,light.constantAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_LINEAR_ATTENUATION,light.linearAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_QUADRATIC_ATTENUATION,light.quadraticAttenuation);
+
         }
     }
 }

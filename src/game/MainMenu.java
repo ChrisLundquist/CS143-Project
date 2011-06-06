@@ -279,7 +279,11 @@ public class MainMenu extends JPanel implements ActionListener {
             menuVisible = false;
             Game.start();
         }
-        if(e.getSource() == joinGameButton) {
+        if(e.getSource() == joinGameButton) {         
+            // Do not join game once a game is already in progress
+            if (game.Game.getActors() != null)
+                return;
+
             JComboBox comboSelect = new JComboBox(NETWORK_SERVERS);
             comboSelect.setEditable(true);
             JLabel label = new JLabel("Select a server to join");

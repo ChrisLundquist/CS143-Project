@@ -4,6 +4,7 @@ import game.GameMultiThread;
 import game.GameThread;
 import game.Map;
 import game.Player;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -22,16 +23,18 @@ public class DedicatedServer extends Thread {
     private ActorSet actors;
     private Map currentMap;
     private GameThread game;
-    private List<Player> players;
+    private List<ServerClientThread> players;
     private boolean running;
     private ServerSocket socket;
+    private int lastPlayerId;
 
     public DedicatedServer() {
-        players = java.util.Collections.synchronizedList(new java.util.ArrayList<Player>());
+        players = new java.util.concurrent.CopyOnWriteArrayList<ServerClientThread>();
         actors = new ActorSet();
+        lastPlayerId = actors.playerId;
     }
     
-    public void addPlayer(Player player) {
+    public void addPlayer(ServerClientThread player) {
         players.add(player);
     }
 
@@ -40,6 +43,11 @@ public class DedicatedServer extends Thread {
     }
 
     public List<Player> getPlayers() {
+        List<Player> players = new java.util.ArrayList<Player>();
+        
+        for (ServerClientThread t: this.players)
+            players.add(t.getPlayer());
+        
         return players;
     }
 
@@ -47,9 +55,12 @@ public class DedicatedServer extends Thread {
         return running;
     }
 
-    public void removePlayer(Player player) {
+    public void removePlayer(ServerClientThread player) {
         players.remove(player);
-        actors.remove(player.getShip());
+        for (actor.Actor a: actors)
+            if (a.getId().getPlayerId() == player.getPlayer().getPlayerId())
+                actors.remove(a);
+        
     }
 
     public void run() {
@@ -89,8 +100,8 @@ public class DedicatedServer extends Thread {
             System.exit(-1);
         }
         
-        currentMap = Map.load("example_1");
-        actors.addAll(currentMap.actors);
+        loadMap("example_1");
+
 
         game = new GameMultiThread(actors);
         game.start();
@@ -98,16 +109,17 @@ public class DedicatedServer extends Thread {
         new ListenerThread(socket, this).start();
     }
 
+    private void loadMap(String mapname) {
+        currentMap = Map.load(mapname);
+        actors.addAll(currentMap.actors);
+    }
+
     public ActorSet getActors() {
         return actors;
     }
 
     public int getNewPlayerId() {
-        int newId = actors.playerId;
-        for (Player p: players)
-            newId = Math.max(newId, p.getPlayerId());
-            
-        return newId + 1;
+        return ++lastPlayerId ;
     }
 
     public Set<String> getModelsInUse() {

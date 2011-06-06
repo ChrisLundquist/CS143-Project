@@ -16,7 +16,7 @@ import javax.media.opengl.*;
  */
 public class ParticleSystem {
     //Max amount of particles
-    private static int MAX_PARTICLES = 4096;
+    private static int MAX_PARTICLES = 16 * 4096;
     static List<Particle> particles = new LinkedList<Particle>();
     static Queue<Particle> newParticles = new java.util.concurrent.ConcurrentLinkedQueue<Particle>();
     static Queue<ParticleGenerator<? extends Particle>> generators = new java.util.concurrent.ConcurrentLinkedQueue<ParticleGenerator<? extends Particle>>();
@@ -60,9 +60,9 @@ public class ParticleSystem {
 
 
         // Particles are transparent.
-        gl.glEnable( GL2.GL_BLEND );
         gl.glDisable(GL2.GL_LIGHTING);
-        gl.glBlendFunc( GL2.GL_SRC_ALPHA, GL2.GL_ONE );
+        gl.glEnable( GL2.GL_BLEND );
+        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE);
         gl.glDepthMask( false );
 
         gl.glEnable(GL2.GL_POINT_SMOOTH);

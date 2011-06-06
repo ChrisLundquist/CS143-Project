@@ -2,6 +2,7 @@ package game;
 
 import graphics.Camera;
 import graphics.InGameMenu;
+import graphics.RespawnMenu;
 import input.InputRouter;
 import java.io.Serializable;
 import actor.Actor;
@@ -10,17 +11,31 @@ import actor.ActorSet;
 import actor.ship.PlayerShip;
 
 public class Player implements Serializable {
-    private static final long serialVersionUID = 8330574859953611636L;
+    // Statuses for our Player state machine
+    public static enum PlayerStatus {
+        ALIVE,
+        DEAD,
+        OBSERVING,
+    }
+    //different ships to respawn as
+    public static enum ShipType {
+        FIGHTER,
+        SCOUT,
+        BOMBER,
+    }
 
-    private String name;
-    private PlayerStatus status;
+
+    private static final long serialVersionUID = 8330574859953611636L;
     private transient final Camera camera;
+    private String name;
+    private int playerId;
     private transient PlayerShip ship;
+
     private ActorId shipId;
     // TODO ship preference - once we have ships
 
-    private int playerId;
-
+    private PlayerStatus status;
+  //  private ShipType shipType;
     public Player() {
         setName("Pilot");
         status = PlayerStatus.OBSERVING;
@@ -28,38 +43,86 @@ public class Player implements Serializable {
         playerId = 0;
     }
 
-    @Override
-    public String toString() {
-        String msg = name + " " + status;
-        Actor ship = getShip();
-        if (ship != null) {
-            msg += " @ " + ship.getPosition();
-        }
-        return msg;
-    }
-
     public Camera getCamera() {
         return camera;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    // TODO create ship of players preference
+    public PlayerShip getNewShip() {
+        return new actor.ship.types.Bomber();
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+
     public PlayerShip getShip() {
+        return getShip(Game.getActors());
+    }
+
+    public PlayerShip getShip(ActorSet actors) {
         if (ship == null) {
             if (shipId != null) {
-                Actor a = Game.getActors().findById(shipId);
-                if (a instanceof PlayerShip) {
+                Actor a = actors.findById(shipId);
+                if (a instanceof PlayerShip)
                     return ship = (PlayerShip) a;
-                }
+                shipId = null;
             }
             ship = getNewShip();
+            shipId = ship.getId();
         }
         return ship;
     }
 
-    public void input(InputRouter.Interaction action) {
-        if (getShip() == null) {
-            return;
-        }
+    public ActorId getShipId() {
+        return shipId;
+    }
 
+    public void input(InputRouter.Interaction action) {
+        if (isAlive())
+            inputAlive(action);
+        else {
+            RespawnMenu.setRespawnOpen(true);
+            switch(action) {
+                case MENU_UP:
+                    if(RespawnMenu.isRespawnOpen()) {
+                        RespawnMenu.selectionUp();
+                    }
+                    break;
+                case MENU_DOWN:
+                    if(RespawnMenu.isRespawnOpen()) {
+                        RespawnMenu.selectionDown();
+                    }
+
+                    break;
+                case MENU_SELECT:
+                    if(RespawnMenu.isRespawnOpen()) {
+                        if(RespawnMenu.getSelection() == 0) {
+                            respawn(ShipType.FIGHTER); 
+                        }
+                        if(RespawnMenu.getSelection() == 1) {
+                            respawn(ShipType.SCOUT); 
+                        }
+                        if(RespawnMenu.getSelection() == 2) {
+                            respawn(ShipType.BOMBER); 
+                        }
+                    }
+                    RespawnMenu.setRespawnOpen(false);
+                    break;
+                default:
+                    System.err.println("Player: unhandled input: " + action);
+            }
+        }
+    }
+    
+    
+
+    private void inputAlive(InputRouter.Interaction action) {
         switch(action) {
             case SHOOT:
                 ship.shoot();
@@ -119,33 +182,58 @@ public class Player implements Serializable {
                 break;
             case OPEN_MENU:
                 InGameMenu.setMenuOpen(true);
-                switch(action) {
-                    case FORWARD:
-                        InGameMenu.selectionUp();
-                        break;
-                    case BACK:
-                        InGameMenu.selectionDown();
-                        break;
-                    case SHOOT:
-                        if(InGameMenu.getSelection() == 1) {
-                            System.exit(0);
-                        }
-                        else{
-                            InGameMenu.setMenuOpen(false);
-                        }
-                        break;
+                break;
+            case MENU_UP:
+                if(InGameMenu.isMenuOpen()) {
+                    InGameMenu.selectionUp();
+                    //   System.out.println("Up " + InGameMenu.getSelection());
+                }
+                break;
+            case MENU_DOWN:
+                if(InGameMenu.isMenuOpen()) {
+                    InGameMenu.selectionDown();
+                    // System.out.println("Down " +InGameMenu.getSelection());
+                }
+                break;
+            case MENU_SELECT:
+                if(InGameMenu.isMenuOpen()) {
+                    //System.out.println("Select");
+                    if(InGameMenu.getSelection() == 0) {
+                        InGameMenu.setMenuOpen(false);
+                    }
+                    if(InGameMenu.getSelection() == 1) {
+                        System.err.println("EXITED");
+                    }
                 }
                 break;
             default:
                 System.err.println("Player: unhandled input: " + action);
         }
     }
+    
+    
 
     public boolean isAlive() {
-        return getShip().isAlive();
-    }
+        if (getShip().isDead() || getShip().getId() == null) {
+            status = PlayerStatus.DEAD;
+            getShip().die();
+            ship = null;
+            shipId = null;
+        }
 
-    public void respawn(ActorSet actors, SpawningPosition spawningPosition) {
+        return status == PlayerStatus.ALIVE;
+    }
+    
+    
+    
+    /**
+     * Respawn the player, this will only be called on the client
+     * the server can not transition us from the observing state
+     */
+    public void respawn(ShipType shipType) {
+        SpawningPosition spawningPosition = Game.getMap().getSpawnPosition();
+        ActorSet actors = Game.getActors();
+
         if (shipId == null) {
             ship = getShip();
         } else {
@@ -156,40 +244,69 @@ public class Player implements Serializable {
                 ship = getShip();
             }
         }
+        switch(shipType) {
+            case BOMBER:
+                if (ship == null) {
+                    ship = new actor.ship.types.Bomber();
+                    System.err.println("Respawned as Bomber");
+                }
+                break;
+            case FIGHTER:
+                if (ship == null) {
+                    ship = new actor.ship.types.Fighter();
+                    System.err.println("Respawned as Figther");
+                }
+                break;
+            case SCOUT:
+                if (ship == null) {
+                    ship = new actor.ship.types.Scout();
+                    System.err.println("Respawned as Figther");
+                }
+                break;
+        }
+
+
+        if (ship == null)
+            throw new RuntimeException("WTF");
 
         ship.setPosition(spawningPosition.getPosition());
         ship.setRotation(spawningPosition.getOrientation());
-        setShipId(ship.getId());
-        status = PlayerStatus.ALIVE;
-        actors.add(ship);
-    }
 
-    // TODO create ship of players preference
-    public PlayerShip getNewShip() {
-        return new actor.ship.types.Bomber();
+        if (ship == null)
+            throw new RuntimeException("WTF");
+
+        if (actors.add(ship)) {
+
+            if (ship == null)
+                throw new RuntimeException("WTF");
+
+            shipId = ship.getId();
+            status = PlayerStatus.ALIVE;
+        } else {
+            throw new RuntimeException("Unable to add new player ship to ActorSet");
+        }
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public Player setPlayerId(int id) {
+        playerId = id;
+        return this;
     }
 
     public void setShipId(ActorId shipId) {
         this.shipId = shipId;
     }
 
-    public ActorId getShipId() {
-        return shipId;
-    }
-
-    // Statuses for our Player state machine
-    public static enum PlayerStatus {
-        OBSERVING,
-        ALIVE,
-        DEAD,
+    @Override
+    public String toString() {
+        String msg = name + " #" + playerId + " " + status;
+        if (ship != null) {
+            msg += " @ " + ship.getPosition();
+        }
+        return msg;
     }
 
     /**
@@ -198,21 +315,9 @@ public class Player implements Serializable {
      * @return the players camera object so it can be chained with setPerspective()
      */
     public Camera updateCamera() {
-        if (ship != null) {
+        if (ship != null)
             camera.updateFromActor(ship);
 
-
-        }
-
         return camera;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-    
-    public Player setPlayerId(int id) {
-        playerId = id;
-        return this;
     }
 }

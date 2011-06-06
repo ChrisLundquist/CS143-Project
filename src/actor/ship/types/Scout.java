@@ -3,7 +3,7 @@ package actor.ship.types;
 import actor.ship.PlayerShip;
 import actor.ship.projectile.Bullet;
 import actor.ship.projectile.SniperBullet;
-import actor.ship.weapon.Weapon;
+import actor.ship.weapon.SingleShotWeapon;
 import graphics.core.Model;
 
 public class Scout extends PlayerShip  {
@@ -13,14 +13,17 @@ public class Scout extends PlayerShip  {
     private final float ROLL_RATE = 0.1f;
     private final float YAW_RATE = 0.017f;
     
-    private final float ADDITIVE_SPEED = 0.005f;
+    private final float ADDITIVE_SPEED = 0.008f;
     private final float NEGATIVE_SPEED = 0.002f;
     
     private final float ANGULAR_DAMPENING = 0.035f;
     
+    private static final int SNIPER_AMMO = 30;
+    private static final int GUN_AMMO = Integer.MAX_VALUE;
+    
     public Scout() {
-        weapons.add(new Weapon<Bullet>(Bullet.class,Bullet.getShotCoolDown()));
-        weapons.add(new Weapon<SniperBullet>(SniperBullet.class,SniperBullet.getShotCoolDown()));
+        weapons.add(new SingleShotWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),GUN_AMMO));
+        weapons.add(new SingleShotWeapon<SniperBullet>(SniperBullet.class,SniperBullet.getShotCoolDown(),SNIPER_AMMO));
 
         shields.add(new actor.ship.shield.PlayerShield());
     }

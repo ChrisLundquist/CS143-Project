@@ -59,8 +59,8 @@ public class Source {
         al.alSourcei(getId(), AL.AL_BUFFER, event.getBuffer().getId());
         al.alSourcef(getId(), AL.AL_PITCH, event.pitch);
         al.alSourcef(getId(), AL.AL_GAIN, event.gain);
-        al.alSourcefv(getId(), AL.AL_POSITION, event.getPosition(), 0);
-        al.alSourcefv(getId(), AL.AL_VELOCITY, event.getVelocity(), 0);
+        al.alSourcefv(getId(), AL.AL_POSITION, event.getPosition().toFloatArray(), 0);
+        al.alSourcefv(getId(), AL.AL_VELOCITY, event.getVelocity().toFloatArray(), 0);
         al.alSourcei(getId(), AL.AL_LOOPING, event.getBuffer().loop[0]);
 
         Manager.checkForALErrorsWithMessage("Error configuring source to play buffer");

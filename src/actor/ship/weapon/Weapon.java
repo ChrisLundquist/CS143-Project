@@ -9,16 +9,21 @@ import actor.Actor;
 import actor.ship.projectile.Projectile;
 
 
-public class Weapon<T extends Projectile> implements Serializable{
+public abstract class Weapon<T extends Projectile> implements Serializable{
     private static final long serialVersionUID = -5639387880039566435L;
     long lastShot,coolDown;
     transient protected Constructor<? extends T> ctor;
     protected Class<? extends T> projectileType;
 
-    public Weapon(Class<? extends T> projectileType, long coolDown) {
+    protected final int maxAmmo;
+    protected int currentAmmo;
+
+    public Weapon(Class<? extends T> projectileType, long coolDown, int maxAmmo) {
         this.projectileType = projectileType;
         lastShot = 0;
         this.coolDown = coolDown;
+        this.maxAmmo = maxAmmo;
+        this.currentAmmo = maxAmmo;
         try {
             ctor = getCtor();
         } catch (SecurityException e) {
@@ -36,7 +41,7 @@ public class Weapon<T extends Projectile> implements Serializable{
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
-        return ctor;
+            return ctor;
     }
 
     protected long getLastShotTime() {
@@ -64,12 +69,22 @@ public class Weapon<T extends Projectile> implements Serializable{
         lastShot = time;
     }
 
-    public void shoot(Actor ship) {
-        //calculates time passed in milliseconds
-        if((System.currentTimeMillis() - getLastShotTime()) > coolDown) {
-            game.Game.getActors().add(newProjectile(ship));
-            setLastShotTime(System.currentTimeMillis());
-        }
+    public abstract void shoot(Actor ship);
+
+    public float getAmmoPercent(){
+        return (float)currentAmmo/(float)maxAmmo;
+    }
+
+    protected boolean hasAmmo(){
+        return currentAmmo > 0;
+    }
+
+    protected boolean hasNoAmmo(){
+        return currentAmmo <= 0;
+    }
+
+    protected int getCurrentAmmo(){
+        return currentAmmo;
     }
 
     public String toString(){

@@ -5,6 +5,7 @@ import graphics.Camera;
 import graphics.Hud;
 import graphics.InGameMenu;
 import graphics.Light;
+import graphics.RespawnMenu;
 import graphics.Shader;
 import graphics.Skybox;
 import graphics.particles.ParticleSystem;
@@ -18,8 +19,9 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
+
+import math.Vector3f;
 
 import actor.Actor;
 
@@ -30,8 +32,12 @@ import com.jogamp.opengl.util.FPSAnimator;
  */
 public class Renderer implements GLEventListener {
     public static String shaderString  = "lighting";
-    
-    private static final int NUM_LIGHTS = 2;
+
+    private static final int NUM_LIGHTS = 4;
+
+    private static final float FAR_PLANE = Skybox.SKYBOX_SIZE * 6.0f;
+
+    private static final double FOV = 60;
     GLU glu;
 
     GLCanvas canvas;
@@ -40,6 +46,7 @@ public class Renderer implements GLEventListener {
     Shader shader;
     Hud hud;
     InGameMenu inGameMenu;
+    RespawnMenu respawnMenu;
     Camera camera;
     private GL2 gl; // Must be recached each frame
 
@@ -51,6 +58,7 @@ public class Renderer implements GLEventListener {
         shader = new Shader(shaderString + ".vert", shaderString + ".frag");
         hud = null; // default no HUD;
         inGameMenu = new InGameMenu();
+        respawnMenu = new RespawnMenu();
         this.camera = camera;
     }
 
@@ -69,24 +77,36 @@ public class Renderer implements GLEventListener {
         Light.update(gl, camera);
         render(Game.getMap().getSkybox());
 
+        actor.ActorId playerShipId = Game.getPlayer().getShip().getId();
+
         // Render each actor
         for(Actor a: game.Game.getActors())
-            render(a);
+            //Don't render the players ship
+            if (a.getId().equals(playerShipId) == false)
+                render(a);
 
+      shader.setUniform1b(gl, "lightingEnabled", false);
         if(ParticleSystem.isEnabled()){
             shader.setUniform1b(gl, "isTextured", false);
             ParticleSystem.render(gl);
             shader.setUniform1b(gl, "isTextured", true);
         }
-        
-        if (hud != null)
+
+
+        if (hud != null) {
             hud.drawStaticHud(gl);
-        
-        if (inGameMenu != null)
+        }
+
+        if (inGameMenu != null) {
             inGameMenu.drawInGameMenu(gl);
+        }
+        
+        if (respawnMenu != null) {
+            respawnMenu.drawRespawnMenu(gl);
+        }
+        shader.setUniform1b(gl, "lightingEnabled", true);
 
         checkForGLErrors(gl);
-
     }
 
     private static void checkForGLErrors(GL2 gl) {
@@ -120,7 +140,7 @@ public class Renderer implements GLEventListener {
 
     public void init(GLAutoDrawable gLDrawable) {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-        
+
         getGL2(); // Repopulate gl each frame because it is not guaranteed to be persistent
 
         gl.glShadeModel(GL2.GL_SMOOTH);
@@ -132,6 +152,10 @@ public class Renderer implements GLEventListener {
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+        gl.glMatrixMode(GL2.GL_PROJECTION);
+        gl.glLoadIdentity();
+        gl.glFrustumf(-1, 1, -1, 1, Vector3f.EPSILON, FAR_PLANE);
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
 
         ((Component) gLDrawable).addKeyListener(game.Game.getInputHandler());
 
@@ -140,7 +164,7 @@ public class Renderer implements GLEventListener {
 
         for(Model model: Model.loaded_models())
             build_display_list(model);
-        
+
         try {
             shader.init(gl);
         } catch (java.io.IOException e) {
@@ -150,6 +174,8 @@ public class Renderer implements GLEventListener {
         // We have to setup the lights after we enable the shader so we can set the uniform
         Light.initialize(gl, NUM_LIGHTS);
         shader.setUniform1i(gl, "numLights", NUM_LIGHTS);
+        shader.setUniform1b(gl, "lightingEnabled", true);
+
         System.gc(); // This is probably a good a idea
     }
 
@@ -164,7 +190,7 @@ public class Renderer implements GLEventListener {
     private void render(Polygon p) {
         if (p.verticies.size() < 2)
             return;
-        gl.glColor4f(1, 1, 1, 1);
+        gl.glColor4f(0, 0, 0, 1);
         p.getMaterial().prepare(gl);
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glNormal3f(p.normal.x, p.normal.y, p.normal.z);
@@ -207,11 +233,12 @@ public class Renderer implements GLEventListener {
             height = 1;
 
         float h = (float) width / (float) height;
-        gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        gl.glPushMatrix();
+        gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
-        gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        glu.gluPerspective(FOV, h, 1.0, FAR_PLANE);
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glPopMatrix();
     }
 
     public void dispose(GLAutoDrawable gLDrawable) {
@@ -251,21 +278,18 @@ public class Renderer implements GLEventListener {
     }
 
     private void render(Actor actor) {
-        //Don't render the players ship
-        if(actor!=Game.getPlayer().getShip()){
-            gl.glPushMatrix();
-            gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
-            // CL - Render our model.
-            render(actor.getModel());
-            gl.glPopMatrix();
-        }
+        gl.glPushMatrix();
+        gl.glMultMatrixf(actor.getTransform().toFloatArray(),0);
+        // CL - Render our model.
+        render(actor.getModel());
+        gl.glPopMatrix();
     }
 
     private void render(Skybox skybox) {
         gl.glPushMatrix();
         math.Vector3f pos = camera.getPosition();
         gl.glTranslatef(pos.x, pos.y, pos.z);
-        gl.glScalef(Skybox.SKYBOX_SIZE, Skybox.SKYBOX_SIZE , Skybox.SKYBOX_SIZE);
+        gl.glScalef(-Skybox.SKYBOX_SIZE, -Skybox.SKYBOX_SIZE , -Skybox.SKYBOX_SIZE);
         render(skybox.getModel());
         gl.glPopMatrix(); 
     }
@@ -288,7 +312,7 @@ public class Renderer implements GLEventListener {
     }
 
 
-    /* public Shader getShader() {
+    public Shader getShader() {
         return shader;
-    }*/
+    }
 }

@@ -1,12 +1,15 @@
 package network;
 
 import game.Player;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+import actor.Actor;
 
 
 public class ServerCli extends Thread {
@@ -47,7 +50,7 @@ public class ServerCli extends Thread {
      * Print all currently running threads
      * based on http://stackoverflow.com/questions/1323408/get-a-list-of-all-threads-currently-running-in-java
      */
-    public static void displayThreads() {
+    private void displayThreads() {
         ThreadGroup rootGroup = Thread.currentThread().getThreadGroup();
         ThreadGroup parentGroup;
         while ((parentGroup = rootGroup.getParent()) != null )
@@ -57,7 +60,7 @@ public class ServerCli extends Thread {
         while (rootGroup.enumerate(threads, true) == threads.length)
             threads = new Thread[threads.length * 2];
 
-        System.out.println("Name\t\t\t\t\tPrior\tState");
+        out.println("Name\t\t\t\t\tPrior\tState");
         for (int i = 0; i < threads.length && threads[i] != null; i ++) {
             Thread t = threads[i];
             String line = t.getName();
@@ -67,7 +70,7 @@ public class ServerCli extends Thread {
             
             line += t.getPriority() + "\t" + t.getState();
             
-            System.out.println(line);
+            out.println(line);
         }
     }
 
@@ -87,6 +90,11 @@ public class ServerCli extends Thread {
         out.println("Memory:\t" + usedMemory + "MB used\t" + freeMemory + "MB free\t" + totalMemory + "MB total");
     }
 
+    private void displayActors() {
+        for (Actor a: server.getActors())
+            out.println(a);
+    }
+    
     private void kickPlayer(StringTokenizer tokenizer) {
         // TODO
     }
@@ -118,6 +126,9 @@ public class ServerCli extends Thread {
                 break;
             case THREADS:
                 displayThreads();
+                break;
+            case ACTORS:
+                displayActors();
                 break;
             default:
                 displayHelp(tokenizer);
@@ -163,6 +174,8 @@ public class ServerCli extends Thread {
             return ServerCommand.THREADS;
         if (token.equalsIgnoreCase("ps"))
             return ServerCommand.THREADS;
+        if (token.equalsIgnoreCase("actors"))
+            return ServerCommand.ACTORS;
 
 
         return ServerCommand.UNKNOWN;
@@ -176,6 +189,6 @@ public class ServerCli extends Thread {
         QUIT,
         STATUS,
         UNKNOWN,
-        THREADS,
+        THREADS, ACTORS,
     }
 }

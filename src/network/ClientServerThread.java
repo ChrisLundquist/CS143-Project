@@ -59,7 +59,7 @@ public class ClientServerThread extends AbstractConnectionThread {
             update.applyTo(actors);
         }
 
-        rate_limit();
+        rateLimit();
 
         return new UpdateMessage(player, newActorsQueue);
     }
@@ -83,7 +83,7 @@ public class ClientServerThread extends AbstractConnectionThread {
     /**
      * Rate limit updates to a reasonable rate
      */
-    private void rate_limit() {
+    private void rateLimit() {
         try {
             int delay = UPDATE_RATE - (int) (System.currentTimeMillis() - lastUpdate);
             if (delay > 0)

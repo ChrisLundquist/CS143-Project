@@ -3,6 +3,8 @@ package actor;
 import graphics.core.Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import actor.interfaces.AngularlyVelocitable;
@@ -23,7 +25,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     protected ActorId id, parentId; // unique ID for each Actor
     private transient Model model; // CL - Used to store the model reference, after we look it up once
     private transient Supportable collisionModel;
-    
+
     /*
      * DL - a back reference to the actor set containing this actor
      * This is so we can avoid Game.getActors() or similar and the same code can work
@@ -47,7 +49,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         scale = new Vector3f(1.0f,1.0f,1.0f);
         age = 0;
     }
-    
+
     public Actor(Actor a) {
         rotation = new Quaternion(a.rotation);
         angularVelocity = new Quaternion(a.angularVelocity);
@@ -63,11 +65,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         actors = a.actors;
         age = a.age;
     }
-    
+
     public void add(Actor actor) {
         actors.add(actor);
     }
-    
+
     public void die(){
         // Callbacks before deletion
         delete();
@@ -89,14 +91,14 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
             return;
             /*
             // Then we will make our best guess and use the line between the two actors as the normal
-            
+
             Vector3f a = delta_p.times(0.5f); // half way between the objects
             Vector3f perpendicular = a.perpendicular();
             Vector3f b = a.plus(perpendicular);
             Vector3f c = a.plus(a.cross(perpendicular));
-            
+
             intersection = Polygon.newFrom(a, b, c);
-            */
+             */
         }
         Vector3f newVelocity = intersection.reflectDirection(delta_v);
 
@@ -125,7 +127,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     protected void dampenAngularVelocity() {
         angularVelocity = angularVelocity.dampen(0.01f);
     }
-    
+
     protected void dampenAngularVelocity(float amount) {
         angularVelocity = angularVelocity.dampen(amount);
     }
@@ -134,7 +136,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         actors.remove(this);
     }
 
-    protected long getAge() {
+    public long getAge() {
         return age;
     }
 
@@ -169,18 +171,29 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
         // we need to sweep the furthest point by our velocity
         if(velocity.sameDirection(direction)) {
             max.plusEquals(velocity);
-        // Do the same thing for angular velocity
-        //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
-        //   max = max.times(getAngularVelocity());
+            // Do the same thing for angular velocity
+            //if(max.times(rotation.times(getAngularVelocity())).dotProduct(direction) > max.dotProduct(direction))
+            //   max = max.times(getAngularVelocity());
         }
 
         return max;
     }
 
+    public List<Vector3f> getHotSpotsFor(String key){
+        List<Vector3f> modelHotSpots = getModel().getHotSpotFor(key);
+        List<Vector3f> transformedSpots = new ArrayList<Vector3f>();
+        Matrix4f transform = getTransform();
+        if(modelHotSpots != null)
+            for(Vector3f vec : modelHotSpots)
+                transformedSpots.add(transform.times(vec));
+        return transformedSpots;
+
+    }
+
     public ActorId getId() {
         return id;
     }
-    
+
     public float getMass() {
         // TODO make a better estimate of mass?
         return scale.magnitude2();
@@ -193,11 +206,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
         return model;
     }
-    
+
     public Supportable getCollisionModel(){
         //if(collisionModel == null)
         return getModel();
-            
+
     }
 
     public String getModelName(){
@@ -230,11 +243,11 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     public String toString() {
         return this.getClass().getSimpleName() + " " + id + " " + position;
     }
-    
+
     public Matrix4f getTransform(){
         return Matrix4f.newFromScale(scale).times(getRotation().toMatrix4f()).setTranslation(getPosition());
     }
-    
+
     public Matrix4f getTransformInverse(){
         return Matrix4f.newFromScale(new Vector3f(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z)).times(getRotation().inverse().toMatrix4f()).setTranslation(position.negate());
     }
@@ -281,12 +294,12 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
 
         return (delta_p.magnitude2() <= collisionRadius * collisionRadius);
     }
-    
+
     public void setModel(Model model) {
         this.modelName = model.name;
         this.model = model;
     }
-    
+
     @Override
     public Actor setPosition(Vector3f position) {
         this.position = position;

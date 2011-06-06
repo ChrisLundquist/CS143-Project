@@ -14,7 +14,6 @@ import actor.ship.Bandit;
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
 public class ActorSet implements Set<Actor> {
-
     private Map<ActorId, Actor> actors;
     public final int playerId;
     private List<Queue<Actor>> addNotifyees;
@@ -49,7 +48,11 @@ public class ActorSet implements Set<Actor> {
      */
     public boolean add(Actor a) {
         if (playerId != 0) { // Restrictive actor creation on network client
-            if (!(a.getParentId() != null && actors.get(a.getParentId()) instanceof actor.ship.PlayerShip))
+            if (a instanceof actor.ship.PlayerShip && a.id == null && ((actor.ship.PlayerShip)a).isAlive()) {
+                // Permit respawning for new live player ships
+            } else if (a.getParentId() != null && actors.get(a.getParentId()) instanceof actor.ship.PlayerShip) {
+                // Permit projectiles from our local player
+            } else
                 return false;
         }
         
@@ -64,7 +67,7 @@ public class ActorSet implements Set<Actor> {
         
         actors.put(a.id, a);
         adjustStat(a,1);
-        
+
         for(Queue<Actor> q: addNotifyees)
             q.offer(a);
 
@@ -114,11 +117,14 @@ public class ActorSet implements Set<Actor> {
         actors.clear();
         asteroidCount = 0;
         banditCount = 0;
+        banditBaseCount = 0;
     }
 
     @Override
-    public boolean contains(Object arg0) {
-        return false;
+    public boolean contains(Object other) {
+        if(other == null || other.getClass() != Actor.class)
+            return false;
+        return contains((ActorId)other);
     }
 
     public boolean contains(Actor a) {
@@ -144,13 +150,15 @@ public class ActorSet implements Set<Actor> {
 
     @Override
     public Iterator<Actor> iterator() {
-        return actors.values().iterator();
+        return getCopyList().iterator();
     }
 
 
     @Override
-    public boolean remove(Object arg0) {
-        return false;
+    public boolean remove(Object other) {
+        if(other == null || other.getClass() != Actor.class)
+            return false;
+        return remove((ActorId)other);
     }
 
     public boolean remove(Actor a) {
@@ -209,9 +217,8 @@ public class ActorSet implements Set<Actor> {
      * @param frames the number of frame elapsed since the last update
      */
     public void update(int frames) {
-        for (Actor a: this) {
-            a.update();
-        }
+        for (Actor a: this)
+            a.update();      
     }
     
     /**
@@ -220,7 +227,7 @@ public class ActorSet implements Set<Actor> {
      * @return
      */
     public List<Actor> getCopyList() {
-        return new java.util.ArrayList<Actor>(actors.values());    
+        return new java.util.ArrayList<Actor>(actors.values());
     }
 
     /**

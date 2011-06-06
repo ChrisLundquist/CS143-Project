@@ -35,6 +35,10 @@ public class Settings {
             public static int energyModifier=0;
             
             public static int mainMenu = 0;
+            public static int mainMenuClose = 0;
+            public static int mainMenuUp = 0;
+            public static int mainMenuDown = 0;
+            public static int menuSelect = 0;
         }
         public static boolean particlesOn = false;
         public static boolean soundOn = true;
@@ -167,6 +171,18 @@ public class Settings {
             else if(part[0].equalsIgnoreCase("main_menu")){
                 Profile.Keys.mainMenu=stringToKey(part[1]);
             }
+            else if(part[0].equalsIgnoreCase("menu_up")){
+                Profile.Keys.mainMenuUp=stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("menu_down")){
+                Profile.Keys.mainMenuDown=stringToKey(part[1]);
+            }
+            else if(part[0].equalsIgnoreCase("menu_select")){
+                Profile.Keys.menuSelect=stringToKey(part[1]);
+            }
+           /* else if(part[0].equalsIgnoreCase("main_select")){
+                Profile.Key.mainMenuSelect=stringToKey(part[1]);
+            }*/
         }
     }
 

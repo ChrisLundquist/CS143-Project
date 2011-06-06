@@ -12,7 +12,7 @@ public class Vector3f implements Serializable {
     public static final Vector3f ORIGIN = new Vector3f(0.0f,0.0f,0.0f);
     public static final Vector3f ZERO = ORIGIN; // makes semantic differences in some if checks
     public static final float EPSILON = 1.0e-6f;;
-    private static java.util.Random gen = new java.util.Random();
+    protected static java.util.Random gen = new java.util.Random();
 
     public float x,y,z;
 

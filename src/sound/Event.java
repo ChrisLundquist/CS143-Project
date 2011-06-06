@@ -1,12 +1,14 @@
 package sound;
 
+import math.Vector3f;
+
 /**
  * 
  * @author Durandal
  *
  */
 public class Event {
-    public float[] position, velocity;
+    public Vector3f position, velocity;
     public final Buffer sound;
     public float gain, pitch;
     
@@ -16,27 +18,19 @@ public class Event {
         pitch = 1.0f;
     }
     
-    public Event(float[] position, float[] velocity, Buffer sound){
-        this(sound);
-        this.position = position;
-        this.velocity = velocity;
-
-    }
-    
     public Event(math.Vector3f pos, math.Vector3f vel, Buffer sound){
         this(sound);
-        position = pos.toFloatArray();
-        velocity = vel.toFloatArray();
+        position = pos;
+        velocity = vel;
     }
     
     public Buffer getBuffer() {
         return sound;
     }
-    public float[] getVelocity() {
+    public Vector3f getVelocity() {
         return velocity;
     }
-    public float[] getPosition() {
+    public Vector3f getPosition() {
         return position;
     }
-
 }
