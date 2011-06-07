@@ -37,6 +37,7 @@ public class Player implements Serializable {
 
     public Player() {
         this(DEFAULT_NAME, ShipType.FIGHTER);
+        
     }
 
     public Player(String name, ShipType shipPreference) {
@@ -202,6 +203,7 @@ public class Player implements Serializable {
                     }
                     if(InGameMenu.getSelection() == 1) {
                         System.err.println("EXITED");
+                        Game.exit();
                     }
                 }
                 break;

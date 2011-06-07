@@ -28,7 +28,7 @@ public class XboxInputListener extends Thread implements Updateable {
      * Sends actions to InputRouter
      */
     public void update(boolean pasued) {
-        
+
         /**
          * Shooting
          */
@@ -41,7 +41,7 @@ public class XboxInputListener extends Thread implements Updateable {
             InputRouter.sendAction(InputRouter.Interaction.SHOOT_SECONDARY);
             System.err.println("Shooting Secondary");
         } 
-      
+
         /**
          * Energy
          */
@@ -60,6 +60,9 @@ public class XboxInputListener extends Thread implements Updateable {
         if(getButtonState() == 4) {
             InputRouter.sendAction(InputRouter.Interaction.ENERGY_SPEED_DOWN);
             System.err.println("Speed Down");
+
+            InputRouter.sendAction(InputRouter.Interaction.MENU_SELECT);
+            System.err.println("Menu Select");
         }     
         //TODO add modifier for seperate shields
         if(getButtonState() == 11) {
@@ -114,6 +117,15 @@ public class XboxInputListener extends Thread implements Updateable {
             InputRouter.sendAction(InputRouter.Interaction.OPEN_MENU);
             System.err.println("Menu Opened");
         }
+        if(getButtonState() == 11) {
+            InputRouter.sendAction(InputRouter.Interaction.MENU_UP);
+            System.err.println("Menu up");
+        }
+        if(getButtonState() == 13) {
+            InputRouter.sendAction(InputRouter.Interaction.MENU_UP);
+            System.err.println("Menu up");
+        }
+
 
         //debug messages
         System.out.println("Button " + getButtonState());
@@ -128,16 +140,16 @@ public class XboxInputListener extends Thread implements Updateable {
      * @throws IOException
      */
     public void run() {
-        
-        //TODO check OS
-
         Process p = null;
         try {
-           // p = Runtime.getRuntime().exec("./sshscript.sh");
-           p = Runtime.getRuntime().exec("XboxControllerInputConsole.exe");
-            
+            if(game.GetOS.isWindows())
+                p = Runtime.getRuntime().exec("XboxControllerInputConsole.exe");
+
+            if(game.GetOS.isUnix() || game.GetOS.isMac())
+                p = Runtime.getRuntime().exec("./xboxdrv.sh");
+
         } catch (IOException e) {
-            System.out.println("Couldn't start Xbox Controller Drivers, make sure you have the drivers and the xna runtime installed");
+            System.err.println("Couldn't start Xbox Controller Drivers");
             e.printStackTrace();
         }
         input =new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -181,7 +193,7 @@ public class XboxInputListener extends Thread implements Updateable {
         rightStick = new Point2D.Double(x, y);
         return rightStick;
     }
-    
+
     /**
      * Gets coordinates of left stick
      * @return leftStick coordinates
@@ -260,30 +272,4 @@ public class XboxInputListener extends Thread implements Updateable {
         int temp=(int)((d*Math.pow(10,2)));
         return (((double)temp)/Math.pow(10,2));
     }
-    /**
-     * Checks if Windows
-     * @return
-     */
-    public static boolean isWindows(){
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.indexOf( "win" ) >= 0);
-    }
-    /**
-     * Checks if Mac
-     * @return
-     */
-    public static boolean isMac(){
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.indexOf( "mac" ) >= 0);
-    }
-    /**
-     * Checks if Unix/Linux
-     * @return
-     */
-    public static boolean isUnix(){
-        String os = System.getProperty("os.name").toLowerCase();
-        return (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0);
-
-    }
-
 }

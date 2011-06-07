@@ -48,27 +48,26 @@ public class Game {
         }
 
 
-
-        /*
-        try {
-            //TODO add boolean to check if controller enabled
-            //TODO addCallBack
-            //starts xbox controller thread
-            controller = new XboxInputListener();
-            Thread myThread = new Thread(controller);
-            myThread.start();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        //turns on controller if enabled in settings
+        if(Settings.Profile.controllerOn) {
+            try {
+                //starts xbox controller thread
+                controller = new XboxInputListener();
+                Thread myThread = new Thread(controller);
+                myThread.start();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-         */
+
 
 
 
         renderer = new graphics.core.Renderer(player.getCamera());
         renderer.setHud(new graphics.Hud(player));
         input = new KeyboardListener();
-        
+
 
         // When we pass player.getCamera() the sound doesn't match the player position
         if (sound.Manager.enabled)
@@ -139,7 +138,14 @@ public class Game {
     }
 
     public static void exit() {
-        System.exit(0);
+        //cleanly exits if on windows or mac
+        if(GetOS.isWindows() || GetOS.isMac()) {
+            System.exit(0);
+        }
+        //not so clean, but that is because linux is superior
+        else {
+
+        }
     }
 
     public static Map getMap() {

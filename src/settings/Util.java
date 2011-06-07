@@ -9,15 +9,15 @@ import java.io.RandomAccessFile;
 import sun.misc.BASE64Decoder;
 
 public class Util {
-    static final String defaultSettings = "Y29uZj1jb25maWd1cmF0aW9uMS5jb25mCmRlYnVnPW9uCnBhcnR"+
-    "pY2xlcz1vbgpzaGFkZXI9dGV4dHVyZQpzb3VuZD1vbgpjb250cm9sbGVyPW9mZgo=";
-    
+    static final String defaultSettings = "Y29uZj1jb25maWd1cmF0aW9uMS5jb25mCmRlYnVnPW9uCnBhcnRpY2xlcz1vbgpzaGFkZXI9dGV4"+
+    "dHVyZWQKc291bmQ9b24KY29udHJvbGxlcj1vZmYK";
+
     static final String defaultConfig= "Zm9yd2FyZD13CmJhY2t3YXJkPXMKcGl0Y2h" +
     "fdXA9aQpwaXRjaF9kb3duPWsKcm9sbF9sZWZ0PWoKcm9sbF9yaWdodD1s" +
     "Cnlhd19sZWZ0PWEKeWF3X3JpZ2h0PWQKc2hvb3Q9c3Bh" +
     "Y2UKbmV4dF93ZWFwb249Y3RybAplbmVyZ3lfZ3VuPTEKZW5lcmd5X3Noa" +
     "WVsZD0yCmVuZXJneV9zcGVlZD0zCmVuZXJneV9tb2RpZmllcj1zaGlmdA==";
-    
+
     /**
      * Writes a string to a file
      * @param file
@@ -30,7 +30,7 @@ public class Util {
         output.close();
         System.out.println("String has been written to " + file.getCanonicalFile());  
     }
-    
+
     public static String stringFromFile(File f) throws IOException{
         RandomAccessFile ram = new RandomAccessFile(f, "r");
         byte[] byteBuffer = new byte[(int)f.length()];
@@ -38,7 +38,7 @@ public class Util {
         ram.close();
         return new String(byteBuffer);
     }
-    
+
     /**
      * Decodes a Base64 String
      * @param base64String
@@ -51,7 +51,7 @@ public class Util {
         String s = new String(decodedBytes);
         return s;
     }
-    
+
     public static void checkSettingFile(File settingsFile) throws IOException{
         if(!settingsFile.exists()) {
             settingsFile.createNewFile();
