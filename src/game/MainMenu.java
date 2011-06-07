@@ -1,5 +1,7 @@
 package game;
 
+import game.Player.ShipType;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +23,7 @@ public class MainMenu extends JPanel implements ActionListener {
     //paths to all images used
 
     private static final String BACKGROUND_PATHS[] = {
-        "assets/images/mainmenu/background1.jpg",
+        //"assets/images/mainmenu/background1.jpg",
         "assets/images/mainmenu/background2.jpg",
         "assets/images/mainmenu/background3.jpg",
         "assets/images/mainmenu/background4.jpg",
@@ -47,14 +49,14 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String CONTROLLER_ON = "assets/images/mainmenu/controller_on.png";
     private static final String CONTROLLER_OFF = "assets/images/mainmenu/controller_off.png";
 
-    private static final String SOUND_ON = "assets/images/mainmenu/sound_on.png";
-    private static final String SOUND_OFF = "assets/images/mainmenu/sound_off.png";
+    private static final String SOUND_ON = "assets/images/mainmenu/sound_checked.png";
+    private static final String SOUND_OFF = "assets/images/mainmenu/sound_unchecked.png";
 
-    private static final String SHADERS_ON = "assets/images/mainmenu/shaders_on.png";
-    private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_on.png";
+    private static final String SHADERS_ON = "assets/images/mainmenu/shaders_checked.png";
+    private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_unchecked.png";
 
-    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on.png";
-    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off.png";
+    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_checked.png";
+    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_unchecked.png";
 
     private static final String BACK = "assets/images/mainmenu/back.png";
     private static final String BACK_SELECTED = "assets/images/mainmenu/back_selected.png";
@@ -116,6 +118,7 @@ public class MainMenu extends JPanel implements ActionListener {
         java.util.Random rand = new java.util.Random();
 
         return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
+        //return BACKGROUND_PATHS[2];
     }
     /**
      * creates and adds gui components
@@ -159,7 +162,7 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setBorder(null);
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
-        quitButton.setBounds(50, 200, 200, 50);
+        quitButton.setBounds(50, 150, 200, 50);
 
 
 
@@ -191,7 +194,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableSound.setBorder(null);
         enableSound.addActionListener(this);
         enableSound.setVisible(false);
-        enableSound.setBounds(50, 100, 100, 50);
+        enableSound.setBounds(250, 50, 230, 50);
 
         enableShaders = new JCheckBox();
         if(shadersEnabled == true) {
@@ -206,7 +209,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableShaders.setBorder(null);
         enableShaders.addActionListener(this);
         enableShaders.setVisible(false);
-        enableShaders.setBounds(50, 150, 100, 50);
+        enableShaders.setBounds(50, 150, 230, 50);
 
         enableParticles = new JCheckBox();
         if(particlesEnabled == true) {
@@ -221,7 +224,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableParticles.setBorder(null);
         enableParticles.addActionListener(this);
         enableParticles.setVisible(false);
-        enableParticles.setBounds(50, 200, 100, 50);
+        enableParticles.setBounds(250, 100, 230, 50);
 
         backButton = new JButton(back);
         backButton.setVisible(false);
@@ -232,13 +235,13 @@ public class MainMenu extends JPanel implements ActionListener {
         backButton.setBorder(null);
         backButton.setRolloverIcon(back_selected);
         backButton.addActionListener(this);
-        backButton.setBounds(50,250,230,50);
+        backButton.setBounds(235,150,230,50);
 
 
         add(playButton);
         add(joinGameButton);
-        add(settingsButton);
-        add(enableController);
+        //add(settingsButton);
+        //add(enableController);
         add(enableSound);
         add(enableShaders);
         add(enableParticles);
@@ -284,31 +287,49 @@ public class MainMenu extends JPanel implements ActionListener {
             if (game.Game.getActors() != null)
                 return;
 
-            JComboBox comboSelect = new JComboBox(NETWORK_SERVERS);
-            comboSelect.setEditable(true);
-            JLabel label = new JLabel("Select a server to join");
+            JLabel serverLabel = new JLabel("Select a server to join");
+            JComboBox serverInput = new JComboBox(NETWORK_SERVERS);
+            serverInput.setEditable(true);
+
+            JLabel playerLabel = new JLabel("Player Name");
+            JTextField playerInput = new JTextField(Player.DEFAULT_NAME);
+
+            JLabel shipLabel = new JLabel("Select a ship");
+            JComboBox shipInput = new JComboBox(ShipType.values());
+
             JPanel panel = new JPanel();
             GroupLayout layout = new GroupLayout(panel);
             panel.setLayout(layout);
             layout.setHorizontalGroup(
                     layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(label)
-                            .addComponent(comboSelect))
+                            .addComponent(serverLabel)
+                            .addComponent(serverInput)
+                            .addComponent(playerLabel)
+                            .addComponent(playerInput)
+                            .addComponent(shipLabel)
+                            .addComponent(shipInput)
+                    )
             );
             layout.setVerticalGroup(
                     layout.createSequentialGroup()
-                    .addComponent(label)
-                    .addComponent(comboSelect)
+                    .addComponent(serverLabel)
+                    .addComponent(serverInput)
+                    .addComponent(playerLabel)
+                    .addComponent(playerInput)
+                    .addComponent(shipLabel)
+                    .addComponent(shipInput)
             );
 
-            int choice = JOptionPane.showConfirmDialog(null, panel, "Join a Network Game", JOptionPane.CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int choice = JOptionPane.showConfirmDialog(this, panel, "Join a Network Game", JOptionPane.CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION)
                 return;
 
-            String server = (String) comboSelect.getSelectedItem();
+            String server = (String) serverInput.getSelectedItem();
+            String playerName = playerInput.getText();
+            ShipType ship = (ShipType) shipInput.getSelectedItem();
 
-            if (Game.joinServer(server) == false)
+            if (Game.joinServer(server, playerName, ship) == false)
                 return;
 
             this.setVisible(false);
@@ -316,10 +337,10 @@ public class MainMenu extends JPanel implements ActionListener {
             Game.start();
         }
         if(e.getSource() == settingsButton) {
-            playButton.setVisible(false);
-            settingsButton.setVisible(false);
-            quitButton.setVisible(false);
-            joinGameButton.setVisible(false);
+            //playButton.setVisible(false);
+            //settingsButton.setVisible(false);
+            //quitButton.setVisible(false);
+            //joinGameButton.setVisible(false);
             enableController.setVisible(true);
             enableSound.setVisible(true);
             enableShaders.setVisible(true);

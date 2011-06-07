@@ -10,6 +10,8 @@ public class Shrapnel extends Bullet {
         super(actor);
         damage = 7;
         scale.timesEquals(0.7f);
+        // Cheat so we don't collide with our ship that really shot the flakShell which generated this
+        parentId = actor.getParentId();
     }
     
     @Override

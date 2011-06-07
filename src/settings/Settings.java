@@ -40,6 +40,7 @@ public class Settings {
         public static boolean particlesOn = false;
         public static boolean soundOn = true;
         public static String shader = null;
+        public static boolean controllerOn = false;
     }
 
     public static void debugKeys(){
@@ -90,6 +91,14 @@ public class Settings {
                 }
                 else{
                     setSound(false);
+                }
+            }
+            if(part[0].equalsIgnoreCase("controller")){
+                if(part[1].equalsIgnoreCase("on")){
+                    setController(true);
+                }
+                else{
+                    setController(false);
                 }
             }
             if(part[0].equalsIgnoreCase("debug")){
@@ -379,6 +388,7 @@ public class Settings {
         setParticles(true);
         setSound(true);
         setShader("texture");
+        setController(false);
     }
     
     private static void setParticles(boolean b){
@@ -392,6 +402,9 @@ public class Settings {
     private static void setShader(String s){
         Profile.shader=s;
         Renderer.shaderString=s;
+    }
+    private static void setController(boolean b) {
+        Profile.controllerOn = b;
     }
     
     public static void main(String[] args) throws IOException {

@@ -1,5 +1,6 @@
 package game;
 
+import game.Player.ShipType;
 import game.types.AsteroidField;
 import game.types.Bandits;
 import input.KeyboardListener;
@@ -43,27 +44,26 @@ public class Game {
         }
 
 
-
-        /*
-        try {
-            //TODO add boolean to check if controller enabled
-            //TODO addCallBack
-            //starts xbox controller thread
-            controller = new XboxInputListener();
-            Thread myThread = new Thread(controller);
-            myThread.start();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        //turns on controller if enabled in settings
+        if(Settings.Profile.controllerOn) {
+            try {
+                //starts xbox controller thread
+                controller = new XboxInputListener();
+                Thread myThread = new Thread(controller);
+                myThread.start();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-         */
+
 
 
 
         renderer = new graphics.core.Renderer(player.getCamera());
         renderer.setHud(new graphics.Hud(player));
         input = new KeyboardListener();
-        
+
 
         // When we pass player.getCamera() the sound doesn't match the player position
         if (sound.Manager.enabled)
@@ -78,11 +78,12 @@ public class Game {
                 player.updateCamera();
             }
         });
-        game.addCallback(new Updateable() {
-            public void update(boolean paused) {
-                sound.Manager.processEvents();
-            }
-        });
+        if (sound.Manager.enabled) 
+            game.addCallback(new Updateable() {
+                public void update(boolean paused) {
+                    sound.Manager.processEvents();
+                }
+            });
         // Single player only callbacks
         if (networkConnection == null) {
             game.addCallback(new AsteroidField());
@@ -90,11 +91,12 @@ public class Game {
         }
     }
 
-    public static boolean joinServer(String server) {
-        player = new Player();
+    public static boolean joinServer(String server, String playerName, ShipType ship) {
+        player = new Player(playerName, ship);
         networkConnection = ClientServerThread.joinServer(server, player);  
         if (networkConnection == null)
             return false;
+            
 
         init();
         return true;
@@ -122,7 +124,17 @@ public class Game {
     }
 
     public static void quitToMenu() {
-        game.setGameState(GameThread.STATE_STOPPED);
+        try {
+            renderer.shutdown();
+            game.setGameState(GameThread.STATE_STOPPED);
+            game.join();
+            if (networkConnection != null) {
+                networkConnection.close();
+                networkConnection.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void togglePause() {
@@ -133,7 +145,16 @@ public class Game {
     }
 
     public static void exit() {
-        System.exit(0);
+        quitToMenu();
+        
+        //cleanly exits if on windows or mac
+        if(GetOS.isWindows() || GetOS.isMac()) {
+            System.exit(0);
+        }
+        //not so clean, but that is because linux is superior
+        else {
+            System.exit(0);
+        }
     }
 
     public static Map getMap() {

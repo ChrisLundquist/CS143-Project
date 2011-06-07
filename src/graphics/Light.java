@@ -26,8 +26,8 @@ public class Light implements java.io.Serializable{
         diffuse = new Vector4f(gen.nextFloat(),gen.nextFloat(),gen.nextFloat(),1);
         specular = new Vector4f(1,1,1,1);
         constantAttenuation = 1.0f;
-        linearAttenuation = 1.0f;
-        quadraticAttenuation = 1.0f;
+        linearAttenuation = 1E-3f; // Should be really small: light is reduced by  1 / (distance * factor)
+        quadraticAttenuation = 1E-7f; // Should be really small: light is reduced by  1 / (distance * factor^2)
     }
 
     public math.Vector4f getAmbient() {
@@ -135,9 +135,9 @@ public class Light implements java.io.Serializable{
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, light.diffuse.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, light.specular.toFloatArray(), 0);
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, light.position.times(inverseRot).toFloatArray(), 0);
-            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_CONSTANT_ATTENUATION,light.constantAttenuation);
-            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_LINEAR_ATTENUATION,light.linearAttenuation);
-            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_QUADRATIC_ATTENUATION,light.quadraticAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_CONSTANT_ATTENUATION, light.constantAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_LINEAR_ATTENUATION, light.linearAttenuation);
+            gl.glLightf(GL2.GL_LIGHT0 + i, GL2.GL_QUADRATIC_ATTENUATION, light.quadraticAttenuation);
 
         }
     }

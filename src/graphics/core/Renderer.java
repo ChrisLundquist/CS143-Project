@@ -242,9 +242,21 @@ public class Renderer implements GLEventListener {
     }
 
     public void dispose(GLAutoDrawable gLDrawable) {
-        animator.stop();
+        try {
+            if (animator.isAnimating())
+                animator.stop();
+            
+            Thread ani = animator.getThread(); 
+            if (ani != null)
+                ani.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public void shutdown() throws InterruptedException {      
         frame.dispose();
-        canvas.destroy();
     }
 
     public void start() {

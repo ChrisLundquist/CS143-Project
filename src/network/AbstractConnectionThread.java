@@ -9,10 +9,12 @@ import java.io.*;
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
 public abstract class AbstractConnectionThread extends Thread {
-    private Socket socket;    
+    private Socket socket;
+    private boolean running;
 
     protected AbstractConnectionThread(Socket socket) {
         this.socket = socket;
+        running = true;
     }
 
     /**
@@ -36,7 +38,7 @@ public abstract class AbstractConnectionThread extends Thread {
             }
 
             // Main loop to receive updates and respond          
-            while (true) {
+            while (running) {
                 msg = (Message)in.readObject();
 
                 msg = handleMessage(msg);
@@ -48,6 +50,12 @@ public abstract class AbstractConnectionThread extends Thread {
                 out.flush();
                 out.reset(); // Flush the object cache so the next update will actually update stuff
             }
+        } catch (SocketException e) {
+            if (e.getMessage().equals("Connection reset")) {
+                System.err.println("Connection reset");
+                running = false;
+            } else
+                e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -63,10 +71,14 @@ public abstract class AbstractConnectionThread extends Thread {
                     out.close();
                 socket.close();
             } catch(Exception e) {
-                e.printStackTrace();
+                // Nothing
             }
             shutdownHook();
         }
+    }
+    
+    public void close() {
+        running = false;
     }
 
     /**

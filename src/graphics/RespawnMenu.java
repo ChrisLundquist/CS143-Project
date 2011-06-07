@@ -1,6 +1,8 @@
 package graphics;
 
 import javax.media.opengl.GL2;
+
+import game.Player.ShipType;
 import graphics.core.Texture;
 /**
  * Allows user to choose what ship to respawn as
@@ -9,12 +11,13 @@ import graphics.core.Texture;
  */
 public class RespawnMenu extends HUDTools {
     private static boolean respawnOpen = false;
-     static Texture respawnMenu;
+    static Texture respawnMenu;
     private static int selection = 0;
     private int s = HEIGHT / 2;
     private final static String FIGHTER = "assets/images/respawnmenu/fighter_selected.png";
     private final static String SCOUT = "assets/images/respawnmenu/scout_selected.png";
     private final static String BOMBER = "assets/images/respawnmenu/bomber_selected.png";
+    private final static String SHOTGUNNER = "assets/images/respawnmenu/shotgunner_selected.png";
 
     public void drawRespawnMenu(GL2 gl) {
         this.gl = gl;
@@ -43,6 +46,13 @@ public class RespawnMenu extends HUDTools {
                 draw(-s / 2, -s / 2, s, s);
                 gl.glEnd();
             }
+            if(selection == 3) {
+                respawnMenu = Texture.findOrCreateByName(SHOTGUNNER);
+                respawnMenu.bind(gl);
+                gl.glBegin(GL2.GL_QUADS);
+                draw(-s / 2, -s / 2, s, s);
+                gl.glEnd();
+            }
             if(isRespawnOpen() == false) {
                 unBind();
             }
@@ -50,17 +60,27 @@ public class RespawnMenu extends HUDTools {
         }
     }
     public static void selectionUp() {
-        if(selection > 0) {
-            selection--;
-        }
+        if (selection > 0)
+            selection --;
     }
     public static void selectionDown() {
-        if(selection < 2 ) {
-            selection++;
-        }
+        if (selection < 3)
+            selection ++;
     }
-    public static int getSelection() {
-        return selection;
+    public static ShipType getSelection() {
+        switch (selection) {
+            case 0:
+                return ShipType.FIGHTER;
+            case 1:
+                return ShipType.SCOUT;
+            case 2:
+                return ShipType.BOMBER;
+            case 3:
+                return ShipType.SHOTGUNNER;
+            default:
+                System.err.println("Should not happen check Respawn Menu");
+                return null;
+        }
     }
     public static void setRespawnOpen(boolean respawnOpen) {
         RespawnMenu.respawnOpen = respawnOpen;

@@ -12,18 +12,19 @@ import java.util.List;
 import math.Quaternion;
 import math.Vector3f;
 import actor.Actor;
+import actor.ship.projectile.Projectile;
 import actor.ship.shield.Shield;
 import actor.ship.weapon.Weapon;
 
 public abstract class Ship extends Actor {
     private static final long serialVersionUID = -7048308038567858490L;
-    private static final int MAX_HIT_POINTS = 1000;
+    private static final int MAX_HIT_POINTS = 200;
 
     protected List<Weapon<? extends actor.ship.projectile.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon, hitPoints;
     protected long lastHitFrame; // age when last hit
-    protected List<ParticleGenerator<? extends Particle>> particleGenerators;
+    protected transient List<ParticleGenerator<? extends Particle>> particleGenerators;
 
     public Ship(){
         super();
@@ -86,6 +87,8 @@ public abstract class Ship extends Actor {
         if(hitPoints <= 0)
             die();
         super.update();
+        for(Shield shield : shields)
+            shield.update();
     }
 
     @Override
@@ -137,7 +140,8 @@ public abstract class Ship extends Actor {
                         return null;
                     }
                 });
-                particleGenerators.add(particleGenerator);
+                if (particleGenerators != null)
+                    particleGenerators.add(particleGenerator);
                 ParticleSystem.addGenerator(particleGenerator);
             }
         }
@@ -145,12 +149,28 @@ public abstract class Ship extends Actor {
 
     @Override
     public void die(){
-        if(ParticleSystem.isEnabled())
+        if(ParticleSystem.isEnabled() && particleGenerators != null)
             for(ParticleGenerator<? extends Particle> particleGenerator : particleGenerators)
                 ParticleSystem.removeGenerator(particleGenerator);
         delete();
     }
 
+    public void nextWeapon() {
+        setWeapon((selectedWeapon + 1) % weapons.size());
+    }
+
+    public void previousWeapon() {
+        setWeapon((selectedWeapon - 1) % weapons.size());
+    }
+
+    public void setWeapon(int weaponNumber){
+        selectedWeapon = weaponNumber % weapons.size();
+    }
+
+    public Weapon<? extends Projectile> getWeapon() {
+        return weapons.get(selectedWeapon);
+    }
+    
     /**
      * Returns the ships health from 1.0 .. 0.0
      * @return

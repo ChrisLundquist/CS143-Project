@@ -206,13 +206,16 @@ public class Model implements math.Supportable{
     @Override
     public Vector3f getFarthestPointInDirection(Vector3f direction) {
         Vector3f max = polygons.get(0).verticies.get(0).coord;
+        float maxDotProduct = max.dotProduct(direction);
 
         // Loop though all of our polygons
         for(Polygon p : polygons){
             // And all of the vertices in each polygon
             for(Vertex v : p.verticies){
-                if (max.dotProduct(direction) < v.coord.dotProduct(direction)) {
+                float thisDotProduct = v.coord.dotProduct(direction);
+                if ( maxDotProduct < thisDotProduct) {
                     max = v.coord;
+                    maxDotProduct = thisDotProduct;
                 }
             }
         }

@@ -38,8 +38,11 @@ public class Manager {
             Event event;
             while ((event = events.poll()) != null) {
                 Source source = getNextFreeSource();
-                if (source == null) // We can't play any more sounds right now
+                if (source == null){ // We can't play any more sounds right now
+                    events.clear(); // Clear the queue so we avoid laggy sound we played the closest 64 anyhow
+                    
                     return;
+                }
                 source.load(event);
                 source.play();
                 checkForALErrorsWithMessage("Error when proccessing Event: "
@@ -134,9 +137,9 @@ public class Manager {
                             listener.getPosition()).magnitude2();
 
                     if (d1 > d2)
-                        return 1;
-                    else if (d2 > d1)
                         return -1;
+                    else if (d2 > d1)
+                        return 1;
                     else
                         return 0;
                 }

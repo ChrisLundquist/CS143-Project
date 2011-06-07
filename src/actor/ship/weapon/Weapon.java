@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-
+import math.Vector3f;
 import actor.Actor;
 import actor.ship.projectile.Projectile;
 
@@ -90,4 +90,29 @@ public abstract class Weapon<T extends Projectile> implements Serializable{
     public String toString(){
         return "" + getClass().getSimpleName() + " " + getCtor().getName();
     }
+
+    protected Vector3f findBestGunPosition(Actor ship, Vector3f direction){
+        java.util.List<Vector3f> gunPositions = ship.getHotSpotsFor("Weapon");
+
+        // Make sure we have gun positions
+        if(gunPositions == null)
+            return null;
+
+        Vector3f closestPosition = gunPositions.get(0);
+        float maxDotProduct = closestPosition.dotProduct(direction);
+
+        for(Vector3f position : gunPositions){
+            float thisDotProduct = position.dotProduct(direction);
+            if ( maxDotProduct < thisDotProduct) {
+                closestPosition = position;
+                maxDotProduct = thisDotProduct;
+            }
+        }
+        return closestPosition;
+    }
+
+
+    abstract public void shoot(Actor ship, Vector3f direction);
+    abstract protected T configureProjectile(T projectile, Actor ship);
+    abstract protected T configureProjectile(T projectile, Actor ship, Vector3f direction);
 }

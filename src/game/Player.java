@@ -22,25 +22,31 @@ public class Player implements Serializable {
         FIGHTER,
         SCOUT,
         BOMBER,
+        SHOTGUNNER,
     }
 
 
     private static final long serialVersionUID = 8330574859953611636L;
+    public static final String DEFAULT_NAME = "Pilot";
     private transient final Camera camera;
     private String name;
     private int playerId;
     private transient PlayerShip ship;
-
     private ActorId shipId;
-    // TODO ship preference - once we have ships
-
     private PlayerStatus status;
-  //  private ShipType shipType;
+    private ShipType shipPreference;
+
     public Player() {
-        setName("Pilot");
+        this(DEFAULT_NAME, ShipType.FIGHTER);
+        
+    }
+
+    public Player(String name, ShipType shipPreference) {
+        this.name = name;
         status = PlayerStatus.OBSERVING;
         camera = new Camera();
         playerId = 0;
+        this.shipPreference = shipPreference;     
     }
 
     public Camera getCamera() {
@@ -53,7 +59,18 @@ public class Player implements Serializable {
 
     // TODO create ship of players preference
     public PlayerShip getNewShip() {
-        return new actor.ship.types.Bomber();
+        switch(shipPreference) {
+            case BOMBER:
+                return new actor.ship.types.Bomber();
+            case FIGHTER:
+                return new actor.ship.types.Fighter();
+            case SCOUT:
+                return new actor.ship.types.Scout();
+            case SHOTGUNNER:
+                return new actor.ship.types.Shotgunner();
+            default:
+                return new actor.ship.types.Scout();
+        }
     }
 
     public int getPlayerId() {
@@ -90,28 +107,14 @@ public class Player implements Serializable {
             RespawnMenu.setRespawnOpen(true);
             switch(action) {
                 case MENU_UP:
-                    if(RespawnMenu.isRespawnOpen()) {
-                        RespawnMenu.selectionUp();
-                    }
+                    RespawnMenu.selectionUp();
                     break;
                 case MENU_DOWN:
-                    if(RespawnMenu.isRespawnOpen()) {
-                        RespawnMenu.selectionDown();
-                    }
-
+                    RespawnMenu.selectionDown();
                     break;
                 case MENU_SELECT:
-                    if(RespawnMenu.isRespawnOpen()) {
-                        if(RespawnMenu.getSelection() == 0) {
-                            respawn(ShipType.FIGHTER); 
-                        }
-                        if(RespawnMenu.getSelection() == 1) {
-                            respawn(ShipType.SCOUT); 
-                        }
-                        if(RespawnMenu.getSelection() == 2) {
-                            respawn(ShipType.BOMBER); 
-                        }
-                    }
+                    shipPreference = RespawnMenu.getSelection();
+                    respawn();    
                     RespawnMenu.setRespawnOpen(false);
                     break;
                 default:
@@ -119,8 +122,8 @@ public class Player implements Serializable {
             }
         }
     }
-    
-    
+
+
 
     private void inputAlive(InputRouter.Interaction action) {
         switch(action) {
@@ -203,6 +206,7 @@ public class Player implements Serializable {
                     }
                     if(InGameMenu.getSelection() == 1) {
                         System.err.println("EXITED");
+                        Game.exit();
                     }
                 }
                 break;
@@ -210,8 +214,8 @@ public class Player implements Serializable {
                 System.err.println("Player: unhandled input: " + action);
         }
     }
-    
-    
+
+
 
     public boolean isAlive() {
         if (getShip().isDead() || getShip().getId() == null) {
@@ -223,14 +227,14 @@ public class Player implements Serializable {
 
         return status == PlayerStatus.ALIVE;
     }
-    
-    
-    
+
+
+
     /**
      * Respawn the player, this will only be called on the client
      * the server can not transition us from the observing state
      */
-    public void respawn(ShipType shipType) {
+    public void respawn() {
         SpawningPosition spawningPosition = Game.getMap().getSpawnPosition();
         ActorSet actors = Game.getActors();
 
@@ -244,26 +248,9 @@ public class Player implements Serializable {
                 ship = getShip();
             }
         }
-        switch(shipType) {
-            case BOMBER:
-                if (ship == null) {
-                    ship = new actor.ship.types.Bomber();
-                    System.err.println("Respawned as Bomber");
-                }
-                break;
-            case FIGHTER:
-                if (ship == null) {
-                    ship = new actor.ship.types.Fighter();
-                    System.err.println("Respawned as Figther");
-                }
-                break;
-            case SCOUT:
-                if (ship == null) {
-                    ship = new actor.ship.types.Scout();
-                    System.err.println("Respawned as Figther");
-                }
-                break;
-        }
+        if (ship == null)
+            ship = getNewShip();
+
 
 
         if (ship == null)

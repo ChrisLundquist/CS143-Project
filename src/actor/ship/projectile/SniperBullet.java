@@ -11,8 +11,9 @@ public class SniperBullet extends Bullet {
 
     public SniperBullet(Actor actor) {
         super(actor);
+        speed = 5;
         damage = 40;
-        velocity.timesEquals(5);
+        velocity.timesEquals(speed);
     }
 
     public void handleCollision(Actor other){

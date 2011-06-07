@@ -26,15 +26,15 @@ public class Hud extends HUDTools {
     private static final String GUNAMMOSINGLE = "assets/images/hud/gun_ammo_single.png";
     private static final String GUNAMMODOUBLE = "assets/images/hud/gun_ammo_double.png";
     private static final String GUNAMMOMISSILE = "assets/images/hud/gun_ammo_missile.png";
-    
+
     private Player player;
     private PlayerShip ship;
     private Texture healthbackdrop, healthbar, shieldbar, gunbar, gunbackdrop;
     private Texture healthcross, crosshair, gunammo;
-    
+
     public Hud(Player player) {
         this.player = player;
-        
+
         healthbackdrop = Texture.findOrCreateByName(HEALTHBACKDROP);
         healthbar = Texture.findOrCreateByName(HEALTHBAR);
         shieldbar = Texture.findOrCreateByName(SHIELDBAR);
@@ -44,94 +44,109 @@ public class Hud extends HUDTools {
         gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
         crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
     }
-    
+
     /**
      * Draws the static elements of the HUD     
      * @param gl
      */
     public void drawStaticHud(GL2 gl) {
         this.gl = gl;
-       
+
         if (! player.isAlive())
             return;
-        
+
         update();
-        
+
         start2D();
         //drawEnergy(gl);
-        
+
         // Set the crosshair color to green
         gl.glColor4f(0.0f, 1.0f, 0.0f, 0.0f);
-        
+
         if(crosshair != null) {
             crosshair.bind(gl);
         }
         gl.glBegin(GL2.GL_QUADS);
         int s = HEIGHT / 2; // Cross hair 10% screen height
-        
+
         draw(-s / 2, -s / 2, s, s);
         gl.glEnd();
         gl.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-        
-        if(healthbackdrop != null) { 
-            healthbackdrop.bind(gl);
+
+        {//Health/Shield Bar
+            float xStart = 0;
+            float xEnd = WIDTH;
+            
+            float yStart = -HEIGHT;
+            float yEnd = HEIGHT;
+
+            if(healthbackdrop != null) { 
+                healthbackdrop.bind(gl);
+            }
+
+            gl.glBegin(GL2.GL_QUADS );
+            draw(xStart, yStart, xEnd , yEnd );
+            gl.glEnd();
+
+
+            if(healthbar != null) {
+                healthbar.bind(gl);
+            }
+
+            //draws the health bar
+            gl.glBegin(GL2.GL_QUADS );
+            drawBarGraph(xStart, yStart, xEnd , yEnd , ship.health()*0.72f);
+            gl.glEnd();
+
+            if(shieldbar!=null){
+                shieldbar.bind(gl);
+            }
+            gl.glBegin(GL2.GL_QUADS );
+            drawBarGraph(xStart, yStart, xEnd , yEnd , ship.shield()*0.70f);
+            gl.glEnd();
+
+            //health cross
+            if(healthcross != null) {
+                healthcross.bind(gl);
+            }
+
+            gl.glBegin(GL2.GL_QUADS );
+            draw(xStart, yStart, xEnd , yEnd );
+            gl.glEnd();
         }
 
-        gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
-        gl.glEnd();
+        {//Gun bar code
+            float xStart = -WIDTH;
+            float xEnd = WIDTH;
+            
+            float yStart = -HEIGHT;
+            float yEnd = HEIGHT;
+            
+            if(gunbackdrop != null) {
+                gunbackdrop.bind(gl);
+            }
 
-        
-        if(healthbar != null) {
-            healthbar.bind(gl);
+            gl.glBegin(GL2.GL_QUADS );
+            draw(xStart, yStart, xEnd , yEnd);
+            gl.glEnd();
+
+            if(gunbar != null) {
+                gunbar.bind(gl);
+            }
+
+            //draw the percent bar for the gun
+            gl.glBegin(GL2.GL_QUADS );
+            drawBarGraph(xStart, yStart, xEnd , yEnd,ship.getWeapon().getAmmoPercent()*0.72f);
+            gl.glEnd();
+
+            if(gunammo != null) {
+                gunammo.bind(gl);
+            }
+
+            gl.glBegin(GL2.GL_QUADS );
+            draw(xStart, yStart, xEnd , yEnd);
+            gl.glEnd();
         }
-        
-        //draws the health bar
-        gl.glBegin(GL2.GL_QUADS );
-        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.health()*0.72f);
-        gl.glEnd();
-        
-        if(shieldbar!=null){
-            shieldbar.bind(gl);
-        }
-        gl.glBegin(GL2.GL_QUADS );
-        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2, ship.shield()*0.70f);
-        gl.glEnd();
-
-        //health cross
-        if(healthcross != null) {
-            healthcross.bind(gl);
-        }
-
-        gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
-        gl.glEnd();
-        
-        
-        if(gunbackdrop != null) {
-            gunbackdrop.bind(gl);
-        }
-
-        gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
-        gl.glEnd();
-
-        if(gunbar != null) {
-            gunbar.bind(gl);
-        }
-
-        //draw the percent bar for the gun
-        gl.glBegin(GL2.GL_QUADS );
-        drawBarGraph(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2,ship.getWeapon().getAmmoPercent()*0.72f);
-        gl.glEnd();
-
-        if(gunammo != null) {
-            gunammo.bind(gl);
-        }
-
-        gl.glBegin(GL2.GL_QUADS );
-        draw(-WIDTH, -HEIGHT, WIDTH *2, HEIGHT * 2);
-        gl.glEnd();
 
         gl.glFlush();
         stop2D();
@@ -159,7 +174,7 @@ public class Hud extends HUDTools {
     }
 
     private void setupCrossHair(Weapon<? extends Projectile> weapon) {
-        
+
         if (weapon instanceof actor.ship.weapon.AlternatingWeapon<?>) {
             crosshair = Texture.findOrCreateByName(CROSSHAIRDUAL);
             gunammo = Texture.findOrCreateByName(GUNAMMODOUBLE);
@@ -170,7 +185,7 @@ public class Hud extends HUDTools {
             crosshair = Texture.findOrCreateByName(CROSSHAIRSINGLE);
             gunammo = Texture.findOrCreateByName(GUNAMMOSINGLE);
         }
-        
+
         Projectile p = weapon.newProjectile(ship);
         if (p instanceof actor.ship.projectile.Missile) {
             gunammo = Texture.findOrCreateByName(GUNAMMOMISSILE);
