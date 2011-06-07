@@ -23,7 +23,7 @@ public class MainMenu extends JPanel implements ActionListener {
     //paths to all images used
 
     private static final String BACKGROUND_PATHS[] = {
-        "assets/images/mainmenu/background1.jpg",
+        //"assets/images/mainmenu/background1.jpg",
         "assets/images/mainmenu/background2.jpg",
         "assets/images/mainmenu/background3.jpg",
         "assets/images/mainmenu/background4.jpg",
@@ -117,8 +117,8 @@ public class MainMenu extends JPanel implements ActionListener {
     public String getRandomImage() {
         java.util.Random rand = new java.util.Random();
 
-        //return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
-        return BACKGROUND_PATHS[2];
+        return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
+        //return BACKGROUND_PATHS[2];
     }
     /**
      * creates and adds gui components
