@@ -52,12 +52,12 @@ public class RespawnMenu extends HUDTools {
         }
     }
     public static void selectionUp() {
-        selection --;
-        selection %= 3;
+        if (selection > 0)
+            selection --;
     }
     public static void selectionDown() {
-        selection ++;
-        selection %=3;
+        if (selection < 2)
+            selection ++;
     }
     public static ShipType getSelection() {
         switch (selection) {
