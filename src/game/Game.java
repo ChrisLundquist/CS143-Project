@@ -6,7 +6,6 @@ import input.KeyboardListener;
 import input.XboxInputListener;
 import java.io.IOException;
 import network.ClientServerThread;
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import settings.Settings;
 import actor.ActorSet;
 
@@ -26,11 +25,7 @@ public class Game {
             Settings.init();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (Base64DecodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        sound.Manager.enabled = true;
 
         if (networkConnection == null) {
             player = new Player();
@@ -71,7 +66,8 @@ public class Game {
         
 
         // When we pass player.getCamera() the sound doesn't match the player position
-        sound.Manager.initialize(player.getCamera());
+        if (sound.Manager.enabled)
+            sound.Manager.initialize(player.getCamera());
 
         game = new GameMultiThread(actors);
         // CL - We need to get input even if the game is paused,

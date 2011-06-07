@@ -2,12 +2,9 @@ package settings;
 
 import graphics.core.Renderer;
 import graphics.particles.ParticleSystem;
-
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 
 public class Settings {
     public static class Profile{
@@ -60,7 +57,7 @@ public class Settings {
         System.out.println("mainMenu: "+Profile.Keys.mainMenu);
     }
 
-    public static void init() throws IOException, Base64DecodingException{
+    public static void init() throws IOException {
         setDefaults();
         File settingsFile = new File("config/settings.ini");
         Util.checkSettingFile(settingsFile);
@@ -397,7 +394,7 @@ public class Settings {
         Renderer.shaderString=s;
     }
     
-    public static void main(String[] args) throws IOException, Base64DecodingException{
+    public static void main(String[] args) throws IOException {
         init();
         Settings.debugKeys();
     }
