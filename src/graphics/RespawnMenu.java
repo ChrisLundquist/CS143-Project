@@ -11,14 +11,14 @@ import graphics.core.Texture;
  */
 public class RespawnMenu extends HUDTools {
     private static boolean respawnOpen = false;
-     static Texture respawnMenu;
+    static Texture respawnMenu;
     private static int selection = 0;
     private int s = HEIGHT / 2;
     private final static String FIGHTER = "assets/images/respawnmenu/fighter_selected.png";
     private final static String SCOUT = "assets/images/respawnmenu/scout_selected.png";
     private final static String BOMBER = "assets/images/respawnmenu/bomber_selected.png";
     private final static String SHOTGUNNER = "assets/images/respawnmenu/shotgunner_selected.png";
-    
+
     public void drawRespawnMenu(GL2 gl) {
         this.gl = gl;
         if(isRespawnOpen()) {
