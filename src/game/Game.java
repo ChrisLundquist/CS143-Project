@@ -48,20 +48,19 @@ public class Game {
         }
 
 
-
-        /*
-        try {
-            //TODO add boolean to check if controller enabled
-            //TODO addCallBack
-            //starts xbox controller thread
-            controller = new XboxInputListener();
-            Thread myThread = new Thread(controller);
-            myThread.start();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        //turns on controller if enabled in settings
+        if(Settings.Profile.controllerOn) {
+            try {
+                //starts xbox controller thread
+                controller = new XboxInputListener();
+                Thread myThread = new Thread(controller);
+                myThread.start();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-         */
+
 
 
 
