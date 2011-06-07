@@ -68,7 +68,7 @@ public class Game {
         renderer = new graphics.core.Renderer(player.getCamera());
         renderer.setHud(new graphics.Hud(player));
         input = new KeyboardListener();
-        
+
 
         // When we pass player.getCamera() the sound doesn't match the player position
         if (sound.Manager.enabled)
@@ -91,8 +91,8 @@ public class Game {
             });
         // Single player only callbacks
         if (networkConnection == null) {
-            game.addCallback(new AsteroidField());
-            game.addCallback(new Bandits());
+            // game.addCallback(new AsteroidField());
+            // game.addCallback(new Bandits());
         }
     }
 
@@ -139,7 +139,14 @@ public class Game {
     }
 
     public static void exit() {
-        System.exit(0);
+        //cleanly exits if on windows or mac
+        if(GetOS.isWindows() || GetOS.isMac()) {
+            System.exit(0);
+        }
+        //not so clean, but that is because linux is superior
+        else {
+            
+        }
     }
 
     public static Map getMap() {
