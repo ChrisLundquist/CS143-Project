@@ -31,7 +31,6 @@ public class Game {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        sound.Manager.enabled = true;
 
         if (networkConnection == null) {
             player = new Player();
@@ -72,7 +71,8 @@ public class Game {
         
 
         // When we pass player.getCamera() the sound doesn't match the player position
-        sound.Manager.initialize(player.getCamera());
+        if (sound.Manager.enabled)
+            sound.Manager.initialize(player.getCamera());
 
         game = new GameMultiThread(actors);
         // CL - We need to get input even if the game is paused,
@@ -83,11 +83,12 @@ public class Game {
                 player.updateCamera();
             }
         });
-        game.addCallback(new Updateable() {
-            public void update(boolean paused) {
-                sound.Manager.processEvents();
-            }
-        });
+        if (sound.Manager.enabled) 
+            game.addCallback(new Updateable() {
+                public void update(boolean paused) {
+                    sound.Manager.processEvents();
+                }
+            });
         // Single player only callbacks
         if (networkConnection == null) {
             game.addCallback(new AsteroidField());
