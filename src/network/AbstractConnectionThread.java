@@ -50,6 +50,12 @@ public abstract class AbstractConnectionThread extends Thread {
                 out.flush();
                 out.reset(); // Flush the object cache so the next update will actually update stuff
             }
+        } catch (SocketException e) {
+            if (e.getMessage().equals("Connection reset")) {
+                System.err.println("Connection reset");
+                running = false;
+            } else
+                e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -65,7 +71,7 @@ public abstract class AbstractConnectionThread extends Thread {
                     out.close();
                 socket.close();
             } catch(Exception e) {
-                e.printStackTrace();
+                // Nothing
             }
             shutdownHook();
         }
@@ -73,12 +79,6 @@ public abstract class AbstractConnectionThread extends Thread {
     
     public void close() {
         running = false;
-        try {
-            socket.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     /**

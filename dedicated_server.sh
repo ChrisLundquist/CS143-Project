@@ -1,4 +1,4 @@
 #!/bin/sh
 
-java -classpath ./bin:./lib/\* -Xprof network.DedicatedServer
+java -classpath ./bin:./lib/\* network.DedicatedServer
 

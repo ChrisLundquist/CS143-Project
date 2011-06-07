@@ -24,7 +24,7 @@ public abstract class Ship extends Actor {
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
     protected int selectedWeapon, hitPoints;
     protected long lastHitFrame; // age when last hit
-    protected List<ParticleGenerator<? extends Particle>> particleGenerators;
+    protected transient List<ParticleGenerator<? extends Particle>> particleGenerators;
 
     public Ship(){
         super();
@@ -140,7 +140,8 @@ public abstract class Ship extends Actor {
                         return null;
                     }
                 });
-                particleGenerators.add(particleGenerator);
+                if (particleGenerators != null)
+                    particleGenerators.add(particleGenerator);
                 ParticleSystem.addGenerator(particleGenerator);
             }
         }
@@ -148,7 +149,7 @@ public abstract class Ship extends Actor {
 
     @Override
     public void die(){
-        if(ParticleSystem.isEnabled())
+        if(ParticleSystem.isEnabled() && particleGenerators != null)
             for(ParticleGenerator<? extends Particle> particleGenerator : particleGenerators)
                 ParticleSystem.removeGenerator(particleGenerator);
         delete();
