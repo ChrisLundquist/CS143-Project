@@ -11,7 +11,7 @@ import math.Vector3f;
 public class Asteroid extends Actor {
     private static final long serialVersionUID = 916554544709785597L;
     private static final String MODEL_NAME = Model.Models.ASTEROID;
-    private static final int SHATTER_THRESHOLD = 4;
+    private static final int SHATTER_THRESHOLD = 8;
     private static final float DEFAULT_SCALE = 10f;
     private static final float HEALTH_MODIFIER= 1.0f / 2.0f;
     private static final String SOUND_EFFECT = "explode.wav";
@@ -73,6 +73,8 @@ public class Asteroid extends Actor {
             // "Die" for our next update
             hitPoints = 0;
         }
+        if(hitPoints < 0)
+            die();
     }
 
     @Override
@@ -115,8 +117,6 @@ public class Asteroid extends Actor {
 
     public void update(){
         velocity = orbitField(position);
-        if(hitPoints < 0)
-            die();
         super.update();
         //TODO: Write code that detects if it is out of the skybox. (or some other boundry).
     }

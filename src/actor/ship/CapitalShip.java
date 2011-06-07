@@ -1,8 +1,11 @@
 package actor.ship;
 
+import math.Vector3f;
 import graphics.core.Model;
+import actor.ship.projectile.Bullet;
 import actor.ship.projectile.FlakShell;
 import actor.ship.weapon.AlternatingWeapon;
+import actor.ship.weapon.TwinLinkedWeapon;
 
 public class CapitalShip extends actor.ship.Ship {
     private static final long serialVersionUID = 3527730335695237893L;
@@ -14,11 +17,25 @@ public class CapitalShip extends actor.ship.Ship {
         super();
         shields.add(new actor.ship.shield.CapitalShipShield());
         weapons.add(new AlternatingWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown(),ALTERNATING_FLAK));
+        weapons.add(new TwinLinkedWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown(),ALTERNATING_FLAK));
+        weapons.add(new AlternatingWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown(),ALTERNATING_FLAK));
+        weapons.add(new TwinLinkedWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown(),ALTERNATING_FLAK));
+        weapons.add(new AlternatingWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),ALTERNATING_FLAK));
+        weapons.add(new TwinLinkedWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),ALTERNATING_FLAK));
+
+
+        hitPoints = 5000;
         modelName = MODEL_NAME;
     }
 
     public void update() {
         super.update();
         shoot();
+    }
+    
+    @Override
+    public void shoot(){
+        weapons.get(selectedWeapon).shoot(this, Vector3f.newRandom(1));
+        nextWeapon();
     }
 }

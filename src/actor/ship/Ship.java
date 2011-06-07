@@ -12,6 +12,7 @@ import java.util.List;
 import math.Quaternion;
 import math.Vector3f;
 import actor.Actor;
+import actor.ship.projectile.Projectile;
 import actor.ship.shield.Shield;
 import actor.ship.weapon.Weapon;
 
@@ -151,6 +152,22 @@ public abstract class Ship extends Actor {
         delete();
     }
 
+    public void nextWeapon() {
+        setWeapon((selectedWeapon + 1) % weapons.size());
+    }
+
+    public void previousWeapon() {
+        setWeapon((selectedWeapon - 1) % weapons.size());
+    }
+
+    public void setWeapon(int weaponNumber){
+        selectedWeapon = weaponNumber % weapons.size();
+    }
+
+    public Weapon<? extends Projectile> getWeapon() {
+        return weapons.get(selectedWeapon);
+    }
+    
     /**
      * Returns the ships health from 1.0 .. 0.0
      * @return

@@ -3,8 +3,6 @@ package actor.ship;
 import graphics.particles.Particle;
 import graphics.particles.ParticleSystem;
 import graphics.particles.generators.ParticleGenerator;
-import actor.ship.projectile.Projectile;
-import actor.ship.weapon.Weapon;
 
 public abstract class PlayerShip extends Ship {
     private static final long serialVersionUID = 1L;
@@ -54,23 +52,6 @@ public abstract class PlayerShip extends Ship {
     }
     public void rollRight() {
         changeRoll(-getRollRate());
-    }
-
-    public void nextWeapon() {
-        setWeapon((selectedWeapon + 1) % weapons.size());
-    }
-
-    public void previousWeapon() {
-        setWeapon((selectedWeapon - 1) % weapons.size());
-    }
-
-    public void setWeapon(int weaponNumber){
-        selectedWeapon = weaponNumber % weapons.size();
-        System.out.println("Switching to " + getWeapon());
-    }
-
-    public Weapon<? extends Projectile> getWeapon() {
-        return weapons.get(selectedWeapon);
     }
 
     @Override
