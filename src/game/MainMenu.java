@@ -49,14 +49,14 @@ public class MainMenu extends JPanel implements ActionListener {
     private static final String CONTROLLER_ON = "assets/images/mainmenu/controller_on.png";
     private static final String CONTROLLER_OFF = "assets/images/mainmenu/controller_off.png";
 
-    private static final String SOUND_ON = "assets/images/mainmenu/sound_on.png";
-    private static final String SOUND_OFF = "assets/images/mainmenu/sound_off.png";
+    private static final String SOUND_ON = "assets/images/mainmenu/sound_checked.png";
+    private static final String SOUND_OFF = "assets/images/mainmenu/sound_unchecked.png";
 
-    private static final String SHADERS_ON = "assets/images/mainmenu/shaders_on.png";
-    private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_on.png";
+    private static final String SHADERS_ON = "assets/images/mainmenu/shaders_checked.png";
+    private static final String SHADERS_OFF = "assets/images/mainmenu/shaders_unchecked.png";
 
-    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_on.png";
-    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_off.png";
+    private static final String PARTICLES_ON = "assets/images/mainmenu/particles_checked.png";
+    private static final String PARTICLES_OFF = "assets/images/mainmenu/particles_unchecked.png";
 
     private static final String BACK = "assets/images/mainmenu/back.png";
     private static final String BACK_SELECTED = "assets/images/mainmenu/back_selected.png";

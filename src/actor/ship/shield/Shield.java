@@ -14,7 +14,7 @@ public abstract class Shield implements Serializable{
         age = 0;
         lastHit = 0;
     }
-    
+
     public int getStrength() {
         return strength;
     }
@@ -26,8 +26,12 @@ public abstract class Shield implements Serializable{
 
     public void update(){
         age++;
-        if(age - lastHit > 600)
-            strength += rechargeRate;
+        if(age - lastHit > 600){
+            if(strength<maxStrength){
+                strength += rechargeRate;
+            }
+        }
+
     }
     /**
      * 
