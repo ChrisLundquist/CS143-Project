@@ -18,14 +18,11 @@ public class Bomber extends PlayerShip {
     
     private static final int MISSILE_AMMO = 30;
     private static final int NUKE_AMMO = 5;
-    private static final int FLAK_SHELL_AMMO = 300;
-    private static final int BULLET_AMMO = 5000;
 
     public Bomber() {
         weapons.add(new TwinLinkedWeapon<Missile>(Missile.class,Missile.getShotCoolDown(),MISSILE_AMMO));
-        weapons.add(new SingleShotWeapon<Bullet>(Bullet.class,Bullet.getShotCoolDown(),BULLET_AMMO));
         weapons.add(new SingleShotWeapon<Nuke>(Nuke.class,Nuke.getShotCoolDown(),NUKE_AMMO));
-        weapons.add(new AlternatingWeapon<FlakShell>(FlakShell.class,FlakShell.getShotCoolDown(),FLAK_SHELL_AMMO));
+       
 
         shields.add(new actor.ship.shield.PlayerShield());
     }

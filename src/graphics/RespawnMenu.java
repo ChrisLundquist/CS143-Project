@@ -17,7 +17,8 @@ public class RespawnMenu extends HUDTools {
     private final static String FIGHTER = "assets/images/respawnmenu/fighter_selected.png";
     private final static String SCOUT = "assets/images/respawnmenu/scout_selected.png";
     private final static String BOMBER = "assets/images/respawnmenu/bomber_selected.png";
-
+    private final static String SHOTGUNNER = "assets/images/respawnmenu/shotgunner_selected.png";
+    
     public void drawRespawnMenu(GL2 gl) {
         this.gl = gl;
         if(isRespawnOpen()) {
@@ -45,6 +46,13 @@ public class RespawnMenu extends HUDTools {
                 draw(-s / 2, -s / 2, s, s);
                 gl.glEnd();
             }
+            if(selection == 3) {
+                respawnMenu = Texture.findOrCreateByName(SHOTGUNNER);
+                respawnMenu.bind(gl);
+                gl.glBegin(GL2.GL_QUADS);
+                draw(-s / 2, -s / 2, s, s);
+                gl.glEnd();
+            }
             if(isRespawnOpen() == false) {
                 unBind();
             }
@@ -56,7 +64,7 @@ public class RespawnMenu extends HUDTools {
             selection --;
     }
     public static void selectionDown() {
-        if (selection < 2)
+        if (selection < 3)
             selection ++;
     }
     public static ShipType getSelection() {
@@ -67,6 +75,8 @@ public class RespawnMenu extends HUDTools {
                 return ShipType.SCOUT;
             case 2:
                 return ShipType.BOMBER;
+            case 3:
+                return ShipType.SHOTGUNNER;
             default:
                 System.err.println("Should not happen check Respawn Menu");
                 return null;

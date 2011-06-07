@@ -22,6 +22,7 @@ public class Player implements Serializable {
         FIGHTER,
         SCOUT,
         BOMBER,
+        SHOTGUNNER,
     }
 
 
@@ -65,6 +66,8 @@ public class Player implements Serializable {
                 return new actor.ship.types.Fighter();
             case SCOUT:
                 return new actor.ship.types.Scout();
+            case SHOTGUNNER:
+                return new actor.ship.types.Shotgunner();
             default:
                 return new actor.ship.types.Scout();
         }
