@@ -18,7 +18,7 @@ import actor.ship.weapon.Weapon;
 
 public abstract class Ship extends Actor {
     private static final long serialVersionUID = -7048308038567858490L;
-    private static final int MAX_HIT_POINTS = 1000;
+    private static final int MAX_HIT_POINTS = 200;
 
     protected List<Weapon<? extends actor.ship.projectile.Projectile>> weapons;
     protected List<Shield> shields; /* If we want to have different shield generators so front and rear shields are different */
@@ -87,6 +87,8 @@ public abstract class Ship extends Actor {
         if(hitPoints <= 0)
             die();
         super.update();
+        for(Shield shield : shields)
+            shield.update();
     }
 
     @Override

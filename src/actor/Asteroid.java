@@ -73,8 +73,6 @@ public class Asteroid extends Actor {
             // "Die" for our next update
             hitPoints = 0;
         }
-        if(hitPoints < 0)
-            die();
     }
 
     @Override
@@ -116,6 +114,8 @@ public class Asteroid extends Actor {
     }
 
     public void update(){
+        if(hitPoints <= 0)
+            die();
         velocity = orbitField(position);
         super.update();
         //TODO: Write code that detects if it is out of the skybox. (or some other boundry).
