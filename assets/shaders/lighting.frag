@@ -1,3 +1,4 @@
+#version 120
 uniform bool isTextured;
 uniform bool lightingEnabled;
 uniform int numLights;
@@ -14,7 +15,8 @@ void main (void) {
         gl_FragColor = gl_Color;
 
     if(lightingEnabled){
-        vec4 effectiveLight = vec4(0.0,0.0,0.0,0.0);
+        vec4 effectiveLight = gl_FrontLightModelProduct.sceneColor; // gl_FrontMaterial.emission + gl_FrontMaterial.ambient * gl_LightModel.ambient
+        
         for(int i = 0; i < numLights; i++) {
             vec3 L = normalize(gl_LightSource[i].position.xyz - v); 
             vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
@@ -35,8 +37,11 @@ void main (void) {
             // calculate Specular Term:
             vec4 Ispec = gl_FrontLightProduct[i].specular * pow(max(dot(R,E),0.0),0.3*gl_FrontMaterial.shininess);
             // write Total Color:
-            effectiveLight += gl_FrontLightModelProduct.sceneColor + atten * (Iamb + Idiff + Ispec); 
+            effectiveLight += atten * (Iamb + Idiff + Ispec); 
         }
+        
+       
+        
         gl_FragColor *= effectiveLight;
     }
 }

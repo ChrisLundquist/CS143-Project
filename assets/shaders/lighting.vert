@@ -1,3 +1,4 @@
+#version 120
 uniform bool lightingEnabled;
 uniform bool isTextured;
 varying vec3 N;

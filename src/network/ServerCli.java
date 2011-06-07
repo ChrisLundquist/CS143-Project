@@ -1,30 +1,29 @@
 package network;
 
 import game.Player;
-
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Scanner;
 import java.util.StringTokenizer;
-
+import jline.ConsoleReader;
 import actor.Actor;
 
 
 public class ServerCli extends Thread {
     private InputStream in;
-    private PrintStream out;
+    private PrintWriter out;
     private DedicatedServer server;
 
     /*
      * Constructor with an input and output stream so we can use over the network
      */
     public ServerCli(DedicatedServer server, OutputStream out, InputStream in) {
-        this(server, new PrintStream(out), in);
+        this(server, new PrintWriter(out), in);
     }
 
-    public ServerCli(DedicatedServer server, PrintStream out, InputStream in) {
+    public ServerCli(DedicatedServer server, PrintWriter out, InputStream in) {
         this.server = server;
         this.in = in;
         this.out = out;
@@ -110,9 +109,7 @@ public class ServerCli extends Thread {
 
         switch(tokenType(token)) {
             case QUIT:
-                if (out != System.out)
-                    out.println("exiting ...");
-                System.out.println("exiting ...");
+                out.println("exiting ...");
                 server.setRunning(false);
                 break;
             case KICK:
@@ -138,14 +135,23 @@ public class ServerCli extends Thread {
 
     public void run() {
         /* Run our little CLI */
-        Scanner kbd = new Scanner(in);
+        ConsoleReader reader;
+                 
+        try {
+            reader = new ConsoleReader(in, out);
+        } catch (IOException e) {
+            out.println("Unable to initialize console.");
+            e.printStackTrace(out);
+            return;
+        }
+        
+        reader.addCompletor (new jline.SimpleCompletor (new String [] { "quit", "help", "exit", "status", "kick", "new", "list", "list", "threads", "ps", "actors" }));
 
         out.println("Server started");
 
         while (server.isRunning()) {
-            out.print("server# ");
             try {
-                processCliCommand(kbd.nextLine());
+                processCliCommand(reader.readLine("server# "));
             } catch (Exception e) {
                 out.println("Exception: " + e);
                 e.printStackTrace(out);
