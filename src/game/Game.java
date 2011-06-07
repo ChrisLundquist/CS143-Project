@@ -91,8 +91,8 @@ public class Game {
             });
         // Single player only callbacks
         if (networkConnection == null) {
-            // game.addCallback(new AsteroidField());
-            // game.addCallback(new Bandits());
+            game.addCallback(new AsteroidField());
+            game.addCallback(new Bandits());
         }
     }
 
@@ -145,7 +145,7 @@ public class Game {
         }
         //not so clean, but that is because linux is superior
         else {
-            
+
         }
     }
 
