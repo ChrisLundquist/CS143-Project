@@ -117,7 +117,8 @@ public class MainMenu extends JPanel implements ActionListener {
     public String getRandomImage() {
         java.util.Random rand = new java.util.Random();
 
-        return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
+        //return BACKGROUND_PATHS[rand.nextInt(BACKGROUND_PATHS.length)];
+        return BACKGROUND_PATHS[2];
     }
     /**
      * creates and adds gui components
@@ -161,7 +162,7 @@ public class MainMenu extends JPanel implements ActionListener {
         quitButton.setBorder(null);
         quitButton.setRolloverIcon(quit_selected);
         quitButton.addActionListener(this);
-        quitButton.setBounds(50, 200, 200, 50);
+        quitButton.setBounds(50, 150, 200, 50);
 
 
 
@@ -193,7 +194,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableSound.setBorder(null);
         enableSound.addActionListener(this);
         enableSound.setVisible(false);
-        enableSound.setBounds(50, 100, 100, 50);
+        enableSound.setBounds(250, 50, 230, 50);
 
         enableShaders = new JCheckBox();
         if(shadersEnabled == true) {
@@ -208,7 +209,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableShaders.setBorder(null);
         enableShaders.addActionListener(this);
         enableShaders.setVisible(false);
-        enableShaders.setBounds(50, 150, 100, 50);
+        enableShaders.setBounds(50, 150, 230, 50);
 
         enableParticles = new JCheckBox();
         if(particlesEnabled == true) {
@@ -223,7 +224,7 @@ public class MainMenu extends JPanel implements ActionListener {
         enableParticles.setBorder(null);
         enableParticles.addActionListener(this);
         enableParticles.setVisible(false);
-        enableParticles.setBounds(50, 200, 100, 50);
+        enableParticles.setBounds(250, 100, 230, 50);
 
         backButton = new JButton(back);
         backButton.setVisible(false);
@@ -234,13 +235,13 @@ public class MainMenu extends JPanel implements ActionListener {
         backButton.setBorder(null);
         backButton.setRolloverIcon(back_selected);
         backButton.addActionListener(this);
-        backButton.setBounds(50,250,230,50);
+        backButton.setBounds(235,150,230,50);
 
 
         add(playButton);
         add(joinGameButton);
-        add(settingsButton);
-        add(enableController);
+        //add(settingsButton);
+        //add(enableController);
         add(enableSound);
         add(enableShaders);
         add(enableParticles);
@@ -336,10 +337,10 @@ public class MainMenu extends JPanel implements ActionListener {
             Game.start();
         }
         if(e.getSource() == settingsButton) {
-            playButton.setVisible(false);
-            settingsButton.setVisible(false);
-            quitButton.setVisible(false);
-            joinGameButton.setVisible(false);
+            //playButton.setVisible(false);
+            //settingsButton.setVisible(false);
+            //quitButton.setVisible(false);
+            //joinGameButton.setVisible(false);
             enableController.setVisible(true);
             enableSound.setVisible(true);
             enableShaders.setVisible(true);
