@@ -8,16 +8,19 @@ public abstract class Projectile extends Actor{
     private static final long serialVersionUID = 8097256529802244313L;
     private static final int MAX_AGE = 60 * 5; /* 60 fps * 5 seconds = 300 frames */
 
-    protected final float DEFAULT_SPEED = 1.0f;
     protected final float DEFAULT_SIZE = 0.1f;
     protected int damage;
+    protected float speed;
 
     protected static final String MODEL_NAME = "bullet";
     protected static final long DEFAULT_DELAY = 1000;
+    protected static final float DEFAULT_SPEED = 1.0f;
+    
 
     public Projectile(Actor actor){
         super();
-        velocity = actor.getVelocity().plus(actor.getDirection().times(DEFAULT_SPEED));
+        speed = DEFAULT_SPEED;
+        velocity = actor.getVelocity().plus(actor.getDirection().times(speed));
         position = new Vector3f(actor.getPosition());
         rotation = new Quaternion(actor.getRotation());
         parentId = actor.getId();
@@ -26,6 +29,10 @@ public abstract class Projectile extends Actor{
     }
     public int getDamage() {
         return damage;
+    }
+    
+    public float getSpeed(){
+        return speed;
     }
 
     public void update() {

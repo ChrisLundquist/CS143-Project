@@ -182,7 +182,7 @@ public abstract class Actor implements Serializable, Supportable, Movable, Colli
     public List<Vector3f> getHotSpotsFor(String key){
         List<Vector3f> modelHotSpots = getModel().getHotSpotFor(key);
         List<Vector3f> transformedSpots = new ArrayList<Vector3f>();
-        Matrix4f transform = getTransform();
+        Matrix4f transform = getTransformInverse();
         if(modelHotSpots != null)
             for(Vector3f vec : modelHotSpots)
                 transformedSpots.add(transform.times(vec));

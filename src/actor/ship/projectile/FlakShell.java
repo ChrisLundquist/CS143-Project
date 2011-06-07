@@ -12,7 +12,7 @@ public class FlakShell extends Projectile {
     
     public FlakShell(Actor actor) {
         super(actor);
-        detonationTime = gen.nextInt(35) + 20;
+        detonationTime = gen.nextInt(15) + 45;
         shrapnelCount = 8;
         scale.timesEquals(3);
     }

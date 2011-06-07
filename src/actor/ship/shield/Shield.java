@@ -4,11 +4,17 @@ import java.io.Serializable;
 
 public abstract class Shield implements Serializable{
     private static final long serialVersionUID = -464289746987986899L;
-    int strength;
-    long rechargeRate;
-    int maxStrength;
-    
+    int strength, rechargeRate, maxStrength, age, lastHit;
 
+
+    public Shield(){
+        strength = 500;
+        rechargeRate = 1;
+        maxStrength = 500;
+        age = 0;
+        lastHit = 0;
+    }
+    
     public int getStrength() {
         return strength;
     }
@@ -17,12 +23,19 @@ public abstract class Shield implements Serializable{
         this.strength = strength;
     }
 
+
+    public void update(){
+        age++;
+        if(age - lastHit > 600)
+            strength += rechargeRate;
+    }
     /**
      * 
      * @param damage
      * @return The remainder of damage to take
      */
     public int takeDamage(int damage) {
+        lastHit = age;
         if(damage < strength){
             strength -= damage;
             return 0;
@@ -41,7 +54,7 @@ public abstract class Shield implements Serializable{
         return rechargeRate;
     }
 
-    public void setRechargeRate(long rechargeRate) {
+    public void setRechargeRate(int rechargeRate) {
         this.rechargeRate = rechargeRate;
     }
 

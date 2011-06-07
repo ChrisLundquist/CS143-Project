@@ -14,8 +14,9 @@ public class Nuke extends Missile {
 
     public Nuke(Actor actor) {
         super(actor);
+        speed = 0.6f;
         damage = NUKE_DAMAGE;
-        velocity.timesEquals(0.6f);
+        velocity.timesEquals(speed);
         scale.timesEquals(2);
     }
 
