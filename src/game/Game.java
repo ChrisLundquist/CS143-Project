@@ -100,6 +100,7 @@ public class Game {
         networkConnection = ClientServerThread.joinServer(server, player);  
         if (networkConnection == null)
             return false;
+            
 
         init();
         return true;
@@ -127,7 +128,17 @@ public class Game {
     }
 
     public static void quitToMenu() {
-        game.setGameState(GameThread.STATE_STOPPED);
+        try {
+            renderer.shutdown();
+            game.setGameState(GameThread.STATE_STOPPED);
+            game.join();
+            if (networkConnection != null) {
+                networkConnection.close();
+                networkConnection.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void togglePause() {
@@ -138,13 +149,15 @@ public class Game {
     }
 
     public static void exit() {
+        quitToMenu();
+        
         //cleanly exits if on windows or mac
         if(GetOS.isWindows() || GetOS.isMac()) {
             System.exit(0);
         }
         //not so clean, but that is because linux is superior
         else {
-
+            System.exit(0);
         }
     }
 

@@ -9,10 +9,12 @@ import java.io.*;
  * @author Dustin Lundquist <dustin@null-ptr.net>
  */
 public abstract class AbstractConnectionThread extends Thread {
-    private Socket socket;    
+    private Socket socket;
+    private boolean running;
 
     protected AbstractConnectionThread(Socket socket) {
         this.socket = socket;
+        running = true;
     }
 
     /**
@@ -36,7 +38,7 @@ public abstract class AbstractConnectionThread extends Thread {
             }
 
             // Main loop to receive updates and respond          
-            while (true) {
+            while (running) {
                 msg = (Message)in.readObject();
 
                 msg = handleMessage(msg);
@@ -66,6 +68,16 @@ public abstract class AbstractConnectionThread extends Thread {
                 e.printStackTrace();
             }
             shutdownHook();
+        }
+    }
+    
+    public void close() {
+        running = false;
+        try {
+            socket.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
