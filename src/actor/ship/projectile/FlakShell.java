@@ -12,9 +12,10 @@ public class FlakShell extends Projectile {
     
     public FlakShell(Actor actor) {
         super(actor);
-        detonationTime = gen.nextInt(15) + 45;
+        detonationTime = gen.nextInt(10) + 45;
         shrapnelCount = 8;
         scale.timesEquals(3);
+        damage = 30;
     }
     
     @Override
@@ -29,6 +30,9 @@ public class FlakShell extends Projectile {
     
     @Override
     public void handleCollision(Actor other) {
+        // Don't collide with our siblings
+        if(other instanceof FlakShell && ((FlakShell) other).parentId.equals(getParentId()))
+            return;
         // Don't shoot our parents
         if (parentId.equals(other.getId()))
             return;

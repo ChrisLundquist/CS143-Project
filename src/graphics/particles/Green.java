@@ -6,17 +6,17 @@ package graphics.particles;
  * @author Chris Lundquist
  *
  */
-public class Fire extends Particle  {
-    public Fire(){
+public class Green extends Particle  {
+    public Green(){
         super();
     }
 
     protected void update() {
         super.update();
 
-        color.x -= 0.015f;
-        color.y -= 0.05f;
-        color.z -= 0.2f;
+        color.x -= 0.2f;
+        color.y -= 0.015f;
+        color.z -= 0.05f;
         color.t -= 0.01f;
     }
 }

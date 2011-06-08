@@ -3,7 +3,7 @@ package actor.ship.projectile;
 import actor.Actor;
 import graphics.core.Model;
 import graphics.particles.ParticleSystem;
-import graphics.particles.Plasma;
+import graphics.particles.Blue;
 import graphics.particles.generators.Explosion;
 
 public class Bullet extends Projectile {
@@ -30,7 +30,7 @@ public class Bullet extends Projectile {
         // This isn't handled in die because we only want to make particles on contact
         velocity.timesEquals(0);
         if(ParticleSystem.isEnabled())
-            ParticleSystem.addEvent( new Explosion<Plasma>(Plasma.class,this));
+            ParticleSystem.addEvent( new Explosion<Blue>(Blue.class,this));
 
         die();
     }
