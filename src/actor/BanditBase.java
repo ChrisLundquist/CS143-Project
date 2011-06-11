@@ -20,6 +20,7 @@ public class BanditBase extends Ship {
         hitPoints = DEFAULT_HITPOINTS;
         shields.add(new CapitalShipShield());
         modelName = Model.Models.BANDIT_BASE;
+        angularVelocity = new math.Quaternion(Vector3f.UNIT_Z,2);
     }
     public BanditBase(Vector3f pos) {
         this();
@@ -28,6 +29,7 @@ public class BanditBase extends Ship {
     
     @Override
     public void update() {
+        super.update();
         spawnBandits();
     }
     

@@ -86,7 +86,7 @@ public class Game {
             });
         // Single player only callbacks
         if (networkConnection == null) {
-            game.addCallback(new AsteroidField());
+            //game.addCallback(new AsteroidField());
             game.addCallback(new Bandits());
         }
     }

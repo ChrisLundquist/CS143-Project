@@ -30,7 +30,7 @@ public class CapitalShip extends actor.ship.Ship {
 
     public void update() {
         super.update();
-        shoot();
+        //shoot();
     }
 
     @Override
